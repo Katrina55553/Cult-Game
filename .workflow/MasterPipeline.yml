@@ -1,0 +1,26 @@
+version: '1.0'
+name: cultgame-pages-pipeline
+displayName: 修仙模拟器 - 构建并部署 Pages
+
+triggers:
+  push:
+    branches:
+      precise:
+        - main
+
+stages:
+  - stage:
+      name: build-and-deploy
+      displayName: 构建并部署 Gitee Pages
+      strategy: fast
+      trigger: auto
+      steps:
+        - step: build@nodejs
+          name: build_deploy_pages
+          displayName: Node.js 构建并发布 Pages
+          nodeVersion: 22.11.0
+          commands:
+            - chmod +x scripts/deploy-gitee-pages.sh
+            - bash scripts/deploy-gitee-pages.sh
+          caches:
+            - ~/.npm

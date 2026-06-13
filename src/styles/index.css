@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Ma Shan Zheng", cursive;
+  --font-body: "Noto Serif SC", serif;
+  --color-ink: #0c0f0d;
+  --color-parchment: #e8dcc8;
+  --color-parchment-dim: #c9b99a;
+  --color-cinnabar: #b83a2a;
+  --color-cinnabar-glow: #d45a3a;
+  --color-jade: #2d5a4a;
+  --color-jade-light: #4a8a72;
+  --color-gold: #c9a227;
+  --color-gold-dim: #8a7020;
+  --color-mist: #6a7a72;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-ink);
+  color: var(--color-parchment);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input::placeholder {
+  color: var(--color-mist);
+  opacity: 1;
+}
+
+select {
+  color-scheme: dark;
+  background-color: #141a17;
+}
+
+select option {
+  background-color: #141a17;
+  color: var(--color-parchment);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--color-jade-light);
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(45, 90, 74, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(184, 58, 42, 0.12) 0%, transparent 45%),
+    linear-gradient(180deg, #0a0d0c 0%, #121816 50%, #0c0f0d 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 2px rgba(201, 162, 39, 0.15);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.log-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 138, 114, 0.45) transparent;
+}
+
+.log-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.log-scroll::-webkit-scrollbar-thumb {
+  background: rgba(74, 138, 114, 0.45);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-pulse-glow {
+    animation: none;
+  }
+
+  .log-scroll {
+    scroll-behavior: auto;
+  }
+}
