@@ -149,7 +149,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       {showInventory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setShowInventory(false)}>
           <div
-            className="max-w-sm w-full border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up"
+            className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -163,9 +163,9 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
               </button>
             </div>
             {player.inventory.length === 0 ? (
-              <p className="text-sm text-[var(--color-mist)] text-center py-4">背包空空如也</p>
+              <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">背包空空如也</p>
             ) : (
-              <div className="space-y-2 max-h-60 overflow-y-auto log-scroll">
+              <div className="space-y-2 flex-1 overflow-y-auto log-scroll min-h-0">
                 {player.inventory.map((item, i) => (
                   <div key={i} className="text-xs flex items-center justify-between gap-2 px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm">
                     <div className="min-w-0">
