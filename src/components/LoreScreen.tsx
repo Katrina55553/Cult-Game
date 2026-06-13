@@ -109,14 +109,14 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
       </div>
 
         {/* 内容区域 */}
-        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 h-[420px] sm:h-[440px] flex flex-col">
+        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 h-[420px] sm:h-[440px] flex flex-col overflow-hidden">
           <h2
             className="text-2xl sm:text-3xl text-[var(--color-gold)] mb-6 text-center shrink-0"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {current.title}
           </h2>
-          <div className="space-y-4 flex-1 overflow-y-auto log-scroll">
+          <div className="space-y-4 flex-1 overflow-y-auto log-scroll min-h-0">
             {paragraphs.map((para, i) => (
               <p
                 key={i}
