@@ -1071,7 +1071,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'stay',
         text: '留守人间，做一方地仙',
         effects: [
-          { type: 'flag', key: 'refused_all_sects', value: true },
+          { type: 'flag', key: 'chose_stay', value: true },
           { type: 'cultivation', value: 20 },
           { type: 'lifespan', value: 50 },
         ],

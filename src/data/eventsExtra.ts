@@ -486,13 +486,11 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'lover_jealousy',
     title: '道侣反目',
-    description: '沈霜凝得知你与叶轻眉曾有机缘纠葛，冷落数日，彼此道心蒙尘。',
+    description: '你与道侣之间生出嫌隙，或是因旧日机缘纠葛，或是因修炼理念不合。数日冷战，彼此道心蒙尘。',
     weight: 12,
     once: true,
     conditions: [
       { type: 'flag', key: 'has_companion', value: true },
-      { type: 'flag', key: 'met_lin_wanyue', value: true },
-      { type: 'flag', key: 'met_su_qing', value: true },
     ],
     choices: [
       {
@@ -1808,7 +1806,10 @@ export const EXTRA_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'foundation' }],
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
     choices: [
       {
         id: 'fight_sect',

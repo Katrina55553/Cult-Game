@@ -157,7 +157,7 @@ export const ENDINGS: Ending[] = [
     title: '剑道圣者',
     description:
       '你以剑入道，一剑破万法。太古雷剑在手，剑意通天。最终以剑证道，肉身化剑，成为传说中的剑道圣者。',
-    priority: 88,
+    priority: 101,
     conditions: [
       { type: 'realm', min: 'nascent_soul' },
       { type: 'flag', key: 'got_inheritance', value: true },
