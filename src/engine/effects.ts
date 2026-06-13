@@ -126,13 +126,14 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
     }
     case 'spiritBeast': {
       const current = state.cultivationSystems.spiritBeast
-      const tier = effect.tier ?? (current?.name === effect.name ? (current.tier + 1) : 1)
+      const name = effect.name === '*' && current ? current.name : effect.name
+      const tier = effect.tier ?? (current?.name === name ? (current.tier + 1) : 1)
       return {
         ...state,
         flags: { ...state.flags, has_spirit_beast: true },
         cultivationSystems: {
           ...state.cultivationSystems,
-          spiritBeast: { name: effect.name, tier: clamp(tier, 1, 3) },
+          spiritBeast: { name, tier: clamp(tier, 1, 3) },
         },
       }
     }

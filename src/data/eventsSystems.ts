@@ -261,7 +261,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
           {
             chance: 0.55,
             successEffects: [
-              { type: 'spiritBeast', name: '妖狼', tier: 2 },
+              { type: 'spiritBeast', name: '*' },
               { type: 'cultivation', value: 12 },
               { type: 'stat', key: 'luck', value: 3 },
             ],
@@ -279,7 +279,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
         requirements: [{ type: 'resource', key: 'spiritStones', min: 25 }],
         effects: [
           { type: 'spiritStones', value: -25 },
-          { type: 'spiritBeast', name: '妖狼' },
+          { type: 'spiritBeast', name: '*' },
           { type: 'cultivation', value: 8 },
         ],
       },
