@@ -225,6 +225,10 @@ function getRootBoneBonus(state: PlayerState, eventId: string): number {
   return Math.min(0.15, state.stats.rootBone / 500)
 }
 
+function getDivineSenseBonus(state: PlayerState): number {
+  return Math.min(0.10, state.cultivationSystems.divineSense / 500)
+}
+
 function resolveOutcome(
   state: PlayerState,
   outcome: Outcome,
@@ -236,6 +240,7 @@ function resolveOutcome(
   }
   chance += getTalentBonus(state, eventId)
   chance += getRootBoneBonus(state, eventId)
+  chance += getDivineSenseBonus(state)
   chance = Math.max(0.05, Math.min(0.95, chance))
 
   const success = rng.random() < chance

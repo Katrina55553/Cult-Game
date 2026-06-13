@@ -2101,6 +2101,8 @@ export const MISC_EVENTS: GameEvent[] = [
       '你来到一处灵气充沛的仙山，山中草木皆有灵性，灵花异草随处可见。山腰处有一片灵田，几名散修正在采集灵草。山顶云雾缭绕，隐约可见一座古亭。',
     weight: 8,
     years: 1,
+    maxTimes: 3,
+    cooldown: 6,
     conditions: [{ type: 'realm', min: 'qi_refining_1' }],
     choices: [
       {

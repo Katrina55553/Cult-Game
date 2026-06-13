@@ -161,6 +161,16 @@ export const BOSS_EVENTS: GameEvent[] = [
           { type: 'cultivation', value: 5 },
         ],
       },
+      {
+        id: 'sense_general',
+        text: '以神识探查血魔将弱点',
+        requirements: [{ type: 'divineSense', min: 30 }],
+        effects: [
+          { type: 'cultivation', value: 22 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'flag', key: 'slayed_demon_general', value: true },
+        ],
+      },
     ],
   },
   {
@@ -213,6 +223,17 @@ export const BOSS_EVENTS: GameEvent[] = [
         effects: [
           { type: 'stat', key: 'luck', value: 3 },
           { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+      {
+        id: 'sense_assassin',
+        text: '以神识锁定刺客行踪',
+        requirements: [{ type: 'divineSense', min: 25 }],
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'spiritStones', value: 15 },
+          { type: 'flag', key: 'survived_assassin', value: true },
         ],
       },
     ],

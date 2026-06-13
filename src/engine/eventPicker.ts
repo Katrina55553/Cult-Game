@@ -63,6 +63,8 @@ function effectiveWeight(
 
   if (event.rarity) {
     weight *= RARITY_MULT[event.rarity] ?? 1
+    const divineSenseBonus = 1 + state.cultivationSystems.divineSense / 400
+    weight *= divineSenseBonus
   }
 
   const romanceChain = !!(state.flags.met_su_qing || state.flags.has_companion)
