@@ -116,6 +116,16 @@ const CORE_EVENTS: GameEvent[] = [
           { type: 'stat', key: 'luck', value: 3 },
         ],
       },
+      {
+        id: 'crawl_in',
+        text: '从石缝中钻进去',
+        requirements: [{ type: 'stat', key: 'rootBone', max: 20 }],
+        effects: [
+          { type: 'spiritStones', value: 15 },
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'stat', key: 'comprehension', value: 2 },
+        ],
+      },
     ],
   },
   {
@@ -324,6 +334,15 @@ const CORE_EVENTS: GameEvent[] = [
               fail: '神识遭猛烈反噬，元神受创，你踉跄退走。',
             },
           },
+        ],
+      },
+      {
+        id: 'play_dead',
+        text: '装死蒙混过关',
+        requirements: [{ type: 'stat', key: 'luck', min: 35 }],
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'cultivation', value: 3 },
         ],
       },
     ],
