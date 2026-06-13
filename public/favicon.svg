@@ -1,14 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#1a2a22"/>
       <stop offset="100%" stop-color="#0c0f0d"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+    <linearGradient id="gold" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#e8c547"/>
       <stop offset="100%" stop-color="#8a7020"/>
     </linearGradient>
   </defs>
-  <circle cx="32" cy="32" r="30" fill="url(#bg)" stroke="url(#gold)" stroke-width="2.5"/>
-  <text x="32" y="42" text-anchor="middle" font-family="serif" font-size="32" font-weight="bold" fill="url(#gold)">仙</text>
+  <circle cx="64" cy="64" r="60" fill="url(#bg)" stroke="url(#gold)" stroke-width="4"/>
+  <text x="64" y="84" text-anchor="middle" font-family="serif" font-size="64" font-weight="bold" fill="url(#gold)">仙</text>
 </svg>
