@@ -157,18 +157,6 @@ export function LoreScreen({ onContinue }: Props) {
           </button>
         </div>
 
-        {/* 跳过按钮 - 右下角 */}
-        <div className="fixed bottom-6 right-6 z-20">
-          <button
-            type="button"
-            onClick={isLast && !isTyping ? onContinue : handleSkip}
-            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-gold)] cursor-pointer
-              border border-[var(--color-mist)]/20 hover:border-[var(--color-gold)]/40
-              px-4 py-2 rounded-sm transition-colors bg-[rgba(12,15,13,0.8)]"
-          >
-            {isLast && !isTyping ? '进入游戏' : '跳过剧情'}
-          </button>
-        </div>
       </div>
     </div>
   )
