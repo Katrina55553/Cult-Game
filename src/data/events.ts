@@ -575,6 +575,8 @@ const CORE_EVENTS: GameEvent[] = [
       '天玄宗门内大比拉开帷幕，弟子们个个摩拳擦掌。夺魁者可获灵石丹药，更有机会被长老收为亲传。',
     weight: 12,
     years: 2,
+    maxTimes: 2,
+    cooldown: 6,
     conditions: [
       { type: 'realm', min: 'foundation' },
       { type: 'flag', key: 'loyal_to_sect', value: true },
@@ -621,6 +623,7 @@ const CORE_EVENTS: GameEvent[] = [
       '一名魔修不知从何处现身，许以无上魔功，条件仅是取一无辜之人的性命。杀意与贪念交织涌来，你的道心正面临严峻的考验。',
     weight: 10,
     years: 1,
+    once: true,
     conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
@@ -792,6 +795,7 @@ const CORE_EVENTS: GameEvent[] = [
       '天地忽生异象，一座上古洞天裂空而出。四方修士闻风而动蜂拥而至，机缘与杀机并存其间。',
     weight: 10,
     years: 3,
+    once: true,
     conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
@@ -1014,6 +1018,8 @@ const CORE_EVENTS: GameEvent[] = [
       '修行到了紧要关头，心魔忽然化形而出，幻作你内心最深处的恐惧与执念，直扑而来。',
     weight: 10,
     years: 3,
+    maxTimes: 2,
+    cooldown: 8,
     conditions: [
       { type: 'stat', key: 'demonHeart', min: 40 },
       { type: 'realm', min: 'foundation' },
@@ -1587,6 +1593,7 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'report',
         text: '禀报值守师兄',
+        requirements: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
         effects: [
           { type: 'stat', key: 'karma', value: 8 },
           { type: 'spiritStones', value: 8 },
@@ -1599,7 +1606,7 @@ const CORE_EVENTS: GameEvent[] = [
     title: '同门之谊',
     description:
       '演武场旁，一名同门弟子盘坐树下，满面愁容。攀谈之下，他坦言修炼瓶颈已久，若无法突破便要被遣送下山。你心生恻隐。',
-    weight: 20,
+    weight: 12,
     years: 1,
     once: true,
     conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
@@ -1637,7 +1644,7 @@ const CORE_EVENTS: GameEvent[] = [
     title: '山间灵兽',
     description:
       '深山采药时，你偶遇一头幼小的灵狐，通体雪白，眸泛灵光。它受了伤，蜷缩在溪边瑟瑟发抖。远处传来猎人追捕的呼喝声。',
-    weight: 18,
+    weight: 12,
     years: 1,
     once: true,
     choices: [
@@ -1686,7 +1693,7 @@ const CORE_EVENTS: GameEvent[] = [
     title: '首次斗法',
     description:
       '宗门比武场开放，你首次与同门弟子正面交锋。对手修为与你相当，招式凌厉。围观的师兄弟议论纷纷，这是你在宗门中证明自己的机会。',
-    weight: 22,
+    weight: 14,
     years: 1,
     once: true,
     conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],

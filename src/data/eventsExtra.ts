@@ -1326,6 +1326,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '村中百姓告急，附近山中出现魔巢，魔物夜夜下山伤人。你循迹而至，见一处洞穴被黑雾笼罩，洞口白骨散落。深处传来低沉嘶吼。',
     weight: 7,
     years: 1,
+    once: true,
     act: 'foundation',
     choices: [
       {
@@ -1431,6 +1432,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你发现一处无主灵脉，灵气浓郁得化为雾霭。然而你并非唯一的发现者——一名散修已在灵脉旁打坐，见你前来，神色不善。',
     weight: 8,
     years: 1,
+    maxTimes: 2,
+    cooldown: 6,
     act: 'foundation',
     choices: [
       {
@@ -2671,7 +2674,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
     weight: 12,
     years: 1,
     maxTimes: 3,
-    cooldown: 5,
+    cooldown: 6,
+    minGap: 4,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
@@ -2710,6 +2714,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 2,
     cooldown: 8,
+    minGap: 5,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
@@ -2815,6 +2820,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '旅途中遇到一名志趣相投的散修，他修为与你相当，性格豁达。二人一见如故，他提议结伴同行一段路程。散修之路孤寂，有个伴总是好的。',
     weight: 10,
     years: 1,
+    maxTimes: 2,
+    cooldown: 6,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
@@ -2952,6 +2959,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 2,
     cooldown: 8,
+    minGap: 5,
     choices: [
       {
         id: 'self_rescue',
@@ -3018,6 +3026,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 0,
     maxTimes: 2,
     cooldown: 10,
+    minGap: 5,
     conditions: [{ type: 'resource', key: 'spiritStones', min: 30 }],
     choices: [
       {
@@ -3068,8 +3077,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '天降异象，妖气冲天。大批妖兽从深山涌出，如潮水般席卷附近村镇。你所在之地也在妖潮波及范围之内，远处已传来百姓的惨叫声。',
     weight: 7,
     years: 1,
-    maxTimes: 2,
-    cooldown: 10,
+    once: true,
+    minGap: 5,
     choices: [
       {
         id: 'defend_village',
@@ -3124,6 +3133,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 2,
     cooldown: 10,
+    minGap: 5,
     choices: [
       {
         id: 'submit',
@@ -3176,6 +3186,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     weight: 6,
     years: 1,
     once: true,
+    minGap: 5,
     choices: [
       {
         id: 'resist_plague',
@@ -3228,6 +3239,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 2,
     cooldown: 8,
+    minGap: 5,
     choices: [
       {
         id: 'accept_mortality',
@@ -3267,6 +3279,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 0,
     maxTimes: 3,
     cooldown: 6,
+    minGap: 4,
     choices: [
       {
         id: 'force_take',
@@ -3317,6 +3330,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 2,
     cooldown: 8,
+    minGap: 5,
     conditions: [{ type: 'stat', key: 'demonHeart', min: 20 }],
     choices: [
       {
