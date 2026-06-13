@@ -3068,6 +3068,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '天降异象，妖气冲天。大批妖兽从深山涌出，如潮水般席卷附近村镇。你所在之地也在妖潮波及范围之内，远处已传来百姓的惨叫声。',
     weight: 7,
     years: 1,
+    maxTimes: 2,
     cooldown: 10,
     choices: [
       {
