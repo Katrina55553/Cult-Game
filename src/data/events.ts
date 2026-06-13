@@ -1747,6 +1747,272 @@ const CORE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'elder_confession',
+    title: '长老秘辛',
+    description:
+      '一位年迈的长老私下召见你，神色凝重。他告诉你一个秘密：天玄宗建宗之初，曾封印一头远古凶兽于山门之下。封印日渐松动，若不及时加固，后果不堪长老望向你：「你资质不凡，此事交给你了。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'accept_mission',
+        text: '领命加固封印',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 22 },
+              { type: 'formationTier', value: 1 },
+              { type: 'stat', key: 'karma', value: 12 },
+              { type: 'flag', key: 'fortified_seal', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以阵法加固封印，凶兽咆哮渐息。长老赞许地点头。',
+              fail: '封印反噬，你被凶兽魔气所伤，但总算暂时稳住了。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'decline_mission',
+        text: '此事凶险，另请高明',
+        effects: [
+          { type: 'stat', key: 'karma', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_politics',
+    title: '宗门暗流',
+    description:
+      '你无意中听到两位长老在密室中争论。一派主张与苍穹阁议和，另一派主张强硬对抗。你被发现后，两位长老都看向你：「你来说说，该如何抉择？」',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'qi_refining_3' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'peace',
+        text: '支持议和，化干戈为玉帛',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'flag', key: 'peace_faction', value: true },
+        ],
+      },
+      {
+        id: 'war',
+        text: '支持强硬，以战止战',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'flag', key: 'war_faction', value: true },
+        ],
+      },
+      {
+        id: 'neutral',
+        text: '弟子不敢妄议宗门大事',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'forbidden_library',
+    title: '禁地藏书阁',
+    description:
+      '你发现宗门后山有一处禁地藏书阁，内藏上古禁术与秘法。守阁长老不在，门虚掩着。你犹豫是否要进去一探究竟。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'enter_forbidden',
+        text: '偷偷潜入',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'flag', key: 'read_forbidden', value: true },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'stat', key: 'karma', value: -10 },
+            ],
+            narrative: {
+              success: '你偷偷翻阅了几卷禁术，修为大进，但内心隐隐不安。',
+              fail: '你被禁制反噬，心魔暗生，仓皇逃出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'report_forbidden',
+        text: '禀报长老',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'spiritStones', value: 15 },
+        ],
+      },
+      {
+        id: 'ignore_forbidden',
+        text: '不碰禁术，转身离去',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_prophesy',
+    title: '古老预言',
+    description:
+      '你在宗门古籍中发现一段古老预言：「千年后，天地大劫将至。唯集齐七件上古神器，方能镇压浩劫。」你心中一动——这预言似乎与你有关。',
+    weight: 6,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'seek_artifacts',
+        text: '开始寻找上古神器',
+        effects: [
+          { type: 'flag', key: 'seeking_artifacts', value: true },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'dismiss_prophesy',
+        text: '不过是古人的妄言',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_flood',
+    title: '灵气潮汐',
+    description:
+      '天地灵气忽然暴涨，如潮水般涌来。修为低微者被灵气冲得七荤八素，修为高深者却借机突破。这是百年一遇的灵气潮汐，机不可失。',
+    weight: 7,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    choices: [
+      {
+        id: 'ride_tide',
+        text: '借灵气潮汐冲击瓶颈',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'rootBone', value: 4 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '你驾驭灵气潮汐，修为暴涨，根基更加扎实。',
+              fail: '灵气过于狂暴，你险些走火入魔，心魔暗生。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'absorb_slowly',
+        text: '缓缓吸收，稳扎稳打',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'help_others',
+        text: '帮助低阶弟子抵御潮汐',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mysterious_letter',
+    title: '神秘信笺',
+    description:
+      '你收到一封没有署名的信笺，信上只有一句话：「三日后，后山断崖，有关于你身世的秘密。」字迹潦草，却透着一股不容置疑的意味。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'go_cliff',
+        text: '如约前往断崖',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'cultivation', value: 15 },
+              { type: 'flag', key: 'know_origin', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你在断崖遇到一位神秘人，他告知你身世的一角。你若有所悟。',
+              fail: '断崖上空无一人，你却被暗处的陷阱所伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'ignore_letter',
+        text: '不理睬，继续修炼',
+        effects: [
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'investigate_letter',
+        text: '调查信笺来源',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
 ]
 
 export const EVENTS: GameEvent[] = [
