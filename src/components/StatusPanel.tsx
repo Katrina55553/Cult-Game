@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { CultivationSystemsPanel } from './CultivationSystemsPanel'
 import { formatArtifactName } from '../data/artifacts'
 import { getRealmName } from '../engine/gameEngine'
@@ -20,9 +21,35 @@ export function StatusPanel({ player, turn }: Props) {
   const remaining = player.lifespan - player.age
   const routes = getRouteTags(player)
   const warnings = getWarnings(player)
+  const prevRealm = useRef(player.realm)
+  const [realmFlash, setRealmFlash] = useState(false)
+  const prevCultivation = useRef(player.cultivation)
+  const [barFlash, setBarFlash] = useState(false)
+
+  useEffect(() => {
+    if (player.realm !== prevRealm.current) {
+      setRealmFlash(true)
+      const t = setTimeout(() => setRealmFlash(false), 1500)
+      prevRealm.current = player.realm
+      return () => clearTimeout(t)
+    }
+  }, [player.realm])
+
+  useEffect(() => {
+    if (player.cultivation !== prevCultivation.current) {
+      setBarFlash(true)
+      const t = setTimeout(() => setBarFlash(false), 1000)
+      prevCultivation.current = player.cultivation
+      return () => clearTimeout(t)
+    }
+  }, [player.cultivation])
 
   return (
-    <header className="border-b border-[var(--color-jade)]/40 pb-4 mb-6">
+    <header className="border-b border-[var(--color-jade)]/40 pb-4 mb-6 relative overflow-hidden">
+      {realmFlash && (
+        <div className="absolute inset-0 bg-[var(--color-gold)]/10 animate-breakthrough pointer-events-none z-10" />
+      )}
+
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
         <h2 className="text-xl text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
           {player.name}
@@ -58,7 +85,9 @@ export function StatusPanel({ player, turn }: Props) {
       )}
 
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm text-[var(--color-parchment-dim)] mb-3">
-        <span>{getRealmName(player.realm)}</span>
+        <span className={realmFlash ? 'animate-stat-gain font-semibold' : ''}>
+          {getRealmName(player.realm)}
+        </span>
         <span className="hidden sm:inline">·</span>
         <span>{player.spiritRoot}</span>
         <span className="hidden sm:inline">·</span>
@@ -75,7 +104,7 @@ export function StatusPanel({ player, turn }: Props) {
           <span>{player.cultivation}%</span>
         </div>
         <div
-          className="h-1.5 bg-[rgba(0,0,0,0.3)] rounded-full overflow-hidden"
+          className={`h-1.5 bg-[rgba(0,0,0,0.3)] rounded-full overflow-hidden ${barFlash ? 'animate-bar-glow' : ''}`}
           role="progressbar"
           aria-valuenow={player.cultivation}
           aria-valuemin={0}
@@ -90,12 +119,12 @@ export function StatusPanel({ player, turn }: Props) {
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-xs">
-        <MiniStat label="根骨" value={player.stats.rootBone} />
-        <MiniStat label="悟性" value={player.stats.comprehension} />
-        <MiniStat label="气运" value={player.stats.luck} />
-        <MiniStat label="因果" value={player.stats.karma} />
-        <MiniStat label="心魔" value={player.stats.demonHeart} warn={player.stats.demonHeart >= 50} />
-        <MiniStat label="灵石" value={player.spiritStones} />
+        <AnimatedStat label="根骨" value={player.stats.rootBone} />
+        <AnimatedStat label="悟性" value={player.stats.comprehension} />
+        <AnimatedStat label="气运" value={player.stats.luck} />
+        <AnimatedStat label="因果" value={player.stats.karma} />
+        <AnimatedStat label="心魔" value={player.stats.demonHeart} warn={player.stats.demonHeart >= 50} />
+        <AnimatedStat label="灵石" value={player.spiritStones} />
       </div>
 
       <CultivationSystemsPanel player={player} />
@@ -109,11 +138,27 @@ export function StatusPanel({ player, turn }: Props) {
   )
 }
 
-function MiniStat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
+function AnimatedStat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
+  const prev = useRef(value)
+  const [flash, setFlash] = useState<'gain' | 'loss' | null>(null)
+
+  useEffect(() => {
+    if (value !== prev.current) {
+      setFlash(value > prev.current ? 'gain' : 'loss')
+      const t = setTimeout(() => setFlash(null), 600)
+      prev.current = value
+      return () => clearTimeout(t)
+    }
+  }, [value])
+
+  const flashClass = flash === 'gain' ? 'animate-stat-gain' : flash === 'loss' ? 'animate-stat-loss' : ''
+
   return (
     <div className="bg-[rgba(0,0,0,0.2)] px-2 py-1.5 rounded-sm text-center">
       <p className="text-[var(--color-mist)]">{label}</p>
-      <p className={warn ? 'text-[var(--color-cinnabar)]' : 'text-[var(--color-parchment)]'}>{value}</p>
+      <p className={`${warn ? 'text-[var(--color-cinnabar)]' : 'text-[var(--color-parchment)]'} ${flashClass}`}>
+        {value}
+      </p>
     </div>
   )
 }

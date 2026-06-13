@@ -42,7 +42,7 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbando
 
       <div className="grid lg:grid-cols-[1fr_280px] gap-4 sm:gap-6 lg:gap-8">
         <main className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-4 sm:p-6 rounded-sm">
-          <EventCard event={currentEvent} />
+          <EventCard key={currentEvent.id} event={currentEvent} />
           <ChoiceList choices={currentEvent.choices} player={player} onChoose={onChoose} />
         </main>
 

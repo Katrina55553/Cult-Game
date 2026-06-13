@@ -32,7 +32,7 @@ export function MilestoneToast({ milestone, onDismiss }: Props) {
       role="presentation"
     >
       <div
-        className={`max-w-md w-full border-2 bg-[rgba(12,15,13,0.95)] px-8 py-6 rounded-sm text-center ${TONE[milestone.type]}`}
+        className={`max-w-md w-full border-2 bg-[rgba(12,15,13,0.95)] px-8 py-6 rounded-sm text-center animate-milestone-enter ${TONE[milestone.type]}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-label="里程碑通知"

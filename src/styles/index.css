@@ -109,12 +109,69 @@ body::before {
   }
 }
 
+@keyframes stat-flash-gain {
+  0% { color: #4a8a72; transform: scale(1.2); }
+  100% { color: inherit; transform: scale(1); }
+}
+
+@keyframes stat-flash-loss {
+  0% { color: #d45a3a; transform: scale(1.2); }
+  100% { color: inherit; transform: scale(1); }
+}
+
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-30px); }
+}
+
+@keyframes breakthrough-flash {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes bar-glow {
+  0% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0); }
+  50% { box-shadow: 0 0 12px 3px rgba(201, 162, 39, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0); }
+}
+
+@keyframes milestone-enter {
+  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .animate-fade-up {
   animation: fade-up 0.5s ease-out both;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-stat-gain {
+  animation: stat-flash-gain 0.6s ease-out;
+}
+
+.animate-stat-loss {
+  animation: stat-flash-loss 0.6s ease-out;
+}
+
+.animate-float-up {
+  animation: float-up 1s ease-out forwards;
+  pointer-events: none;
+}
+
+.animate-breakthrough {
+  animation: breakthrough-flash 1.5s ease-out forwards;
+}
+
+.animate-bar-glow {
+  animation: bar-glow 1s ease-out;
+}
+
+.animate-milestone-enter {
+  animation: milestone-enter 0.4s ease-out both;
 }
 
 .log-scroll {
@@ -133,7 +190,13 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
-  .animate-pulse-glow {
+  .animate-pulse-glow,
+  .animate-stat-gain,
+  .animate-stat-loss,
+  .animate-float-up,
+  .animate-breakthrough,
+  .animate-bar-glow,
+  .animate-milestone-enter {
     animation: none;
   }
 
