@@ -1,6 +1,7 @@
 import { AchievementToast } from './components/AchievementToast'
 import { EndingScreen } from './components/EndingScreen'
 import { GameScreen } from './components/GameScreen'
+import { LoreScreen } from './components/LoreScreen'
 import { MilestoneToast } from './components/MilestoneToast'
 import { RootRevealScreen } from './components/RootRevealScreen'
 import { ShopScreen } from './components/ShopScreen'
@@ -15,6 +16,7 @@ export default function App() {
     milestone,
     achievementToast,
     startGame,
+    confirmLore,
     confirmRoot,
     choose,
     buyItem,
@@ -38,6 +40,10 @@ export default function App() {
 
   return (
     <>
+      {session.phase === 'lore' && (
+        <LoreScreen onContinue={confirmLore} />
+      )}
+
       {session.phase === 'root_reveal' && (
         <RootRevealScreen session={session} onConfirm={confirmRoot} onAbandon={restart} />
       )}

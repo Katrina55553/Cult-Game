@@ -167,7 +167,7 @@ export function createNewGame(options: NewGameOptions): GameSession {
   const startEvent = EVENTS.find((e) => e.id === 'enter_sect') ?? null
 
   return {
-    phase: 'root_reveal',
+    phase: 'lore',
     player,
     currentEvent: startEvent,
     ending: null,

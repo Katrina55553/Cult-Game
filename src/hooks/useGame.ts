@@ -67,6 +67,13 @@ export function useGame() {
     [],
   )
 
+  const confirmLore = useCallback(() => {
+    setSession((prev) => {
+      if (!prev) return prev
+      return { ...prev, phase: 'root_reveal' }
+    })
+  }, [])
+
   const confirmRoot = useCallback(() => {
     setSession((prev) => {
       if (!prev) return prev
@@ -212,6 +219,7 @@ export function useGame() {
     milestone,
     achievementToast,
     startGame,
+    confirmLore,
     confirmRoot,
     choose,
     buyItem,
