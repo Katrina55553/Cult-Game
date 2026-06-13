@@ -2938,4 +2938,408 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'qi_deviation',
+    title: '走火入魔',
+    description:
+      '闭关修炼时急于求成，灵气运转失控，经脉寸寸断裂。你口吐鲜血，意识模糊，体内灵气如脱缰野马四处冲撞。若不及时施救，轻则修为倒退，重则走火入魔。',
+    weight: 10,
+    years: 1,
+    choices: [
+      {
+        id: 'self_rescue',
+        text: '强运心法自救',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'demonHeart', value: -8 },
+              { type: 'cultivation', value: 5 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+              { type: 'lifespan', value: -10 },
+            ],
+            narrative: {
+              success: '你以强横意志压制灵气暴走，虽元气受损，却因祸得福，心魔反被压制。',
+              fail: '自救失败，灵气暴走更加猛烈，你修为大幅倒退，心魔滋生。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'seek_pill',
+        text: '服用保命丹药',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 20 }],
+        effects: [
+          { type: 'spiritStones', value: -20 },
+          { type: 'cultivation', value: -8 },
+        ],
+      },
+      {
+        id: 'endure_qi',
+        text: '咬牙硬撑',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'rootBone', value: 4 },
+              { type: 'cultivation', value: 8 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'cultivation', value: -15 },
+            ],
+            narrative: {
+              success: '你以肉身强扛灵气暴走，经脉虽损，根基却更加坚韧。',
+              fail: '你撑不住了，灵气暴走摧毁数条经脉，寿元大损。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_stone_theft',
+    title: '灵石失窃',
+    description:
+      '你从闭关中醒来，发现储物袋被人割破，灵石不翼而飞。现场留下一枚黑色令牌，似是某个盗修组织的记号。你怒火中烧，却无从追查。',
+    weight: 8,
+    years: 0,
+    conditions: [{ type: 'resource', key: 'spiritStones', min: 30 }],
+    choices: [
+      {
+        id: 'hunt_thief',
+        text: '追查盗修组织',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你循迹找到盗修巢穴，以雷霆手段夺回灵石，还缴获了他们的赃物。',
+              fail: '盗修早有防备，你中了埋伏，重伤而归，灵石也未能追回。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'accept_loss',
+        text: '破财消灾，不再追究',
+        effects: [
+          { type: 'spiritStones', value: -25 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'rob_others',
+        text: '以其人之道还治其人之身',
+        effects: [
+          { type: 'spiritStones', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'stat', key: 'karma', value: -12 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_invasion',
+    title: '妖潮来袭',
+    description:
+      '天降异象，妖气冲天。大批妖兽从深山涌出，如潮水般席卷附近村镇。你所在之地也在妖潮波及范围之内，远处已传来百姓的惨叫声。',
+    weight: 7,
+    years: 1,
+    choices: [
+      {
+        id: 'defend_village',
+        text: '挺身而出，守护百姓',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 18 },
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'cultivation', value: 5 },
+            ],
+            narrative: {
+              success: '你浴血奋战击退妖潮，百姓感恩戴德，你的道心也因此更加坚定。',
+              fail: '妖兽凶猛，你虽奋力抵抗，仍被重伤。百姓得以逃脱，你却元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'flee_invasion',
+        text: '妖潮凶猛，先保自身',
+        effects: [
+          { type: 'stat', key: 'karma', value: -10 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+      {
+        id: 'hunt_stragglers',
+        text: '等妖潮过后猎杀落单妖兽',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'cultivation', value: 8 },
+          { type: 'stat', key: 'karma', value: -5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'senior_bullying',
+    title: '前辈欺压',
+    description:
+      '一名修为远高于你的前辈修士看上了你的法宝，当众逼你交出。他气势汹汹，周围修士噤若寒蝉，无人敢为你说话。你修为低微，正面对抗毫无胜算。',
+    weight: 8,
+    years: 1,
+    choices: [
+      {
+        id: 'submit',
+        text: '忍辱交出法宝',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 12 },
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+      {
+        id: 'trick',
+        text: '以计谋脱身',
+        requirements: [{ type: 'stat', key: 'luck', min: 45 }],
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'defy',
+        text: '宁死不屈',
+        outcomes: [
+          {
+            chance: 0.2,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'cultivation', value: 10 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你以弱胜强，拼死反抗竟逼退对方。围观修士纷纷惊叹，你的威名传遍四方。',
+              fail: '实力差距过大，你被重伤，法宝也被夺走。但你的骨气让人敬佩。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'calamity_plague',
+    title: '灵瘟肆虐',
+    description:
+      '一场诡异的灵瘟席卷修真界，修士感染后修为倒退、灵根受损。你不幸被感染，体内灵气正缓缓流失。此瘟无药可解，唯有以强横肉身硬抗，或寻传说中的灵泉洗髓。',
+    weight: 6,
+    years: 1,
+    choices: [
+      {
+        id: 'resist_plague',
+        text: '以肉身强扛灵瘟',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'rootBone', value: 6 },
+              { type: 'lifespan', value: 5 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: -15 },
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'rootBone', value: -4 },
+            ],
+            narrative: {
+              success: '你以强横肉身扛过灵瘟，脱胎换骨，根基更加扎实。',
+              fail: '灵瘟侵蚀你的根基，修为倒退，寿元也有所折损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'find_spring',
+        text: '四处寻访灵泉',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'lifespan', value: -5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'isolate',
+        text: '闭关隔离，静待瘟退',
+        effects: [
+          { type: 'cultivation', value: -8 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dao_heart_shaken',
+    title: '道心动摇',
+    description:
+      '你目睹一名曾经叱咤风云的前辈修士寿尽坐化，化为一抔黄土。千年修为，终归尘土。你不禁怀疑：修仙问道，真的有意义吗？道心出现裂痕，若不及时修补，恐生心魔。',
+    weight: 9,
+    years: 1,
+    choices: [
+      {
+        id: 'accept_mortality',
+        text: '坦然接受生死轮回',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'obsess_immortality',
+        text: '发誓不惜一切代价求长生',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 12 },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'karma', value: -8 },
+        ],
+      },
+      {
+        id: 'visit_mentor',
+        text: '求教于师长',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'resource_conflict',
+    title: '灵脉之争',
+    description:
+      '你发现一处小型灵脉正适合修炼，却有另一名修士早已在此打坐。他见你到来，面色不善：「此地是我先到，识趣的便滚。」灵脉资源稀缺，退让意味着修炼进度落后。',
+    weight: 10,
+    years: 0,
+    choices: [
+      {
+        id: 'force_take',
+        text: '以实力抢夺灵脉',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以强硬手段夺下灵脉，修为有所进益，却也树了一个敌人。',
+              fail: '对方实力不俗，你两败俱伤，灵脉也被破坏。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'share_vein',
+        text: '提议共同修炼',
+        effects: [
+          { type: 'cultivation', value: 8 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'yield_vein',
+        text: '让出灵脉',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'inner_demon',
+    title: '心魔幻境',
+    description:
+      '你陷入心魔幻境，眼前浮现你最恐惧的场景：亲朋离散、修为尽废、孤独终老。心魔低语：「放弃吧，一切皆是虚妄。」你必须做出抉择。',
+    weight: 7,
+    years: 1,
+    conditions: [{ type: 'stat', key: 'demonHeart', min: 20 }],
+    choices: [
+      {
+        id: 'face_demon',
+        text: '直面心魔，斩断执念',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'demonHeart', value: -15 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'cultivation', value: 12 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'cultivation', value: -10 },
+            ],
+            narrative: {
+              success: '你以道心斩断心魔，心境澄明，修为大进。',
+              fail: '心魔反噬，你道心受损，修为倒退。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'embrace_demon',
+        text: '拥抱心魔，以魔证道',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'karma', value: -10 },
+        ],
+      },
+      {
+        id: 'suppress_demon',
+        text: '强行压制心魔',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 5 },
+          { type: 'lifespan', value: -5 },
+        ],
+      },
+    ],
+  },
 ]
