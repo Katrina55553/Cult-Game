@@ -67,6 +67,10 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
     setPage(p)
   }, [])
 
+  const handleSkipAll = useCallback(() => {
+    onContinue()
+  }, [onContinue])
+
   const handleNext = useCallback(() => {
     if (isTyping) {
       handleSkip()
@@ -146,7 +150,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
 
         {/* 导航按钮 */}
         <div className="flex gap-3">
-          {page > 0 && (
+          {page > 0 && !isTyping && (
             <button
               type="button"
               onClick={handlePrev}
@@ -160,13 +164,36 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
           <button
             type="button"
             onClick={handleNext}
-            className="flex-1 py-3 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
-              text-[var(--color-parchment)] tracking-[0.2em] rounded-sm transition-all cursor-pointer
-              border border-[var(--color-cinnabar-glow)]/50
-              hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
+            className="flex-1 py-3 min-h-[44px] border border-[var(--color-jade)]/40 rounded-sm
+              text-[var(--color-parchment-dim)] hover:text-[var(--color-parchment)] hover:border-[var(--color-jade-light)]
+              cursor-pointer transition-all tracking-wider"
           >
-            {isTyping ? '跳过' : isLast ? '开始修行' : '下一页'}
+            {isTyping ? '跳过当前' : isLast ? '开始修行' : '下一页'}
           </button>
+          {!isLast && (
+            <button
+              type="button"
+              onClick={handleSkipAll}
+              className="flex-1 py-3 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
+                text-[var(--color-parchment)] tracking-[0.2em] rounded-sm transition-all cursor-pointer
+                border border-[var(--color-cinnabar-glow)]/50
+                hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
+            >
+              跳过全部
+            </button>
+          )}
+          {isLast && !isTyping && (
+            <button
+              type="button"
+              onClick={onContinue}
+              className="flex-1 py-3 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
+                text-[var(--color-parchment)] tracking-[0.2em] rounded-sm transition-all cursor-pointer
+                border border-[var(--color-cinnabar-glow)]/50
+                hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
+            >
+              开始修行
+            </button>
+          )}
         </div>
 
       </div>
