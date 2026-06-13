@@ -35,6 +35,7 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'spiritStones', value: 50 },
             ],
             failEffects: [
+              { type: 'flag', key: 'loyal_to_sect', value: true },
               { type: 'stat', key: 'karma', value: -10 },
               { type: 'cultivation', value: 10 },
             ],
