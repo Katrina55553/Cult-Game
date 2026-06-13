@@ -4918,4 +4918,215 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'npc_conflict',
+    title: '同门争执',
+    description:
+      '林远与赵天行在演武场发生争执。赵天行讥讽林远修为低微不配留在宗门，林远涨红了脸却无力反驳。周围弟子围观议论，你必须做出选择。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'helped_lin_yuan', value: true },
+      { type: 'flag', key: 'zhao_enemy', value: true },
+    ],
+    choices: [
+      {
+        id: 'defend_lin',
+        text: '挺身而出为林远说话',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'flag', key: 'lin_yuan_brother', value: true },
+          { type: 'flag', key: 'zhao_enemy', value: true },
+        ],
+      },
+      {
+        id: 'mediate',
+        text: '居中调停，化解纷争',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 45 }],
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'ignore_conflict',
+        text: '不插手同门私事',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'su_muyan_train',
+    title: '师姐传功',
+    description:
+      '苏暮烟找到你，说她近日领悟了一门新功法，愿与你分享。「你我同为天玄宗弟子，互相切磋才能共同进步。」她目光认真，手中捧着一卷玉简。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'su_muyan_ally', value: true }],
+    choices: [
+      {
+        id: 'accept_train',
+        text: '虚心接受传功',
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'flag', key: 'su_muyan_tech', value: true },
+        ],
+      },
+      {
+        id: 'exchange_train',
+        text: '以自己的功法交换',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'flag', key: 'su_muyan_tech', value: true },
+        ],
+      },
+      {
+        id: 'decline_train',
+        text: '婉拒好意，独自苦修',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'lin_yuan_growth',
+    title: '林远蜕变',
+    description:
+      '数年过去，林远已非当日那个怯懦少年。他独闯秘境九死一生，修为突飞猛进，性格也变得坚毅沉稳。他找到你，目光坚定：「师兄，我已不再是需要你保护的人了。今后，让我与你并肩作战。」',
+    weight: 7,
+    years: 3,
+    once: true,
+    conditions: [{ type: 'flag', key: 'lin_yuan_brother', value: true }],
+    choices: [
+      {
+        id: 'proud',
+        text: '为他的成长感到欣慰',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 12 },
+          { type: 'flag', key: 'lin_yuan_master', value: true },
+        ],
+      },
+      {
+        id: 'spar_growth',
+        text: '与他切磋一番',
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'flag', key: 'lin_yuan_master', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'zhao_tianxing_sacrifice',
+    title: '赵天行挡劫',
+    description:
+      '天劫降临之际，赵天行突然出现在你面前。你以为他要趁人之危，却见他转身面对天雷，以肉身替你挡下一道劫雷。「别误会，我只是不想让别人打败你。」他浑身焦黑，却仍强撑着站立。',
+    weight: 5,
+    years: 3,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'beat_zhao', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'save_zhao',
+        text: '拼尽灵力救他',
+        effects: [
+          { type: 'lifespan', value: -5 },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'flag', key: 'zhao_friend', value: true },
+        ],
+      },
+      {
+        id: 'acknowledge_zhao',
+        text: '默默记下这份情',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'flag', key: 'zhao_friend', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'moli_muyan_encounter',
+    title: '正魔相遇',
+    description:
+      '你与苏暮烟同行时，迎面撞上了墨离。三人对视，空气凝固。苏暮烟手按剑柄，墨离目光冰冷。你夹在中间，必须化解这场正魔对峙。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'moli_ally', value: true },
+      { type: 'flag', key: 'su_muyan_ally', value: true },
+    ],
+    choices: [
+      {
+        id: 'introduce',
+        text: '向苏暮烟解释墨离是朋友',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'moli_muyan_peace', value: true },
+        ],
+      },
+      {
+        id: 'separate',
+        text: '让墨离先行离开',
+        effects: [
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+      {
+        id: 'stand_aside',
+        text: '让他们自己解决',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'npc_feast',
+    title: '同门宴饮',
+    description:
+      '宗门大比之后，林远提议众人聚饮。苏暮烟难得放下冷淡面具，赵天行也默不作声地坐下。觥筹交错间，你看着这些同门，忽觉修仙路上有这些人同行，亦是幸事。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'lin_yuan_ally', value: true },
+      { type: 'flag', key: 'su_muyan_ally', value: true },
+    ],
+    choices: [
+      {
+        id: 'toast',
+        text: '举杯畅饮，尽兴而归',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'lifespan', value: 2 },
+        ],
+      },
+      {
+        id: 'discuss',
+        text: '借机交流修炼心得',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+    ],
+  },
 ]
