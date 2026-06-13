@@ -77,7 +77,6 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'force',
         text: '以力破阵，强行闯入',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.35,
@@ -508,7 +507,6 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'hard',
         text: '凭肉身硬撼天雷',
         hint: '约四成得手 · 败则重伤',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
         outcomes: [
           {
             chance: 0.4,
@@ -593,7 +591,6 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'compete',
         text: '登台比试，竭尽全力',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.5,
@@ -638,7 +635,6 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'reject',
         text: '断然回绝，拔剑斩魔',
-        requirements: [{ type: 'swordTier', min: 1 }],
         outcomes: [
           {
             chance: 0.55,
@@ -939,7 +935,7 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'array',
         text: '布设护体阵法',
-        requirements: [{ type: 'formationTier', min: 1 }],
+        requirements: [{ type: 'stat', key: 'comprehension', min: 55 }],
         outcomes: [
           {
             chance: 0.55,
@@ -1391,7 +1387,6 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'pull_sword',
         text: '拔出石中古剑',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
         outcomes: [
           {
             chance: 0.35,
@@ -1455,7 +1450,6 @@ const CORE_EVENTS: GameEvent[] = [
       {
         id: 'refine',
         text: '带回炼制成灵丹',
-        requirements: [{ type: 'alchemyTier', min: 1 }],
         outcomes: [
           {
             chance: 0.5,

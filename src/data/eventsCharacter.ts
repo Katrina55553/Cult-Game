@@ -31,7 +31,6 @@ export const CHARACTER_EVENTS: GameEvent[] = [
       {
         id: 'challenge_demon',
         text: '趁其闭关偷袭',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
         outcomes: [
           {
             chance: 0.15,
@@ -101,7 +100,6 @@ export const CHARACTER_EVENTS: GameEvent[] = [
       {
         id: 'betray_moli',
         text: '趁他专注禁制，夺其宝物',
-        requirements: [{ type: 'stat', key: 'comprehension', min: 45 }],
         outcomes: [
           {
             chance: 0.2,
@@ -172,7 +170,6 @@ export const CHARACTER_EVENTS: GameEvent[] = [
       {
         id: 'betray_moli_final',
         text: '设下陷阱伏击墨离',
-        requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
         outcomes: [
           {
             chance: 0.25,

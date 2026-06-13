@@ -417,7 +417,6 @@ export const SYSTEM_EVENTS: GameEvent[] = [
       {
         id: 'force',
         text: '强行催动剑意',
-        requirements: [{ type: 'swordTier', min: 1 }],
         outcomes: [
           {
             chance: 0.35,

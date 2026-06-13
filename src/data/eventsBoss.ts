@@ -14,7 +14,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'fight_wolf',
         text: '正面迎战妖狼王',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.45,
@@ -97,7 +96,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'challenge_general',
         text: '单挑血魔将',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
         outcomes: [
           {
             chance: 0.4,
@@ -188,7 +186,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'fight_assassin',
         text: '反手制敌',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 25 }],
         outcomes: [
           {
             chance: 0.5,
@@ -254,7 +251,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'fight_golem',
         text: '以力破力，硬撼傀儡',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 45 }],
         outcomes: [
           {
             chance: 0.35,
@@ -309,7 +305,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'fight_thunder',
         text: '以金丹之力对抗雷兽',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 50 }],
         outcomes: [
           {
             chance: 0.35,
@@ -364,7 +359,6 @@ export const BOSS_EVENTS: GameEvent[] = [
       {
         id: 'defy_lord',
         text: '宁死不屈，正面迎战',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 60 }],
         outcomes: [
           {
             chance: 0.3,

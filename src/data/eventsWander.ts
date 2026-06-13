@@ -125,7 +125,6 @@ export const WANDER_EVENTS: GameEvent[] = [
       {
         id: 'fight_bandits',
         text: '以一敌三，正面迎战',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 25 }],
         outcomes: [
           {
             chance: 0.45,

@@ -324,7 +324,6 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'hunt',
         text: '猎兽取丹',
         hint: '约四成得手 · 败则重伤',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 25 }],
         outcomes: [
           {
             chance: 0.4,
@@ -783,7 +782,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'fight',
         text: '杀入魔巢',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.5,
@@ -808,7 +806,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'seal',
         text: '以阵法封印魔巢',
-        requirements: [{ type: 'formationTier', min: 1 }],
         effects: [
           { type: 'formationTier', value: 1 },
           { type: 'stat', key: 'karma', value: 10 },
@@ -1351,7 +1348,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'defend_village',
         text: '挺身而出，守护百姓',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.45,
@@ -1425,7 +1421,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'defy',
         text: '宁死不屈',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
         outcomes: [
           {
             chance: 0.2,
@@ -1461,7 +1456,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'resist_plague',
         text: '以肉身强扛灵瘟',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 35 }],
         outcomes: [
           {
             chance: 0.4,
@@ -1555,7 +1549,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'force_take',
         text: '以实力抢夺灵脉',
-        requirements: [{ type: 'stat', key: 'rootBone', min: 25 }],
         outcomes: [
           {
             chance: 0.5,
@@ -1608,7 +1601,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'face_demon',
         text: '直面心魔，斩断执念',
-        requirements: [{ type: 'stat', key: 'comprehension', min: 35 }],
         outcomes: [
           {
             chance: 0.45,
@@ -1671,7 +1663,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'steal_map',
         text: '趁摊主不备顺走古图',
-        requirements: [{ type: 'stat', key: 'luck', min: 30 }],
         outcomes: [
           {
             chance: 0.4,
@@ -1853,7 +1844,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'cultivate_blood',
         text: '趁血月修炼',
-        requirements: [{ type: 'stat', key: 'comprehension', min: 30 }],
         outcomes: [
           {
             chance: 0.4,
@@ -1905,7 +1895,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'follow_light',
         text: '追随光柱而去',
-        requirements: [{ type: 'stat', key: 'luck', min: 40 }],
         outcomes: [
           {
             chance: 0.35,
@@ -2031,7 +2020,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'take_egg',
         text: '取走巢中雷鹰蛋',
-        requirements: [{ type: 'stat', key: 'luck', min: 35 }],
         outcomes: [
           {
             chance: 0.5,
@@ -2085,7 +2073,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'capture_phoenix',
         text: '以法术强行收服',
-        requirements: [{ type: 'stat', key: 'comprehension', min: 60 }],
         outcomes: [
           {
             chance: 0.15,
@@ -2220,7 +2207,6 @@ export const MISC_EVENTS: GameEvent[] = [
       {
         id: 'enter_tomb',
         text: '破解禁制进入墓穴',
-        requirements: [{ type: 'formationTier', min: 1 }],
         outcomes: [
           {
             chance: 0.4,
