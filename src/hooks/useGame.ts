@@ -14,6 +14,7 @@ import type { GameSession, Milestone, NewGameOptions, OriginId } from '../types/
 
 export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
+  const [currentSlot, setCurrentSlot] = useState<number>(0)
   const [soundOn, setSoundOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
@@ -25,9 +26,9 @@ export function useGame() {
 
   useEffect(() => {
     if (session && (session.phase === 'playing' || session.phase === 'shop' || session.phase === 'ending')) {
-      saveGame(session)
+      saveGame(session, currentSlot)
     }
-  }, [session])
+  }, [session, currentSlot])
 
   useEffect(() => {
     setMuted(!soundOn)
@@ -38,14 +39,31 @@ export function useGame() {
   }, [])
 
   const startGame = useCallback(
-    (options: NewGameOptions) => {
+    (options: NewGameOptions & { slot?: number }) => {
+      const slot = options.slot ?? 0
       if (soundOnRef.current) playSound('start')
+      setCurrentSlot(slot)
       setSession(createNewGame(options))
       setMilestone(null)
       setAchievementToast([])
     },
     [],
   )
+
+  const loadSlot = useCallback((slot: number) => {
+    const s = loadGame(slot)
+    if (s) {
+      setCurrentSlot(slot)
+      setSession(s)
+      setMilestone(null)
+      setAchievementToast([])
+    }
+  }, [])
+
+  const deleteSlot = useCallback((slot: number) => {
+    clearSave(slot)
+    if (soundOnRef.current) playSound('click')
+  }, [])
 
   const confirmRoot = useCallback(() => {
     setSession((prev) => {
@@ -153,12 +171,12 @@ export function useGame() {
   const dismissAchievements = useCallback(() => setAchievementToast([]), [])
 
   const restart = useCallback(() => {
-    clearSave()
+    clearSave(currentSlot)
     setSession(null)
     setMilestone(null)
     setAchievementToast([])
     if (soundOnRef.current) playSound('click')
-  }, [])
+  }, [currentSlot])
 
   const toggleSound = useCallback(() => {
     if (soundOnRef.current) playSound('click')
@@ -170,7 +188,10 @@ export function useGame() {
     soundOn,
     milestone,
     achievementToast,
+    currentSlot,
     startGame,
+    loadSlot,
+    deleteSlot,
     confirmRoot,
     choose,
     buyItem,
@@ -187,4 +208,5 @@ export type StartGameParams = {
   dailyMode: boolean
   useInnateBody: boolean
   origin: OriginId
+  slot?: number
 }

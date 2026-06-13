@@ -14,6 +14,8 @@ export default function App() {
     milestone,
     achievementToast,
     startGame,
+    loadSlot,
+    deleteSlot,
     confirmRoot,
     choose,
     buyItem,
@@ -30,11 +32,20 @@ export default function App() {
       dailyMode: params.dailyMode,
       useInnateBody: params.useInnateBody,
       origin: params.origin,
+      slot: params.slot,
     })
   }
 
   if (!session) {
-    return <StartScreen onStart={handleStart} soundOn={soundOn} onToggleSound={toggleSound} />
+    return (
+      <StartScreen
+        onStart={handleStart}
+        onLoadSlot={loadSlot}
+        onDeleteSlot={deleteSlot}
+        soundOn={soundOn}
+        onToggleSound={toggleSound}
+      />
+    )
   }
 
   return (
