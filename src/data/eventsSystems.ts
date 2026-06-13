@@ -251,6 +251,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
     weight: 10,
     years: 2,
     cooldown: 5,
+    maxTimes: 5,
     conditions: [{ type: 'flag', key: 'has_spirit_beast', value: true }],
     choices: [
       {

@@ -2670,6 +2670,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你行至一处偏僻坊市，此地多为散修聚集，鱼龙混杂。坊市角落有人摆摊出售来历不明的灵器，茶馆中散修们交换着各处秘境的消息。你孑然一身，在这江湖中倒也自在。',
     weight: 12,
     years: 1,
+    maxTimes: 3,
+    cooldown: 5,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
@@ -2706,6 +2708,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '荒野赶路时，你被三名散修拦住去路。为首者目光贪婪，盯着你身上的储物袋：「没有宗门庇护的散修，最好欺负。交出灵石，饶你不死。」',
     weight: 10,
     years: 1,
+    maxTimes: 2,
+    cooldown: 8,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
@@ -2946,6 +2950,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '闭关修炼时急于求成，灵气运转失控，经脉寸寸断裂。你口吐鲜血，意识模糊，体内灵气如脱缰野马四处冲撞。若不及时施救，轻则修为倒退，重则走火入魔。',
     weight: 10,
     years: 1,
+    maxTimes: 2,
+    cooldown: 8,
     choices: [
       {
         id: 'self_rescue',
@@ -3010,6 +3016,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你从闭关中醒来，发现储物袋被人割破，灵石不翼而飞。现场留下一枚黑色令牌，似是某个盗修组织的记号。你怒火中烧，却无从追查。',
     weight: 8,
     years: 0,
+    maxTimes: 2,
+    cooldown: 10,
     conditions: [{ type: 'resource', key: 'spiritStones', min: 30 }],
     choices: [
       {
@@ -3060,6 +3068,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '天降异象，妖气冲天。大批妖兽从深山涌出，如潮水般席卷附近村镇。你所在之地也在妖潮波及范围之内，远处已传来百姓的惨叫声。',
     weight: 7,
     years: 1,
+    cooldown: 10,
     choices: [
       {
         id: 'defend_village',
@@ -3112,6 +3121,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '一名修为远高于你的前辈修士看上了你的法宝，当众逼你交出。他气势汹汹，周围修士噤若寒蝉，无人敢为你说话。你修为低微，正面对抗毫无胜算。',
     weight: 8,
     years: 1,
+    maxTimes: 2,
+    cooldown: 10,
     choices: [
       {
         id: 'submit',
@@ -3163,6 +3174,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '一场诡异的灵瘟席卷修真界，修士感染后修为倒退、灵根受损。你不幸被感染，体内灵气正缓缓流失。此瘟无药可解，唯有以强横肉身硬抗，或寻传说中的灵泉洗髓。',
     weight: 6,
     years: 1,
+    once: true,
     choices: [
       {
         id: 'resist_plague',
@@ -3213,6 +3225,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你目睹一名曾经叱咤风云的前辈修士寿尽坐化，化为一抔黄土。千年修为，终归尘土。你不禁怀疑：修仙问道，真的有意义吗？道心出现裂痕，若不及时修补，恐生心魔。',
     weight: 9,
     years: 1,
+    maxTimes: 2,
+    cooldown: 8,
     choices: [
       {
         id: 'accept_mortality',
@@ -3250,6 +3264,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你发现一处小型灵脉正适合修炼，却有另一名修士早已在此打坐。他见你到来，面色不善：「此地是我先到，识趣的便滚。」灵脉资源稀缺，退让意味着修炼进度落后。',
     weight: 10,
     years: 0,
+    maxTimes: 3,
+    cooldown: 6,
     choices: [
       {
         id: 'force_take',
@@ -3298,6 +3314,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
       '你陷入心魔幻境，眼前浮现你最恐惧的场景：亲朋离散、修为尽废、孤独终老。心魔低语：「放弃吧，一切皆是虚妄。」你必须做出抉择。',
     weight: 7,
     years: 1,
+    maxTimes: 2,
+    cooldown: 8,
     conditions: [{ type: 'stat', key: 'demonHeart', min: 20 }],
     choices: [
       {
