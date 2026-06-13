@@ -131,19 +131,13 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
 
       <CultivationSystemsPanel player={player} />
 
-      {player.artifacts.length > 0 && (
-        <p className="mt-2 text-xs text-[var(--color-mist)]">
-          法宝：{player.artifacts.map(formatArtifactName).join('、')}
-        </p>
-      )}
-
       <button
         type="button"
         onClick={() => setShowInventory(true)}
         className="mt-2 text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
           border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
       >
-        背包 {player.inventory.length > 0 ? `(${player.inventory.length})` : ''}
+        背包 ({player.artifacts.length + player.inventory.length})
       </button>
 
       {showInventory && (
@@ -162,29 +156,44 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
                 关闭
               </button>
             </div>
-            {player.inventory.length === 0 ? (
+            {player.artifacts.length === 0 && player.inventory.length === 0 ? (
               <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">背包空空如也</p>
             ) : (
               <div className="space-y-2 flex-1 overflow-y-auto log-scroll min-h-0">
-                {player.inventory.map((item, i) => (
-                  <div key={i} className="text-xs flex items-center justify-between gap-2 px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm">
-                    <div className="min-w-0">
-                      <p className="text-[var(--color-parchment)]">{item.name}</p>
-                      <p className="text-[var(--color-mist)]">{item.description}</p>
-                    </div>
-                    {item.usable && onUseItem && (
-                      <button
-                        type="button"
-                        onClick={() => onUseItem(i)}
-                        className="shrink-0 text-xs px-3 py-1 border border-[var(--color-jade)]/40 rounded-sm
-                          text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-                          cursor-pointer transition-colors"
-                      >
-                        使用
-                      </button>
-                    )}
+                {player.artifacts.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">法宝</p>
+                    {player.artifacts.map((id, i) => (
+                      <div key={`a-${i}`} className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1">
+                        <p className="text-[var(--color-gold)]">{formatArtifactName(id)}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+                {player.inventory.length > 0 && (
+                  <div>
+                    <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
+                    {player.inventory.map((item, i) => (
+                      <div key={`i-${i}`} className="text-xs flex items-center justify-between gap-2 px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1">
+                        <div className="min-w-0">
+                          <p className="text-[var(--color-parchment)]">{item.name}</p>
+                          <p className="text-[var(--color-mist)]">{item.description}</p>
+                        </div>
+                        {item.usable && onUseItem && (
+                          <button
+                            type="button"
+                            onClick={() => onUseItem(i)}
+                            className="shrink-0 text-xs px-3 py-1 border border-[var(--color-jade)]/40 rounded-sm
+                              text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                              cursor-pointer transition-colors"
+                          >
+                            使用
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
