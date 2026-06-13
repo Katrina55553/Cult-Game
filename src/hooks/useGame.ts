@@ -27,7 +27,7 @@ export function useGame() {
   }, [soundOn])
 
   useEffect(() => {
-    if (session && (session.phase === 'playing' || session.phase === 'shop' || session.phase === 'ending')) {
+    if (session && session.phase !== 'start') {
       saveGame(session, currentSlot)
     }
   }, [session, currentSlot])
