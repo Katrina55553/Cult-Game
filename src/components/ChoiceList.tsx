@@ -26,7 +26,7 @@ export function ChoiceList({ choices, player, onChoose }: Props) {
               onChoose(choice.id)
             }}
             className={`
-              w-full text-left px-4 py-3 rounded-sm border transition-all cursor-pointer
+              w-full text-left px-4 py-3 min-h-[44px] rounded-sm border transition-all cursor-pointer
               ${canChoose
                 ? 'border-[var(--color-jade)]/60 bg-[rgba(45,90,74,0.12)] hover:bg-[rgba(45,90,74,0.25)] hover:border-[var(--color-jade-light)] text-[var(--color-parchment)]'
                 : 'border-[var(--color-mist)]/20 bg-[rgba(0,0,0,0.15)] text-[var(--color-mist)]/50 cursor-not-allowed'

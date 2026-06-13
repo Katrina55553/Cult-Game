@@ -57,13 +57,13 @@ export function StatusPanel({ player, turn }: Props) {
         </p>
       )}
 
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--color-parchment-dim)] mb-3">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm text-[var(--color-parchment-dim)] mb-3">
         <span>{getRealmName(player.realm)}</span>
-        <span>·</span>
+        <span className="hidden sm:inline">·</span>
         <span>{player.spiritRoot}</span>
-        <span>·</span>
+        <span className="hidden sm:inline">·</span>
         <span>{player.age} 岁</span>
-        <span>·</span>
+        <span className="hidden sm:inline">·</span>
         <span className={remaining <= 10 ? 'text-[var(--color-cinnabar)]' : ''}>
           寿元 {remaining} 年
         </span>

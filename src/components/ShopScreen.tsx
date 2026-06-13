@@ -45,7 +45,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
   }
 
   return (
-    <div className="min-h-screen px-4 py-8 max-w-lg mx-auto animate-fade-up relative">
+    <div className="min-h-screen px-3 sm:px-4 py-6 sm:py-8 max-w-lg mx-auto animate-fade-up relative safe-bottom">
       {purchaseToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 animate-fade-up">
           <div className="border border-[var(--color-gold)] bg-[rgba(12,15,13,0.95)] px-4 py-4 rounded-sm text-center">
@@ -140,7 +140,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
           type="button"
           disabled={!canConfirm}
           onClick={handleConfirm}
-          className={`w-full py-3 tracking-wider rounded-sm transition-all
+          className={`w-full py-3.5 min-h-[44px] tracking-wider rounded-sm transition-all
             ${canConfirm
               ? 'bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)] text-[var(--color-parchment)] cursor-pointer border border-[var(--color-cinnabar-glow)]/50'
               : 'bg-[rgba(45,90,74,0.15)] text-[var(--color-mist)] cursor-not-allowed border border-[var(--color-mist)]/20'
@@ -154,7 +154,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
         <button
           type="button"
           onClick={onLeave}
-          className="w-full py-3 bg-[var(--color-jade)] hover:bg-[var(--color-jade-light)]
+          className="w-full py-3.5 min-h-[44px] bg-[var(--color-jade)] hover:bg-[var(--color-jade-light)]
             text-[var(--color-parchment)] tracking-wider rounded-sm cursor-pointer transition-all"
         >
           离开坊市，继续修行

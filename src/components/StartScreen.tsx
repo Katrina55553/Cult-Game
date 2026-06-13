@@ -29,7 +29,7 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden safe-bottom">
       {/* 背景装饰 */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[var(--color-jade)]/[0.04] blur-3xl" />
@@ -164,7 +164,7 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
 
         <button
           type="submit"
-          className="w-full py-3.5 bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
+          className="w-full py-3.5 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
             text-[var(--color-parchment)] font-semibold tracking-[0.3em] rounded-sm
             transition-all cursor-pointer border border-[var(--color-cinnabar-glow)]/50
             hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"

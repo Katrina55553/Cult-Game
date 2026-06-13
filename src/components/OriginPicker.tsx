@@ -44,7 +44,7 @@ export function OriginPicker({ value, onChange }: Props) {
           transition-colors"
       >
         <span className="shrink-0">{selected.label}</span>
-        <span className="text-xs text-[var(--color-mist)] truncate text-right">{selected.desc}</span>
+        <span className="text-xs text-[var(--color-mist)] truncate text-right hidden sm:inline">{selected.desc}</span>
       </button>
 
       {open && (
@@ -69,10 +69,12 @@ export function OriginPicker({ value, onChange }: Props) {
                       : 'text-[var(--color-parchment)] hover:bg-[#1c2420]'
                     }`}
                 >
-                  <span className="shrink-0 text-sm">{opt.label}</span>
-                  <span className={`text-xs truncate text-right ${active ? 'text-[var(--color-parchment-dim)]' : 'text-[var(--color-mist)]'}`}>
-                    {opt.desc}
-                  </span>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-3 min-w-0">
+                    <span className="shrink-0 text-sm">{opt.label}</span>
+                    <span className={`text-xs ${active ? 'text-[var(--color-parchment-dim)]' : 'text-[var(--color-mist)]'}`}>
+                      {opt.desc}
+                    </span>
+                  </div>
                 </button>
               </li>
             )

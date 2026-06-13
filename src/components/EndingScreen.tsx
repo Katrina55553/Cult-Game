@@ -32,14 +32,14 @@ export function EndingScreen({ session, onRestart }: Props) {
   )
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 animate-fade-up">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 animate-fade-up safe-bottom">
       {session.newEndingUnlock && (
         <p className="text-[var(--color-gold)] text-sm tracking-[0.4em] mb-2">✦ 首通结局 ✦</p>
       )}
       <p className="text-[var(--color-gold-dim)] text-sm tracking-[0.4em] mb-4">— 天命已定 —</p>
 
       <h2
-        className="text-5xl text-[var(--color-cinnabar-glow)] mb-4 text-center"
+        className="text-4xl sm:text-5xl text-[var(--color-cinnabar-glow)] mb-4 text-center"
         style={{ fontFamily: 'var(--font-display)' }}
       >
         {ending.title}
@@ -108,7 +108,7 @@ export function EndingScreen({ session, onRestart }: Props) {
       <button
         type="button"
         onClick={onRestart}
-        className="px-10 py-3 bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
+        className="w-full sm:w-auto px-10 py-3.5 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
           text-[var(--color-parchment)] tracking-[0.2em] rounded-sm transition-all cursor-pointer
           border border-[var(--color-cinnabar-glow)]/50"
       >

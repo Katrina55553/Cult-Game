@@ -37,6 +37,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
 }
 
 input,
@@ -138,4 +140,14 @@ body::before {
   .log-scroll {
     scroll-behavior: auto;
   }
+}
+
+@media (max-width: 639px) {
+  .log-scroll {
+    max-height: 30vh;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
