@@ -2669,6 +2669,71 @@ export const EXTRA_EVENTS: GameEvent[] = [
     ],
   },
   {
+    id: 'moli_backstory',
+    title: '墨离往事',
+    description:
+      '篝火旁，墨离罕见地开口说起往事。他原是北荒散修之子，父母被宗门弟子所杀，从此独行修魔。「我不恨正道，我只是不信任何人。」他望着火焰，语气平淡如水。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'moli_ally', value: true }],
+    choices: [
+      {
+        id: 'empathize',
+        text: '坦言自己也曾历经坎坷',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'flag', key: 'moli_trusted', value: true },
+        ],
+      },
+      {
+        id: 'promise',
+        text: '许诺不会辜负他的信任',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'flag', key: 'moli_trusted', value: true },
+        ],
+      },
+      {
+        id: 'silent',
+        text: '沉默不语，只是添柴',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'moli_sacrifice',
+    title: '墨离挡刀',
+    description:
+      '你与墨离并肩作战之际，一道暗箭直射你后心。墨离身形一闪，以肉身替你挡下这一击。他单膝跪地，嘴角溢血，淡淡道：「别误会，只是还你之前的人情。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'moli_trusted', value: true }],
+    choices: [
+      {
+        id: 'heal_moli',
+        text: '拼尽灵力为他疗伤',
+        effects: [
+          { type: 'lifespan', value: -5 },
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'flag', key: 'moli_brother', value: true },
+        ],
+      },
+      {
+        id: 'acknowledge',
+        text: '默默记下这份情',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'flag', key: 'moli_brother', value: true },
+        ],
+      },
+    ],
+  },
+  {
     id: 'wander_market',
     title: '散修坊市',
     description:

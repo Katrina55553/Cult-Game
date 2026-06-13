@@ -366,4 +366,88 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'ye_qingmei_reunion',
+    title: '再遇叶轻眉',
+    description:
+      '坊市之中，你忽闻一阵幽香。回首望去，正是当日灵泉边的青衣女修叶轻眉。她见到你，浅浅一笑：「缘分不浅，又见面了。」',
+    weight: 14,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'met_lin_wanyue', value: true },
+      { type: 'flag', key: 'has_companion', value: false },
+    ],
+    choices: [
+      {
+        id: 'tea',
+        text: '邀她品茶叙旧',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'flag', key: 'ye_qingmei_friend', value: true },
+        ],
+      },
+      {
+        id: 'ask_companion',
+        text: '试探结为道侣之意',
+        requirements: [{ type: 'stat', key: 'luck', min: 40 }],
+        effects: [
+          { type: 'flag', key: 'has_companion', value: true },
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'farewell',
+        text: '点头致意，各自离去',
+        effects: [
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ye_qingmei_help',
+    title: '叶轻眉求助',
+    description:
+      '叶轻眉传音于你，语气少见地焦急。她发现了一处上古遗迹，但禁制凶险，需要帮手。「我信得过你。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'ye_qingmei_friend', value: true }],
+    choices: [
+      {
+        id: 'help_ye',
+        text: '即刻前往相助',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+              { type: 'flag', key: 'ye_qingmei_close', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'cultivation', value: 10 },
+            ],
+            narrative: {
+              success: '你二人联手破开禁制，各有所获。叶轻眉望向你的眼神多了几分暖意。',
+              fail: '禁制反噬猛烈，你二人虽脱身，却都受了不轻的伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'decline_ye',
+        text: '近日闭关，无法分身',
+        effects: [
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
 ]
