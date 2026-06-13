@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface Props {
   onContinue: () => void
@@ -19,11 +19,70 @@ const LORE_PAGES = [
   },
 ]
 
+const CHAR_DELAY = 40
+
 export function LoreScreen({ onContinue }: Props) {
   const [page, setPage] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [typingDone, setTypingDone] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const current = LORE_PAGES[page]
   const isLast = page === LORE_PAGES.length - 1
+  const fullText = current.text
+  const displayedText = fullText.slice(0, charIndex)
+  const isComplete = charIndex >= fullText.length
+  const isTyping = !typingDone && !isComplete
+
+  useEffect(() => {
+    if (isComplete || typingDone) return
+
+    timerRef.current = setInterval(() => {
+      setCharIndex((prev) => {
+        const next = prev + 1
+        if (next >= fullText.length) {
+          if (timerRef.current) clearInterval(timerRef.current)
+          return fullText.length
+        }
+        return next
+      })
+    }, CHAR_DELAY)
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [isComplete, typingDone, fullText])
+
+  const handleSkip = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setTypingDone(true)
+    setCharIndex(fullText.length)
+  }, [fullText])
+
+  const goToPage = useCallback((p: number) => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setTypingDone(false)
+    setCharIndex(0)
+    setPage(p)
+  }, [])
+
+  const handleNext = useCallback(() => {
+    if (isTyping) {
+      handleSkip()
+      return
+    }
+    if (isLast) {
+      onContinue()
+    } else {
+      goToPage(page + 1)
+    }
+  }, [isTyping, isLast, onContinue, handleSkip, goToPage, page])
+
+  const handlePrev = useCallback(() => {
+    if (page > 0) goToPage(page - 1)
+  }, [page, goToPage])
+
+  const paragraphs = displayedText.split('\n\n')
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden safe-bottom">
@@ -40,7 +99,7 @@ export function LoreScreen({ onContinue }: Props) {
             <button
               key={i}
               type="button"
-              onClick={() => setPage(i)}
+              onClick={() => goToPage(i)}
               className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
                 i === page
                   ? 'bg-[var(--color-gold)] w-6'
@@ -51,7 +110,7 @@ export function LoreScreen({ onContinue }: Props) {
         </div>
 
         {/* 内容区域 */}
-        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8">
+        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 min-h-[280px]">
           <h2
             className="text-2xl sm:text-3xl text-[var(--color-gold)] mb-6 text-center"
             style={{ fontFamily: 'var(--font-display)' }}
@@ -59,12 +118,15 @@ export function LoreScreen({ onContinue }: Props) {
             {current.title}
           </h2>
           <div className="space-y-4">
-            {current.text.split('\n\n').map((para, i) => (
+            {paragraphs.map((para, i) => (
               <p
                 key={i}
                 className="text-[var(--color-parchment-dim)] leading-[1.9] text-sm sm:text-base"
               >
                 {para}
+                {i === paragraphs.length - 1 && isTyping && (
+                  <span className="inline-block w-[2px] h-[1em] bg-[var(--color-gold)] ml-0.5 align-middle animate-pulse" />
+                )}
               </p>
             ))}
           </div>
@@ -75,7 +137,7 @@ export function LoreScreen({ onContinue }: Props) {
           {page > 0 && (
             <button
               type="button"
-              onClick={() => setPage((p) => p - 1)}
+              onClick={handlePrev}
               className="flex-1 py-3 min-h-[44px] border border-[var(--color-mist)]/30 rounded-sm
                 text-[var(--color-mist)] hover:text-[var(--color-parchment)] hover:border-[var(--color-mist)]/60
                 cursor-pointer transition-all tracking-wider"
@@ -85,13 +147,26 @@ export function LoreScreen({ onContinue }: Props) {
           )}
           <button
             type="button"
-            onClick={isLast ? onContinue : () => setPage((p) => p + 1)}
+            onClick={handleNext}
             className="flex-1 py-3 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
               text-[var(--color-parchment)] tracking-[0.2em] rounded-sm transition-all cursor-pointer
               border border-[var(--color-cinnabar-glow)]/50
               hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
           >
-            {isLast ? '开始修行' : '下一页'}
+            {isTyping ? '跳过' : isLast ? '开始修行' : '下一页'}
+          </button>
+        </div>
+
+        {/* 跳过按钮 - 右下角 */}
+        <div className="fixed bottom-6 right-6 z-20">
+          <button
+            type="button"
+            onClick={isLast && !isTyping ? onContinue : handleSkip}
+            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-gold)] cursor-pointer
+              border border-[var(--color-mist)]/20 hover:border-[var(--color-gold)]/40
+              px-4 py-2 rounded-sm transition-colors bg-[rgba(12,15,13,0.8)]"
+          >
+            {isLast && !isTyping ? '进入游戏' : '跳过剧情'}
           </button>
         </div>
       </div>
