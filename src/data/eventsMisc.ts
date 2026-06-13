@@ -1441,6 +1441,16 @@ export const MISC_EVENTS: GameEvent[] = [
           },
         ],
       },
+      {
+        id: 'beg',
+        text: '跪地求饶',
+        requirements: [{ type: 'stat', key: 'rootBone', max: 20 }],
+        effects: [
+          { type: 'stat', key: 'karma', value: -8 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+          { type: 'spiritStones', value: 5 },
+        ],
+      },
     ],
   },
   {
@@ -1582,6 +1592,15 @@ export const MISC_EVENTS: GameEvent[] = [
         effects: [
           { type: 'stat', key: 'karma', value: 8 },
           { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+      {
+        id: 'sneak_vein',
+        text: '趁其不备偷偷吸收灵气',
+        requirements: [{ type: 'stat', key: 'rootBone', max: 20 }],
+        effects: [
+          { type: 'cultivation', value: 10 },
+          { type: 'stat', key: 'luck', value: 3 },
         ],
       },
     ],

@@ -163,6 +163,16 @@ export const WANDER_EVENTS: GameEvent[] = [
           { type: 'stat', key: 'karma', value: -3 },
         ],
       },
+      {
+        id: 'beg_mercy',
+        text: '跪地求饶，装可怜',
+        requirements: [{ type: 'stat', key: 'rootBone', max: 18 }],
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'spiritStones', value: -10, set: false },
+        ],
+      },
     ],
   },
   {
