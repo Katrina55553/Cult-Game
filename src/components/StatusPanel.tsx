@@ -134,6 +134,22 @@ export function StatusPanel({ player, turn }: Props) {
           法宝：{player.artifacts.map(formatArtifactName).join('、')}
         </p>
       )}
+
+      {player.inventory.length > 0 && (
+        <details className="mt-2">
+          <summary className="text-xs text-[var(--color-jade-light)] cursor-pointer select-none">
+            背包 ({player.inventory.length})
+          </summary>
+          <div className="mt-1 space-y-1">
+            {player.inventory.map((item, i) => (
+              <div key={i} className="text-xs text-[var(--color-parchment-dim)] pl-2 border-l-2 border-[var(--color-jade)]/20">
+                <span className="text-[var(--color-parchment)]">{item.name}</span>
+                <span className="text-[var(--color-mist)] ml-2">{item.description}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
     </header>
   )
 }

@@ -75,6 +75,7 @@ export interface PlayerState {
   stats: PlayerStats
   spiritStones: number
   artifacts: string[]
+  inventory: { name: string; description: string; usable: boolean }[]
   cultivationSystems: CultivationSystems
   flags: Record<string, boolean>
   history: string[]
@@ -126,6 +127,7 @@ export type Effect =
   | { type: 'divineWeaponTier'; value: number }
   | { type: 'spiritBeast'; name: string; tier?: number }
   | { type: 'cultivationPath'; path: CultivationPath }
+  | { type: 'inventory'; name: string; description: string; usable?: boolean }
 
 export interface Outcome {
   chance: number

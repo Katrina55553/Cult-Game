@@ -173,6 +173,14 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
         ...state,
         cultivationSystems: { ...state.cultivationSystems, path: effect.path },
       }
+    case 'inventory':
+      return {
+        ...state,
+        inventory: [
+          ...state.inventory,
+          { name: effect.name, description: effect.description, usable: effect.usable ?? false },
+        ],
+      }
     case 'log':
       return { ...state, log: [...state.log, effect.text] }
     case 'age':

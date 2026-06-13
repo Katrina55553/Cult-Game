@@ -2468,4 +2468,106 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'find_healing_pill',
+    title: '灵丹妙药',
+    description:
+      '你在山涧边发现一株灵草，叶片上凝结着晶莹的露珠。仔细辨认后，你认出这是可以疗伤的灵草，若能炼制成丹药，关键时刻可救一命。',
+    weight: 8,
+    years: 1,
+    choices: [
+      {
+        id: 'refine_pill',
+        text: '当场炼制成丹药',
+        requirements: [{ type: 'alchemyTier', min: 1 }],
+        effects: [
+          { type: 'inventory', name: '疗伤丹', description: '可恢复寿元10点', usable: true },
+          { type: 'alchemyTier', value: 1 },
+        ],
+      },
+      {
+        id: 'eat_raw',
+        text: '直接服用灵草',
+        effects: [
+          { type: 'lifespan', value: 5 },
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+      {
+        id: 'sell_herb',
+        text: '拿到坊市出售',
+        effects: [
+          { type: 'spiritStones', value: 12 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'find_scroll',
+    title: '古卷残页',
+    description:
+      '你在古书堆中翻到一页泛黄的残卷，上面记载着一种失传的护体法门。残卷不完整，但核心口诀仍在。',
+    weight: 7,
+    years: 1,
+    choices: [
+      {
+        id: 'study_scroll',
+        text: '参悟残卷口诀',
+        effects: [
+          { type: 'inventory', name: '护体残卷', description: '使用后根骨+3', usable: true },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'copy_scroll',
+        text: '抄录一份副本',
+        effects: [
+          { type: 'inventory', name: '护体残卷', description: '使用后根骨+3', usable: true },
+          { type: 'spiritStones', value: 8 },
+        ],
+      },
+      {
+        id: 'discard_scroll',
+        text: '残卷不全，随手丢弃',
+        effects: [
+          { type: 'stat', key: 'karma', value: -2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'find_elixir',
+    title: '地脉灵液',
+    description:
+      '你在地底溶洞中发现一汪灵液，液面泛着淡金色的光芒。这是地脉精华凝聚而成的灵液，对修士大有裨益。',
+    weight: 6,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'drink_elixir',
+        text: '当场饮下灵液',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'bottle_elixir',
+        text: '装瓶带走',
+        effects: [
+          { type: 'inventory', name: '地脉灵液', description: '使用后修为+15', usable: true },
+        ],
+      },
+      {
+        id: 'share_elixir',
+        text: '分给附近修士',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
 ]

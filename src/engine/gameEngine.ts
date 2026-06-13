@@ -108,6 +108,7 @@ export function createPlayer(
     },
     spiritStones: 10,
     artifacts: [],
+    inventory: [],
     cultivationSystems: createDefaultCultivationSystems(
       options.origin === 'demon_blood' ? '魔裔血脉' : null,
     ),
@@ -535,6 +536,9 @@ export function loadGame(): GameSession | null {
     }
     if (!Array.isArray(session.player.artifacts)) {
       session.player.artifacts = []
+    }
+    if (!Array.isArray(session.player.inventory)) {
+      session.player.inventory = []
     }
     if (!session.player.cultivationSystems) {
       session.player.cultivationSystems = createDefaultCultivationSystems(null)
