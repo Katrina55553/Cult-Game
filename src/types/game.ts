@@ -12,7 +12,7 @@ export type EventAct = 'qi' | 'foundation' | 'golden' | 'any'
 export type EventRarity = 'common' | 'rare' | 'legendary'
 export type MilestoneType = 'breakthrough' | 'lifespan_low' | 'cultivation_full' | 'rare_event'
 export type GamePhase = 'start' | 'root_reveal' | 'playing' | 'shop' | 'ending'
-export type OriginId = 'farmer' | 'noble_exile' | 'demon_blood' | null
+export type OriginId = 'farmer' | 'noble_exile' | 'demon_blood' | 'scholar' | 'merchant' | 'hermit' | 'sect_orphan' | 'tomb_raider' | 'healer' | null
 export type CultivationPath = 'balanced' | 'body' | 'law'
 
 export interface SpiritBeastState {

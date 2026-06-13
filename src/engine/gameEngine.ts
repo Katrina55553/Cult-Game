@@ -83,18 +83,48 @@ export function createPlayer(
   switch (options.origin) {
     case 'farmer':
       player.stats.karma += 8
-      player.log.push('16岁：农家子弟出身，心性质朴。')
+      player.log.push('16岁：田园牧歌出身，心性质朴，因果深厚。')
       break
     case 'noble_exile':
       player.stats.comprehension += 6
       player.spiritStones += 30
-      player.log.push('16岁：世家弃子，携资入道。')
+      player.log.push('16岁：世家遗孤，携先辈遗资踏入仙途。')
       break
     case 'demon_blood':
       player.stats.rootBone += 6
       player.stats.demonHeart += 12
       player.cultivationSystems.bloodline = '魔裔血脉'
-      player.log.push('16岁：魔裔血脉，性情桀骜。')
+      player.log.push('16岁：魔裔宿命觉醒，体内暗流涌动。')
+      break
+    case 'scholar':
+      player.stats.comprehension += 10
+      player.log.push('16岁：书香门第出身，自幼饱读经卷，悟性超群。')
+      break
+    case 'merchant':
+      player.spiritStones += 50
+      player.log.push('16岁：商贾世家，家资丰厚，携重金入道。')
+      break
+    case 'hermit':
+      player.lifespan += 15
+      player.stats.karma += 5
+      player.log.push('16岁：隐世遗脉，先祖遗泽护体，寿元悠长。')
+      break
+    case 'sect_orphan':
+      player.stats.rootBone += 3
+      player.stats.comprehension += 3
+      player.stats.luck += 3
+      player.log.push('16岁：宗门弃婴长大，根基尚可，福缘不浅。')
+      break
+    case 'tomb_raider':
+      player.stats.luck += 8
+      player.spiritStones += 15
+      player.stats.demonHeart += 5
+      player.log.push('16岁：墓中求生，练就一身机敏，却也沾染几分戾气。')
+      break
+    case 'healer':
+      player.stats.karma += 12
+      player.stats.comprehension += 3
+      player.log.push('16岁：悬壶济世，积善成德，因果深厚。')
       break
   }
 
