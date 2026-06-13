@@ -6,6 +6,6 @@ const isPagesDeploy =
   process.env.GITEE_PAGES === 'true' || process.env.GITHUB_PAGES === 'true'
 
 export default defineConfig({
-  base: isPagesDeploy ? '/CultGame/' : '/',
+  base: isPagesDeploy ? '/Cult-Game/' : '/',
   plugins: [react(), tailwindcss()],
 })
