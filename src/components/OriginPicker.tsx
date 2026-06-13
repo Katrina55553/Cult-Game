@@ -49,7 +49,7 @@ export function OriginPicker({ value, onChange }: Props) {
 
       {open && (
         <ul
-          className="absolute z-20 mt-1 w-full max-h-60 overflow-y-auto border border-[var(--color-jade)]/40 bg-[#0a0d0c] rounded-sm
+          className="absolute z-20 bottom-full mb-1 w-full max-h-60 overflow-y-auto border border-[var(--color-jade)]/40 bg-[#0a0d0c] rounded-sm
             shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
           role="listbox"
         >
