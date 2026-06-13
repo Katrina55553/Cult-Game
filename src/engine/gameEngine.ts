@@ -32,14 +32,34 @@ function randBetween([min, max]: [number, number]): number {
   return rng.randInt(min, max)
 }
 
-export function rollSpiritRoot(): SpiritRoot {
-  const totalWeight = SPIRIT_ROOTS.reduce((sum, r) => sum + r.weight, 0)
-  let roll = rng.random() * totalWeight
-  for (const root of SPIRIT_ROOTS) {
-    roll -= root.weight
-    if (roll < 0) return root
+export function rollSpiritRoot(origin?: NewGameOptions['origin']): SpiritRoot {
+  const originMult: Record<string, number> = {
+    scholar: 1.3,
+    noble_exile: 1.2,
+    hermit: 1.15,
+    sect_orphan: 1.1,
+    healer: 1.1,
+    demon_blood: 1.1,
+    merchant: 1.0,
+    tomb_raider: 1.0,
+    farmer: 1.0,
   }
-  return SPIRIT_ROOTS[SPIRIT_ROOTS.length - 1]
+  const mult = origin ? (originMult[origin] ?? 1) : 1
+
+  const weights = SPIRIT_ROOTS.map((r, i) => {
+    const base = r.weight
+    if (mult === 1) return base
+    const bonus = mult - 1
+    const quality = 1 - i / (SPIRIT_ROOTS.length - 1)
+    return base * (1 + bonus * quality)
+  })
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0)
+  let roll = rng.random() * totalWeight
+  for (let i = 0; i < SPIRIT_ROOTS.length; i++) {
+    roll -= weights[i]
+    if (roll < 0) return SPIRIT_ROOTS[i]
+  }
+  return SPIRIT_ROOTS[0]
 }
 
 export function createPlayer(
@@ -139,7 +159,7 @@ export function createNewGame(options: NewGameOptions): GameSession {
     rng.setSeed(Date.now())
   }
 
-  const root = rollSpiritRoot()
+  const root = rollSpiritRoot(options.origin)
   const player = createPlayer(options.name.trim() || '无名修士', root, {
     useInnateBody: options.useInnateBody && meta.innateBodyUnlocked,
     origin: options.origin ?? null,
