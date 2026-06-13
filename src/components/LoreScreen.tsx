@@ -90,7 +90,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
   const paragraphs = displayedText.split('\n\n')
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden safe-bottom">
+    <div className="h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden safe-bottom">
       {/* 背景装饰 */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[var(--color-jade)]/[0.05] blur-3xl" />
@@ -108,31 +108,54 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
         </button>
       </div>
 
-        {/* 内容区域 */}
-        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 h-[420px] sm:h-[440px] flex flex-col overflow-hidden">
+      {/* 页码指示 */}
+      <div className="flex justify-center gap-2 mb-6 shrink-0 relative z-10">
+        {LORE_PAGES.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => goToPage(i)}
+            className={`p-2 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer transition-all ${
+              i === page ? 'text-[var(--color-gold)]' : 'text-[var(--color-mist)]/40 hover:text-[var(--color-mist)]/70'
+            }`}
+          >
+            <span
+              className={`block rounded-full transition-all ${
+                i === page ? 'w-6 h-2 bg-[var(--color-gold)]' : 'w-2 h-2 bg-current'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* 内容区域 — 固定高度 */}
+      <div className="w-full max-w-lg relative z-10 shrink-0">
+        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 h-[380px] sm:h-[400px] flex flex-col overflow-hidden">
           <h2
             className="text-2xl sm:text-3xl text-[var(--color-gold)] mb-6 text-center shrink-0"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {current.title}
           </h2>
-          <div className="space-y-4 flex-1 overflow-y-auto log-scroll min-h-0">
-            {paragraphs.map((para, i) => (
-              <p
-                key={i}
-                className="text-[var(--color-parchment-dim)] leading-[1.9] text-sm sm:text-base"
-              >
-                {para}
-                {i === paragraphs.length - 1 && isTyping && (
-                  <span className="inline-block w-[2px] h-[1em] bg-[var(--color-gold)] ml-0.5 align-middle animate-pulse" />
-                )}
-              </p>
-            ))}
+          <div className="flex-1 overflow-y-auto log-scroll min-h-0">
+            <div className="space-y-4">
+              {paragraphs.map((para, i) => (
+                <p
+                  key={i}
+                  className="text-[var(--color-parchment-dim)] leading-[1.9] text-sm sm:text-base"
+                >
+                  {para}
+                  {i === paragraphs.length - 1 && isTyping && (
+                    <span className="inline-block w-[2px] h-[1em] bg-[var(--color-gold)] ml-0.5 align-middle animate-pulse" />
+                  )}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* 导航按钮 */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 shrink-0">
           {page > 0 && !isTyping && (
             <button
               type="button"
@@ -178,7 +201,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
             </button>
           )}
         </div>
-
+      </div>
     </div>
   )
 }
