@@ -174,6 +174,36 @@ body::before {
   animation: milestone-enter 0.4s ease-out both;
 }
 
+@keyframes title-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes title-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(201, 162, 39, 0.3), 0 0 30px rgba(201, 162, 39, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(201, 162, 39, 0.5), 0 0 50px rgba(201, 162, 39, 0.2), 0 0 80px rgba(201, 162, 39, 0.1);
+  }
+}
+
+.title-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-gold-dim) 0%,
+    var(--color-gold) 25%,
+    #f0d060 50%,
+    var(--color-gold) 75%,
+    var(--color-gold-dim) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: title-shimmer 4s linear infinite, title-glow 3s ease-in-out infinite;
+}
+
 .log-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(74, 138, 114, 0.45) transparent;

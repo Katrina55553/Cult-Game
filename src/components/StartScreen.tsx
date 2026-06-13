@@ -65,7 +65,7 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         </div>
 
         <h1
-          className="text-6xl md:text-8xl text-[var(--color-gold)] mb-3 animate-pulse-glow leading-tight"
+          className="text-6xl md:text-8xl mb-3 title-shimmer leading-tight"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           修仙模拟器
