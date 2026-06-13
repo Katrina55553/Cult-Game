@@ -41,7 +41,7 @@ export default function App() {
   return (
     <>
       {session.phase === 'lore' && (
-        <LoreScreen onContinue={confirmLore} />
+        <LoreScreen onContinue={confirmLore} onAbandon={restart} />
       )}
 
       {session.phase === 'root_reveal' && (

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface Props {
   onContinue: () => void
+  onAbandon: () => void
 }
 
 const LORE_PAGES = [
@@ -21,7 +22,7 @@ const LORE_PAGES = [
 
 const CHAR_DELAY = 40
 
-export function LoreScreen({ onContinue }: Props) {
+export function LoreScreen({ onContinue, onAbandon }: Props) {
   const [page, setPage] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [typingDone, setTypingDone] = useState(false)
@@ -90,6 +91,17 @@ export function LoreScreen({ onContinue }: Props) {
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[var(--color-jade)]/[0.05] blur-3xl" />
         <div className="absolute bottom-[5%] left-[30%] w-[400px] h-[400px] rounded-full bg-[var(--color-cinnabar)]/[0.03] blur-3xl" />
+      </div>
+
+      {/* 右上角弃道按钮 */}
+      <div className="absolute top-5 right-5 z-10">
+        <button
+          type="button"
+          onClick={onAbandon}
+          className="text-sm text-[var(--color-mist)] hover:text-[var(--color-cinnabar-glow)] transition-colors cursor-pointer"
+        >
+          弃道归去
+        </button>
       </div>
 
       <div className="w-full max-w-lg animate-fade-up relative z-10">
