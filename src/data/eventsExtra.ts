@@ -1688,4 +1688,419 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'secret_realm_treasure',
+    title: '秘境夺宝',
+    description:
+      '上古秘境开启，你深入其中，发现一座被禁制封印的石殿。殿内宝光冲天，似有重宝。然而你不远处，玄天宗的天骄弟子也盯上了此处，双方剑拔弩张。',
+    weight: 8,
+    years: 2,
+    once: true,
+    act: 'foundation',
+    choices: [
+      {
+        id: 'fight_for_treasure',
+        text: '抢先出手，夺宝在先',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 50 },
+              { type: 'artifact', id: 'realm_treasure', name: '秘境灵宝' },
+              { type: 'flag', key: 'rival_xuantian', value: true },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'flag', key: 'rival_xuantian', value: true },
+            ],
+            narrative: {
+              success: '你以迅雷之势夺下灵宝，玄天宗天骄怒目而视，立誓日后必报此仇。',
+              fail: '玄天宗天骄早有防备，一掌将你震退，灵宝落入他手。你含恨而退。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'negotiate',
+        text: '提议平分宝物',
+        effects: [
+          { type: 'spiritStones', value: 25 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'retreat',
+        text: '退避三舍，另寻他处',
+        effects: [
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'rival_provocation',
+    title: '天骄挑衅',
+    description:
+      '宗门论道大会上，玄天宗一名天骄弟子当众出言不逊，嘲讽天玄宗弟子不过尔尔。他目光挑衅地看着你，周围各宗弟子纷纷注目。此乃宗门颜面之争。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'qi_refining_2' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'accept_challenge',
+        text: '当众应战，捍卫宗门',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'karma', value: 12 },
+              { type: 'flag', key: 'beat_rival', value: true },
+              { type: 'spiritStones', value: 20 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'flag', key: 'lost_to_rival', value: true },
+            ],
+            narrative: {
+              success: '你以凌厉手段击败玄天宗天骄，天玄宗弟子欢呼雷动，你名震各宗。',
+              fail: '玄天宗天骄技高一筹，你惜败当场。虽败犹荣，却心有不甘。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'ignore',
+        text: '不与之争，静心论道',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'scheme',
+        text: '暗中记下，伺机报复',
+        effects: [
+          { type: 'flag', key: 'rival_xuantian', value: true },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_battlefield',
+    title: '宗门争锋',
+    description:
+      '天玄宗与玄天宗因灵脉归属争执不下，最终以弟子比斗定胜负。你作为天玄宗代表之一出战，对面是玄天宗精心培养的天骄。两宗弟子列阵观战，此战关乎宗门颜面与灵脉归属。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'fight_sect',
+        text: '全力以赴，为宗门而战',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'flag', key: 'sect_battle_hero', value: true },
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'spiritStones', value: 40 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'cultivation', value: 10 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以精妙功法击败对手，为天玄宗赢得灵脉。宗门上下对你刮目相看。',
+              fail: '对手功法诡异，你惜败阵前。宗门虽未责怪，你却暗自发誓要苦修雪耻。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'strategy',
+        text: '以阵法布局，智取对手',
+        requirements: [{ type: 'formationTier', min: 2 }],
+        effects: [
+          { type: 'flag', key: 'sect_battle_strategist', value: true },
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'spiritStones', value: 30 },
+        ],
+      },
+      {
+        id: 'decline_sect',
+        text: '主动退让，避免冲突升级',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_ruins_deep',
+    title: '遗迹深处',
+    description:
+      '大能遗迹深处，你发现一座悬浮的玉台，上面放着一枚散发古朴气息的储物戒指。然而另一名修士也从侧门闯入，他身着玄天宗服饰，修为与你不相上下。二人对视，空气凝固。',
+    weight: 7,
+    years: 2,
+    once: true,
+    act: 'golden',
+    choices: [
+      {
+        id: 'claim_first',
+        text: '先下手为强',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 70 },
+              { type: 'artifact', id: 'ancient_ring', name: '大能遗戒' },
+              { type: 'flag', key: 'deep_rival', value: true },
+              { type: 'cultivation', value: 20 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+              { type: 'flag', key: 'deep_rival', value: true },
+            ],
+            narrative: {
+              success: '你抢先一步夺下储物戒，内藏大量灵石与一件古宝。玄天宗修士恨恨离去。',
+              fail: '对方早有防备，一道剑气划伤你手臂，储物戒被他夺走。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'share_ruins',
+        text: '提议各取一半',
+        effects: [
+          { type: 'spiritStones', value: 35 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'yield_ruins',
+        text: '让出宝物，结个善缘',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'luck', value: 6 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'rival_ambush',
+    title: '仇家伏击',
+    description:
+      '你独自赶路时，前方道路突然被阵法封锁。数名玄天宗弟子从暗处现身，为首者正是曾败于你手的天骄。他冷笑一声：「今日，便是你的死期。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'beat_rival', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'fight_ambush',
+        text: '以一敌众，背水一战',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'flag', key: 'survived_ambush', value: true },
+              { type: 'spiritStones', value: 30 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 15 },
+            ],
+            narrative: {
+              success: '你以一己之力击退数名玄天宗弟子，天骄也被你重伤遁走。你的威名更盛。',
+              fail: '寡不敌众，你身受重伤，拼死突围而出，元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'escape_ambush',
+        text: '施展遁术脱身',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'luck', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'cultivation', value: 5 },
+            ],
+            narrative: {
+              success: '你施展遁术瞬间消失，玄天宗弟子扑了个空。',
+              fail: '阵法封锁了遁术，你被迫硬接一掌才脱身。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'surrender_ambush',
+        text: '交出灵石求和',
+        effects: [
+          { type: 'spiritStones', value: -40, set: false },
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'realm_formation',
+    title: '秘境阵眼',
+    description:
+      '秘境深处发现一座上古大阵的阵眼，阵中封印着大能遗留的功法玉简。但阵法凶险异常，强行破阵可能引发反噬。更棘手的是，远处已有数道身影朝此方向飞来。',
+    weight: 7,
+    years: 2,
+    once: true,
+    act: 'foundation',
+    choices: [
+      {
+        id: 'break_formation',
+        text: '强行破阵取宝',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'formationTier', value: 1 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你以精妙手法破解阵法，获得功法玉简与阵道感悟。',
+              fail: '阵法反噬，雷电入体，你重伤退出。功法玉简被后来者夺走。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_realm_formation',
+        text: '参悟阵法不急于取宝',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'ambush_others',
+        text: '藏身暗处，等后来者破阵后抢夺',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.003,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'karma', value: -10 },
+              { type: 'lifespan', value: -8 },
+            ],
+            narrative: {
+              success: '你趁他人破阵疲惫之际出手，轻松夺下宝物。',
+              fail: '对方早有察觉，反将你一军，你仓皇逃窜。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_alliance',
+    title: '宗门结盟',
+    description:
+      '魔道势力蠢蠢欲动，天玄宗与数家正道宗门商议结盟抵御。你作为宗门代表参与议事，各宗天骄齐聚一堂。盟约已定，但需派人深入魔域刺探虚实——这既是危险，也是机遇。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'volunteer_spy',
+        text: '主动请缨，深入魔域',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 22 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'flag', key: 'spy_hero', value: true },
+              { type: 'spiritStones', value: 30 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+            ],
+            narrative: {
+              success: '你深入魔域探得虚实，带回重要情报。各宗对你赞誉有加。',
+              fail: '魔域凶险，你被魔修发现，重伤逃回。虽完成任务，却元气大伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'stay_alliance',
+        text: '留守宗门，巩固防线',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 10 },
+          { type: 'formationTier', value: 1 },
+        ],
+      },
+      {
+        id: 'refuse_alliance',
+        text: '独善其身，不参与联盟',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
 ]
