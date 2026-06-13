@@ -24,19 +24,11 @@ export function CodexScreen({ onClose }: Props) {
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-lg max-h-[85vh] flex flex-col border border-[var(--color-jade)] bg-[var(--color-ink)] rounded-sm">
         {/* 吸顶头部 */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-[var(--color-jade)]/30 shrink-0
+        <div className="flex items-center px-6 py-4 border-b border-[var(--color-jade)]/30 shrink-0
           bg-[var(--color-ink)] sticky top-0 z-10">
           <h2 className="text-2xl text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
             修仙志
           </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-sm text-[var(--color-mist)] hover:text-[var(--color-gold)] cursor-pointer
-              border border-[var(--color-mist)]/20 hover:border-[var(--color-gold)]/40 px-3 py-1 rounded-sm transition-colors"
-          >
-            关闭
-          </button>
         </div>
 
         {/* 可滚动内容 */}
