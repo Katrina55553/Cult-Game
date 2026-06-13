@@ -126,6 +126,11 @@ function filterEligible(
       if (since < event.cooldown) return false
     }
 
+    if (event.minGap !== undefined && times > 0) {
+      const since = turnsSinceLast(state.history, event.id)
+      if (since < event.minGap) return false
+    }
+
     if (!options.skipAct && event.act && event.act !== 'any' && event.act !== act) return false
     if (event.requiresUnlock && !unlockedEvents.includes(event.requiresUnlock)) return false
 

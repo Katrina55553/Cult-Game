@@ -141,6 +141,7 @@ export interface GameEvent {
   once?: boolean
   maxTimes?: number
   cooldown?: number
+  minGap?: number
   storyGroup?: string
   act?: EventAct
   rarity?: EventRarity
