@@ -11,6 +11,7 @@ export default function App() {
   const {
     session,
     soundOn,
+    bgmOn,
     milestone,
     achievementToast,
     startGame,
@@ -22,6 +23,7 @@ export default function App() {
     exitShop,
     restart,
     toggleSound,
+    toggleBgm,
     dismissMilestone,
     dismissAchievements,
   } = useGame()
@@ -60,6 +62,8 @@ export default function App() {
           onChoose={choose}
           soundOn={soundOn}
           onToggleSound={toggleSound}
+          bgmOn={bgmOn}
+          onToggleBgm={toggleBgm}
           onAbandon={restart}
         />
       )}

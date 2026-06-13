@@ -10,10 +10,12 @@ interface Props {
   onChoose: (choiceId: string) => void
   soundOn: boolean
   onToggleSound: () => void
+  bgmOn: boolean
+  onToggleBgm: () => void
   onAbandon: () => void
 }
 
-export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbandon }: Props) {
+export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon }: Props) {
   const { player, currentEvent, turn } = session
 
   if (!currentEvent) {
@@ -26,8 +28,16 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbando
 
   return (
     <div className="min-h-screen px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8 max-w-6xl mx-auto relative">
-      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-3 sm:gap-4 z-10">
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 sm:gap-3 z-10">
         <AbandonButton onAbandon={onAbandon} />
+        <button
+          type="button"
+          onClick={onToggleBgm}
+          aria-label={bgmOn ? '关闭音乐' : '开启音乐'}
+          className="text-sm text-[var(--color-mist)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+        >
+          {bgmOn ? '🎵' : '🔇'}
+        </button>
         <button
           type="button"
           onClick={onToggleSound}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { playSound, setMuted } from '../audio/sounds'
+import { startBgm, stopBgm, setBgmMood } from '../audio/bgm'
 import {
   beginPlaying,
   clearSave,
@@ -16,6 +17,7 @@ export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
   const [currentSlot, setCurrentSlot] = useState<number>(0)
   const [soundOn, setSoundOn] = useState(true)
+  const [bgmOn, setBgmOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
   const soundOnRef = useRef(soundOn)
@@ -33,6 +35,24 @@ export function useGame() {
   useEffect(() => {
     setMuted(!soundOn)
   }, [soundOn])
+
+  useEffect(() => {
+    if (!session || !bgmOn) {
+      stopBgm()
+      return
+    }
+    const { phase, player } = session
+    if (phase === 'playing') {
+      const hasDemonHeart = player.stats.demonHeart >= 40
+      setBgmMood(hasDemonHeart ? 'tense' : 'calm')
+      startBgm()
+    } else if (phase === 'shop') {
+      setBgmMood('mystical')
+      startBgm()
+    } else if (phase === 'ending') {
+      stopBgm()
+    }
+  }, [session, bgmOn])
 
   const showAchievements = useCallback((ids: string[]) => {
     if (ids.length > 0) setAchievementToast(ids)
@@ -199,9 +219,14 @@ export function useGame() {
     setSoundOn((prev) => !prev)
   }, [])
 
+  const toggleBgm = useCallback(() => {
+    setBgmOn((prev) => !prev)
+  }, [])
+
   return {
     session,
     soundOn,
+    bgmOn,
     milestone,
     achievementToast,
     currentSlot,
@@ -214,6 +239,7 @@ export function useGame() {
     exitShop,
     restart,
     toggleSound,
+    toggleBgm,
     dismissMilestone,
     dismissAchievements,
   }
