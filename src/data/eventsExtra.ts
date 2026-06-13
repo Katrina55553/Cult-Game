@@ -4628,4 +4628,294 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'dungeon_entrance',
+    title: '秘境入口',
+    description:
+      '天地灵气汇聚之处，一道古老的空间裂缝缓缓撕开。裂缝内霞光流转，隐约可见亭台楼阁、灵田药圃。这是一处上古修士遗留的秘境，内藏无数机缘与凶险。入口处已有数名修士在观望。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'enter_dungeon',
+        text: '踏入秘境',
+        effects: [
+          { type: 'flag', key: 'in_dungeon', value: true },
+          { type: 'flag', key: 'dungeon_floor_1', value: true },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'observe_dungeon',
+        text: '先在外围观察地形',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'in_dungeon', value: true },
+          { type: 'flag', key: 'dungeon_floor_1', value: true },
+          { type: 'flag', key: 'dungeon_observed', value: true },
+        ],
+      },
+      {
+        id: 'avoid_dungeon',
+        text: '秘境凶险，不进去',
+        effects: [
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dungeon_fork',
+    title: '秘境分岔',
+    description:
+      '秘境内部分为三条通道。左侧传来金铁交鸣之声，似有战斗；正前方弥漫着浓郁灵气，似有宝物；右侧刻满符文的石壁上写着「悟道者得传承」。你必须择一而行。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'dungeon_floor_1', value: true }],
+    choices: [
+      {
+        id: 'combat_path',
+        text: '走左侧战斗通道',
+        effects: [
+          { type: 'flag', key: 'dungeon_combat', value: true },
+          { type: 'stat', key: 'rootBone', value: 3 },
+        ],
+      },
+      {
+        id: 'treasure_path',
+        text: '走前方灵气通道',
+        effects: [
+          { type: 'flag', key: 'dungeon_treasure', value: true },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'puzzle_path',
+        text: '走右侧符文通道',
+        effects: [
+          { type: 'flag', key: 'dungeon_puzzle', value: true },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dungeon_combat_battle',
+    title: '秘境试炼·战',
+    description:
+      '战斗通道尽头是一座巨大的演武场。场中一头三阶妖兽正虎视眈眈，它已吞食了数名闯入的修士。妖兽感应到你的气息，猛然扑来。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'dungeon_combat', value: true }],
+    choices: [
+      {
+        id: 'fight_beast',
+        text: '全力迎战妖兽',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'spiritStones', value: 30 },
+              { type: 'flag', key: 'dungeon_boss_ready', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以凌厉手段斩杀妖兽，取出其妖丹。演武场后方出现一道传送门。',
+              fail: '妖兽凶猛异常，你重伤逃出，但记下了它的弱点。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'trap_beast',
+        text: '利用地形设陷阱',
+        requirements: [{ type: 'formationTier', min: 1 }],
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'formationTier', value: 1 },
+          { type: 'flag', key: 'dungeon_boss_ready', value: true },
+        ],
+      },
+      {
+        id: 'retreat_beast',
+        text: '妖兽太强，先撤',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dungeon_treasure_room',
+    title: '秘境试炼·宝',
+    description:
+      '灵气通道尽头是一座藏宝阁。三件宝物悬浮于光柱之中：一柄灵剑、一瓶丹药、一卷阵图。但每件宝物都有禁制守护，你只能选其一。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'dungeon_treasure', value: true }],
+    choices: [
+      {
+        id: 'take_sword',
+        text: '取灵剑',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'divineWeapon', id: 'dungeon_sword', name: '秘境灵剑' },
+              { type: 'cultivation', value: 10 },
+              { type: 'flag', key: 'dungeon_boss_ready', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -5 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你破开禁制取下灵剑，剑身嗡鸣，似认你为主。',
+              fail: '禁制反噬，你被震退数步，灵剑飞走。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'take_pill',
+        text: '取丹药',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'lifespan', value: 8 },
+          { type: 'flag', key: 'dungeon_boss_ready', value: true },
+        ],
+      },
+      {
+        id: 'take_formation',
+        text: '取阵图',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'flag', key: 'dungeon_boss_ready', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dungeon_puzzle_trial',
+    title: '秘境试炼·悟',
+    description:
+      '符文通道尽头是一间密室，四壁刻满上古文字。中央石台上放着一枚玉简，上书：「悟透此阵，方可得道。」你需要参悟这些符文才能通过。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'dungeon_puzzle', value: true }],
+    choices: [
+      {
+        id: 'study_puzzle',
+        text: '静心参悟符文',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 22 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'formationTier', value: 1 },
+              { type: 'flag', key: 'dungeon_boss_ready', value: true },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你参透符文玄机，密室石门缓缓开启，内藏大能传承。',
+              fail: '符文晦涩难懂，你只领悟了皮毛，但也有所收获。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'brute_puzzle',
+        text: '以蛮力破开禁制',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 50 }],
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'flag', key: 'dungeon_boss_ready', value: true },
+        ],
+      },
+      {
+        id: 'copy_puzzle',
+        text: '拓印符文带走研究',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'formationTier', value: 1 },
+          { type: 'flag', key: 'dungeon_boss_ready', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dungeon_boss',
+    title: '秘境之主',
+    description:
+      '三条通道汇合于一座宏伟的大殿。殿中央盘坐着一具古修遗骸，遗骸前的玉台上放着一件散发耀眼光芒的宝物。当你靠近时，遗骸忽然睁开双眼——古修以残魂化为守关者，要考验你的实力。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'dungeon_boss_ready', value: true }],
+    choices: [
+      {
+        id: 'fight_guardian',
+        text: '以实力通过考验',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'artifact', id: 'dungeon_relic', name: '秘境遗宝' },
+              { type: 'spiritStones', value: 50 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'flag', key: 'dungeon_cleared', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以强横实力通过古修考验，获得秘境遗宝。古修残魂含笑消散。',
+              fail: '古修残魂实力恐怖，你被震飞出殿，秘境开始崩塌。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'respect_guardian',
+        text: '恭敬行礼，以诚意打动',
+        requirements: [{ type: 'stat', key: 'karma', min: 25 }],
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'artifact', id: 'dungeon_relic', name: '秘境遗宝' },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'flag', key: 'dungeon_cleared', value: true },
+        ],
+      },
+      {
+        id: 'flee_guardian',
+        text: '秘境将崩，速速逃离',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
 ]

@@ -92,6 +92,7 @@ export function checkAchievements(
   if (player.flags.lin_yuan_ally && player.flags.su_muyan_ally) add('three_friends')
   if (player.flags.ye_qingmei_close) add('ye_qingmei_close')
   if (player.flags.moli_brother) add('moli_brother')
+  if (player.flags.dungeon_cleared) add('dungeon_cleared')
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')
   if (player.spiritStones >= 300) add('rich')

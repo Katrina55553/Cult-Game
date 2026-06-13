@@ -71,6 +71,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'three_friends', title: '三人同行', description: '与林远、苏暮烟同游' },
   { id: 'ye_qingmei_close', title: '灵泉之约', description: '与叶轻眉共探遗迹' },
   { id: 'moli_brother', title: '生死之交', description: '墨离为你挡刀' },
+  { id: 'dungeon_cleared', title: '秘境通关', description: '通关秘境副本' },
   { id: 'all_spirit_beasts', title: '百兽之王', description: '收集全部灵宠', hidden: true },
   { id: 'all_origins', title: '轮回百世', description: '以全部出身各通关一次', hidden: true },
 ]
