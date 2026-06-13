@@ -4,6 +4,7 @@ import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
 import type { OriginId } from '../types/game'
 import type { StartGameParams } from '../hooks/useGame'
 import { CodexScreen } from './CodexScreen'
+import { LoreScreen } from './LoreScreen'
 import { OriginPicker } from './OriginPicker'
 
 interface Props {
@@ -18,14 +19,34 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
   const [useInnateBody, setUseInnateBody] = useState(false)
   const [origin, setOrigin] = useState<OriginId>(null)
   const [showCodex, setShowCodex] = useState(false)
+  const [showLore, setShowLore] = useState(() => {
+    try {
+      return !localStorage.getItem('cultgame_save') && !localStorage.getItem('cultgame_lore_seen')
+    } catch {
+      return false
+    }
+  })
 
   const meta = useMemo(() => loadMeta(), [])
   const { unlocked, total } = getEndingCodexProgress(meta)
+
+  const handleLoreContinue = () => {
+    setShowLore(false)
+    try {
+      localStorage.setItem('cultgame_lore_seen', '1')
+    } catch {
+      // ignore
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     resumeAudio()
     onStart({ name, dailyMode, useInnateBody, origin })
+  }
+
+  if (showLore) {
+    return <LoreScreen onContinue={handleLoreContinue} />
   }
 
   return (
@@ -37,7 +58,15 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
       </div>
 
       {/* 右上角按钮 */}
-      <div className="absolute top-5 right-5 flex items-center gap-4 z-10">
+      <div className="absolute top-5 right-5 flex items-center gap-3 z-10">
+        <button
+          type="button"
+          onClick={() => setShowLore(true)}
+          className="text-sm text-[var(--color-mist)] hover:text-[var(--color-gold)] transition-colors cursor-pointer
+            border border-[var(--color-mist)]/20 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm"
+        >
+          世界观
+        </button>
         <button
           type="button"
           onClick={() => setShowCodex(true)}
