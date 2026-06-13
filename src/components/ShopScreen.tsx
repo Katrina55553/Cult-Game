@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { formatShopEffectNote, SHOP_ITEMS } from '../data/shop'
+import { getRealmName } from '../engine/gameEngine'
 import type { GameSession } from '../types/game'
 import { AbandonButton } from './AbandonButton'
 
@@ -78,9 +79,32 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
       >
         坊市小憩
       </h2>
-      <p className="text-center text-sm text-[var(--color-mist)] mb-6">
+      <p className="text-center text-sm text-[var(--color-mist)] mb-4">
         灵石：{player.spiritStones}
       </p>
+
+      {/* 状态面板 */}
+      <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.5)] p-4 rounded-sm mb-6">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--color-parchment-dim)] mb-3 justify-center">
+          <span>{getRealmName(player.realm)}</span>
+          <span>·</span>
+          <span>{player.spiritRoot}</span>
+          <span>·</span>
+          <span>{player.age} 岁</span>
+          <span>·</span>
+          <span className={player.lifespan - player.age <= 10 ? 'text-[var(--color-cinnabar)]' : ''}>
+            寿元 {player.lifespan - player.age} 年
+          </span>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-xs">
+          <MiniStat label="根骨" value={player.stats.rootBone} />
+          <MiniStat label="悟性" value={player.stats.comprehension} />
+          <MiniStat label="气运" value={player.stats.luck} />
+          <MiniStat label="因果" value={player.stats.karma} />
+          <MiniStat label="心魔" value={player.stats.demonHeart} warn={player.stats.demonHeart >= 50} />
+          <MiniStat label="修为" value={`${player.cultivation}%`} />
+        </div>
+      </div>
 
       <div className="space-y-3 mb-6">
         {SHOP_ITEMS.map((item) => {
@@ -136,6 +160,15 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
           离开坊市，继续修行
         </button>
       </div>
+    </div>
+  )
+}
+
+function MiniStat({ label, value, warn }: { label: string; value: string | number; warn?: boolean }) {
+  return (
+    <div className="bg-[rgba(0,0,0,0.2)] px-2 py-1.5 rounded-sm text-center">
+      <p className="text-[var(--color-mist)]">{label}</p>
+      <p className={warn ? 'text-[var(--color-cinnabar)]' : 'text-[var(--color-parchment)]'}>{value}</p>
     </div>
   )
 }

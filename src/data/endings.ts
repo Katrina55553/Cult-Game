@@ -172,7 +172,7 @@ export const ENDINGS: Ending[] = [
       '你痴迷阵道，穷尽一生钻研上古阵法。虽未飞升，却能以阵法困杀元婴修士，成为修真界公认的阵法第一人。',
     priority: 68,
     conditions: [
-      { type: 'formationTier', min: 4 },
+      { type: 'formationTier', min: 3 },
       { type: 'realm', min: 'golden_core' },
     ],
   },
