@@ -34,12 +34,12 @@ function randBetween([min, max]: [number, number]): number {
 
 export function rollSpiritRoot(origin?: NewGameOptions['origin']): SpiritRoot {
   const originMult: Record<string, number> = {
-    scholar: 1.3,
-    noble_exile: 1.2,
-    hermit: 1.15,
+    demon_blood: 1.4,
+    noble_exile: 1.35,
+    hermit: 1.3,
+    scholar: 1.15,
     sect_orphan: 1.1,
     healer: 1.1,
-    demon_blood: 1.1,
     merchant: 1.0,
     tomb_raider: 1.0,
     farmer: 1.0,
