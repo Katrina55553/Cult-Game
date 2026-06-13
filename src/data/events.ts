@@ -1094,6 +1094,366 @@ const CORE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'outer_sect_life',
+    title: '外门杂务',
+    description:
+      '入门已有数月，你每日挑水砍柴、清扫殿堂，修为进展缓慢。今日管事师兄分配新差事：灵田除草可近灵气，丹房打杂可窥丹道，巡山守夜可磨心志。',
+    weight: 25,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    choices: [
+      {
+        id: 'field',
+        text: '灵田除草，借灵气修炼',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 2 },
+        ],
+      },
+      {
+        id: 'alchemy',
+        text: '丹房打杂，偷学丹道',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'patrol',
+        text: '巡山守夜，磨炼心志',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'inner_sect_trial',
+    title: '内门考核',
+    description:
+      '青云宗一年一度内门考核开启。三道关卡：灵阵幻境考验心性，御剑飞行考验根骨，对战擂台考验实战。通过者可晋升内门弟子，获更多修炼资源。',
+    weight: 22,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'heart',
+        text: '以心性过幻境关',
+        effects: [
+          { type: 'flag', key: 'inner_disciple', value: true },
+          { type: 'cultivation', value: 15 },
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'karma', value: 8 },
+        ],
+      },
+      {
+        id: 'body',
+        text: '以根骨过御剑关',
+        effects: [
+          { type: 'flag', key: 'inner_disciple', value: true },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'rootBone', value: 5 },
+        ],
+      },
+      {
+        id: 'fight',
+        text: '以实战过擂台关',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'flag', key: 'inner_disciple', value: true },
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+              { type: 'spiritStones', value: 30 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以凌厉剑法击败对手，破格晋升内门，获赐灵石三十。',
+              fail: '擂台上惜败，仍是外门弟子，但实战经验大增。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'world_travel',
+    title: '下山历练',
+    description:
+      '修为小有所成，师尊命你下山历练。红尘万丈，机缘与凶险并存。你行至三岔路口：繁华都城人烟稠密，深山古刹钟声悠远，荒野古道黄沙漫天。',
+    weight: 18,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    choices: [
+      {
+        id: 'city',
+        text: '入繁华都城，见世间百态',
+        effects: [
+          { type: 'spiritStones', value: 25 },
+          { type: 'stat', key: 'luck', value: 4 },
+          { type: 'stat', key: 'karma', value: 6 },
+        ],
+      },
+      {
+        id: 'temple',
+        text: '入深山古刹，寻隐世高人',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'hint', text: '古刹高人指点迷津' },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'comprehension', value: 2 },
+            ],
+            narrative: {
+              success: '古刹老僧传你一卷心法，悟性大增。',
+              fail: '古刹已荒废百年，唯有断壁残垣，你静坐半日略有感悟。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'wild',
+        text: '走荒野古道，磨炼意志',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_war',
+    title: '宗门大战',
+    description:
+      '血云压境，魔道六宗联军围攻青云宗。山门护阵摇摇欲坠，长老们浴血奋战。你站在城墙上，望着铺天盖地的魔修大军，生死存亡在此一战。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'defend',
+        text: '死守山门，与宗门共存亡',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'flag', key: 'war_hero', value: true },
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'spiritStones', value: 40 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 15 },
+              { type: 'cultivation', value: 10 },
+            ],
+            narrative: {
+              success: '你浴血奋战击退魔军，被封为宗门功臣，名震修仙界。',
+              fail: '大战中身受重伤，虽保住山门，但元气大伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'flank',
+        text: '率精锐绕后突袭魔军粮草',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'flag', key: 'war_strategist', value: true },
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '奇袭成功，魔军大乱，你以智取胜名扬四方。',
+              fail: '中了埋伏，险些丧命，拼死突围而出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'evacuate',
+        text: '护送低阶弟子撤离',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dao_heart_trial',
+    title: '道心试炼',
+    description:
+      '闭关突破之际，你坠入道心幻境。眼前浮现三道幻象：一世你是帝王坐拥天下，一世你是乞丐饥寒交迫，一世你是枯骨黄土一抔。道心在此一念之间。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'realm', min: 'golden_core' }],
+    choices: [
+      {
+        id: 'emperor',
+        text: '帝王幻象中悟权势如浮云',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -15 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'beggar',
+        text: '乞丐幻象中悟万物皆空',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+      {
+        id: 'bones',
+        text: '枯骨幻象中直面生死',
+        effects: [
+          { type: 'lifespan', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -20 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_battlefield',
+    title: '古战场遗迹',
+    description:
+      '荒漠深处发现上古战场遗迹，遍地残破法宝与枯骨。中央一柄古剑插在巨石中，剑身雷纹隐隐发光。四周灵气紊乱，似有远古禁制未散。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'golden_core' }],
+    choices: [
+      {
+        id: 'pull_sword',
+        text: '拔出古剑',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'divineWeapon', id: 'ancient_thunder_sword', name: '太古雷剑' },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'lifespan', value: -10 },
+            ],
+            narrative: {
+              success: '你以金丹之力拔出古剑，雷纹认主，此剑威能通天。',
+              fail: '古剑反噬，雷电入体，你重伤退出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study',
+        text: '参悟战场残余道韵',
+        effects: [
+          { type: 'cultivation', value: 25 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+      {
+        id: 'loot',
+        text: '搜刮残破法宝换取灵石',
+        effects: [
+          { type: 'spiritStones', value: 60 },
+          { type: 'stat', key: 'karma', value: -5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'heavenly_treasure',
+    title: '天降奇缘',
+    description:
+      '天穹骤然裂开一道缝隙，一枚散发五彩霞光的灵果坠落于前。灵果落地之处灵气暴涨，方圆百丈草木疯长。此乃传说中的先天灵果，食之可脱胎换骨。',
+    weight: 4,
+    years: 0,
+    once: true,
+    rarity: 'legendary',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'eat',
+        text: '立即服下灵果',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'lifespan', value: 20 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'refine',
+        text: '带回炼制成丹药',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'alchemyTier', value: 1 },
+              { type: 'stat', key: 'rootBone', value: 15 },
+              { type: 'stat', key: 'comprehension', value: 10 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'alchemyTier', value: 1 },
+            ],
+            narrative: {
+              success: '你以精妙丹术将灵果炼成脱胎换骨丹，效果倍增。',
+              fail: '炼制失败灵果精华散失大半，但丹术有所长进。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'share',
+        text: '分与同门共食',
+        effects: [
+          { type: 'stat', key: 'karma', value: 20 },
+          { type: 'stat', key: 'rootBone', value: 5 },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+    ],
+  },
 ]
 
 export const EVENTS: GameEvent[] = [

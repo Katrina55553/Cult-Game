@@ -140,4 +140,40 @@ export const ENDINGS: Ending[] = [
     priority: 5,
     conditions: [{ type: 'flag', key: '__path_exhausted__', value: true }],
   },
+  {
+    id: 'war_hero',
+    title: '宗门护法',
+    description:
+      '宗门大战中你力挽狂澜，击退魔军，被封为护法长老。此后镇守山门数百年，威名赫赫，成为修真界一代传奇。',
+    priority: 72,
+    conditions: [
+      { type: 'flag', key: 'war_hero', value: true },
+      { type: 'realm', min: 'golden_core' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+  },
+  {
+    id: 'sword_saint',
+    title: '剑道圣者',
+    description:
+      '你以剑入道，一剑破万法。太古雷剑在手，剑意通天。最终以剑证道，肉身化剑，成为传说中的剑道圣者。',
+    priority: 88,
+    conditions: [
+      { type: 'realm', min: 'nascent_soul' },
+      { type: 'flag', key: 'got_inheritance', value: true },
+      { type: 'flag', key: 'chose_ascension', value: true },
+      { type: 'stat', key: 'rootBone', min: 80 },
+    ],
+  },
+  {
+    id: 'formation_master',
+    title: '阵法宗师',
+    description:
+      '你痴迷阵道，穷尽一生钻研上古阵法。虽未飞升，却能以阵法困杀元婴修士，成为修真界公认的阵法第一人。',
+    priority: 68,
+    conditions: [
+      { type: 'formationTier', min: 4 },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
 ]

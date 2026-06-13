@@ -1169,4 +1169,361 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'sword_tomb',
+    title: '剑冢探秘',
+    description:
+      '深山之中发现一座古剑冢，千柄断剑插满山谷，剑气纵横。谷中央一柄完好古剑悬浮半空，剑身通体雪白，寒气逼人。四周刻着古篆：「能入此冢者，当为剑道有缘人。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    act: 'qi',
+    rarity: 'rare',
+    choices: [
+      {
+        id: 'kneel',
+        text: '跪拜古剑，诚心求取',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'flag', key: 'sword_tomb_visited', value: true },
+        ],
+      },
+      {
+        id: 'grab',
+        text: '强行夺取古剑',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'divineWeapon', id: 'frost_sword', name: '寒魄古剑' },
+              { type: 'cultivation', value: 10 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以真元强行收服古剑，寒魄认主，剑气入体。',
+              fail: '古剑剑气反噬，你重伤退出剑冢。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'observe',
+        text: '静坐观悟千剑剑意',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'pill_auction',
+    title: '丹药拍卖',
+    description:
+      '坊市中最大的拍卖行今日开拍一炉九品筑基丹，各方势力齐聚。你囊中羞涩，但机不可失。掌柜看你一眼，似乎认出你有几分潜力。',
+    weight: 8,
+    years: 1,
+    once: true,
+    act: 'qi',
+    choices: [
+      {
+        id: 'bid',
+        text: '倾尽灵石竞拍',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'spiritStones', value: -30, set: false },
+            ],
+            failEffects: [
+              { type: 'spiritStones', value: -15, set: false },
+              { type: 'stat', key: 'luck', value: -2 },
+            ],
+            narrative: {
+              success: '你以全部灵石拍得筑基丹，服下后修为大进。',
+              fail: '竞价失败，灵石花了不少，只能空手而归。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'work',
+        text: '为拍卖行做护卫赚灵石',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'rootBone', value: 2 },
+        ],
+      },
+      {
+        id: 'leave',
+        text: '不参与，静心修炼',
+        effects: [
+          { type: 'cultivation', value: 8 },
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'hermit_cave',
+    title: '隐修洞府',
+    description:
+      '瀑布后方发现一处隐蔽洞府，石壁上刻满修炼心得。一位散修的遗骸坐化于蒲团之上，面前放着一枚玉简和一壶灵酒。洞府完好无损，似是特意留给后来者。',
+    weight: 6,
+    years: 1,
+    once: true,
+    act: 'foundation',
+    choices: [
+      {
+        id: 'jade_slip',
+        text: '参悟玉简中的功法',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+      {
+        id: 'wine',
+        text: '饮下灵酒',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.003,
+            successEffects: [
+              { type: 'lifespan', value: 10 },
+              { type: 'stat', key: 'rootBone', value: 4 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'lifespan', value: -5 },
+            ],
+            narrative: {
+              success: '灵酒入腹，经脉通畅，寿元有所延长。',
+              fail: '灵酒变质，饮后心魔暗生。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'bury',
+        text: '为散修前辈安葬',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'luck', value: 4 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_nest',
+    title: '魔巢探查',
+    description:
+      '村庄百姓告急，附近山中出现魔巢，魔物夜夜下山伤人。你循迹而至，发现一处被黑雾笼罩的洞穴，洞口散落白骨。深处传来低沉嘶吼。',
+    weight: 7,
+    years: 1,
+    act: 'foundation',
+    choices: [
+      {
+        id: 'fight',
+        text: '杀入魔巢',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'spiritStones', value: 25 },
+              { type: 'flag', key: 'demon_slayer', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你斩杀魔物首领，村民感恩戴德，因果大增。',
+              fail: '魔物凶猛，你重伤逃出，元气受损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'seal',
+        text: '以阵法封印魔巢',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'ignore',
+        text: '事不关己，转身离去',
+        effects: [
+          { type: 'stat', key: 'karma', value: -8 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'star_river',
+    title: '星河入梦',
+    description:
+      '夜观天象时，你忽感神识被牵引，坠入一片璀璨星河。星辰化作文字在眼前流转，竟是一篇上古功法残篇。星河深处似有声音在呼唤你的名字。',
+    weight: 4,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    act: 'golden',
+    choices: [
+      {
+        id: 'read',
+        text: '记诵功法残篇',
+        effects: [
+          { type: 'cultivation', value: 25 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'divineSense', value: 10 },
+        ],
+      },
+      {
+        id: 'follow',
+        text: '追随声音深入星河',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 35 },
+              { type: 'stat', key: 'comprehension', value: 12 },
+              { type: 'flag', key: 'star_river_deep', value: true },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 12 },
+              { type: 'cultivation', value: 10 },
+            ],
+            narrative: {
+              success: '你在星河深处悟得大道真谛，神识暴涨。',
+              fail: '星河深处心魔幻象丛生，你险些迷失。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'wake',
+        text: '强行挣脱星河幻境',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_vein',
+    title: '灵脉争锋',
+    description:
+      '发现一处无主灵脉，灵气浓郁得化为雾气。但你并非唯一发现者——一名散修已在灵脉旁打坐，见你到来，目光不善。',
+    weight: 8,
+    years: 1,
+    act: 'foundation',
+    choices: [
+      {
+        id: 'share_vein',
+        text: '提议共享灵脉',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'karma', value: 8 },
+        ],
+      },
+      {
+        id: 'fight_vein',
+        text: '驱赶散修独占灵脉',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.003,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'spiritStones', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'karma', value: -10 },
+            ],
+            narrative: {
+              success: '你以实力驱走散修，独占灵脉修炼，修为大进。',
+              fail: '散修实力不俗，你两败俱伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'yield',
+        text: '让出灵脉，结个善缘',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_formation',
+    title: '上古阵法',
+    description:
+      '荒野中发现一座上古传送阵残骸，阵纹虽残破但仍有微弱灵光流转。阵中央悬浮着一枚空间戒指，似是阵法启动的关键。强行取戒可能触发阵法反噬。',
+    weight: 5,
+    years: 1,
+    once: true,
+    act: 'golden',
+    choices: [
+      {
+        id: 'take',
+        text: '冒险取下空间戒指',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 80 },
+              { type: 'artifact', id: 'spatial_ring', name: '上古空间戒' },
+              { type: 'formationTier', value: 1 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你安全取下空间戒，内藏大量灵石与阵法典籍。',
+              fail: '阵法反噬，空间裂缝割伤你数道，元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_formation',
+        text: '研究阵纹推演阵法',
+        effects: [
+          { type: 'formationTier', value: 2 },
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'leave_formation',
+        text: '此地诡异，速速离去',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
 ]
