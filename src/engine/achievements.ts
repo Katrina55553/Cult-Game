@@ -4,6 +4,17 @@ import { ENDINGS } from '../data/endings'
 import { getRealmOrder } from '../data/realms'
 import type { Ending, GameSession, MetaProgress } from '../types/game'
 
+const SYSTEM_EVENT_IDS = [
+  'cultivation_path',
+  'divine_sense_trial',
+  'formation_study',
+  'alchemy_workshop',
+  'bloodline_awakening',
+  'spirit_beast_train',
+  'divine_weapon_forge',
+  'technique_pavilion',
+]
+
 export function checkAchievements(
   session: GameSession,
   meta: MetaProgress,
@@ -25,6 +36,7 @@ export function checkAchievements(
     const map: Record<string, string> = {
       ascension: 'ascension_first',
       demon_fall: 'demon_first',
+      demon_overlord: 'demon_first',
       immortal_lovers: 'lovers_first',
       sect_elder: 'sect_elder_path',
       pill_master: 'pill_guru',
@@ -32,7 +44,9 @@ export function checkAchievements(
       body_death: 'body_death',
       mortal_life: 'mortal_end',
       wandering_hermit: 'wander_end',
-      demon_overlord: 'demon_first',
+      war_hero: 'war_hero_first',
+      sword_saint: 'sword_saint_first',
+      formation_master: 'formation_master_first',
     }
     if (map[ending.id]) add(map[ending.id])
 
@@ -41,10 +55,15 @@ export function checkAchievements(
     if (player.flags.refused_all_sects) add('no_sect')
     if (session.dailySeed !== null) add('daily_player')
     if (session.useInnateBody) add('innate_body')
+    if (session.turn <= 10) add('speed_run')
+    if ((player.shopBuffs.purchases ?? 0) === 0) add('no_shop')
   }
   if (player.flags.rescued_beauty) add('rescue_beauty')
   if (player.flags.dual_cultivation_mastered) add('dual_master')
   if (player.flags.survived_together) add('companion_trib')
+  if (player.flags.war_hero) add('war_hero')
+  if (player.flags.war_strategist) add('war_strategist')
+  if (player.flags.demon_slayer) add('demon_slayer')
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')
   if (player.spiritStones >= 300) add('rich')
@@ -59,7 +78,9 @@ export function checkAchievements(
   if (player.stats.karma >= 50) add('karma_saint')
   if (player.stats.karma <= -50) add('karma_devil')
   if (session.turn >= 30) add('turn_30')
+  if (session.turn >= 50) add('turn_50')
   if (player.age <= 50 && getRealmOrder(player.realm) >= getRealmOrder('golden_core')) add('young_golden')
+  if (SYSTEM_EVENT_IDS.every((id) => player.history.includes(id))) add('all_systems')
 
   return newly.filter((id) => ACHIEVEMENTS.some((a) => a.id === id))
 }
