@@ -1454,6 +1454,268 @@ const CORE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'mentor_assign',
+    title: '拜师问道',
+    description:
+      '入门半载，天玄宗依例为新弟子分配引道师尊。三位长老各有专擅：一位精于剑道、一位通晓丹术、一位擅长大阵。你跪于大殿之中，静候师尊择徒。',
+    weight: 30,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'sword_master',
+        text: '拜入剑道长老门下',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 4 },
+          { type: 'cultivation', value: 12 },
+          { type: 'flag', key: 'sword_disciple', value: true },
+        ],
+      },
+      {
+        id: 'alchemy_master',
+        text: '拜入丹术长老门下',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'flag', key: 'alchemy_disciple', value: true },
+        ],
+      },
+      {
+        id: 'formation_master',
+        text: '拜入阵法长老门下',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'first_mission',
+    title: '初领宗门任务',
+    description:
+      '天玄宗每月派发宗门任务以磨砺弟子。你初次领命，可选三桩差事：巡守山门外围、赴坊市采买灵材、前往药田除虫。',
+    weight: 28,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'patrol',
+        text: '巡守山门，熟悉地形',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'stat', key: 'luck', value: 2 },
+          { type: 'cultivation', value: 6 },
+        ],
+      },
+      {
+        id: 'errand',
+        text: '赴坊市采买，见见世面',
+        effects: [
+          { type: 'spiritStones', value: 12 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'herb_field',
+        text: '药田除虫，亲近灵草',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'night_whisper',
+    title: '夜半低语',
+    description:
+      '夜深人静，你于房中打坐。忽闻窗外传来幽幽低语，似有无形之物在呢喃你的名字。窗外月色如水，树影婆娑，那声音时远时近，令人毛骨悚然。',
+    weight: 15,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'investigate',
+        text: '循声而出，一探究竟',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'cultivation', value: 10 },
+              { type: 'stat', key: 'luck', value: 3 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'lifespan', value: -5 },
+            ],
+            narrative: {
+              success: '你循声至后山古井旁，井中灵光一闪，竟是一枚先辈遗留的玉简。你参悟其中法诀，悟性大增。',
+              fail: '你循声而行，不知不觉走入禁地，被残留的魔气侵袭，心魔暗生。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'meditate',
+        text: '不为所动，静心打坐',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'report',
+        text: '禀报值守师兄',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'spiritStones', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_friend',
+    title: '同门之谊',
+    description:
+      '演武场旁，一名同门弟子盘坐树下，满面愁容。攀谈之下，他坦言修炼瓶颈已久，若无法突破便要被遣送下山。你心生恻隐。',
+    weight: 20,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'teach',
+        text: '倾囊相授修炼心得',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'helped_sect_friend', value: true },
+        ],
+      },
+      {
+        id: 'compete',
+        text: '暗自庆幸少一个对手',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'trade',
+        text: '提议互相切磋印证',
+        effects: [
+          { type: 'cultivation', value: 10 },
+          { type: 'stat', key: 'rootBone', value: 2 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mountain_spirit',
+    title: '山间灵兽',
+    description:
+      '深山采药时，你偶遇一头幼小的灵狐，通体雪白，眸泛灵光。它受了伤，蜷缩在溪边瑟瑟发抖。远处传来猎人追捕的呼喝声。',
+    weight: 18,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'rescue_fox',
+        text: '救下灵狐，为其疗伤',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'flag', key: 'saved_fox', value: true },
+        ],
+      },
+      {
+        id: 'ignore_fox',
+        text: '事不关己，转身离去',
+        effects: [
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'catch_fox',
+        text: '趁机捕获灵狐取丹',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'spiritStones', value: 20 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'karma', value: -10 },
+              { type: 'stat', key: 'luck', value: -5 },
+            ],
+            narrative: {
+              success: '你趁灵狐虚弱取其内丹，修为有所进益，却种下一段恶因。',
+              fail: '灵狐虽弱却灵智极高，拼死逃脱时抓伤了你。你空手而归，反添因果。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'first_duel',
+    title: '首次斗法',
+    description:
+      '宗门比武场开放，你首次与同门弟子正面交锋。对手修为与你相当，招式凌厉。围观的师兄弟议论纷纷，这是你在宗门中证明自己的机会。',
+    weight: 22,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'aggressive',
+        text: '全力进攻，速战速决',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+              { type: 'spiritStones', value: 10 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 5 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你攻势如潮，对手节节败退，最终认输。围观同门纷纷喝彩。',
+              fail: '你急于求成露出破绽，被对手反击得手，遗憾落败。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'defensive',
+        text: '以守为攻，寻找破绽',
+        effects: [
+          { type: 'cultivation', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'forfeit',
+        text: '主动认负，保存实力',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
 ]
 
 export const EVENTS: GameEvent[] = [
