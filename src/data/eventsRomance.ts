@@ -84,7 +84,10 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     weight: 32,
     years: 2,
     once: true,
-    conditions: [{ type: 'flag', key: 'met_su_qing', value: true }],
+    conditions: [
+      { type: 'flag', key: 'met_su_qing', value: true },
+      { type: 'flag', key: 'rescued_beauty', value: true },
+    ],
     choices: [
       {
         id: 'companion',
@@ -272,6 +275,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     once: true,
     conditions: [
       { type: 'flag', key: 'has_companion', value: true },
+      { type: 'flag', key: 'su_qing_companion', value: true },
+      { type: 'flag', key: 'dual_cultivation_mastered', value: true },
       { type: 'realm', min: 'foundation' },
       { type: 'cultivation', min: 72 },
     ],

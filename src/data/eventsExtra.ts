@@ -2615,6 +2615,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     once: true,
     conditions: [
       { type: 'flag', key: 'moli_enemy', value: true },
+      { type: 'flag', key: 'met_moli', value: true },
       { type: 'realm', min: 'foundation' },
     ],
     choices: [

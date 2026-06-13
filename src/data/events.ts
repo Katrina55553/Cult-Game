@@ -1010,7 +1010,10 @@ const CORE_EVENTS: GameEvent[] = [
       '修行到了紧要关头，心魔忽然化形而出，幻作你内心最深处的恐惧与执念，直扑而来。',
     weight: 10,
     years: 3,
-    conditions: [{ type: 'stat', key: 'demonHeart', min: 40 }],
+    conditions: [
+      { type: 'stat', key: 'demonHeart', min: 40 },
+      { type: 'realm', min: 'foundation' },
+    ],
     choices: [
       {
         id: 'face',
