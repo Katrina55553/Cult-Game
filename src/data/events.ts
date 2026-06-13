@@ -574,7 +574,10 @@ const CORE_EVENTS: GameEvent[] = [
       '天玄宗门内大比拉开帷幕，弟子们个个摩拳擦掌。夺魁者可获灵石丹药，更有机会被长老收为亲传。',
     weight: 12,
     years: 2,
-    conditions: [{ type: 'realm', min: 'foundation' }],
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
     choices: [
       {
         id: 'compete',
@@ -1105,7 +1108,10 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 25,
     years: 1,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    conditions: [
+      { type: 'realm', min: 'qi_refining_1' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
     choices: [
       {
         id: 'field',
@@ -1141,7 +1147,10 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 22,
     years: 1,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    conditions: [
+      { type: 'realm', min: 'qi_refining_2' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
     choices: [
       {
         id: 'heart',
@@ -1465,6 +1474,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 30,
     years: 1,
     once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'sword_master',
@@ -1591,6 +1601,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 20,
     years: 1,
     once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'teach',
@@ -1677,6 +1688,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 22,
     years: 1,
     once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'aggressive',
