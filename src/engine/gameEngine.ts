@@ -91,6 +91,7 @@ export function createPlayer(
     history: [],
     log: [`${16}岁：踏入修仙之路，测得${root.name}。`],
     shopBuffs: { purchases: 0 },
+    spiritBeastsSeen: [],
   }
 
   if (options.useInnateBody) {
@@ -470,6 +471,9 @@ export function loadGame(): GameSession | null {
     }
     if (!Array.isArray(session.player.log)) {
       session.player.log = []
+    }
+    if (!Array.isArray(session.player.spiritBeastsSeen)) {
+      session.player.spiritBeastsSeen = []
     }
     return session
   } catch {

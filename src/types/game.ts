@@ -81,6 +81,7 @@ export interface PlayerState {
   log: string[]
   nextEventHint?: string
   shopBuffs: Record<string, number>
+  spiritBeastsSeen: string[]
 }
 
 export type Condition =
@@ -195,6 +196,7 @@ export interface MetaProgress {
   flagsEverTriggered: string[]
   romanceBoost: boolean
   innateBodyUnlocked: boolean
+  unlockedOrigins: string[]
 }
 
 export interface Milestone {

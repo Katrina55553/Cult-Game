@@ -104,5 +104,12 @@ export function checkAchievements(
   if (player.age <= 50 && getRealmOrder(player.realm) >= getRealmOrder('golden_core')) add('young_golden')
   if (SYSTEM_EVENT_IDS.every((id) => player.history.includes(id))) add('all_systems')
 
+  const ALL_BEASTS = ['妖狼', '灵鹤', '玄龟', '赤焰虎', '雷鹰', '冰凤']
+  const seen = player.spiritBeastsSeen ?? []
+  if (ALL_BEASTS.every((b) => seen.includes(b))) add('all_spirit_beasts')
+
+  const ALL_ORIGINS = ['farmer', 'noble_exile', 'demon_blood', 'scholar', 'merchant', 'hermit', 'sect_orphan', 'tomb_raider', 'healer', 'random']
+  if (ALL_ORIGINS.every((o) => meta.unlockedOrigins.includes(o))) add('all_origins')
+
   return newly.filter((id) => ACHIEVEMENTS.some((a) => a.id === id))
 }

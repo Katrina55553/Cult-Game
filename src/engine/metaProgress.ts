@@ -14,6 +14,7 @@ export const DEFAULT_META: MetaProgress = {
   flagsEverTriggered: [],
   romanceBoost: false,
   innateBodyUnlocked: false,
+  unlockedOrigins: [],
 }
 
 export function loadMeta(): MetaProgress {
@@ -41,6 +42,7 @@ export function recordEndingRun(
   turn: number,
 ): { meta: MetaProgress; isFirstEnding: boolean } {
   const isFirstEnding = !meta.unlockedEndings.includes(ending.id)
+  const origin = player.origin ?? 'random'
   const next: MetaProgress = {
     ...meta,
     totalRuns: meta.totalRuns + 1,
@@ -66,6 +68,9 @@ export function recordEndingRun(
       meta.unlockedEndings.length + (isFirstEnding ? 1 : 0) >= 5
         ? [...new Set([...meta.unlockedEvents, 'upper_realm_rumor'])]
         : meta.unlockedEvents,
+    unlockedOrigins: meta.unlockedOrigins.includes(origin)
+      ? meta.unlockedOrigins
+      : [...meta.unlockedOrigins, origin],
   }
   saveMeta(next)
   return { meta: next, isFirstEnding }

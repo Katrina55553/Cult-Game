@@ -83,19 +83,19 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         {meta.totalRuns > 0 && (
           <div className="mt-6 flex items-center justify-center gap-6 text-xs">
             <div className="text-center">
-              <p className="text-[var(--color-gold)] text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>{meta.totalRuns}</p>
+              <p className="text-[var(--color-gold)] text-lg font-semibold">{meta.totalRuns}</p>
               <p className="text-[var(--color-mist)] tracking-wider">修行次数</p>
             </div>
             <span className="h-8 w-px bg-[var(--color-mist)]/20" />
             <div className="text-center">
-              <p className="text-[var(--color-gold)] text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>{unlocked}/{total}</p>
+              <p className="text-[var(--color-gold)] text-lg font-semibold">{unlocked}/{total}</p>
               <p className="text-[var(--color-mist)] tracking-wider">结局收集</p>
             </div>
             {meta.bestTurn > 0 && (
               <>
                 <span className="h-8 w-px bg-[var(--color-mist)]/20" />
                 <div className="text-center">
-                  <p className="text-[var(--color-gold)] text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>{meta.bestTurn}</p>
+                  <p className="text-[var(--color-gold)] text-lg font-semibold">{meta.bestTurn}</p>
                   <p className="text-[var(--color-mist)] tracking-wider">最佳回合</p>
                 </div>
               </>
