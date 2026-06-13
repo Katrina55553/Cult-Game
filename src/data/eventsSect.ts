@@ -659,4 +659,264 @@ export const SECT_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'qinglian_visit',
+    title: '青莲剑宗来访',
+    description:
+      '青莲剑宗派人前来天玄宗切磋剑道。领队是一名冷峻的青年剑修，剑意凌厉。他当众挑战天玄宗弟子，无人敢应。长老看向了你。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'qi_refining_2' },
+    ],
+    choices: [
+      {
+        id: 'accept_qinglian',
+        text: '应战，捍卫宗门颜面',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'karma', value: 10 },
+              { type: 'flag', key: 'beat_qinglian', value: true },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 10 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你以精妙剑法击败青莲剑宗弟子，赢得满堂喝彩。',
+              fail: '青莲剑宗剑法凌厉，你惜败但赢得了对手的尊重。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'learn_qinglian',
+        text: '借机观摩青莲剑法',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'decline_qinglian',
+        text: '实力不足，不逞强',
+        effects: [
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'yaogu_trade',
+    title: '药谷交易',
+    description:
+      '药谷派人来天玄宗兜售丹药，价格公道。你若有灵石，可购置一些提升修为的丹药。药谷弟子还透露，他们正在招收外门丹师。',
+    weight: 8,
+    years: 1,
+    maxTimes: 2,
+    cooldown: 6,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'buy_yaogu',
+        text: '购买丹药',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 20 }],
+        effects: [
+          { type: 'spiritStones', value: -20 },
+          { type: 'cultivation', value: 15 },
+          { type: 'alchemyTier', value: 1 },
+        ],
+      },
+      {
+        id: 'learn_yaogu',
+        text: '向药谷弟子请教丹道',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'skip_yaogu',
+        text: '不感兴趣',
+        effects: [
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wanyao_encounter',
+    title: '万妖殿使者',
+    description:
+      '一名万妖殿使者前来天玄宗递交和书。她是一只化形的白狐，举止优雅却透着妖异。长老们对此争论不休，有人主张接受，有人坚决反对。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'support_wanyao',
+        text: '支持与万妖殿结盟',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'oppose_wanyao',
+        text: '反对与妖修为伍',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+        ],
+      },
+      {
+        id: 'talk_wanyao',
+        text: '私下与白狐使者交谈',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'guiyi_visit',
+    title: '归一寺讲禅',
+    description:
+      '归一寺高僧前来天玄宗讲禅说法。他言道：「因果轮回，善恶有报。修仙者当以修心为本。」你听后若有所悟。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'listen_guiyi',
+        text: '认真聆听禅理',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -8 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'debate_guiyi',
+        text: '与高僧辩论修仙之道',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'divineSense', value: 5 },
+        ],
+      },
+      {
+        id: 'skip_guiyi',
+        text: '对佛法不感兴趣',
+        effects: [
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_exchange',
+    title: '宗门交流',
+    description:
+      '天玄宗与其他几家宗门商议弟子交流计划。你可以选择前往青莲剑宗学习剑法，或去药谷研习丹道，或去归一寺修炼神识。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'qi_refining_3' },
+    ],
+    choices: [
+      {
+        id: 'visit_qinglian',
+        text: '前往青莲剑宗',
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'rootBone', value: 5 },
+        ],
+      },
+      {
+        id: 'visit_yaogu',
+        text: '前往药谷',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'visit_guiyi',
+        text: '前往归一寺',
+        effects: [
+          { type: 'divineSense', value: 10 },
+          { type: 'stat', key: 'demonHeart', value: -8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'moyu_invasion',
+    title: '魔域入侵',
+    description:
+      '魔域六宗突然发难，联合进攻正道势力。天玄宗首当其冲，山门外魔气冲天。你必须为宗门而战。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'frontline',
+        text: '冲上最前线',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'flag', key: 'moyu_war_hero', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你在前线浴血奋战，击退魔域先锋。宗门上下对你敬佩不已。',
+              fail: '魔域攻势凶猛，你身受重伤，拼死才退回山门。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'defend_gate',
+        text: '守护山门大阵',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'evacuate_disciples',
+        text: '护送低阶弟子撤离',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'luck', value: 4 },
+        ],
+      },
+    ],
+  },
 ]
