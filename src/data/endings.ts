@@ -176,4 +176,39 @@ export const ENDINGS: Ending[] = [
       { type: 'realm', min: 'golden_core' },
     ],
   },
+  {
+    id: 'moli_friend',
+    title: '魔修挚友',
+    description:
+      '你与墨离从秘境中的萍水相逢，到联手破禁的生死之交，最终成为彼此唯一的挚友。你们一正一魔，却惺惺相惜，携手闯荡修真界，留下一段传奇佳话。',
+    priority: 66,
+    conditions: [
+      { type: 'flag', key: 'moli_friend', value: true },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
+  {
+    id: 'wander_leader',
+    title: '散修盟主',
+    description:
+      '你以散修之身，聚拢天下独行修士，建立散修盟。此后散修不再是孤立无援的个体，而是一股不可忽视的力量。你被尊为盟主，名震修真界。',
+    priority: 64,
+    conditions: [
+      { type: 'flag', key: 'wander_leader', value: true },
+      { type: 'realm', min: 'golden_core' },
+      { type: 'flag', key: 'refused_all_sects', value: true },
+    ],
+  },
+  {
+    id: 'demon_conqueror',
+    title: '降魔真人',
+    description:
+      '妖潮肆虐之时你挺身而出，荡平魔巢、击退妖潮，被修真界尊为「降魔真人」。你以降魔入道，虽未飞升，却成为守护苍生的一代宗师。',
+    priority: 71,
+    conditions: [
+      { type: 'flag', key: 'demon_slayer', value: true },
+      { type: 'stat', key: 'karma', min: 20 },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
 ]

@@ -47,6 +47,9 @@ export function checkAchievements(
       war_hero: 'war_hero_first',
       sword_saint: 'sword_saint_first',
       formation_master: 'formation_master_first',
+      moli_friend: 'moli_friend_first',
+      wander_leader: 'wander_leader_first',
+      demon_conqueror: 'demon_conqueror_first',
     }
     if (map[ending.id]) add(map[ending.id])
 
@@ -64,6 +67,15 @@ export function checkAchievements(
   if (player.flags.war_hero) add('war_hero')
   if (player.flags.war_strategist) add('war_strategist')
   if (player.flags.demon_slayer) add('demon_slayer')
+  if (player.flags.met_moli) add('met_moli')
+  if (player.flags.moli_ally) add('moli_ally')
+  if (player.flags.defeated_moli) add('defeated_moli')
+  if (player.flags.wander_defender) add('wander_defender')
+  if (player.flags.sect_battle_hero) add('sect_battle_hero')
+  if (player.flags.spy_hero) add('spy_hero')
+  if (player.history.includes('calamity_plague')) add('survived_plague')
+  if (player.history.includes('qi_deviation')) add('survived_qi_deviation')
+  if (player.history.includes('inner_demon')) add('defeated_demon_heart')
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')
   if (player.spiritStones >= 300) add('rich')
