@@ -2570,4 +2570,514 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'enemy_cooperation',
+    title: '仇人求合作',
+    description:
+      '一个曾经暗害过你的修士，如今落魄潦倒地找上门来。他声称发现了一处大机缘，但独力难取，需要你合作。他指天发誓事成之后平分。你看着他狼狈的模样，心中五味杂陈。',
+    weight: 6,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'cooperate_enemy',
+        text: '暂且合作，各取所需',
+        effects: [
+          { type: 'spiritStones', value: 35 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+        ],
+      },
+      {
+        id: 'refuse_enemy',
+        text: '此人不可信，拒绝合作',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'betray_enemy',
+        text: '假意合作，独吞机缘',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 45 }],
+        effects: [
+          { type: 'spiritStones', value: 55 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'stat', key: 'karma', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sever_ties',
+    title: '斩尘缘',
+    description:
+      '你修炼一门上古功法，功法要求斩断尘缘方能大成。你需要做出抉择：放弃一段过往的羁绊，换取功法突破。尘缘一断，便是永别。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'sever_lover',
+        text: '斩断与道侣的尘缘',
+        requirements: [{ type: 'flag', key: 'has_companion', value: true }],
+        effects: [
+          { type: 'flag', key: 'has_companion', value: false },
+          { type: 'flag', key: 'su_qing_companion', value: false },
+          { type: 'flag', key: 'severed_lover', value: true },
+          { type: 'cultivation', value: 30 },
+          { type: 'techniqueTier', value: 1 },
+          { type: 'stat', key: 'demonHeart', value: 15 },
+        ],
+      },
+      {
+        id: 'sever_friend',
+        text: '斩断与友人的尘缘',
+        requirements: [{ type: 'flag', key: 'lin_yuan_ally', value: true }],
+        effects: [
+          { type: 'flag', key: 'lin_yuan_ally', value: false },
+          { type: 'flag', key: 'severed_friend', value: true },
+          { type: 'cultivation', value: 25 },
+          { type: 'techniqueTier', value: 1 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+        ],
+      },
+      {
+        id: 'refuse_sever',
+        text: '宁可功法不成，不断尘缘',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'soul_possession',
+    title: '夺舍诱惑',
+    description:
+      '一次濒死之际，一道上古残魂忽然出现在你识海中。它自称万年前的大能修士，愿以残魂之力助你复活——条件是与你共用一具身体。它的力量强大，但你不确定它的真实意图。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'stat', key: 'demonHeart', min: 30 }],
+    choices: [
+      {
+        id: 'accept_soul',
+        text: '接受残魂共体',
+        effects: [
+          { type: 'flag', key: 'soul_possessed', value: true },
+          { type: 'cultivation', value: 25 },
+          { type: 'stat', key: 'rootBone', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'lifespan', value: -10 },
+        ],
+      },
+      {
+        id: 'negotiate_soul',
+        text: '与残魂谈判，只借力不共享',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
+        effects: [
+          { type: 'flag', key: 'soul_possessed', value: true },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+      {
+        id: 'reject_soul',
+        text: '拒绝残魂，宁死不屈',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'soul_demand',
+    title: '残魂索求',
+    description:
+      '你体内的残魂忽然开口：「小友，老夫有一事相求。」它的语气平静却带着不容拒绝的威压。残魂想借你的身体去完成一件未了的心愿——但这件事可能违背你的道心。',
+    weight: 5,
+    years: 2,
+    maxTimes: 2,
+    cooldown: 8,
+    conditions: [{ type: 'flag', key: 'soul_possessed', value: true }],
+    choices: [
+      {
+        id: 'obey_soul',
+        text: '答应残魂的要求',
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'stat', key: 'karma', value: -5 },
+        ],
+      },
+      {
+        id: 'refuse_soul',
+        text: '拒绝残魂的要求',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'negotiate_demand',
+        text: '与残魂协商折中方案',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 40 }],
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'inheritance_battle',
+    title: '继承权之战',
+    description:
+      '一位化神期大能寿元将尽，公开选传人继承衣钵。你与数名候选人被扔进试炼场。但你很快发现，其他人都是世家子弟，只有你一个散修。他们的目光不善——先联手除掉你，再争夺传承。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'fight_inheritance',
+        text: '以一敌多，正面突围',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'rootBone', value: 8 },
+              { type: 'artifact', id: 'inheritance_seal', name: '大能传承印' },
+              { type: 'flag', key: 'won_inheritance', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你以一己之力击败所有对手，获得大能传承。散修之名响彻修真界。',
+              fail: '世家子弟联手围攻，你寡不敌众，重伤退出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'ally_inheritance',
+        text: '与最弱者结盟对抗强者',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 40 }],
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'spiritStones', value: 20 },
+        ],
+      },
+      {
+        id: 'withdraw_inheritance',
+        text: '放弃传承，保全性命',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'vein_depletion',
+    title: '灵脉枯竭',
+    description:
+      '你洞府所在的灵脉正在枯竭，灵气日渐稀薄。你必须另觅灵脉迁移。探查后发现三处可选：一处在深山妖兽领地，一处在宗门势力边缘，一处在荒漠深处。每处都有不同的危险和机遇。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    choices: [
+      {
+        id: 'mountain_vein',
+        text: '深山妖兽领地',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 5 },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+      {
+        id: 'sect_vein',
+        text: '宗门势力边缘',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'desert_vein',
+        text: '荒漠深处',
+        effects: [
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mortal_plight',
+    title: '凡人处境',
+    description:
+      '两名修士斗法，余波殃及附近的凡人城镇。房屋倒塌，死伤无数。但无人追究——在修仙者眼中，凡人如蝼蚁。你站在废墟前，看着哭泣的孩童和遍地的尸体，想起自己的父母也是凡人。',
+    weight: 6,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'help_mortals',
+        text: '出手救助幸存者',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'report_mortals',
+        text: '向宗门举报肇事修士',
+        requirements: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'spiritStones', value: 15 },
+        ],
+      },
+      {
+        id: 'ignore_mortals',
+        text: '修仙界本就弱肉强食',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'stat', key: 'karma', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_stone_origin',
+    title: '灵石从哪来',
+    description:
+      '你参观了一处灵石矿场。矿工是灵根驳杂不纯的低阶修士，被当作消耗品使用。他们日夜劳作，换取微薄的灵石修炼。你忽然想起——当年的你，差一点也走上了这条路。',
+    weight: 5,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'sympathize_miners',
+        text: '为矿工争取更好的待遇',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'buy_freedom',
+        text: '出资赎几名矿工的自由',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 30 }],
+        effects: [
+          { type: 'spiritStones', value: -30 },
+          { type: 'stat', key: 'karma', value: 20 },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+      {
+        id: 'accept_system',
+        text: '这就是修真界的法则',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'spiritStones', value: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'righteous_dark_side',
+    title: '正道暗面',
+    description:
+      '你无意中发现，天玄宗的灵石矿场里，矿工竟是抓来的魔修俘虏和还不起债的散修。他们日夜劳作，待遇与牲畜无异。但监工长老毫不在意：「他们是魔道，活该如此。」你心中泛起一丝不适。',
+    weight: 5,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'protest_dark',
+        text: '向掌门举报矿场真相',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+      {
+        id: 'accept_dark',
+        text: '修仙界本就弱肉强食',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'spiritStones', value: 15 },
+        ],
+      },
+      {
+        id: 'help_miners',
+        text: '暗中帮助几名矿工逃脱',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_mercy',
+    title: '魔道的另一面',
+    description:
+      '你深入魔域，本以为会见到人间炼狱。却意外发现一处魔修聚落，秩序井然，老幼皆有所养。一名魔修长老告诉你：「我们不是滥杀无辜，只是不守正道的规矩。正道说我们是魔，只是因为我们不服从他们。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'reconsider',
+        text: '重新审视正魔之分',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'still_enemy',
+        text: '魔道就是魔道，不改立场',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'learn_demon',
+        text: '向魔修请教他们的功法',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mysterious_old_man',
+    title: '杂役老头',
+    description:
+      '外门有个扫地的老头，谁也不在意他。直到有一天你深夜经过，看到他一掌拍碎了一头三阶妖兽。他看到你，叹了口气：「既然被你看到了，老夫便不再隐瞒。」他自称三百年前的宗门天才，因某些原因自我封印、隐姓埋名。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    choices: [
+      {
+        id: 'learn_old_man',
+        text: '向他请教修炼之道',
+        effects: [
+          { type: 'cultivation', value: 22 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'flag', key: 'met_hidden_master', value: true },
+        ],
+      },
+      {
+        id: 'keep_secret',
+        text: '替他保守秘密',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+      {
+        id: 'report_old_man',
+        text: '禀报宗门',
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'spiritStones', value: 20 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'half_marriage_scroll',
+    title: '半张婚书',
+    description:
+      '你在整理旧物时发现一张泛黄的半张婚书，上面写着你的名字。你忽然想起——年幼时父母曾为你定了娃娃亲，对方是谁不知道，只有这半张婚书。某天婚书突然发烫——对方也在附近。但你已经有了喜欢的人。',
+    weight: 4,
+    years: 2,
+    once: true,
+    choices: [
+      {
+        id: 'seek_match',
+        text: '寻找婚书的另一半',
+        effects: [
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'sought_match', value: true },
+        ],
+      },
+      {
+        id: 'burn_scroll',
+        text: '烧掉婚书，往事不究',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+      {
+        id: 'keep_scroll',
+        text: '收好婚书，日后再看',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'letter_from_past',
+    title: '褪色的储物戒',
+    description:
+      '你在古玩摊上买到一枚褪色的储物戒指，里面只有一封信。信纸发黄，是一个母亲写给儿子的：「娘等不到你了，你好好修炼，不要为我报仇。」落款是三百年前。没有署名，只有无尽的思念。',
+    weight: 5,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'read_letter',
+        text: '读完这封信，感慨万千',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+      {
+        id: 'find_son',
+        text: '试着找到信中的儿子',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'flag', key: 'sought_letter_son', value: true },
+        ],
+      },
+    ],
+  },
 ]

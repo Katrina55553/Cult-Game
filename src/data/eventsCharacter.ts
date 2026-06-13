@@ -758,4 +758,125 @@ export const CHARACTER_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'zhao_truth',
+    title: '赵天行的真相',
+    description:
+      '你无意中从长老口中得知一个秘密：当年赵天行暗害你，竟是受长老暗中指使——「压着他，别让他太快冒头，外面有人盯着他。」赵天行的刁难，其实是在保护你。你找到他，他沉默良久才说：「知道了又如何，我确实嫉恨你。保护你和恨你，不矛盾。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'beat_zhao', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'understand_zhao',
+        text: '理解他的苦衷',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'flag', key: 'zhao_friend', value: true },
+        ],
+      },
+      {
+        id: 'still_angry',
+        text: '恨意难消，但不再追究',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'elder_suspicion',
+    title: '前辈的真面目',
+    description:
+      '那位和蔼可亲、经常指点你的前辈，忽然邀你去他的密室品茶。你推门而入，却看到密室墙上贴满了你的画像和灵根分析图。他转身微笑：「你来了。」你忽然明白——他对你的好，是在「养炉鼎」。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    choices: [
+      {
+        id: 'fight_elder',
+        text: '趁他不备出手',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'spiritStones', value: 30 },
+              { type: 'flag', key: 'escaped_elder', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你趁其不备出手，重伤前辈后逃出密室。真相大白，你心有余悸。',
+              fail: '前辈修为远超你想象，你被他制服。幸而他需要你活着，你被关入密室。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'trick_elder',
+        text: '假意顺从，伺机逃脱',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'flag', key: 'escaped_elder', value: true },
+        ],
+      },
+      {
+        id: 'submit_elder',
+        text: '实力差距太大，暂时屈服',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'stat', key: 'karma', value: -10 },
+          { type: 'lifespan', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'rival_kindness',
+    title: '竞争对手的善意',
+    description:
+      '你重伤濒死之际，迷糊中看到一个熟悉的身影将一颗丹药塞入你口中。醒来后发现伤势痊愈，枕边放着一张纸条：「别误会，我只是不想让一个弱者替我死。等你好了，再堂堂正正赢你。」笔迹是你的竞争对手的。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'beat_zhao', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'acknowledge_rival',
+        text: '承他的情，下次公平一战',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'repay_rival',
+        text: '找到他当面道谢',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'flag', key: 'zhao_friend', value: true },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
 ]
