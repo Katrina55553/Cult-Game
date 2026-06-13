@@ -26,6 +26,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   const [realmFlash, setRealmFlash] = useState(false)
   const prevCultivation = useRef(player.cultivation)
   const [barFlash, setBarFlash] = useState(false)
+  const [showInventory, setShowInventory] = useState(false)
 
   useEffect(() => {
     if (player.realm !== prevRealm.current) {
@@ -137,32 +138,48 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       )}
 
       {player.inventory.length > 0 && (
-        <details className="mt-2">
-          <summary className="text-xs text-[var(--color-jade-light)] cursor-pointer select-none">
-            背包 ({player.inventory.length})
-          </summary>
-          <div className="mt-1 space-y-1">
-            {player.inventory.map((item, i) => (
-              <div key={i} className="text-xs text-[var(--color-parchment-dim)] pl-2 border-l-2 border-[var(--color-jade)]/20 flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <span className="text-[var(--color-parchment)]">{item.name}</span>
-                  <span className="text-[var(--color-mist)] ml-2">{item.description}</span>
-                </div>
-                {item.usable && onUseItem && (
-                  <button
-                    type="button"
-                    onClick={() => onUseItem(i)}
-                    className="shrink-0 text-xs px-2 py-0.5 border border-[var(--color-jade)]/40 rounded-sm
-                      text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-                      cursor-pointer transition-colors"
-                  >
-                    使用
-                  </button>
-                )}
-              </div>
-            ))}
+        <button
+          type="button"
+          onClick={() => setShowInventory((v) => !v)}
+          className="mt-2 text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+        >
+          背包 ({player.inventory.length})
+        </button>
+      )}
+
+      {showInventory && player.inventory.length > 0 && (
+        <div className="mt-2 border border-[var(--color-jade)]/30 bg-[rgba(0,0,0,0.3)] rounded-sm p-3 space-y-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs text-[var(--color-jade-light)]">背包物品</span>
+            <button
+              type="button"
+              onClick={() => setShowInventory(false)}
+              className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer"
+            >
+              关闭
+            </button>
           </div>
-        </details>
+          {player.inventory.map((item, i) => (
+            <div key={i} className="text-xs flex items-center justify-between gap-2 pl-2 border-l-2 border-[var(--color-jade)]/20">
+              <div className="min-w-0">
+                <span className="text-[var(--color-parchment)]">{item.name}</span>
+                <span className="text-[var(--color-mist)] ml-2">{item.description}</span>
+              </div>
+              {item.usable && onUseItem && (
+                <button
+                  type="button"
+                  onClick={() => onUseItem(i)}
+                  className="shrink-0 text-xs px-2 py-0.5 border border-[var(--color-jade)]/40 rounded-sm
+                    text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                    cursor-pointer transition-colors"
+                >
+                  使用
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       )}
     </header>
   )
