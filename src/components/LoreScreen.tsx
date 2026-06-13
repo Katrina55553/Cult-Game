@@ -167,15 +167,17 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
               上一页
             </button>
           )}
-          <button
-            type="button"
-            onClick={handleNext}
-            className="flex-1 py-3 min-h-[44px] border border-[var(--color-jade)]/40 rounded-sm
-              text-[var(--color-parchment-dim)] hover:text-[var(--color-parchment)] hover:border-[var(--color-jade-light)]
-              cursor-pointer transition-all tracking-wider"
-          >
-            {isTyping ? '跳过当前' : isLast ? '开始修行' : '下一页'}
-          </button>
+          {(!isLast || isTyping) && (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="flex-1 py-3 min-h-[44px] border border-[var(--color-jade)]/40 rounded-sm
+                text-[var(--color-parchment-dim)] hover:text-[var(--color-parchment)] hover:border-[var(--color-jade-light)]
+                cursor-pointer transition-all tracking-wider"
+            >
+              {isTyping ? '跳过当前' : '下一页'}
+            </button>
+          )}
           {!isLast && (
             <button
               type="button"
