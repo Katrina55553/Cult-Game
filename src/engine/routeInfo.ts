@@ -14,15 +14,15 @@ export function getRouteTags(player: PlayerState): RouteTag[] {
   }
   if (player.flags.has_companion) {
     const name = player.flags.met_su_qing
-      ? '道侣·苏清雪'
+      ? '道侣·沈霜凝'
       : player.flags.met_lin_wanyue
-        ? '道侣·林挽月'
+        ? '道侣·叶轻眉'
         : '道侣同行'
     tags.push({ label: name, tone: 'gold' })
   } else if (player.flags.met_su_qing) {
-    tags.push({ label: '情缘·苏清雪', tone: 'gold' })
+    tags.push({ label: '情缘·沈霜凝', tone: 'gold' })
   } else if (player.flags.met_lin_wanyue) {
-    tags.push({ label: '情缘·林挽月', tone: 'gold' })
+    tags.push({ label: '情缘·叶轻眉', tone: 'gold' })
   }
   if (player.flags.loyal_to_sect) {
     tags.push({ label: '宗门线', tone: 'jade' })

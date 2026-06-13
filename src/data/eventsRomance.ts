@@ -33,8 +33,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'met_su_qing', value: true },
             ],
             narrative: {
-              success: '你斩杀妖狼，救下苏清雪。她欠你一命之恩，目含感激。',
-              fail: '你拼力击退妖狼，苏清雪亦受内伤，二人互相扶持脱险。',
+              success: '你斩杀妖狼，救下沈霜凝。她欠你一命之恩，目含感激。',
+              fail: '你拼力击退妖狼，沈霜凝亦受内伤，二人互相扶持脱险。',
             },
           },
         ],
@@ -59,8 +59,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 5 },
             ],
             narrative: {
-              success: '符箓连环引爆，妖狼溃散。苏清雪惊叹你心机缜密，赠灵石以表谢意。',
-              fail: '符箓失灵，反被妖狼所伤，苏清雪扶你遁走，结下一段孽缘。',
+              success: '符箓连环引爆，妖狼溃散。沈霜凝惊叹你心机缜密，赠灵石以表谢意。',
+              fail: '符箓失灵，反被妖狼所伤，沈霜凝扶你遁走，结下一段孽缘。',
             },
           },
         ],
@@ -80,7 +80,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     id: 'beauty_gratitude',
     title: '佳人答谢',
     description:
-      '苏清雪持灵茶亲访你的居所，言称那日救命之恩未报，愿以家传心法相赠，并试探你是否愿与她结为道侣，共参大道。',
+      '沈霜凝持灵茶亲访你的居所，言称那日救命之恩未报，愿以家传心法相赠，并试探你是否愿与她结为道侣，共参大道。',
     weight: 32,
     years: 2,
     once: true,
@@ -89,7 +89,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'companion',
         text: '欣然应允，结为道侣',
-        narrative: '你与苏清雪对天盟誓，结为道侣。冰莲心法与你的功法相融，修为精进，心魔亦散。',
+        narrative: '你与沈霜凝对天盟誓，结为道侣。冰莲心法与你的功法相融，修为精进，心魔亦散。',
         effects: [
           { type: 'flag', key: 'has_companion', value: true },
           { type: 'cultivation', value: 38 },
@@ -101,7 +101,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'friend',
         text: '只做挚友，不谈风月',
-        narrative: '你以礼相待，只接受心法相赠。苏清雪浅笑不语，二人结为金兰，彼此砥砺修行。',
+        narrative: '你以礼相待，只接受心法相赠。沈霜凝浅笑不语，二人结为金兰，彼此砥砺修行。',
         effects: [
           { type: 'flag', key: 'met_su_qing', value: true },
           { type: 'cultivation', value: 18 },
@@ -112,7 +112,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'reject',
         text: '婉拒好意，专心修道',
-        narrative: '你言明仙途孤峭，不宜牵绊。苏清雪默然离去，留下一枚温玉，祝你大道有成。',
+        narrative: '你言明仙途孤峭，不宜牵绊。沈霜凝默然离去，留下一枚温玉，祝你大道有成。',
         effects: [
           { type: 'cultivation', value: 12 },
           { type: 'stat', key: 'comprehension', value: 5 },
@@ -125,7 +125,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     id: 'dual_cultivation',
     title: '月下双修',
     description:
-      '月圆之夜，苏清雪在你洞府外驻足。她提议以双修之法引动阴阳二气，助你们共同冲击修炼瓶颈——此法若成，修为一日千里；若心志不坚，则易生心魔。',
+      '月圆之夜，沈霜凝在你洞府外驻足。她提议以双修之法引动阴阳二气，助你们共同冲击修炼瓶颈——此法若成，修为一日千里；若心志不坚，则易生心魔。',
     weight: 26,
     years: 2,
     maxTimes: 2,
@@ -153,7 +153,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 10 },
             ],
             narrative: {
-              success: '月华如水，阴阳交汇。你与苏清雪气息相融，修为大涨，道心愈发澄澈。',
+              success: '月华如水，阴阳交汇。你与沈霜凝气息相融，修为大涨，道心愈发澄澈。',
               fail: '灵气紊乱，双修半途受阻，虽未酿成大祸，却留一丝杂念。',
             },
           },
@@ -182,7 +182,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你们以心血为引，双修大成。天地灵气倒灌入体，寿元延绵，羡煞同门。',
-              fail: '欲速则不达，心魔趁虚而入。苏清雪以冰莲心法替你镇压，代价是因果受损。',
+              fail: '欲速则不达，心魔趁虚而入。沈霜凝以冰莲心法替你镇压，代价是因果受损。',
             },
           },
         ],
@@ -190,7 +190,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'decline',
         text: '守正不移，拒绝速成',
-        narrative: '你婉拒双修之请，宁可以苦功渐进。苏清雪虽遗憾，却更敬重你的道心。',
+        narrative: '你婉拒双修之请，宁可以苦功渐进。沈霜凝虽遗憾，却更敬重你的道心。',
         effects: [
           { type: 'cultivation', value: 12 },
           { type: 'stat', key: 'karma', value: 8 },
@@ -215,7 +215,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'guard',
         text: '转身守门，为她护法',
-        narrative: '你背对灵泉守门三日。女修伤愈出关，自称林挽月，愿以灵草相赠，并留下传音符。',
+        narrative: '你背对灵泉守门三日。女修伤愈出关，自称叶轻眉，愿以灵草相赠，并留下传音符。',
         effects: [
           { type: 'flag', key: 'met_lin_wanyue', value: true },
           { type: 'stat', key: 'karma', value: 15 },
@@ -241,7 +241,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '林挽月见你守礼有度，又气运不俗，遂与你结为道侣，共取灵泉造化。',
+              success: '叶轻眉见你守礼有度，又气运不俗，遂与你结为道侣，共取灵泉造化。',
               fail: '唐突之举惹她不悦，灵泉灵气反噬，你只得赔礼退走。',
             },
           },
@@ -341,7 +341,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'ascend_together',
         text: '携手证道，比翼双飞',
-        narrative: '你与苏清雪心意相通，双双踏入霞光之中，誓共证长生。',
+        narrative: '你与沈霜凝心意相通，双双踏入霞光之中，誓共证长生。',
         effects: [
           { type: 'flag', key: 'chose_lovers_ascension', value: true },
           { type: 'cultivation', value: 10 },

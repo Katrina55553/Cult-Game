@@ -6,25 +6,25 @@ import { SYSTEM_EVENTS } from './eventsSystems'
 const CORE_EVENTS: GameEvent[] = [
   {
     id: 'enter_sect',
-    title: '拜入宗门',
+    title: '入山问道',
     description:
-      '青云宗收徒大典，数百少年齐聚山门前。长老扫视众人，目光如电。你站在人群中，心跳加速——这是踏入仙途的第一步。',
+      '天玄宗百年一度的收徒盛会，数百名少年才俊齐聚于巍峨山门之前。执事长老目光如炬，逐一看过众人资质。你置身人群之中，心潮起伏——此乃踏入仙途的第一道门槛。',
     weight: 100,
     years: 0,
     once: true,
     choices: [
       {
         id: 'honest',
-        text: '诚实地展示灵根，求取入门',
+        text: '坦然展露灵根，诚心求入',
         effects: [
           { type: 'flag', key: 'loyal_to_sect', value: true },
           { type: 'cultivation', value: 15 },
-          { type: 'log', text: '16岁：拜入青云宗，成为外门弟子。' },
+          { type: 'log', text: '16岁：拜入天玄宗，列为外门弟子。' },
         ],
       },
       {
         id: 'boast',
-        text: '夸大资质，试图进入内门',
+        text: '虚夸资质，图谋内门之位',
         outcomes: [
           {
             chance: 0.3,
@@ -39,29 +39,29 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 10 },
             ],
             narrative: {
-              success: '长老识才，破格收入内门，赐灵石五十。',
-              fail: '谎言被识破，仅得外门弟子身份，因果受损。',
+              success: '长老慧眼识珠，破例收入内门，并赐下灵石五十枚。',
+              fail: '谎言被当场揭穿，仅得外门身份，因果蒙尘。',
             },
           },
         ],
       },
       {
         id: 'refuse',
-        text: '拒绝宗门，决意独行',
+        text: '拒入宗门，甘为散修',
         effects: [
           { type: 'flag', key: 'refused_all_sects', value: true },
           { type: 'stat', key: 'luck', value: 5 },
           { type: 'cultivation', value: 12 },
-          { type: 'log', text: '16岁：拒绝宗门，踏上散修之路。' },
+          { type: 'log', text: '16岁：婉拒宗门，独行于天地之间。' },
         ],
       },
     ],
   },
   {
     id: 'cave_inheritance',
-    title: '洞府遗泽',
+    title: '古洞秘藏',
     description:
-      '你在后山禁地边缘，发现一处被封印的洞府。石门上古篆流转，灵气隐隐透出，似有机缘，亦有凶险。',
+      '你于后山禁地边缘，偶然寻得一座被重重封印所护的古洞府。石门之上篆文流转不息，灵气丝丝外泄，似藏着一段机缘，却也暗伏凶险。',
     weight: 15,
     years: 2,
     once: true,
@@ -69,7 +69,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'force',
-        text: '强行破阵',
+        text: '以力破阵，强行闯入',
         outcomes: [
           {
             chance: 0.35,
@@ -85,15 +85,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '破阵而入，获古剑一柄与残卷，道基大进。',
-              fail: '阵法反噬，重伤逃遁，寿元大损，心魔暗生。',
+              success: '阵法告破，你得古剑残卷，道基为之大进。',
+              fail: '禁制反噬，你负伤遁走，寿元折损，心魔渐生。',
             },
           },
         ],
       },
       {
         id: 'comprehend',
-        text: '静心参悟门上符文',
+        text: '凝神静参门上符文',
         requirements: [{ type: 'stat', key: 'comprehension', min: 35 }],
         effects: [
           { type: 'stat', key: 'comprehension', value: 12 },
@@ -103,7 +103,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'mark',
-        text: '记下位置，日后再来',
+        text: '暗记方位，改日再来',
         effects: [
           { type: 'flag', key: 'cave_marked', value: true },
           { type: 'stat', key: 'luck', value: 3 },
@@ -113,9 +113,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'market_find',
-    title: '集市捡漏',
+    title: '坊市觅宝',
     description:
-      '坊市角落，一落魄修士摆摊出售"古物"。多数皆是假货，但你目光一扫，其中似有一件灵器微光一闪而逝。',
+      '坊市一角，一落魄修士设摊叫卖"上古奇珍"。满目皆为赝品劣货，但你眸光一闪，瞥见其中一件器物微微泛起灵光，转瞬即逝。',
     rarity: 'rare',
     weight: 9,
     years: 1,
@@ -123,7 +123,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'buy',
-        text: '花30灵石买下',
+        text: '以三十灵石购入',
         requirements: [{ type: 'resource', key: 'spiritStones', min: 30 }],
         outcomes: [
           {
@@ -140,15 +140,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'karma', value: -5 },
             ],
             narrative: {
-              success: '果然是灵玉佩，佩戴后气运大增。',
-              fail: '买来竟是赝品，白白浪费灵石。',
+              success: '果不其然，乃一枚灵玉佩，佩戴之后气运大增。',
+              fail: '购得之物竟是仿造赝品，灵石白白折损。',
             },
           },
         ],
       },
       {
         id: 'bargain',
-        text: '砍价至10灵石',
+        text: '狠压至十灵石',
         requirements: [{ type: 'resource', key: 'spiritStones', min: 10 }],
         outcomes: [
           {
@@ -162,24 +162,24 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'karma', value: -3 },
             ],
             narrative: {
-              success: '摊主恼怒甩卖，你竟得一小块灵石原矿。',
-              fail: '摊主翻脸，将你赶出摊位。',
+              success: '摊主恼羞成怒低价甩卖，你竟意外得了一块灵石原矿。',
+              fail: '摊主勃然翻脸，将你驱离摊前。',
             },
           },
         ],
       },
       {
         id: 'ignore',
-        text: '不予理会，径直走过',
+        text: '视若无睹，拂袖而过',
         effects: [{ type: 'stat', key: 'comprehension', value: 2 }],
       },
     ],
   },
   {
     id: 'peer_trap',
-    title: '同门陷害',
+    title: '同门暗算',
     description:
-      '同门师兄邀你共探秘境，言语殷勤。你察觉他目光闪烁，显然别有用心。',
+      '一位同门师兄前来相邀，言称共探秘境，言辞恳切。但你察觉其目光游移闪烁，分明暗藏祸心。',
     weight: 10,
     years: 1,
     once: true,
@@ -188,7 +188,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'expose',
-        text: '当面揭穿，上报长老',
+        text: '当众揭发，禀报长老',
         outcomes: [
           {
             chance: 0.6,
@@ -202,15 +202,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -5 },
             ],
             narrative: {
-              success: '长老嘉奖你的正直，赐灵石三十，记为宗门功臣。',
-              fail: '反被诬陷，受罚闭关，心魔暗生。',
+              success: '长老赞许你秉性刚正，赏灵石三十，并记你为宗门功臣。',
+              fail: '反遭对方倒打一耙，受罚禁闭思过，心魔暗伏。',
             },
           },
         ],
       },
       {
         id: 'play_along',
-        text: '将计就计，反设陷阱',
+        text: '将计就计，暗设反局',
         requirements: [{ type: 'stat', key: 'comprehension', min: 40 }],
         outcomes: [
           {
@@ -225,15 +225,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 15 },
             ],
             narrative: {
-              success: '反夺对方机缘，获灵石五十，修为精进。',
-              fail: '计谋败露，被打成重伤，寿元受损。',
+              success: '反夺其机缘，获灵石五十，修为亦有所精进。',
+              fail: '计策败露，遭其重创，寿元折损。',
             },
           },
         ],
       },
       {
         id: 'avoid',
-        text: '婉言拒绝，避而远之',
+        text: '委婉回绝，敬而远之',
         effects: [
           { type: 'stat', key: 'demonHeart', value: -3 },
           { type: 'cultivation', value: 5 },
@@ -243,16 +243,16 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'beast_attack',
-    title: '妖兽袭击',
+    title: '妖狼夜袭',
     description:
-      '夜行山林，腥风扑面。一头二阶妖狼从暗处扑出，双目猩红，利爪如刀。',
+      '月黑风高，你穿行于密林之中，忽觉一股腥风扑面而来。一头二阶妖狼自暗影中窜出，双瞳赤红如血，利爪森然似刃。',
     weight: 10,
     years: 1,
     once: true,
     choices: [
       {
         id: 'fight',
-        text: '正面迎战',
+        text: '正面交锋',
         hint: '约四成胜算 · 败则重伤',
         outcomes: [
           {
@@ -269,15 +269,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -8 },
             ],
             narrative: {
-              success: '险胜妖狼，取其妖丹，体魄更为坚韧。',
-              fail: '不敌妖狼，重伤逃遁，寿元受损，心魔暗生。',
+              success: '一番苦战终斩妖狼，取其妖丹，体魄愈发强横。',
+              fail: '不敌妖狼凶威，重伤遁逃，寿元折损，心魔渐起。',
             },
           },
         ],
       },
       {
         id: 'flee',
-        text: '施展遁术逃跑',
+        text: '催动遁术逃离',
         hint: '较安全 · 收益低',
         outcomes: [
           {
@@ -288,15 +288,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 5 },
             ],
             narrative: {
-              success: '脱身成功，虽无收获，保全性命。',
-              fail: '遁术不及，被划伤后背，心生动摇。',
+              success: '安然脱身，虽无所获，却保全了性命。',
+              fail: '遁术未及施展，后背被利爪划伤，道心微动。',
             },
           },
         ],
       },
       {
         id: 'tame',
-        text: '尝试以神识驯服',
+        text: '以神识之力降伏',
         hint: '需悟性45 · 高风险高回报',
         requirements: [{ type: 'stat', key: 'comprehension', min: 45 }],
         outcomes: [
@@ -313,8 +313,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -8 },
             ],
             narrative: {
-              success: '神识贯通，妖狼臣服，结为灵宠。',
-              fail: '神识遭反噬，元神受创，重伤退走。',
+              success: '神识贯入妖狼识海，妖兽俯首帖耳，化为你的灵宠。',
+              fail: '神识遭猛烈反噬，元神受创，你踉跄退走。',
             },
           },
         ],
@@ -323,9 +323,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'elder_lecture',
-    title: '长老讲道',
+    title: '长老授业',
     description:
-      '宗门长老开坛讲道，百余名弟子端坐听讲。天地灵气随道音流转，沁人心脾。',
+      '宗门长老于论道台上开坛说法，百余名弟子盘膝而坐，凝神聆听。天地灵气随着道音流转回旋，令人周身通泰。',
     weight: 9,
     years: 2,
     maxTimes: 2,
@@ -334,8 +334,8 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'attend',
-        text: '全神贯注，认真听讲',
-        narrative: '道音入耳，你凝神静听，灵气随讲道流转周身，修为大进，悟性亦有所增。',
+        text: '正襟危坐，悉心聆听',
+        narrative: '道音如潮灌入耳中，你澄心静虑，灵气随讲道流转周天，修为精进，悟性亦有长进。',
         effects: [
           { type: 'cultivation', value: 20 },
           { type: 'stat', key: 'comprehension', value: 5 },
@@ -343,9 +343,9 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'ask',
-        text: '提问修炼疑惑',
+        text: '起身请教修行疑难',
         requirements: [{ type: 'stat', key: 'comprehension', min: 30 }],
-        narrative: '你起身提问，长老欣然解惑，令你茅塞顿开。众弟子侧目，长老更将你记为宗门翘楚。',
+        narrative: '你起身发问，长老含笑作答，令你豁然开朗。四座侧目，长老亦将你视为可造之材。',
         effects: [
           { type: 'cultivation', value: 25 },
           { type: 'stat', key: 'comprehension', value: 8 },
@@ -354,8 +354,8 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'sleep',
-        text: '昏昏欲睡，敷衍了事',
-        narrative: '你昏昏欲睡，长老蹙眉不语，同门窃笑。虽略有收获，因果却微损。',
+        text: '昏然欲寐，心不在焉',
+        narrative: '你神思恍惚，长老微微蹙眉，同门窃笑不已。虽略有微末所得，因果却添一笔折损。',
         effects: [
           { type: 'cultivation', value: 5 },
           { type: 'stat', key: 'karma', value: -5 },
@@ -365,17 +365,17 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'herb_gather',
-    title: '灵草采集',
+    title: '采药遇险',
     rarity: 'rare',
     description:
-      '药园深处，百年灵草散发清香。然而附近有毒蛇盘踞，采摘需格外小心。',
+      '药园幽深处，一株百年灵草散发着沁人清香。然而近旁有毒蛇盘踞守候，采摘之事实非易事。',
     weight: 8,
     years: 1,
     once: true,
     choices: [
       {
         id: 'careful',
-        text: '谨慎采摘',
+        text: '小心谨慎，徐徐采摘',
         outcomes: [
           {
             chance: 0.75,
@@ -388,15 +388,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'lifespan', value: -8 },
             ],
             narrative: {
-              success: '成功采得灵草，对丹道有了初步领悟。',
-              fail: '被毒蛇咬伤，虽采得灵草，却损耗寿元。',
+              success: '灵草到手，你对炼丹之道亦有了些许感悟。',
+              fail: '不慎被毒蛇噬咬，虽得灵草，寿元却有所损耗。',
             },
           },
         ],
       },
       {
         id: 'rush',
-        text: '快速采摘，冒险一搏',
+        text: '速战速决，铤而走险',
         outcomes: [
           {
             chance: 0.4,
@@ -409,8 +409,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 8 },
             ],
             narrative: {
-              success: '险中求富贵，获稀有灵草。',
-              fail: '毒蛇突袭，重伤退走，心魔滋生。',
+              success: '险中取胜，你夺得一株珍稀灵草。',
+              fail: '毒蛇暴起发难，你重伤败退，心魔乘虚而入。',
             },
           },
         ],
@@ -419,9 +419,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'demon_whisper',
-    title: '心魔初现',
+    title: '心魔萌动',
     description:
-      '闭关修炼时，心底浮现低语，诱惑你放弃正道，改修魔功。修为可一日千里，但因果深重。',
+      '闭关之时，心底忽起阵阵低语，蛊惑你弃正道而修魔功。魔功进境虽可一日千里，然因果之重难以估量。',
     weight: 10,
     years: 2,
     once: true,
@@ -429,7 +429,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'resist',
-        text: '坚守道心，强行压制',
+        text: '抱元守一，强行镇压',
         outcomes: [
           {
             chance: 0.65,
@@ -442,15 +442,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 15 },
             ],
             narrative: {
-              success: '道心坚定，心魔退散，修为更进一层。',
-              fail: '心魔难压，虽未入魔，却已滋生暗根。',
+              success: '道心坚如磐石，心魔溃散，修为更上一层。',
+              fail: '心魔难以根除，虽未入魔，暗根已然种下。',
             },
           },
         ],
       },
       {
         id: 'accept',
-        text: '倾听魔音，试探魔功',
+        text: '侧耳倾听，试探魔道',
         hint: '约五成失控 · 修为涨或心魔反噬',
         outcomes: [
           {
@@ -465,15 +465,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 10 },
             ],
             narrative: {
-              success: '你克制魔音，小有顿悟，修为进益。',
-              fail: '魔音反噬，你堕入魔道边缘，心魔大起。',
+              success: '你堪堪驾驭魔音，偶有所悟，修为小进。',
+              fail: '魔音反客为主，你被推向魔道深渊，心魔大炽。',
             },
           },
         ],
       },
       {
         id: 'seek_help',
-        text: '出关求长老指点',
+        text: '出关请长老开导',
         requirements: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
         effects: [
           { type: 'stat', key: 'demonHeart', value: -15 },
@@ -485,9 +485,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'foundation_tribulation',
-    title: '筑基天劫',
+    title: '筑基雷劫',
     description:
-      '修为圆满，天劫将至。乌云密布，雷光如龙，这是踏入筑基期的生死关头。',
+      '修为圆满，天劫应期而至。乌云翻涌遮天蔽日，雷霆如龙蛇狂舞，此乃踏入筑基境界的生死之关。',
     weight: 20,
     years: 3,
     once: true,
@@ -498,7 +498,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'hard',
-        text: '以肉身硬抗天雷',
+        text: '凭肉身硬撼天雷',
         hint: '约四成得手 · 败则重伤',
         outcomes: [
           {
@@ -515,15 +515,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'grievously_wounded', value: true },
             ],
             narrative: {
-              success: '雷劫过后，筑基成功，肉身更为强韧。',
-              fail: '天雷贯体，道基受损，你重伤脱身，筑基未成。',
+              success: '雷劫历尽，筑基功成，肉身百炼成钢。',
+              fail: '天雷贯体而过，道基崩裂，你重伤退场，筑基未成。',
             },
           },
         ],
       },
       {
         id: 'artifact',
-        text: '祭出法宝抵御',
+        text: '祭出法宝抵挡雷劫',
         requirements: [{ type: 'stat', key: 'comprehension', min: 40 }],
         outcomes: [
           {
@@ -537,15 +537,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '法宝护体，有惊无险，成功筑基。',
-              fail: '法宝碎裂，勉强保住性命，筑基失败。',
+              success: '法宝护持周全，有惊无险，你顺利筑基。',
+              fail: '法宝承受不住雷威碎裂，你勉强保命，筑基功亏一篑。',
             },
           },
         ],
       },
       {
         id: 'pill',
-        text: '服用护劫丹药',
+        text: '吞服护劫灵丹',
         requirements: [{ type: 'resource', key: 'spiritStones', min: 50 }],
         outcomes: [
           {
@@ -559,8 +559,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -20 },
             ],
             narrative: {
-              success: '丹药生效，顺利渡过天劫，踏入筑基。',
-              fail: '丹药品质不足，天劫失败，修为倒退。',
+              success: '灵丹药力发作，你安然渡劫，迈入筑基之境。',
+              fail: '灵丹品质欠佳，雷劫未能化解，修为倒退。',
             },
           },
         ],
@@ -569,16 +569,16 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'sect_tournament',
-    title: '宗门大比',
+    title: '门内比武',
     description:
-      '宗门大比开幕，弟子们摩拳擦掌。胜者可得灵石、丹药，甚至长老亲传。',
+      '天玄宗门内大比拉开帷幕，弟子们个个摩拳擦掌。夺魁者可获灵石丹药，更有机会被长老收为亲传。',
     weight: 12,
     years: 2,
     conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'compete',
-        text: '参加比试，全力以赴',
+        text: '登台比试，竭尽全力',
         outcomes: [
           {
             chance: 0.5,
@@ -594,15 +594,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 5 },
             ],
             narrative: {
-              success: '力压群雄，夺得头名，名声大振。',
-              fail: '首轮落败，虽败犹荣，略有收获。',
+              success: '你技压群雄拔得头筹，声名远播。',
+              fail: '首轮即遭淘汰，虽败犹有所获。',
             },
           },
         ],
       },
       {
         id: 'observe',
-        text: '旁观悟法，不参与',
+        text: '旁观悟道，不参战',
         effects: [
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'cultivation', value: 10 },
@@ -612,16 +612,16 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'demon_temptation',
-    title: '魔修诱惑',
+    title: '魔修引诱',
     description:
-      '一名魔修悄然现身，许诺传你无上魔功，只需杀一人献祭。杀意与诱惑交织，道心面临考验。',
+      '一名魔修不知从何处现身，许以无上魔功，条件仅是取一无辜之人的性命。杀意与贪念交织涌来，你的道心正面临严峻的考验。',
     weight: 10,
     years: 1,
     conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'reject',
-        text: '断然拒绝，出手斩魔',
+        text: '断然回绝，拔剑斩魔',
         outcomes: [
           {
             chance: 0.55,
@@ -635,15 +635,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '斩灭魔修，正道名声远扬，获战利品。',
-              fail: '魔修遁走，你反受伤，心魔暗生。',
+              success: '魔修伏诛，你正道之名传扬四方，并缴获不少战利品。',
+              fail: '魔修遁形而去，你反受其伤，心魔暗中滋长。',
             },
           },
         ],
       },
       {
         id: 'accept',
-        text: '接受魔功，献祭无辜',
+        text: '纳受魔功，献祭无辜',
         effects: [
           { type: 'flag', key: 'accepted_demon_path', value: true },
           { type: 'stat', key: 'demonHeart', value: 35 },
@@ -653,7 +653,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'pretend',
-        text: '假意接受，伺机反杀',
+        text: '佯装应允，伺机反戈',
         requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
         outcomes: [
           {
@@ -668,8 +668,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 20 },
             ],
             narrative: {
-              success: '反杀魔修，夺得魔储物袋。',
-              fail: '计谋被识破，被迫修炼魔功，心魔大生。',
+              success: '趁其不备反杀成功，夺取魔修储物袋。',
+              fail: '伪装被识破，你被迫修习魔功，心魔大炽。',
             },
           },
         ],
@@ -678,9 +678,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'ancient_legacy',
-    title: '古修传承',
+    title: '先贤遗泽',
     description:
-      '秘境深处，一具古修遗骸盘坐，身前悬浮一枚玉简，似有传承等待有缘人。',
+      '秘境深处，一位古修遗骸端坐于蒲团之上，面前悬浮着一枚温润玉简，似有毕生传承静候有缘之人。',
     weight: 8,
     years: 3,
     once: true,
@@ -688,7 +688,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'inherit',
-        text: '跪拜传承',
+        text: '叩首受传',
         outcomes: [
           {
             chance: 0.55,
@@ -703,15 +703,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 12 },
             ],
             narrative: {
-              success: '玉简入体，获古修传承，大道可期。',
-              fail: '传承排斥，神识受创，心魔暗生。',
+              success: '玉简化作流光没入眉心，古修传承尽归于你，大道有望。',
+              fail: '传承之力排斥你的神识，你受创退开，心魔暗伏。',
             },
           },
         ],
       },
       {
         id: 'loot',
-        text: '只取遗物，不拜传承',
+        text: '只取遗物，不受传承',
         hint: '约六成得手 · 败则触怒禁制',
         outcomes: [
           {
@@ -727,8 +727,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 12 },
             ],
             narrative: {
-              success: '你悄然取走遗物，迅速离去。',
-              fail: '禁制反扑，你受伤逃遁，因果大损。',
+              success: '你悄然取走遗物，迅速抽身离去。',
+              fail: '禁制骤然发作，你受伤逃遁，因果大损。',
             },
           },
         ],
@@ -737,9 +737,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'dao_companion',
-    title: '道侣结缘',
+    title: '道侣之缘',
     description:
-      '秘境深处，一名紫衣女修与你狭路相逢。她自称来自南海，资质不俗，提议结为道侣，共参大道。',
+      '秘境深处，一位身着紫衣的女修与你不期而遇。她自称来自南海，灵根资质颇佳，欲与你结为道侣，同参大道。',
     weight: 10,
     years: 2,
     once: true,
@@ -751,8 +751,8 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'accept',
-        text: '结为道侣，双修共进',
-        narrative: '你与紫衣女修对天盟誓，结为道侣。二人功法互补，修为一日千里。',
+        text: '缔结道侣，双修同进',
+        narrative: '你与紫衣女修对天盟誓，结为道侣。二人功法相辅相成，修为日进千里。',
         effects: [
           { type: 'flag', key: 'has_companion', value: true },
           { type: 'cultivation', value: 25 },
@@ -761,8 +761,8 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'decline',
-        text: '婉言谢绝，专心修道',
-        narrative: '你以礼相送，女修叹你道心坚定，留下一枚玉佩后飘然离去。',
+        text: '以礼相辞，潜心修道',
+        narrative: '你恭送女修离去，她赞叹你道心坚定，赠你一枚玉佩后飘然而去。',
         effects: [
           { type: 'cultivation', value: 15 },
           { type: 'stat', key: 'comprehension', value: 5 },
@@ -770,8 +770,8 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'betray',
-        text: '趁其不备，夺其机缘',
-        narrative: '你暗算女修，夺其储物袋。修为虽涨，因果大损，心魔暗生。',
+        text: '趁其不备，夺其造化',
+        narrative: '你暗施手段偷袭女修，夺走她的储物袋。修为虽有长进，因果大损，心魔渐生。',
         effects: [
           { type: 'spiritStones', value: 80 },
           { type: 'stat', key: 'karma', value: -30 },
@@ -783,16 +783,16 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'secret_realm',
-    title: '秘境开启',
+    title: '洞天现世',
     description:
-      '天地异象，上古秘境开启。各方修士蜂拥而入，机缘与杀机并存。',
+      '天地忽生异象，一座上古洞天裂空而出。四方修士闻风而动蜂拥而至，机缘与杀机并存其间。',
     weight: 10,
     years: 3,
     conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'explore',
-        text: '深入秘境核心',
+        text: '深入洞天腹地',
         hint: '约四成得手 · 败则重伤',
         outcomes: [
           {
@@ -810,15 +810,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'grievously_wounded', value: true },
             ],
             narrative: {
-              success: '核心区域获重宝，修为大进。',
-              fail: '遭遇空间裂缝，你被震出秘境，重伤濒死却保住一命。',
+              success: '腹地之中重宝在手，修为暴涨。',
+              fail: '遭遇空间裂缝，你被震出洞天，重伤濒死却侥幸保命。',
             },
           },
         ],
       },
       {
         id: 'periphery',
-        text: '在外围搜寻',
+        text: '在外围搜刮',
         effects: [
           { type: 'spiritStones', value: 40 },
           { type: 'cultivation', value: 15 },
@@ -826,7 +826,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'skip',
-        text: '谨慎观望，不入秘境',
+        text: '谨慎旁观，不涉险地',
         effects: [
           { type: 'stat', key: 'comprehension', value: 5 },
           { type: 'cultivation', value: 8 },
@@ -838,7 +838,7 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'alchemy_master',
     title: '炼丹悟道',
     description:
-      '你偶得丹方残卷，欲炼九转金丹。需集齐灵草，闭关七七四十九日。',
+      '你偶得一卷丹方残篇，可炼九转金丹。需备齐诸般灵草，闭关七七四十九日方可开炉。',
     weight: 8,
     years: 5,
     once: true,
@@ -849,7 +849,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'refine',
-        text: '闭关炼丹',
+        text: '闭关开炉炼丹',
         outcomes: [
           {
             chance: 0.45,
@@ -867,15 +867,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -10 },
             ],
             narrative: {
-              success: '丹成九转，药香四溢，丹道大成。',
-              fail: '丹炉炸裂，反噬受伤，心魔暗生。',
+              success: '金丹九转功成，药香弥漫四野，你的丹道造诣登峰造极。',
+              fail: '丹炉骤然炸裂，炉火反噬，你受伤不轻，心魔暗生。',
             },
           },
         ],
       },
       {
         id: 'study',
-        text: '只研丹方，不急于炼制',
+        text: '只研丹方，暂不开炉',
         effects: [
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'cultivation', value: 10 },
@@ -885,9 +885,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'golden_tribulation',
-    title: '金丹天劫',
+    title: '金丹雷劫',
     description:
-      '金丹将成，天劫再临。此次雷劫比筑基时猛烈十倍，稍有不慎便是灰飞烟灭。',
+      '金丹将成，天劫再度降临。此番雷劫威势远胜筑基之时十倍有余，稍有差池便是灰飞烟灭之局。',
     weight: 15,
     years: 5,
     once: true,
@@ -898,7 +898,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'endure',
-        text: '以身渡劫',
+        text: '以血肉之躯硬扛雷劫',
         hint: '约三成得手 · 败则身死',
         outcomes: [
           {
@@ -912,15 +912,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'died_in_tribulation', value: true },
             ],
             narrative: {
-              success: '雷劫过后，金丹凝成，光芒万丈。',
-              fail: '天劫之下，身死道消。',
+              success: '雷霆退散，金丹凝结，光华万道。',
+              fail: '天威之下，身死道消。',
             },
           },
         ],
       },
       {
         id: 'array',
-        text: '布阵护体',
+        text: '布设护体阵法',
         requirements: [{ type: 'stat', key: 'comprehension', min: 55 }],
         outcomes: [
           {
@@ -931,8 +931,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -30 },
             ],
             narrative: {
-              success: '阵法抵挡雷劫，金丹凝成。',
-              fail: '阵法破碎，勉强保住性命，金丹未成。',
+              success: '阵法堪堪挡住雷劫，你金丹大成。',
+              fail: '阵法崩溃，你勉强苟全性命，金丹终未成形。',
             },
           },
         ],
@@ -941,9 +941,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'lifespan_crisis',
-    title: '寿元将尽',
+    title: '暮年将至',
     description:
-      '你感到体内生机流逝，须发渐白。若不寻得续命之法，大限将至。',
+      '你感知到体内生机如流水般逝去，鬓发渐白、面容渐老。若寻不到续命之法，大限恐在眼前。',
     weight: 12,
     years: 2,
     once: true,
@@ -951,7 +951,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'search_pill',
-        text: '寻访续命丹药',
+        text: '四处求购续命丹药',
         requirements: [{ type: 'resource', key: 'spiritStones', min: 80 }],
         outcomes: [
           {
@@ -965,15 +965,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '购得续命丹，寿元延长三十年。',
-              fail: '丹药无效，灵石白费，心魔暗生。',
+              success: '幸得续命灵丹，寿元再延三十载。',
+              fail: '所购丹药毫无效用，灵石尽付东流，心魔渐起。',
             },
           },
         ],
       },
       {
         id: 'breakthrough',
-        text: '强行突破，以境界换寿元',
+        text: '孤注一掷，以破境求寿',
         outcomes: [
           {
             chance: 0.3,
@@ -984,17 +984,17 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'lifespan', value: -10 },
             ],
             narrative: {
-              success: '破境成功，寿元大增。',
-              fail: '突破失败，寿元更为紧迫。',
+              success: '破境功成，寿元大增。',
+              fail: '突破未果，寿元愈发紧迫。',
             },
           },
         ],
       },
       {
         id: 'accept',
-        text: '坦然面对，整理遗训',
+        text: '坦然受命，安排后事',
         hint: '因果清正 · 本回合后寿尽坐化',
-        narrative: '你将毕生感悟写成遗训，传予后辈，随后安然坐化。',
+        narrative: '你将毕生修行感悟编撰成册，传予后辈弟子，而后安然坐化。',
         effects: [
           { type: 'stat', key: 'karma', value: 10 },
           { type: 'stat', key: 'demonHeart', value: -15 },
@@ -1007,14 +1007,14 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'demon_tribulation',
     title: '心魔大劫',
     description:
-      '修炼至关键时刻，心魔化形，化作你内心最深的恐惧与执念，向你扑来。',
+      '修行到了紧要关头，心魔忽然化形而出，幻作你内心最深处的恐惧与执念，直扑而来。',
     weight: 10,
     years: 3,
     conditions: [{ type: 'stat', key: 'demonHeart', min: 40 }],
     choices: [
       {
         id: 'face',
-        text: '直面心魔，以道心斩之',
+        text: '正面迎击，以道心斩灭心魔',
         outcomes: [
           {
             chance: 0.5,
@@ -1028,15 +1028,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'accepted_demon_path', value: true },
             ],
             narrative: {
-              success: '斩灭心魔，道心通明，修为大进。',
-              fail: '道心失守，心魔入主，堕入魔道边缘。',
+              success: '心魔应声而灭，道心澄澈如镜，修为突飞猛进。',
+              fail: '道心失守，心魔鸠占鹊巢，你已站在魔道的边缘。',
             },
           },
         ],
       },
       {
         id: 'merge',
-        text: '与心魔融合，以魔证道',
+        text: '与心魔合一，以魔入道',
         effects: [
           { type: 'flag', key: 'accepted_demon_path', value: true },
           { type: 'stat', key: 'demonHeart', value: 40 },
@@ -1047,9 +1047,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'final_choice',
-    title: '飞升契机',
+    title: '飞升抉择',
     description:
-      '天地异象，飞升通道开启。你可择日飞升，亦可留世守护，或堕入魔道，一念之间，命运迥异。',
+      '天地异象骤起，飞升通道洞开于前。你可飞升成仙，亦可留驻人间守护苍生，或堕入魔道改写天规——一念之间，命运迥然不同。',
     weight: 20,
     years: 1,
     once: true,
@@ -1057,7 +1057,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'ascend',
-        text: '踏入飞升通道，求成仙道',
+        text: '步入飞升通道，追寻仙道',
         requirements: [
           { type: 'stat', key: 'demonHeart', max: 30 },
           { type: 'flag', key: 'got_inheritance', value: true },
@@ -1069,7 +1069,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'stay',
-        text: '留世守护，做人间地仙',
+        text: '留守人间，做一方地仙',
         effects: [
           { type: 'flag', key: 'refused_all_sects', value: true },
           { type: 'cultivation', value: 20 },
@@ -1078,7 +1078,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'demon',
-        text: '以魔入道，打破飞升规则',
+        text: '以魔证道，打破飞升天规',
         effects: [
           { type: 'flag', key: 'accepted_demon_path', value: true },
           { type: 'stat', key: 'demonHeart', value: 50 },
@@ -1087,7 +1087,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'retire',
-        text: '放弃修仙，回归凡尘',
+        text: '弃绝仙途，回归红尘',
         effects: [
           { type: 'flag', key: 'gave_up_cultivation', value: true },
         ],
@@ -1096,9 +1096,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'outer_sect_life',
-    title: '外门杂务',
+    title: '外门琐务',
     description:
-      '入门已有数月，你每日挑水砍柴、清扫殿堂，修为进展缓慢。今日管事师兄分配新差事：灵田除草可近灵气，丹房打杂可窥丹道，巡山守夜可磨心志。',
+      '入门已有数月，你每日挑水斫柴、洒扫殿宇，修为进展甚缓。今日执事师兄分派新差：灵田除草可近灵气修行，丹房帮佣可窥丹道门径，巡山值夜可磨砺心志。',
     weight: 25,
     years: 1,
     once: true,
@@ -1114,7 +1114,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'alchemy',
-        text: '丹房打杂，偷学丹道',
+        text: '丹房帮佣，暗学丹道',
         effects: [
           { type: 'alchemyTier', value: 1 },
           { type: 'cultivation', value: 8 },
@@ -1122,7 +1122,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'patrol',
-        text: '巡山守夜，磨炼心志',
+        text: '巡山值夜，砥砺心性',
         effects: [
           { type: 'stat', key: 'rootBone', value: 3 },
           { type: 'stat', key: 'karma', value: 5 },
@@ -1132,9 +1132,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'inner_sect_trial',
-    title: '内门考核',
+    title: '内门试炼',
     description:
-      '青云宗一年一度内门考核开启。三道关卡：灵阵幻境考验心性，御剑飞行考验根骨，对战擂台考验实战。通过者可晋升内门弟子，获更多修炼资源。',
+      '天玄宗一年一度的内门考核如期而至。三道关隘依次设下：灵阵幻境考验心性，御剑飞行考验根骨，擂台对战考验实战。过关者可晋升内门弟子，享有更多修炼资源。',
     weight: 22,
     years: 1,
     once: true,
@@ -1142,7 +1142,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'heart',
-        text: '以心性过幻境关',
+        text: '凭心性闯幻境之关',
         effects: [
           { type: 'flag', key: 'inner_disciple', value: true },
           { type: 'cultivation', value: 15 },
@@ -1152,7 +1152,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'body',
-        text: '以根骨过御剑关',
+        text: '凭根骨闯御剑之关',
         effects: [
           { type: 'flag', key: 'inner_disciple', value: true },
           { type: 'cultivation', value: 15 },
@@ -1161,7 +1161,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'fight',
-        text: '以实战过擂台关',
+        text: '凭实战闯擂台之关',
         outcomes: [
           {
             chance: 0.55,
@@ -1177,8 +1177,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 5 },
             ],
             narrative: {
-              success: '你以凌厉剑法击败对手，破格晋升内门，获赐灵石三十。',
-              fail: '擂台上惜败，仍是外门弟子，但实战经验大增。',
+              success: '你以凌厉剑招击败对手，破格晋升内门，并获灵石三十之赏。',
+              fail: '擂台上惜败于人，仍是外门弟子，但实战阅历大为增长。',
             },
           },
         ],
@@ -1187,9 +1187,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'world_travel',
-    title: '下山历练',
+    title: '入世历练',
     description:
-      '修为小有所成，师尊命你下山历练。红尘万丈，机缘与凶险并存。你行至三岔路口：繁华都城人烟稠密，深山古刹钟声悠远，荒野古道黄沙漫天。',
+      '修为初有所成，师尊遣你下山入世历练。红尘滚滚，机缘与凶险并存。你行至一处三岔路口：繁华都城车水马龙，深山古刹钟磬悠扬，荒野古道黄沙蔽日。',
     weight: 18,
     years: 2,
     once: true,
@@ -1197,7 +1197,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'city',
-        text: '入繁华都城，见世间百态',
+        text: '入繁华都城，阅尽人间百态',
         effects: [
           { type: 'spiritStones', value: 25 },
           { type: 'stat', key: 'luck', value: 4 },
@@ -1206,7 +1206,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'temple',
-        text: '入深山古刹，寻隐世高人',
+        text: '入深山古刹，寻访隐世高人',
         outcomes: [
           {
             chance: 0.5,
@@ -1221,15 +1221,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'comprehension', value: 2 },
             ],
             narrative: {
-              success: '古刹老僧传你一卷心法，悟性大增。',
-              fail: '古刹已荒废百年，唯有断壁残垣，你静坐半日略有感悟。',
+              success: '古刹老僧传授你一卷心法，你悟性大增。',
+              fail: '古刹早已荒废百年，仅余断壁残垣，你静坐半日略有所悟。',
             },
           },
         ],
       },
       {
         id: 'wild',
-        text: '走荒野古道，磨炼意志',
+        text: '走荒野古道，以苦行磨砺',
         effects: [
           { type: 'stat', key: 'rootBone', value: 5 },
           { type: 'stat', key: 'demonHeart', value: 3 },
@@ -1242,7 +1242,7 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'sect_war',
     title: '宗门大战',
     description:
-      '血云压境，魔道六宗联军围攻青云宗。山门护阵摇摇欲坠，长老们浴血奋战。你站在城墙上，望着铺天盖地的魔修大军，生死存亡在此一战。',
+      '血云压境而来，魔道六宗联军将天玄宗团团围困。山门护阵摇摇欲坠，长老们浴血厮杀。你伫立城头，望着铺天盖地的魔修大军，此战关乎存亡。',
     weight: 8,
     years: 2,
     once: true,
@@ -1253,7 +1253,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'defend',
-        text: '死守山门，与宗门共存亡',
+        text: '死守山门，誓与宗门共存亡',
         outcomes: [
           {
             chance: 0.5,
@@ -1278,7 +1278,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'flank',
-        text: '率精锐绕后突袭魔军粮草',
+        text: '率精锐迂回奇袭魔军粮草',
         outcomes: [
           {
             chance: 0.6,
@@ -1293,15 +1293,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 8 },
             ],
             narrative: {
-              success: '奇袭成功，魔军大乱，你以智取胜名扬四方。',
-              fail: '中了埋伏，险些丧命，拼死突围而出。',
+              success: '奇袭得手，魔军阵脚大乱，你凭智谋名扬四海。',
+              fail: '中了埋伏，险些殒命，拼死方才突围。',
             },
           },
         ],
       },
       {
         id: 'evacuate',
-        text: '护送低阶弟子撤离',
+        text: '护送低阶弟子撤离战场',
         effects: [
           { type: 'stat', key: 'karma', value: 12 },
           { type: 'stat', key: 'luck', value: 3 },
@@ -1312,9 +1312,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'dao_heart_trial',
-    title: '道心试炼',
+    title: '道心幻境',
     description:
-      '闭关突破之际，你坠入道心幻境。眼前浮现三道幻象：一世你是帝王坐拥天下，一世你是乞丐饥寒交迫，一世你是枯骨黄土一抔。道心在此一念之间。',
+      '闭关突破之际，你坠入道心幻境之中。三重幻象接踵而至：一世你是帝王坐拥四海，一世你是乞儿饥寒交迫，一世你是枯骨黄土一抔。道心存亡，在此一念。',
     weight: 10,
     years: 1,
     once: true,
@@ -1322,7 +1322,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'emperor',
-        text: '帝王幻象中悟权势如浮云',
+        text: '帝王幻象中参透权势如浮云',
         effects: [
           { type: 'stat', key: 'demonHeart', value: -15 },
           { type: 'stat', key: 'karma', value: 10 },
@@ -1331,7 +1331,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'beggar',
-        text: '乞丐幻象中悟万物皆空',
+        text: '乞丐幻象中体悟万物皆空',
         effects: [
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'stat', key: 'demonHeart', value: -10 },
@@ -1340,7 +1340,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'bones',
-        text: '枯骨幻象中直面生死',
+        text: '枯骨幻象中直面生死大限',
         effects: [
           { type: 'lifespan', value: 15 },
           { type: 'stat', key: 'demonHeart', value: -20 },
@@ -1351,9 +1351,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'ancient_battlefield',
-    title: '古战场遗迹',
+    title: '远古战场',
     description:
-      '荒漠深处发现上古战场遗迹，遍地残破法宝与枯骨。中央一柄古剑插在巨石中，剑身雷纹隐隐发光。四周灵气紊乱，似有远古禁制未散。',
+      '荒漠腹地发掘出一片远古战场遗迹，遍地皆是残破法宝与累累白骨。中央巨石之中插着一柄古剑，剑身雷纹隐隐放光。四周灵气紊乱不堪，似有上古禁制余威未散。',
     weight: 7,
     years: 2,
     once: true,
@@ -1361,7 +1361,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'pull_sword',
-        text: '拔出古剑',
+        text: '拔出石中古剑',
         outcomes: [
           {
             chance: 0.35,
@@ -1375,15 +1375,15 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'lifespan', value: -10 },
             ],
             narrative: {
-              success: '你以金丹之力拔出古剑，雷纹认主，此剑威能通天。',
-              fail: '古剑反噬，雷电入体，你重伤退出。',
+              success: '你以金丹之力将古剑拔出，雷纹认主归服，此剑威力通天彻地。',
+              fail: '古剑猛然反噬，雷电贯入体内，你重伤退走。',
             },
           },
         ],
       },
       {
         id: 'study',
-        text: '参悟战场残余道韵',
+        text: '参悟战场残存道韵',
         effects: [
           { type: 'cultivation', value: 25 },
           { type: 'stat', key: 'comprehension', value: 6 },
@@ -1391,7 +1391,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'loot',
-        text: '搜刮残破法宝换取灵石',
+        text: '搜集残破法宝换取灵石',
         effects: [
           { type: 'spiritStones', value: 60 },
           { type: 'stat', key: 'karma', value: -5 },
@@ -1401,9 +1401,9 @@ const CORE_EVENTS: GameEvent[] = [
   },
   {
     id: 'heavenly_treasure',
-    title: '天降奇缘',
+    title: '天赐仙缘',
     description:
-      '天穹骤然裂开一道缝隙，一枚散发五彩霞光的灵果坠落于前。灵果落地之处灵气暴涨，方圆百丈草木疯长。此乃传说中的先天灵果，食之可脱胎换骨。',
+      '天穹骤然裂开一道缝隙，一枚散发五彩霞光的灵果坠落在你面前。灵果落地之处灵气暴涨，方圆百丈内草木疯长。此乃传说中的先天灵果，服之可脱胎换骨。',
     weight: 4,
     years: 0,
     once: true,
@@ -1412,7 +1412,7 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'eat',
-        text: '立即服下灵果',
+        text: '当场服下灵果',
         effects: [
           { type: 'stat', key: 'rootBone', value: 12 },
           { type: 'stat', key: 'comprehension', value: 8 },
@@ -1422,7 +1422,7 @@ const CORE_EVENTS: GameEvent[] = [
       },
       {
         id: 'refine',
-        text: '带回炼制成丹药',
+        text: '带回炼制成灵丹',
         outcomes: [
           {
             chance: 0.5,
@@ -1437,8 +1437,8 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'alchemyTier', value: 1 },
             ],
             narrative: {
-              success: '你以精妙丹术将灵果炼成脱胎换骨丹，效果倍增。',
-              fail: '炼制失败灵果精华散失大半，但丹术有所长进。',
+              success: '你以精湛丹术将灵果炼成脱胎换骨丹，功效倍增。',
+              fail: '炼制失败，灵果精华散逸大半，不过丹术倒有几分长进。',
             },
           },
         ],

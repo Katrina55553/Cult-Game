@@ -11,7 +11,7 @@ const STAT_LABELS: Record<string, string> = {
 }
 
 const FLAG_PHRASES: Record<string, string> = {
-  loyal_to_sect: '拜入青云宗，成为宗门弟子',
+  loyal_to_sect: '拜入天玄宗，成为宗门弟子',
   refused_all_sects: '决意独行，踏上散修之路',
   got_inheritance: '获上古传承，道基更为深厚',
   cave_marked: '记下洞府方位，留待他日再来',

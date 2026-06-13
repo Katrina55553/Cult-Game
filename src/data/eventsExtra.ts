@@ -4,7 +4,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'immortal_guidance',
     title: '仙人指路',
-    description: '云雾中现一老者虚影，笑言你根骨不凡，愿指一条明路。话音未落，天地灵气骤然凝实。',
+    description: '云霭之中忽现一老者虚影，笑谓尔根骨清奇，愿授一条通天之径。语声未歇，周遭天地灵气骤然凝若实质。',
     weight: 4,
     years: 2,
     once: true,
@@ -13,7 +13,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'accept',
-        text: '恭听指点',
+        text: '恭聆仙谕',
         hint: '气运加成 · 修为大涨',
         outcomes: [
           {
@@ -26,16 +26,16 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'stat', key: 'demonHeart', value: 5 }],
             narrative: {
-              success: '仙人传你口诀，修为暴涨，道心通透。',
-              fail: '口诀艰涩，你只悟得一二，心魔微生。',
+              success: '仙人口授真诀，修为一日千里，道心豁然贯通。',
+              fail: '真诀玄奥难参，你仅悟得十之一二，心魔暗生。',
             },
           },
         ],
       },
       {
         id: 'decline',
-        text: '婉拒机缘',
-        narrative: '你谢过仙人，宁可以己身悟道。仙人抚须一笑，消失于云雾。',
+        text: '婉辞仙缘',
+        narrative: '你躬身谢过仙人，宁凭己身悟道。老者抚须含笑，身形渐散于云霭之中。',
         effects: [{ type: 'stat', key: 'karma', value: 8 }, { type: 'cultivation', value: 8 }],
       },
     ],
@@ -43,7 +43,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'past_life_memory',
     title: '前世记忆',
-    description: '入定之时，前世碎片涌入识海。你曾是大能转世，抑或只是黄粱一梦？',
+    description: '入定之际，前世残影纷涌灌入识海。尔前世莫非大能转世，抑或仅是南柯一梦？',
     weight: 3,
     years: 3,
     once: true,
@@ -52,7 +52,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'embrace',
-        text: '接纳记忆，融为己用',
+        text: '接纳宿忆，融归己身',
         hint: '有风险 · 悟性或心魔',
         outcomes: [
           {
@@ -68,16 +68,16 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'lifespan', value: -15 },
             ],
             narrative: {
-              success: '前世感悟灌顶而来，你道基更为深厚。',
-              fail: '记忆冲击神识，心魔大起，寿元受损。',
+              success: '前世感悟如醍醐灌顶，你之道基愈发深厚。',
+              fail: '宿忆冲击神识，心魔大炽，寿元折损。',
             },
           },
         ],
       },
       {
         id: 'seal',
-        text: '封印记忆，专注今生',
-        narrative: '你封住前世残念，道心更为纯粹坚定。',
+        text: '封印残念，专注今生',
+        narrative: '你将前世杂念尽数封禁，道心愈显澄明坚定。',
         effects: [
           { type: 'stat', key: 'demonHeart', value: -15 },
           { type: 'cultivation', value: 15 },
@@ -88,7 +88,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'upper_realm_rumor',
     title: '上界传闻',
-    description: '玉简传讯：上界使者将在凡间遴选传人。此乃千年难遇之机，亦可能是致命陷阱。',
+    description: '玉简传讯：上界遣使将临凡间遴选衣钵传人。此乃千载难逢之机，亦恐是夺命陷阱。',
     weight: 8,
     years: 2,
     once: true,
@@ -99,7 +99,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'seek',
-        text: '主动求见使者',
+        text: '主动求见仙使',
         outcomes: [
           {
             chance: 0.45,
@@ -110,8 +110,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'lifespan', value: -20 }],
             narrative: {
-              success: '使者赐你仙缘印记，寿元大增。',
-              fail: '使者试你心性，你未通过考验，寿元大损。',
+              success: '仙使赐你仙缘印记，寿元大增。',
+              fail: '仙使试探心性，你未能通过考较，寿元大损。',
             },
           },
         ],
@@ -126,7 +126,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'sect_betrayal',
     title: '宗门叛逃',
-    description: '你发现宗门暗中炼制邪丹，以弟子性命献祭。是揭发，还是连夜叛逃？',
+    description: '你察觉宗门暗中炼制邪丹，竟以弟子性命为祭。是揭穿阴谋，还是趁夜出逃？',
     weight: 10,
     once: true,
     storyGroup: 'sect_intrigue',
@@ -153,8 +153,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'grievously_wounded', value: true },
             ],
             narrative: {
-              success: '你扳倒邪长老，名震宗门，被封真传。',
-              fail: '揭发失败，你被诬陷，身受重伤，只得连夜逃出宗门。',
+              success: '你扳倒邪长老，声名远播，受封真传弟子。',
+              fail: '揭发败露，你遭诬陷构罪，身受重创，连夜逃离宗门。',
             },
           },
         ],
@@ -177,8 +177,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'loyal_to_sect', value: false },
             ],
             narrative: {
-              success: '你连夜叛逃，脱离宗门，成为一名散修。',
-              fail: '追杀不舍，你重伤脱身，却成了宗门弃徒。',
+              success: '你趁夜遁走，自此脱离宗门，沦为散修。',
+              fail: '追兵紧随不舍，你重伤方得脱身，成了宗门弃徒。',
             },
           },
         ],
@@ -188,7 +188,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'sect_master_legacy',
     title: '掌门传承',
-    description: '掌门临终召你入密室，欲传掌门之位与镇派神功，但需以性命守护宗门。',
+    description: '掌门弥留之际召你入密室，欲传掌门之位与镇派绝学，但需以性命护佑宗门。',
     weight: 8,
     once: true,
     act: 'golden',
@@ -208,7 +208,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
       {
         id: 'decline',
-        text: '推荐同门',
+        text: '举荐同门',
         effects: [
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'cultivation', value: 20 },
@@ -219,7 +219,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'sect_crisis',
     title: '宗门灭门危机',
-    description: '魔道围攻山门，护山大阵将破。你是死守，还是带同门突围？',
+    description: '魔道大举围攻山门，护山大阵摇摇欲坠。你是死守不退，还是率同门突围？',
     weight: 9,
     once: true,
     act: 'foundation',
@@ -244,8 +244,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'grievously_wounded', value: true },
             ],
             narrative: {
-              success: '你力挽狂澜，保住宗门，成为英雄。',
-              fail: '山门失守，你重伤濒死，却被同门拼死救出。',
+              success: '你力挽狂澜，守住宗门基业，被尊为护宗英雄。',
+              fail: '山门终告失守，你重伤濒死，幸得同门拼死救出。',
             },
           },
         ],
@@ -267,8 +267,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -5 },
             ],
             narrative: {
-              success: '你带同门突围成功，虽损失惨重，却保住性命。',
-              fail: '突围惨烈，你濒死脱险，同门折损甚众。',
+              success: '你率同门突围成功，虽折损惨重，终保全性命。',
+              fail: '突围之战惨烈异常，你九死一生方得脱身，同门伤亡甚众。',
             },
           },
         ],
@@ -278,7 +278,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'blood_sacrifice',
     title: '魔道血祭',
-    description: '魔修邀你共参血祭大阵，可一日破境，但需屠戮凡人村落。',
+    description: '魔修邀你共参血祭禁阵，可一日破境飞升，然须屠戮凡人村落以祭。',
     weight: 8,
     once: true,
     act: 'foundation',
@@ -307,8 +307,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'lifespan', value: -20 }],
             narrative: {
-              success: '你斩灭魔修，正道名声大振。',
-              fail: '魔修反扑，你身受重伤。',
+              success: '你斩灭魔修，正道之名远扬。',
+              fail: '魔修拼死反扑，你身受重创。',
             },
           },
         ],
@@ -318,7 +318,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'demon_lord_offer',
     title: '魔尊招揽',
-    description: '魔尊化身亲临，许诺传你魔道至尊功法，只要你献祭正道好友。',
+    description: '魔尊分身亲至，许以魔道至尊功法为酬，条件是献祭正道挚友。',
     weight: 7,
     once: true,
     act: 'golden',
@@ -327,7 +327,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'accept',
-        text: '投靠魔尊',
+        text: '投效魔尊',
         effects: [
           { type: 'cultivation', value: 50 },
           { type: 'flag', key: 'demon_lord_servant', value: true },
@@ -336,7 +336,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
       {
         id: 'betray',
-        text: '假意投靠，伺机反杀',
+        text: '虚与委蛇，伺机反噬',
         requirements: [{ type: 'stat', key: 'comprehension', min: 55 }],
         outcomes: [
           {
@@ -350,8 +350,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 30 },
             ],
             narrative: {
-              success: '你反杀魔尊化身，夺得魔道秘宝。',
-              fail: '计谋败露，你被迫臣服魔尊。',
+              success: '你反杀魔尊分身，夺得魔道秘藏。',
+              fail: '奸计败露，你被迫俯首称臣。',
             },
           },
         ],
@@ -361,7 +361,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'righteous_siege',
     title: '正道围剿',
-    description: '你魔名远扬，正道联盟集结围剿。是力战到底，还是遁入荒域？',
+    description: '你魔名远播，正道联盟倾巢围剿。是力战群雄，还是遁入蛮荒？',
     weight: 10,
     once: true,
     act: 'golden',
@@ -382,7 +382,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'flag', key: 'died_in_tribulation', value: true }],
             narrative: {
-              success: '你击退群雄，魔威盖世，号称魔尊。',
+              success: '你击退群雄，魔威震世，自号魔尊。',
               fail: '寡不敌众，身死道消。',
             },
           },
@@ -390,7 +390,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
       {
         id: 'flee',
-        text: '遁入荒域',
+        text: '遁入蛮荒',
         hint: '约七成脱身 · 败则遭追杀',
         outcomes: [
           {
@@ -405,7 +405,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 5 },
             ],
             narrative: {
-              success: '你遁入荒域，正道难追，得以喘息。',
+              success: '你遁入蛮荒深处，正道难以追缉，暂得安身。',
               fail: '正道紧追不舍，你重伤遁走，寿元大损。',
             },
           },
@@ -416,7 +416,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'market_duel',
     title: '坊市争霸',
-    description: '坊市举行斗宝大会，胜者可得海量灵石与稀有丹方。你手中灵石充裕，是否参战？',
+    description: '坊市举办斗宝盛会，夺魁者可获海量灵石与珍稀丹方。你手头灵石宽裕，可要一试？',
     weight: 9,
     act: 'qi',
     maxTimes: 2,
@@ -438,8 +438,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'spiritStones', value: 0, set: true }],
             narrative: {
-              success: '你夺得头名，获丹方与灵石。',
-              fail: '斗宝失利，灵石尽失。',
+              success: '你力压群雄夺魁，丹方与灵石尽入囊中。',
+              fail: '斗宝落败，灵石尽数赔光。',
             },
           },
         ],
@@ -454,7 +454,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'solo_tribulation',
     title: '独行渡劫',
-    description: '你孤身立于荒峰，天劫将至。无宗门护法，无道侣相助，全凭一己道心。',
+    description: '你孑然立于荒峰之巅，天劫将至。无宗门护法，无道侣相佐，唯凭一己道心硬抗。',
     weight: 10,
     once: true,
     act: 'foundation',
@@ -475,8 +475,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             failEffects: [{ type: 'lifespan', value: -25 }],
             narrative: {
-              success: '独抗天雷，筑基成功，道心更为坚定。',
-              fail: '天劫失败，重伤闭关。',
+              success: '独抗天雷而不屈，筑基大成，道心愈发坚固。',
+              fail: '天劫未能渡过，重伤闭关。',
             },
           },
         ],
@@ -486,7 +486,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'lover_jealousy',
     title: '道侣反目',
-    description: '苏清雪发现你曾与林挽月有过机缘传闻，冷战数日，道心蒙尘。',
+    description: '沈霜凝得知你与叶轻眉曾有机缘纠葛，冷落数日，彼此道心蒙尘。',
     weight: 12,
     once: true,
     conditions: [
@@ -497,7 +497,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'apologize',
-        text: '坦诚相待，化解误会',
+        text: '坦诚相告，消弭嫌隙',
         effects: [
           { type: 'stat', key: 'demonHeart', value: -10 },
           { type: 'cultivation', value: 15 },
@@ -505,7 +505,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
       {
         id: 'cold',
-        text: '冷处理，专注修道',
+        text: '冷淡处之，潜心修道',
         effects: [
           { type: 'stat', key: 'demonHeart', value: 15 },
           { type: 'cultivation', value: 10 },
@@ -513,7 +513,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
       {
         id: 'break',
-        text: '割席断义',
+        text: '割袍断义',
         effects: [
           { type: 'flag', key: 'has_companion', value: false },
           { type: 'stat', key: 'demonHeart', value: 20 },
@@ -524,7 +524,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'rival_beauty',
     title: '情敌现身',
-    description: '一名世家公子当众向你的道侣提亲，携重礼而来，言语间尽是挑衅。',
+    description: '一名世家公子当众向你的道侣提亲，携厚礼登门，言语之间满是挑衅之意。',
     weight: 10,
     once: true,
     act: 'foundation',
@@ -545,7 +545,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你击败情敌，道侣对你更为倾心。',
-              fail: '决斗落败，心魔暗生，道侣安慰你。',
+              fail: '决斗落败，心魔暗生，道侣好言宽慰。',
             },
           },
         ],
@@ -560,7 +560,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'combo_art',
     title: '合击秘法',
-    description: '你与道侣闭关数月，共创合击秘法。若成，可越阶克敌；若败，则双双反噬。',
+    description: '你与道侣闭关数月，共研合击之术。若能大成，可越阶克敌；若有差池，则双双遭反噬。',
     weight: 14,
     once: true,
     act: 'golden',
@@ -585,8 +585,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 10 },
             ],
             narrative: {
-              success: '合击秘法大成，你们可越阶一战。',
-              fail: '秘法反噬，双双受伤。',
+              success: '合击秘法终得大成，二人联手可越阶一战。',
+              fail: '秘法反噬，双双负伤。',
             },
           },
         ],
@@ -596,7 +596,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'daily_sparring',
     title: '同门切磋',
-    description: '演武场上人声鼎沸，师兄邀你过几招，以检验修行成果。',
+    description: '演武场上人声喧阗，师兄邀你过招，以验修行进境。',
     weight: 6,
     years: 1,
     cooldown: 4,
@@ -618,8 +618,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 3 },
             ],
             narrative: {
-              success: '你来我往，险胜半招，体魄与修为皆有进益。',
-              fail: '不慎落败，轻伤退场，却也长了见闻。',
+              success: '你来我往数十回合，险胜半招，体魄与修为皆有所进。',
+              fail: '不慎落败，轻伤退场，却也长了几分见识。',
             },
           },
         ],
@@ -627,7 +627,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'watch',
         text: '旁观悟招',
-        narrative: '你静坐旁观，悟得几式妙解，悟性微增。',
+        narrative: '你静坐一旁观摩，悟得几式妙解，悟性微增。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 3 },
           { type: 'cultivation', value: 5 },
@@ -638,7 +638,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'daily_scripture',
     title: '藏经阁阅读',
-    description: '闲来无事，你踱入藏经阁，翻阅前人心得。',
+    description: '闲暇无事，你踱入藏经阁，翻阅前人遗留的心得札记。',
     weight: 6,
     years: 1,
     cooldown: 4,
@@ -647,7 +647,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'read',
         text: '研读功法',
-        narrative: '残卷之中偶有灵光，你对功法理解更深。',
+        narrative: '残卷之中偶现灵光，你对功法领悟更深一层。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 4 },
           { type: 'cultivation', value: 8 },
@@ -656,7 +656,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'copy',
         text: '抄录心经',
-        narrative: '你抄录心经数日，心魔稍减，道心更静。',
+        narrative: '你誊抄心经数日，心魔稍减，道心愈静。',
         effects: [
           { type: 'stat', key: 'demonHeart', value: -3 },
           { type: 'stat', key: 'karma', value: 2 },
@@ -667,7 +667,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'floating_isle',
     title: '浮空残岛',
-    description: '云雾散去，一座残破浮岛浮现天际。岛上古木参天，隐有宝光流转。',
+    description: '云雾拨开，一座残破浮岛显现于天际。岛上古木蔽日，隐约有宝光流转。',
     weight: 9,
     years: 2,
     once: true,
@@ -691,8 +691,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 5 },
             ],
             narrative: {
-              success: '你在浮岛残殿觅得灵石与残卷，修为大涨。',
-              fail: '触发残阵，你轻伤脱身，仍有所悟。',
+              success: '你在浮岛残殿中觅得灵石与残卷，修为大涨。',
+              fail: '误触残阵禁制，你轻伤脱身，仍有所悟。',
             },
           },
         ],
@@ -700,7 +700,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'observe',
         text: '远观悟法',
-        narrative: '你远观浮岛灵气运转，对天地法则多了一分体悟。',
+        narrative: '你远观浮岛灵气流转之势，对天地法则多了一分体悟。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 4 },
           { type: 'cultivation', value: 8 },
@@ -711,7 +711,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'stray_scripture',
     title: '残碑秘文',
-    description: '山野古道上，半埋残碑刻着残缺功法。风吹碑裂，灵光忽现。',
+    description: '山野古道旁，半截残碑没于荒草，上刻残缺功法。风过碑裂，灵光乍现。',
     weight: 8,
     years: 1,
     once: true,
@@ -730,7 +730,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             failEffects: [{ type: 'stat', key: 'demonHeart', value: 5 }],
             narrative: {
               success: '碑文残意入心，你悟性精进。',
-              fail: '碑文残缺难辨，你略感烦躁，心魔微生。',
+              fail: '碑文残缺难辨，参悟无果，道心微生烦躁。',
             },
           },
         ],
@@ -738,7 +738,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'rub',
         text: '拓印带走',
-        narrative: '你拓下碑文，日后再慢慢钻研。',
+        narrative: '你将碑文细心拓下，留待日后慢慢钻研。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 3 },
           { type: 'cultivation', value: 6 },
@@ -749,7 +749,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'roadside_duel',
     title: '路遇斗法',
-    description: '两名修士在路边斗法，剑气纵横。围观者议论纷纷，似在赌斗。',
+    description: '两名修士在路边斗法，剑气纵横交错。旁观者议论纷纷，似在以赌注押胜负。',
     weight: 8,
     years: 1,
     maxTimes: 2,
@@ -757,7 +757,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'join',
-        text: '出手相助弱者',
+        text: '出手襄助弱者',
         outcomes: [
           {
             chance: 0.55,
@@ -771,8 +771,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'karma', value: 3 },
             ],
             narrative: {
-              success: '你助弱者脱险，对方赠灵石以谢。',
-              fail: '你险胜却受伤，仍觉问心无愧。',
+              success: '你助弱者脱困，对方赠灵石以谢。',
+              fail: '你勉力取胜却负伤，但问心无愧。',
             },
           },
         ],
@@ -780,7 +780,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'watch',
         text: '旁观悟剑',
-        narrative: '你从斗法中悟得几式剑意，修为微增。',
+        narrative: '你从二人斗法中悟得几式剑意，修为微增。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 3 },
           { type: 'cultivation', value: 8 },
@@ -791,7 +791,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'misty_valley',
     title: '迷雾深谷',
-    description: '你误入迷雾深谷，异兽低吼与灵草幽香交织，危机与机缘并存。',
+    description: '你误入迷雾笼罩的深谷，异兽低吟与灵草幽香交织弥漫，凶险与机缘并存。',
     weight: 9,
     years: 2,
     once: true,
@@ -815,7 +815,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你斩杀异兽，取丹炼化，体魄更为坚韧。',
-              fail: '异兽凶猛，你重伤逃出谷外。',
+              fail: '异兽凶悍异常，你重伤逃出谷外。',
             },
           },
         ],
@@ -823,7 +823,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'gather',
         text: '采药退走',
-        narrative: '你采得几株灵草，见好就收，安然离去。',
+        narrative: '你采得数株灵草，见好就收，安然离去。',
         effects: [
           { type: 'flag', key: 'mastered_alchemy', value: true },
           { type: 'cultivation', value: 10 },
@@ -835,7 +835,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'lucky_stone',
     title: '意外横财',
-    description: '雨后溪边，你偶然踢到一块灵石原矿，灵气外溢，附近似还有异象。',
+    description: '雨后溪畔，你无意间踢到一块灵石原矿，灵气外溢，附近似另有异象。',
     weight: 7,
     years: 1,
     once: true,
@@ -856,8 +856,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 5 },
             ],
             narrative: {
-              success: '你掘出小型灵矿，发了一笔横财。',
-              fail: '只挖到零星灵石，还惊动了一窝毒虫。',
+              success: '你掘出一处小型灵矿，发了一笔横财。',
+              fail: '仅挖到零星碎石，还惊扰了一窝毒虫。',
             },
           },
         ],
@@ -865,7 +865,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'take',
         text: '拾取便走',
-        narrative: '你将原矿炼化，获灵石二十枚。',
+        narrative: '你将原矿炼化，得灵石二十枚。',
         effects: [
           { type: 'spiritStones', value: 20 },
           { type: 'cultivation', value: 5 },
@@ -876,7 +876,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'thunder_marsh',
     title: '雷泽遗泽',
-    description: '雷雨过后，沼泽深处雷纹未散，似有上古雷法残意留存其间。',
+    description: '雷雨过后，沼泽深处雷纹未消，似有上古雷法残意蛰伏其间。',
     weight: 8,
     years: 2,
     once: true,
@@ -901,8 +901,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 12 },
             ],
             narrative: {
-              success: '雷意入体，你经脉更为强韧，修为精进。',
-              fail: '雷意失控，你重伤退走，心魔暗生。',
+              success: '雷意贯体，经脉愈发强韧，修为精进。',
+              fail: '雷意失控反噬，你重伤退走，心魔暗生。',
             },
           },
         ],
@@ -910,7 +910,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'collect',
         text: '采集雷纹草后离去',
-        narrative: '你采得几株雷纹草，炼丹备用，修为微增。',
+        narrative: '你采得数株雷纹草，可炼丹备用，修为微增。',
         effects: [
           { type: 'flag', key: 'mastered_alchemy', value: true },
           { type: 'cultivation', value: 10 },
@@ -922,7 +922,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'soul_ferry',
     title: '古渡遗舟',
-    description: '迷雾江面，一叶孤舟无桨自渡。舟中老者邀你上船，称可渡你至彼岸秘境。',
+    description: '迷雾弥漫的江面上，一叶孤舟无桨自流。舟中老者唤你上船，言可渡你至彼岸秘境。',
     weight: 7,
     years: 2,
     once: true,
@@ -946,8 +946,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'karma', value: -5 },
             ],
             narrative: {
-              success: '舟过秘境，你悟得几分彼岸真意，寿元微增。',
-              fail: '舟入迷津，你耗费寿元才脱身而归。',
+              success: '舟行至秘境，你悟得几分彼岸真意，寿元微增。',
+              fail: '孤舟误入迷津，你耗费寿元方得以脱身归返。',
             },
           },
         ],
@@ -955,7 +955,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'refuse',
         text: '婉拒登舟',
-        narrative: '你守正不移，未上孤舟，道心更为澄澈。',
+        narrative: '你守正不移，未上孤舟，道心愈发澄澈。',
         effects: [
           { type: 'stat', key: 'karma', value: 6 },
           { type: 'stat', key: 'demonHeart', value: -4 },
@@ -966,7 +966,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'cloud_crane',
     title: '云海鹤唳',
-    description: '云海翻涌，白鹤盘旋长唳，尾羽洒落点点灵光，似在引路。',
+    description: '云海翻涌如潮，白鹤盘旋长鸣，尾羽洒落点点灵光，恍若在为人引路。',
     weight: 8,
     years: 1,
     once: true,
@@ -988,8 +988,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 4 },
             ],
             narrative: {
-              success: '鹤引你到灵泉边，你饮泉悟道，气运大涨。',
-              fail: '鹤影消散于云海，你只拾得些许灵气。',
+              success: '白鹤引你至灵泉之畔，你饮泉悟道，气运大涨。',
+              fail: '鹤影消散于云海之中，你仅拾得些许灵气。',
             },
           },
         ],
@@ -997,7 +997,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'meditate',
         text: '原地参鹤鸣',
-        narrative: '鹤鸣九皋，声闻于天，你静坐参悟，悟性精进。',
+        narrative: '鹤鸣九皋，声闻于天。你静坐参悟，悟性精进。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 6 },
           { type: 'cultivation', value: 8 },
@@ -1008,7 +1008,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'jade_spring',
     title: '地脉灵泉',
-    description: '山腹裂隙中，一眼灵泉汩汩涌出，地脉灵气浓郁得几乎凝成雾气。',
+    description: '山腹裂隙之中，一眼灵泉汩汩涌出，地脉灵气浓郁得几近凝为雾霭。',
     weight: 8,
     years: 2,
     once: true,
@@ -1032,8 +1032,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 8 },
             ],
             narrative: {
-              success: '灵泉洗髓，你寿元延长，修为大涨。',
-              fail: '灵气过烈，你勉强吸收小半，心魔微起。',
+              success: '灵泉洗筋伐髓，你寿元延长，修为大涨。',
+              fail: '灵气过于猛烈，你仅勉强吸收小半，心魔微起。',
             },
           },
         ],
@@ -1041,7 +1041,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'seal',
         text: '封泉留待他日',
-        narrative: '你记下灵泉方位，留待破境再来。',
+        narrative: '你记下灵泉方位，留待破境之日再来。',
         effects: [
           { type: 'flag', key: 'cave_marked', value: true },
           { type: 'stat', key: 'comprehension', value: 4 },
@@ -1052,7 +1052,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'meteor_iron',
     title: '天外陨铁',
-    description: '夜空炸亮，陨星坠于荒原，炽热未散，铁中似有星纹流转。',
+    description: '夜空骤亮，陨星坠于荒原，炽热未消，铁中隐约有星纹流转。',
     weight: 7,
     years: 2,
     once: true,
@@ -1076,8 +1076,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: -5 },
             ],
             narrative: {
-              success: '你淬出陨星短刃，杀伐之气助益修行。',
-              fail: '陨铁炸裂，你灼伤倒退，修为受损。',
+              success: '你淬出一柄陨星短刃，杀伐之气反助修行。',
+              fail: '陨铁骤然炸裂，你灼伤倒退，修为受损。',
             },
           },
         ],
@@ -1085,7 +1085,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'sell',
         text: '售与炼器师',
-        narrative: '炼器师高价收购陨铁，你获灵石颇丰。',
+        narrative: '炼器师以高价收购陨铁，你获灵石颇丰。',
         effects: [
           { type: 'spiritStones', value: 65 },
           { type: 'cultivation', value: 5 },
@@ -1096,7 +1096,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'daily_insight',
     title: '观星悟道',
-    description: '夜深独坐，你仰观星斗，揣摩天地运转之理。',
+    description: '夜深人静，你独坐仰观星斗，揣摩天地运行之理。',
     weight: 2,
     years: 1,
     cooldown: 10,
@@ -1104,7 +1104,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'contemplate',
         text: '穷理致知',
-        narrative: '星斗流转间，你对道法多有领悟。',
+        narrative: '星斗流转之间，你对道法多有领悟。',
         effects: [
           { type: 'stat', key: 'comprehension', value: 3 },
           { type: 'cultivation', value: 6 },
@@ -1124,7 +1124,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'daily_cultivation',
     title: '静坐吐纳',
-    description: '你寻一处清幽之地，稳固根基，吐纳天地灵气。',
+    description: '你觅得一处清幽之所，盘膝而坐，吐纳天地灵气以固根基。',
     weight: 3,
     years: 1,
     cooldown: 8,
@@ -1132,13 +1132,13 @@ export const EXTRA_EVENTS: GameEvent[] = [
       {
         id: 'meditate',
         text: '专心打坐',
-        narrative: '元气盈体，修行日深，修为稳步增长。',
+        narrative: '元气充盈于体，修行日积月累，修为稳步增长。',
         effects: [{ type: 'cultivation', value: 10 }],
       },
       {
         id: 'wander',
         text: '下山历练',
-        narrative: '你行走山川，见闻广开，气运与悟性皆有所增。',
+        narrative: '你游历山川，见闻渐广，气运与悟性皆有所增。',
         effects: [
           { type: 'stat', key: 'luck', value: 2 },
           { type: 'stat', key: 'comprehension', value: 2 },
@@ -1150,7 +1150,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
   {
     id: 'market_rest',
     title: '坊市小憩',
-    description: '修行路上，你驻足坊市，灵石在握，可购丹药符箓以助仙途。',
+    description: '修行途中，你驻足坊市歇息。灵石在握，可购丹药符箓以助仙途。',
     weight: 9,
     years: 0,
     maxTimes: 3,
@@ -1173,7 +1173,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'sword_tomb',
     title: '剑冢探秘',
     description:
-      '深山之中发现一座古剑冢，千柄断剑插满山谷，剑气纵横。谷中央一柄完好古剑悬浮半空，剑身通体雪白，寒气逼人。四周刻着古篆：「能入此冢者，当为剑道有缘人。」',
+      '深山之中隐现一座古剑冢，千柄断剑插满山谷，剑气纵横。谷中央一柄完好古剑悬于半空，通体雪白，寒气凛冽。四周刻有古篆：「能入此冢者，当为剑道有缘人。」',
     weight: 5,
     years: 2,
     once: true,
@@ -1225,7 +1225,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'pill_auction',
     title: '丹药拍卖',
     description:
-      '坊市中最大的拍卖行今日开拍一炉九品筑基丹，各方势力齐聚。你囊中羞涩，但机不可失。掌柜看你一眼，似乎认出你有几分潜力。',
+      '坊市中最大的拍卖行今日开拍一炉九品筑基丹，各方势力云集。你囊中羞涩，然机不可失。掌柜瞥你一眼，似觉你颇有几分潜力。',
     weight: 8,
     years: 1,
     once: true,
@@ -1247,8 +1247,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'luck', value: -2 },
             ],
             narrative: {
-              success: '你以全部灵石拍得筑基丹，服下后修为大进。',
-              fail: '竞价失败，灵石花了不少，只能空手而归。',
+              success: '你倾囊拍得筑基丹，服下后修为大进。',
+              fail: '竞价落败，灵石折损不少，只得空手而归。',
             },
           },
         ],
@@ -1275,7 +1275,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'hermit_cave',
     title: '隐修洞府',
     description:
-      '瀑布后方发现一处隐蔽洞府，石壁上刻满修炼心得。一位散修的遗骸坐化于蒲团之上，面前放着一枚玉简和一壶灵酒。洞府完好无损，似是特意留给后来者。',
+      '瀑布之后隐现一处洞府，石壁上刻满修炼心得。一位散修遗骸端坐蒲团之上，面前置有玉简一枚、灵酒一壶。洞府完好无损，似是特意留给后来者。',
     weight: 6,
     years: 1,
     once: true,
@@ -1306,7 +1306,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '灵酒入腹，经脉通畅，寿元有所延长。',
-              fail: '灵酒变质，饮后心魔暗生。',
+              fail: '灵酒已然变质，饮后心魔暗生。',
             },
           },
         ],
@@ -1325,7 +1325,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'demon_nest',
     title: '魔巢探查',
     description:
-      '村庄百姓告急，附近山中出现魔巢，魔物夜夜下山伤人。你循迹而至，发现一处被黑雾笼罩的洞穴，洞口散落白骨。深处传来低沉嘶吼。',
+      '村中百姓告急，附近山中出现魔巢，魔物夜夜下山伤人。你循迹而至，见一处洞穴被黑雾笼罩，洞口白骨散落。深处传来低沉嘶吼。',
     weight: 7,
     years: 1,
     act: 'foundation',
@@ -1349,7 +1349,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你斩杀魔物首领，村民感恩戴德，因果大增。',
-              fail: '魔物凶猛，你重伤逃出，元气受损。',
+              fail: '魔物凶悍异常，你重伤逃出，元气受损。',
             },
           },
         ],
@@ -1377,7 +1377,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'star_river',
     title: '星河入梦',
     description:
-      '夜观天象时，你忽感神识被牵引，坠入一片璀璨星河。星辰化作文字在眼前流转，竟是一篇上古功法残篇。星河深处似有声音在呼唤你的名字。',
+      '夜观天象之际，你忽觉神识被无形之力牵引，坠入一片璀璨星河。星辰化作文字在眼前流转，竟是一篇上古功法残篇。星河深处似有声音在呼唤你的名字。',
     weight: 4,
     years: 1,
     once: true,
@@ -1411,7 +1411,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你在星河深处悟得大道真谛，神识暴涨。',
-              fail: '星河深处心魔幻象丛生，你险些迷失。',
+              fail: '星河深处心魔幻象丛生，你险些迷失其中。',
             },
           },
         ],
@@ -1430,7 +1430,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'spirit_vein',
     title: '灵脉争锋',
     description:
-      '发现一处无主灵脉，灵气浓郁得化为雾气。但你并非唯一发现者——一名散修已在灵脉旁打坐，见你到来，目光不善。',
+      '你发现一处无主灵脉，灵气浓郁得化为雾霭。然而你并非唯一的发现者——一名散修已在灵脉旁打坐，见你前来，神色不善。',
     weight: 8,
     years: 1,
     act: 'foundation',
@@ -1460,7 +1460,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             ],
             narrative: {
               success: '你以实力驱走散修，独占灵脉修炼，修为大进。',
-              fail: '散修实力不俗，你两败俱伤。',
+              fail: '散修实力不俗，你二人两败俱伤。',
             },
           },
         ],
@@ -1479,7 +1479,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'ancient_formation',
     title: '上古阵法',
     description:
-      '荒野中发现一座上古传送阵残骸，阵纹虽残破但仍有微弱灵光流转。阵中央悬浮着一枚空间戒指，似是阵法启动的关键。强行取戒可能触发阵法反噬。',
+      '荒野之中发现一座上古传送阵残骸，阵纹虽残破犹有微弱灵光流转。阵中央悬浮一枚空间戒指，似是阵法启钥。贸然取戒恐触发阵法反噬。',
     weight: 5,
     years: 1,
     once: true,
@@ -1502,7 +1502,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 8 },
             ],
             narrative: {
-              success: '你安全取下空间戒，内藏大量灵石与阵法典籍。',
+              success: '你安然取下空间戒，内藏大量灵石与阵法典籍。',
               fail: '阵法反噬，空间裂缝割伤你数道，元气大损。',
             },
           },

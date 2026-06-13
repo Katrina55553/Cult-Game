@@ -26,7 +26,7 @@ export function EndingScreen({ session, onRestart }: Props) {
       l.includes('陨落') ||
       l.includes('拜入') ||
       l.includes('散修') ||
-      l.includes('苏清雪') ||
+      l.includes('沈霜凝') ||
       l.includes('双修'),
   )
 

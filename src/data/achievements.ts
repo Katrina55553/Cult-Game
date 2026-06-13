@@ -12,7 +12,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'no_sect', title: '逍遥自在', description: '拒绝宗门并完成一局' },
   { id: 'sect_elder_path', title: '宗门柱石', description: '达成宗门长老结局' },
   { id: 'pill_guru', title: '丹道通玄', description: '达成丹道宗师结局' },
-  { id: 'rescue_beauty', title: '英雄救美', description: '救下苏清雪' },
+  { id: 'rescue_beauty', title: '英雄救美', description: '救下沈霜凝' },
   { id: 'dual_master', title: '双修大成', description: '达成双修大成' },
   { id: 'companion_trib', title: '同渡天劫', description: '与道侣共抗天劫' },
   { id: 'demon_heart_90', title: '心魔缠身', description: '心魔达到 90 仍存活' },
