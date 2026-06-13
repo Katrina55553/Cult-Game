@@ -244,4 +244,38 @@ export const ENDINGS: Ending[] = [
       { type: 'realm', min: 'golden_core' },
     ],
   },
+  {
+    id: 'celestial_heir',
+    title: '天象传承',
+    description:
+      '你获得九星连珠时的上古传承，修为突飞猛进。最终以传承之力突破桎梏，成为修真界千年来第一位获得天象传承的修士。',
+    priority: 83,
+    conditions: [
+      { type: 'flag', key: 'celestial_heritage', value: true },
+      { type: 'realm', min: 'nascent_soul' },
+    ],
+  },
+  {
+    id: 'beast_king',
+    title: '万兽之王',
+    description:
+      '你与灵兽心意相通，统御万兽。灵兽们奉你为王，你建立了修真界第一个灵兽国度，开创了人兽共修的新纪元。',
+    priority: 63,
+    conditions: [
+      { type: 'flag', key: 'has_spirit_beast', value: true },
+      { type: 'realm', min: 'golden_core' },
+      { type: 'stat', key: 'karma', min: 30 },
+    ],
+  },
+  {
+    id: 'map_inheritance',
+    title: '洞天之主',
+    description:
+      '你按古图找到洞天秘境，获得洞天内的全部传承。你成为这处洞天的新主人，坐拥无尽资源，修为一日千里。',
+    priority: 62,
+    conditions: [
+      { type: 'flag', key: 'has_ancient_map', value: true },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
 ]

@@ -53,6 +53,9 @@ export function checkAchievements(
       bloodline_lord: 'bloodline_lord_first',
       weapon_master: 'weapon_master_first',
       technique_sage: 'technique_sage_first',
+      celestial_heir: 'celestial_heir_first',
+      beast_king: 'beast_king_first',
+      map_inheritance: 'map_inheritance_first',
     }
     if (map[ending.id]) add(map[ending.id])
 
@@ -79,6 +82,10 @@ export function checkAchievements(
   if (player.history.includes('calamity_plague')) add('survived_plague')
   if (player.history.includes('qi_deviation')) add('survived_qi_deviation')
   if (player.history.includes('inner_demon')) add('defeated_demon_heart')
+  if (player.flags.has_ancient_map) add('ancient_map_found')
+  if (player.history.includes('blood_moon')) add('blood_moon_cultivate')
+  if (player.flags.celestial_heritage) add('celestial_witness')
+  if (player.flags.vein_war_hero) add('vein_war_hero')
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')
   if (player.spiritStones >= 300) add('rich')

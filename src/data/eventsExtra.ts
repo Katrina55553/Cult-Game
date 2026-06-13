@@ -3378,4 +3378,511 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'ancient_map',
+    title: '古图残卷',
+    description:
+      '你在坊市地摊上发现一卷泛黄的古图，上面标注着一处隐秘洞天的入口。摊主开价不高，但图上墨迹斑驳，真假难辨。',
+    weight: 8,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'buy_map',
+        text: '花灵石买下古图',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 20 }],
+        effects: [
+          { type: 'spiritStones', value: -20 },
+          { type: 'flag', key: 'has_ancient_map', value: true },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'steal_map',
+        text: '趁摊主不备顺走古图',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'flag', key: 'has_ancient_map', value: true },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'karma', value: -10 },
+              { type: 'spiritStones', value: -10, set: false },
+            ],
+            narrative: {
+              success: '你趁摊主转身之际将古图收入袖中，悄然离去。',
+              fail: '摊主早已察觉，一把抓住你，你被迫交出灵石赔罪。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'ignore_map',
+        text: '不感兴趣，转身离去',
+        effects: [
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_map_follow',
+    title: '洞天秘境',
+    description:
+      '你按古图所示，跋涉数日终于找到一处被藤蔓遮蔽的山洞。洞内灵气浓郁得化为雾霭，深处隐约可见一座石门，门上刻着古老的符文。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'has_ancient_map', value: true }],
+    choices: [
+      {
+        id: 'open_gate',
+        text: '以灵力催动符文开启石门',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 60 },
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'artifact', id: 'ancient_seal', name: '上古封印' },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '石门缓缓开启，内藏大量灵石与一件上古法宝。你满载而归。',
+              fail: '符文反噬，你被震飞数丈，重伤退出洞天。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_gate',
+        text: '先研究符文再做决定',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'leave_gate',
+        text: '此地诡异，速速离去',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mysterious_merchant',
+    title: '神秘商人',
+    description:
+      '夜市深处，一名戴着斗笠的神秘商人拦住你的去路。他的摊位上摆满了奇异的物品，每一件都散发着不同寻常的气息。「有缘人，看看我的货吧。」',
+    weight: 7,
+    years: 1,
+    maxTimes: 3,
+    cooldown: 6,
+    choices: [
+      {
+        id: 'buy_pill',
+        text: '购买一枚神秘丹药',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 30 }],
+        effects: [
+          { type: 'spiritStones', value: -30 },
+          { type: 'stat', key: 'rootBone', value: 5 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'buy_artifact',
+        text: '购买一件神秘法宝',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 50 }],
+        effects: [
+          { type: 'spiritStones', value: -50 },
+          { type: 'artifact', id: 'mysterious_artifact', name: '神秘法宝' },
+        ],
+      },
+      {
+        id: 'decline_merchant',
+        text: '婉拒好意',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_spring',
+    title: '灵泉沐浴',
+    description:
+      '深山中发现一处天然灵泉，泉水清澈见底，灵气氤氲。你犹豫是否要下去沐浴——灵泉可以洗筋伐髓，但也可能有未知风险。',
+    weight: 8,
+    years: 1,
+    maxTimes: 3,
+    cooldown: 6,
+    choices: [
+      {
+        id: 'bathe',
+        text: '下泉沐浴',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'rootBone', value: 4 },
+              { type: 'stat', key: 'comprehension', value: 3 },
+              { type: 'lifespan', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -5 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '灵泉洗筋伐髓，你感到身体轻盈了许多，根骨悟性均有提升。',
+              fail: '泉水中暗藏杂质，你被侵蚀了数条经脉，寿元微损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'collect_spring',
+        text: '收集泉水带走',
+        effects: [
+          { type: 'spiritStones', value: 15 },
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+      {
+        id: 'leave_spring',
+        text: '不冒险，继续赶路',
+        effects: [
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'blood_moon',
+    title: '血月之夜',
+    description:
+      '天现异象，一轮血月高悬夜空。你感到体内灵气躁动不安，心魔蠢蠢欲动。这是修炼邪功的绝佳时机，但也极易走火入魔。',
+    weight: 6,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    choices: [
+      {
+        id: 'cultivate_blood',
+        text: '趁血月修炼',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 20 },
+              { type: 'lifespan', value: -10 },
+            ],
+            narrative: {
+              success: '你借血月之力突破瓶颈，修为大进，但心魔也随之增长。',
+              fail: '血月之力过于狂暴，你险些走火入魔，心魔暴涨。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'purify',
+        text: '以道心压制躁动',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -8 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'observe_moon',
+        text: '静观血月，感悟天道',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'celestial_phenomenon',
+    title: '天象异变',
+    description:
+      '九星连珠，天降异象。整个修真界都能看到天空中璀璨的星光汇聚成一道光柱，直指你所在的方向。各方势力蠢蠢欲动，你感到一股莫名的召唤。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'legendary',
+    choices: [
+      {
+        id: 'follow_light',
+        text: '追随光柱而去',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'comprehension', value: 10 },
+              { type: 'lifespan', value: 15 },
+              { type: 'flag', key: 'celestial_heritage', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+            ],
+            narrative: {
+              success: '你在光柱尽头发现一处上古传承，获得无上机缘。',
+              fail: '光柱消散，你被余波所伤，元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'protect',
+        text: '守护附近百姓免受异象波及',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'ignore_phenomenon',
+        text: '闭关不出，不为所动',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_vein_war',
+    title: '灵脉争夺',
+    description:
+      '你发现一处大型灵脉，但苍穹阁的弟子也同时赶到。双方剑拔弩张，灵脉归属一战即发。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'fight_vein',
+        text: '为宗门争夺灵脉',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'cultivation', value: 20 },
+              { type: 'flag', key: 'vein_war_hero', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '你击败苍穹阁弟子，为天玄宗夺得灵脉，声名远扬。',
+              fail: '苍穹阁弟子实力不俗，你惜败而归。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'negotiate_vein',
+        text: '提议两宗共享灵脉',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'yield_vein',
+        text: '让出灵脉，避免冲突',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'thunder_falcon_nest',
+    title: '雷鹰巢穴',
+    description:
+      '悬崖峭壁上发现一处雷鹰巢穴，幼鹰浑身电弧闪烁，正独自嗷嗷待哺。它的父母似乎已经遭遇不测。',
+    weight: 6,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    choices: [
+      {
+        id: 'adopt_falcon',
+        text: '收养雷鹰幼崽',
+        effects: [
+          { type: 'spiritBeast', name: '雷鹰', tier: 1 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'leave_falcon',
+        text: '留下灵果，让它自生自灭',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+      {
+        id: 'take_egg',
+        text: '取走巢中雷鹰蛋',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'spiritStones', value: 25 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -5 },
+              { type: 'stat', key: 'karma', value: -8 },
+            ],
+            narrative: {
+              success: '你取走雷鹰蛋，可高价出售给驯兽师。',
+              fail: '雷鹰蛋在你手中破裂，你空手而归。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ice_phoenix',
+    title: '冰凤现身',
+    description:
+      '极北冰原上，一只通体冰蓝的凤凰从天而降。它浑身散发着刺骨寒意，却目光温和地看着你。传说冰凤择主而侍，非有缘人不遇。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'legendary',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'bond_phoenix',
+        text: '以诚心结交冰凤',
+        requirements: [{ type: 'stat', key: 'karma', min: 25 }],
+        effects: [
+          { type: 'spiritBeast', name: '冰凤', tier: 1 },
+          { type: 'lifespan', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+      {
+        id: 'bow_phoenix',
+        text: '恭敬行礼，不求回报',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'capture_phoenix',
+        text: '以法术强行收服',
+        outcomes: [
+          {
+            chance: 0.15,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'spiritBeast', name: '冰凤', tier: 1 },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 15 },
+            ],
+            narrative: {
+              success: '你以强大法术收服冰凤，它认你为主。',
+              fail: '冰凤震怒，寒冰之力将你冻伤，你仓皇逃窜。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ancient_formation_battle',
+    title: '阵法对决',
+    description:
+      '你与一名苍穹阁阵法师在秘境中狭路相逢。双方都盯上了同一处阵法遗迹，唯有以阵法造诣一决高下。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'formationTier', min: 1 },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'formation_duel',
+        text: '以阵法造诣一决高下',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'formationTier', value: 1 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以精妙阵法压制对手，获得阵法传承，阵道修为大进。',
+              fail: '对手阵法更胜一筹，你惜败而归。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_formation',
+        text: '不争不抢，静心参悟',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'retreat_formation',
+        text: '主动退让',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
 ]
