@@ -4918,4 +4918,295 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'puppet_workshop',
+    title: '傀儡工坊',
+    description:
+      '你发现一处隐秘的傀儡工坊，四周摆满了各种机关零件和半成品傀儡。工坊主人是一位白发苍苍的老者，他正专注地为一尊傀儡雕刻符文。见你到来，他头也不抬：「想学傀儡术？先帮我搬三天木头。」',
+    weight: 7,
+    years: 1,
+    once: true,
+    choices: [
+      {
+        id: 'learn_puppet',
+        text: '老老实实搬了三天木头',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'flag', key: 'learned_puppet', value: true },
+        ],
+      },
+      {
+        id: 'show_talent',
+        text: '展示你对符文的理解',
+        requirements: [{ type: 'formationTier', min: 1 }],
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'flag', key: 'learned_puppet', value: true },
+        ],
+      },
+      {
+        id: 'steal_puppet',
+        text: '趁老者不备偷走一尊傀儡',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'artifact', id: 'stolen_puppet', name: '偷来的傀儡' },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'karma', value: -15 },
+            ],
+            narrative: {
+              success: '你趁老者打盹偷走一尊傀儡，悄然离去。',
+              fail: '老者早已察觉，一道禁制将你定在原地，你被狠狠教训了一顿。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'puppet_duel',
+    title: '傀儡斗法',
+    description:
+      '傀儡工坊老者要考校你的傀儡术。他放出三尊不同等级的傀儡，让你选一尊与之对战。这是一场以傀儡术定胜负的比试。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'learned_puppet', value: true }],
+    choices: [
+      {
+        id: 'fight_basic',
+        text: '挑战初阶傀儡',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'artifact', id: 'basic_puppet', name: '初阶傀儡' },
+        ],
+      },
+      {
+        id: 'fight_mid',
+        text: '挑战中阶傀儡',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'artifact', id: 'mid_puppet', name: '中阶傀儡' },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你操控傀儡击败中阶傀儡，老者赞许地点头。',
+              fail: '中阶傀儡攻击凶猛，你的傀儡被击碎，但你学到了不少。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'skip_duel',
+        text: '不比了，继续学习',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'artifact_reforge',
+    title: '法宝重铸',
+    description:
+      '你得到一块罕见的天外陨铁，此物蕴含星辰之力，是重铸法宝的绝佳材料。炼器师说若能找到合适的辅材，可将你的法宝品质提升一个档次。',
+    weight: 7,
+    years: 1,
+    choices: [
+      {
+        id: 'reforge_weapon',
+        text: '以陨铁重铸本命法宝',
+        requirements: [{ type: 'divineWeaponTier', min: 1 }],
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'divineWeaponTier', value: 1 },
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 5 },
+              { type: 'spiritStones', value: -15, set: false },
+            ],
+            narrative: {
+              success: '法宝重铸成功，品质大进，威能更胜从前。',
+              fail: '重铸失败，材料尽毁，你白白浪费了一块天外陨铁。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'forge_new',
+        text: '请炼器师打造新法宝',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 30 }],
+        effects: [
+          { type: 'spiritStones', value: -30 },
+          { type: 'divineWeaponTier', value: 1 },
+          { type: 'artifact', id: 'reforged_weapon', name: '重铸法宝' },
+        ],
+      },
+      {
+        id: 'sell_iron',
+        text: '将陨铁高价出售',
+        effects: [
+          { type: 'spiritStones', value: 40 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'artifact_spirit',
+    title: '器灵觉醒',
+    description:
+      '你的法宝在一次战斗中忽然发出耀眼光芒，似有器灵觉醒。器灵化作一团灵光，在你面前凝聚成形。「主人，我已沉睡千年，今日终于苏醒。」',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'divineWeaponTier', min: 2 }],
+    choices: [
+      {
+        id: 'commune_spirit',
+        text: '与器灵交流',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'divineWeaponTier', value: 1 },
+        ],
+      },
+      {
+        id: 'suppress_spirit',
+        text: '压制器灵，不让它干扰',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'puppet_army',
+    title: '傀儡军团',
+    description:
+      '你在古战场发现了一处傀儡军团的遗迹。数百尊傀儡整齐排列，虽已残破但仍可修复。若能修复这些傀儡，你将拥有一支强大的傀儡军团。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [
+      { type: 'flag', key: 'learned_puppet', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'repair_army',
+        text: '尝试修复傀儡军团',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'artifact', id: 'puppet_army', name: '傀儡军团' },
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你成功修复了部分傀儡，组成了一支小型傀儡军团。',
+              fail: '傀儡年代久远，修复过程中发生爆炸，你被炸伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_army',
+        text: '研究傀儡制造技术',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'formationTier', value: 1 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'salvage_army',
+        text: '拆解傀儡取零件出售',
+        effects: [
+          { type: 'spiritStones', value: 35 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'artifact_competition',
+    title: '炼器大会',
+    description:
+      '修真界百年一度的炼器大会召开，各方炼器大师齐聚一堂。你也受邀参加，展示自己的炼器造诣。大会设有三个奖项：最佳法宝、最佳创意、最佳新人。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'divineWeaponTier', min: 1 }],
+    choices: [
+      {
+        id: 'compete_best',
+        text: '竞争最佳法宝奖',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 50 },
+              { type: 'divineWeaponTier', value: 1 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'comprehension', value: 3 },
+              { type: 'divineWeaponTier', value: 1 },
+            ],
+            narrative: {
+              success: '你的法宝力压群雄，夺得最佳法宝奖。名声大噪。',
+              fail: '高手如云，你的法宝虽不错但未能获奖。但观摩他人作品，炼器造诣有所提升。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'compete_creative',
+        text: '竞争最佳创意奖',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'divineWeaponTier', value: 1 },
+          { type: 'spiritStones', value: 20 },
+        ],
+      },
+      {
+        id: 'watch_competition',
+        text: '旁观学习',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'divineWeaponTier', value: 1 },
+        ],
+      },
+    ],
+  },
 ]
