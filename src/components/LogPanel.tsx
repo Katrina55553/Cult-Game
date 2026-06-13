@@ -9,6 +9,10 @@ interface Props {
 export function LogPanel({ logs, playerName }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const recentFirst = useMemo(() => [...logs].reverse(), [logs])
+  const highlightedEntries = useMemo(
+    () => recentFirst.map((entry) => highlightLogEntry(entry)),
+    [recentFirst],
+  )
   const [showExport, setShowExport] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -28,7 +32,7 @@ export function LogPanel({ logs, playerName }: Props) {
     navigator.clipboard.writeText(exportText).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    })
+    }).catch(() => {})
   }, [exportText])
 
   const handleDownload = useCallback(() => {
@@ -91,12 +95,12 @@ export function LogPanel({ logs, playerName }: Props) {
         {logs.length === 0 ? (
           <p className="text-sm text-[var(--color-mist)]/50">尚无记录……</p>
         ) : (
-          recentFirst.map((entry, i) => (
+          recentFirst.map((_entry, i) => (
             <p
               key={logs.length - 1 - i}
               className="text-sm text-[var(--color-parchment-dim)] leading-relaxed border-l-2 border-[var(--color-jade)]/30 pl-3"
             >
-              {highlightLogEntry(entry).map((segment, j) =>
+              {highlightedEntries[i].map((segment, j) =>
                 segment.tone ? (
                   <span key={j} className={LOG_TONE_CLASS[segment.tone]}>
                     {segment.text}

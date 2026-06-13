@@ -284,7 +284,8 @@ function finalizeAfterChoice(
   }
 
   if (player.age >= player.lifespan) {
-    const naturalEnding = ENDINGS.find((e) => e.id === 'natural_death')!
+    const naturalEnding = ENDINGS.find((e) => e.id === 'natural_death')
+      ?? { id: 'natural_death', title: '寿终正寝', description: '寿元耗尽，魂归天地。', priority: 0, conditions: [] }
     return buildEndingSession(
       session,
       { ...player, log: [...player.log, `${player.age}岁：寿元耗尽，魂归天地。`] },
@@ -340,7 +341,8 @@ function resolveNoEventEnding(player: PlayerState): {
     return { ending: matched, trigger: 'condition' }
   }
   return {
-    ending: ENDINGS.find((e) => e.id === 'path_exhausted')!,
+    ending: ENDINGS.find((e) => e.id === 'path_exhausted')
+      ?? { id: 'path_exhausted', title: '仙途终焉', description: '所有机缘已尽，修仙之路到此为止。', priority: 0, conditions: [] },
     trigger: 'no_events',
   }
 }
@@ -480,6 +482,26 @@ export function loadGame(): GameSession | null {
     if (!raw) return null
     const session = JSON.parse(raw) as GameSession
     if (!session.player || !session.phase) return null
+    if (!session.player.stats || typeof session.player.stats !== 'object') return null
+    const stats = session.player.stats
+    if (
+      typeof stats.rootBone !== 'number' ||
+      typeof stats.comprehension !== 'number' ||
+      typeof stats.luck !== 'number' ||
+      typeof stats.karma !== 'number' ||
+      typeof stats.demonHeart !== 'number'
+    ) return null
+    stats.rootBone = clamp(stats.rootBone, 0, 999)
+    stats.comprehension = clamp(stats.comprehension, 0, 999)
+    stats.luck = clamp(stats.luck, 0, 999)
+    stats.karma = clamp(stats.karma, -100, 100)
+    stats.demonHeart = clamp(stats.demonHeart, 0, 100)
+    if (typeof session.player.age !== 'number' || session.player.age < 0) return null
+    if (typeof session.player.lifespan !== 'number' || session.player.lifespan < 1) return null
+    if (typeof session.player.cultivation !== 'number') return null
+    session.player.cultivation = clamp(session.player.cultivation, 0, 100)
+    if (typeof session.player.spiritStones !== 'number') return null
+    session.player.spiritStones = Math.max(0, session.player.spiritStones)
     if (!session.player.shopBuffs) {
       session.player.shopBuffs = { purchases: 0 }
     }
@@ -493,6 +515,23 @@ export function loadGame(): GameSession | null {
       session.player.cultivationSystems = createDefaultCultivationSystems(null)
     } else {
       session.player.cultivationSystems = migrateCultivationSystems(session.player)
+      const cs = session.player.cultivationSystems
+      if (typeof cs.divineSense !== 'number') cs.divineSense = 10
+      if (typeof cs.alchemyTier !== 'number') cs.alchemyTier = 0
+      if (typeof cs.formationTier !== 'number') cs.formationTier = 0
+      if (typeof cs.swordTier !== 'number') cs.swordTier = 0
+      if (typeof cs.bloodlineTier !== 'number') cs.bloodlineTier = 0
+      if (typeof cs.techniqueTier !== 'number') cs.techniqueTier = 0
+      if (typeof cs.divineWeaponTier !== 'number') cs.divineWeaponTier = 0
+      if (!Array.isArray(cs.techniques)) cs.techniques = []
+      if (!Array.isArray(cs.divineWeapons)) cs.divineWeapons = []
+      cs.divineSense = clamp(cs.divineSense, 0, 100)
+      cs.alchemyTier = clamp(cs.alchemyTier, 0, 3)
+      cs.formationTier = clamp(cs.formationTier, 0, 3)
+      cs.swordTier = clamp(cs.swordTier, 0, 3)
+      cs.bloodlineTier = clamp(cs.bloodlineTier, 0, 3)
+      cs.techniqueTier = clamp(cs.techniqueTier, 0, 3)
+      cs.divineWeaponTier = clamp(cs.divineWeaponTier, 0, 3)
     }
     if (!Array.isArray(session.player.history)) {
       session.player.history = []
@@ -507,6 +546,10 @@ export function loadGame(): GameSession | null {
   } catch {
     return null
   }
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value))
 }
 
 export function clearSave(): void {

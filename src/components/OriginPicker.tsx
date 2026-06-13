@@ -38,6 +38,8 @@ export function OriginPicker({ value, onChange }: Props) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="listbox"
         className="w-full px-4 py-3 bg-[#0a0d0c] border border-[var(--color-jade)]/40 rounded-sm
           flex items-center justify-between gap-3 text-base text-[var(--color-parchment)] cursor-pointer
           hover:border-[var(--color-jade-light)] focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)]/30

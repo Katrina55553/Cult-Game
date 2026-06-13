@@ -108,23 +108,6 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
         </button>
       </div>
 
-      <div className="w-full max-w-lg animate-fade-up relative z-10">
-        {/* 页码指示 */}
-        <div className="flex justify-center gap-2 mb-8">
-          {LORE_PAGES.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => goToPage(i)}
-              className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                i === page
-                  ? 'bg-[var(--color-gold)] w-6'
-                  : 'bg-[var(--color-mist)]/30 hover:bg-[var(--color-mist)]/60'
-              }`}
-            />
-          ))}
-        </div>
-
         {/* 内容区域 */}
         <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-6 sm:p-8 rounded-sm mb-8 min-h-[280px]">
           <h2
@@ -196,7 +179,6 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
           )}
         </div>
 
-      </div>
     </div>
   )
 }

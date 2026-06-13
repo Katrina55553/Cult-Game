@@ -230,6 +230,14 @@ body::before {
     animation: none;
   }
 
+  .title-shimmer {
+    animation: none;
+    background: var(--color-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   .log-scroll {
     scroll-behavior: auto;
   }

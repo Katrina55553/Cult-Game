@@ -21,8 +21,10 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
       const actual = state.flags[condition.key] ?? false
       return actual === condition.value
     }
-    case 'resource':
-      return state[condition.key] >= condition.min
+    case 'resource': {
+      const resources: Record<string, number> = { spiritStones: state.spiritStones }
+      return (resources[condition.key] ?? 0) >= condition.min
+    }
     case 'age': {
       if (condition.min !== undefined && state.age < condition.min) return false
       if (condition.max !== undefined && state.age > condition.max) return false

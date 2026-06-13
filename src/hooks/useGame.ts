@@ -11,7 +11,7 @@ import {
   resolveChoice,
   saveGame,
 } from '../engine/gameEngine'
-import type { GameSession, Milestone, NewGameOptions, OriginId } from '../types/game'
+import type { GameSession, Milestone, NewGameOptions } from '../types/game'
 
 export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
@@ -51,7 +51,7 @@ export function useGame() {
     } else if (phase === 'ending') {
       stopBgm()
     }
-  }, [session, bgmOn])
+  }, [session?.phase, session?.player?.stats?.demonHeart, bgmOn])
 
   const showAchievements = useCallback((ids: string[]) => {
     if (ids.length > 0) setAchievementToast(ids)
@@ -74,6 +74,9 @@ export function useGame() {
     })
   }, [])
 
+  // Known pattern: sound effects and milestone calls are inside setSession updaters.
+  // Ideally these would be in a useEffect watching session changes, but the imperative
+  // sound/milestone logic is tightly coupled to the state transition. Refactor later.
   const confirmRoot = useCallback(() => {
     setSession((prev) => {
       if (!prev) return prev
@@ -89,6 +92,8 @@ export function useGame() {
     })
   }, [])
 
+  // Known pattern: side effects (sound, milestone) inside setSession updater.
+  // See comment on confirmRoot for rationale.
   const choose = useCallback(
     (choiceId: string) => {
       setSession((prev) => {
@@ -160,6 +165,8 @@ export function useGame() {
     [showAchievements],
   )
 
+  // Known pattern: side effects (sound) inside setSession updater.
+  // See comment on confirmRoot for rationale.
   const buyItem = useCallback(
     (itemId: string) => {
       setSession((prev) => {
@@ -178,6 +185,8 @@ export function useGame() {
     [showAchievements],
   )
 
+  // Known pattern: side effects (sound, milestone) inside setSession updater.
+  // See comment on confirmRoot for rationale.
   const exitShop = useCallback(() => {
     setSession((prev) => {
       if (!prev) return prev
@@ -232,9 +241,3 @@ export function useGame() {
   }
 }
 
-export type StartGameParams = {
-  name: string
-  dailyMode: boolean
-  useInnateBody: boolean
-  origin: OriginId
-}

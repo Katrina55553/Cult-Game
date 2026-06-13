@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
 import { getRealmName } from '../engine/gameEngine'
@@ -11,14 +11,16 @@ interface Props {
 export function CodexScreen({ onClose }: Props) {
   const meta = useMemo(() => loadMeta(), [])
   const { unlocked, total } = getEndingCodexProgress(meta)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') onCloseRef.current()
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [onClose])
+  }, [])
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4 py-8">

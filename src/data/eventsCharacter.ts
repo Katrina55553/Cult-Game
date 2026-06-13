@@ -317,7 +317,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'ye_qingmei_reunion',
+    id: 'ye_qingmei_reunion_alt',
     title: '叶轻眉重逢',
     description:
       '坊市深处，你恍惚间看到一个熟悉的身影。那名白衣女子转过身来，正是当年宗门中与你交好的叶轻眉。数年未见，她已是筑基修士，眉宇间多了几分沧桑。「好久不见。」她微微一笑。',
@@ -357,7 +357,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
     ],
   },
   {
-    id: 'ye_qingmei_help',
+    id: 'ye_qingmei_help_alt',
     title: '叶轻眉求助',
     description:
       '叶轻眉急匆匆找到你，面色凝重。她发现了一处藏有邪修据点的山谷，内有被囚禁的凡人百姓。「我一人势单力薄，你可愿助我一臂之力？」',

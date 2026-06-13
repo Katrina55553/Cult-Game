@@ -19,6 +19,10 @@ function next(): number {
   return seed / 0x100000000
 }
 
+export function getSeed(): number {
+  return seed
+}
+
 export function random(): number {
   return next()
 }

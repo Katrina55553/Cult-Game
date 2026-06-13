@@ -34,6 +34,9 @@ export function AbandonButton({ onAbandon }: Props) {
           <div
             className="max-w-sm w-full border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-6 rounded-sm text-center animate-fade-up"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="确认弃道"
           >
             <p
               className="text-xl text-[var(--color-parchment)] mb-2"

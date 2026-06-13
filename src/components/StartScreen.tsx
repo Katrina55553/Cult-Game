@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react'
 import { resumeAudio } from '../audio/sounds'
 import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
-import type { OriginId } from '../types/game'
-import type { StartGameParams } from '../hooks/useGame'
+import type { NewGameOptions, OriginId } from '../types/game'
 import { CodexScreen } from './CodexScreen'
 import { OriginPicker } from './OriginPicker'
 
 interface Props {
-  onStart: (params: StartGameParams) => void
+  onStart: (params: NewGameOptions) => void
   soundOn: boolean
   onToggleSound: () => void
 }

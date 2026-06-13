@@ -20,7 +20,13 @@ export function AchievementToast({ ids, onDismiss }: Props) {
   if (ids.length === 0) return null
 
   const items = ids
-    .map((id) => ACHIEVEMENTS.find((a) => a.id === id))
+    .map((id) => {
+      const found = ACHIEVEMENTS.find((a) => a.id === id)
+      if (!found && import.meta.env.DEV) {
+        console.warn(`[AchievementToast] Unknown achievement ID: "${id}"`)
+      }
+      return found
+    })
     .filter((a): a is NonNullable<typeof a> => a !== undefined)
 
   return (

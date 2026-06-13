@@ -1220,6 +1220,7 @@ export const MISC_EVENTS: GameEvent[] = [
     title: '走火入魔',
     description:
       '闭关修炼时急于求成，灵气运转失控，经脉寸寸断裂。你口吐鲜血，意识模糊，体内灵气如脱缰野马四处冲撞。若不及时施救，轻则修为倒退，重则走火入魔。',
+    conditions: [{ type: 'cultivation', min: 20 }],
     weight: 10,
     years: 1,
     maxTimes: 2,

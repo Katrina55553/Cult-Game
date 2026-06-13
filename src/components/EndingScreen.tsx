@@ -26,7 +26,7 @@ export function EndingScreen({ session, onRestart }: Props) {
     navigator.clipboard.writeText(exportText).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    })
+    }).catch(() => {})
   }, [exportText])
 
   const handleDownload = useCallback(() => {
