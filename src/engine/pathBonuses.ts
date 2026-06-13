@@ -7,6 +7,7 @@ export function getCultivationMultiplier(state: PlayerState): number {
   if (path === 'law') mult *= 1 + divineSense / 200
   if (state.cultivationSystems.techniques.length > 0) mult *= 1.05
   if (state.flags.has_companion) mult *= 1.12
+  if (state.flags.talent_spirit_affinity) mult *= 1.15
   return mult
 }
 

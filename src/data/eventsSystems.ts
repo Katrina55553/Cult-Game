@@ -621,4 +621,112 @@ export const SYSTEM_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'talent_combat',
+    title: '天赋觉醒·战',
+    description:
+      '突破之际，你体内涌起一股战斗本能。天地灵气在你经脉中流转，凝聚成一种与生俱来的天赋之力。你必须选择一种天赋来强化自身。',
+    weight: 15,
+    years: 0,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    choices: [
+      {
+        id: 'sword_heart',
+        text: '剑心通明 — 剑道事件成功率 +15%',
+        effects: [
+          { type: 'flag', key: 'talent_sword_heart', value: true },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'iron_body',
+        text: '铜皮铁骨 — 根骨 +8',
+        effects: [
+          { type: 'flag', key: 'talent_iron_body', value: true },
+          { type: 'stat', key: 'rootBone', value: 8 },
+        ],
+      },
+      {
+        id: 'quick_reflexes',
+        text: '身手敏捷 — 战斗事件成功率 +10%',
+        effects: [
+          { type: 'flag', key: 'talent_quick_reflexes', value: true },
+          { type: 'stat', key: 'rootBone', value: 4 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'talent_utility',
+    title: '天赋觉醒·道',
+    description:
+      '突破之际，你对天地之道有了更深的领悟。丹道、阵法、灵兽之道在你脑海中流转，你必须选择一种来深化修炼。',
+    weight: 15,
+    years: 0,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    choices: [
+      {
+        id: 'alchemy_nose',
+        text: '丹道灵觉 — 炼丹事件成功率 +15%',
+        effects: [
+          { type: 'flag', key: 'talent_alchemy_nose', value: true },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'formation_eye',
+        text: '阵法慧眼 — 阵法事件成功率 +15%',
+        effects: [
+          { type: 'flag', key: 'talent_formation_eye', value: true },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'beast_whisper',
+        text: '万兽亲和 — 灵兽事件成功率 +15%',
+        effects: [
+          { type: 'flag', key: 'talent_beast_whisper', value: true },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'talent_fate',
+    title: '天赋觉醒·命',
+    description:
+      '突破之际，你感应到命运之线的牵引。福祸相依，气运流转，你必须选择一种与命运相关的天赋。',
+    weight: 15,
+    years: 0,
+    once: true,
+    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    choices: [
+      {
+        id: 'golden_luck',
+        text: '天降鸿运 — 气运 +10',
+        effects: [
+          { type: 'flag', key: 'talent_golden_luck', value: true },
+          { type: 'stat', key: 'luck', value: 10 },
+        ],
+      },
+      {
+        id: 'fate_weaver',
+        text: '命运编织 — 所有概率型事件 +5%',
+        effects: [
+          { type: 'flag', key: 'talent_fate_weaver', value: true },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+      {
+        id: 'longevity',
+        text: '长生体质 — 寿元 +20',
+        effects: [
+          { type: 'flag', key: 'talent_longevity', value: true },
+          { type: 'lifespan', value: 20 },
+        ],
+      },
+    ],
+  },
 ]

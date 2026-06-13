@@ -205,14 +205,28 @@ export function checkEnding(state: PlayerState): Ending | null {
   return null
 }
 
+function getTalentBonus(state: PlayerState, eventId: string): number {
+  let bonus = 0
+  if (state.flags.talent_sword_heart && eventId.includes('sword')) bonus += 0.15
+  if (state.flags.talent_alchemy_nose && (eventId.includes('alchemy') || eventId.includes('pill'))) bonus += 0.15
+  if (state.flags.talent_formation_eye && eventId.includes('formation')) bonus += 0.15
+  if (state.flags.talent_beast_whisper && eventId.includes('beast')) bonus += 0.15
+  if (state.flags.talent_quick_reflexes && eventId.includes('duel')) bonus += 0.10
+  if (state.flags.talent_treasure_sense && eventId.includes('dungeon')) bonus += 0.10
+  if (state.flags.talent_fate_weaver) bonus += 0.05
+  return bonus
+}
+
 function resolveOutcome(
   state: PlayerState,
   outcome: Outcome,
+  eventId: string,
 ): { state: PlayerState; narrative: string; success: boolean } {
   let chance = outcome.chance
   if (outcome.luckBonus) {
     chance += state.stats.luck * outcome.luckBonus
   }
+  chance += getTalentBonus(state, eventId)
   chance = Math.max(0.05, Math.min(0.95, chance))
 
   const success = rng.random() < chance
@@ -368,7 +382,7 @@ export function resolveChoice(session: GameSession, choiceId: string): GameSessi
   let narrative = ''
 
   if (choice.outcomes && choice.outcomes.length > 0) {
-    const result = resolveOutcome(player, choice.outcomes[0])
+    const result = resolveOutcome(player, choice.outcomes[0], session.currentEvent.id)
     player = result.state
     narrative = result.narrative
   } else if (choice.effects) {
