@@ -36,6 +36,31 @@ export const BOSS_EVENTS: GameEvent[] = [
         ],
       },
       {
+        id: 'overpower_wolf',
+        text: '以蛮力硬撼妖狼王',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 40 }],
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'rootBone', value: 8 },
+              { type: 'spiritStones', value: 30 },
+              { type: 'flag', key: 'slayed_wolf_king', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以强横肉身硬抗妖狼王数十爪，最终将其击杀。根骨越强，胜算越大。',
+              fail: '妖狼王力量超出预期，你被震退数步，但伤势不重。',
+            },
+          },
+        ],
+      },
+      {
         id: 'trap_wolf',
         text: '布阵困杀妖狼王',
         requirements: [{ type: 'formationTier', min: 1 }],
@@ -89,6 +114,32 @@ export const BOSS_EVENTS: GameEvent[] = [
             narrative: {
               success: '你以一己之力斩杀血魔将，救出被困弟子。宗门上下对你刮目相看。',
               fail: '血魔将实力远超预期，你重伤败退，据点沦陷。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'overpower_general',
+        text: '以蛮力硬撼血魔将',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 55 }],
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'rootBone', value: 8 },
+              { type: 'spiritStones', value: 40 },
+              { type: 'flag', key: 'slayed_demon_general', value: true },
+              { type: 'stat', key: 'karma', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以强横肉身硬抗血魔将数十矛，最终将其击杀。根骨越强，胜算越大。',
+              fail: '血魔将实力超出预期，你被震退数步，但伤势不重。',
             },
           },
         ],

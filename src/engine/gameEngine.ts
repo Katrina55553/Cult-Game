@@ -73,7 +73,7 @@ export function createPlayer(
     origin: options.origin ?? null,
     realm: 'mortal',
     age: 16,
-    lifespan: randBetween(root.lifespan),
+    lifespan: randBetween(root.lifespan) + Math.floor(randBetween(root.stats.rootBone) * 0.2),
     cultivation: 0,
     stats: {
       rootBone: randBetween(root.stats.rootBone),
@@ -217,6 +217,14 @@ function getTalentBonus(state: PlayerState, eventId: string): number {
   return bonus
 }
 
+function getRootBoneBonus(state: PlayerState, eventId: string): number {
+  const isCombat = eventId.includes('boss') || eventId.includes('duel') || eventId.includes('fight')
+    || eventId.includes('battle') || eventId.includes('wolf') || eventId.includes('assassin')
+    || eventId.includes('golem') || eventId.includes('thunder') || eventId.includes('lord')
+  if (!isCombat) return 0
+  return Math.min(0.15, state.stats.rootBone / 500)
+}
+
 function resolveOutcome(
   state: PlayerState,
   outcome: Outcome,
@@ -227,6 +235,7 @@ function resolveOutcome(
     chance += state.stats.luck * outcome.luckBonus
   }
   chance += getTalentBonus(state, eventId)
+  chance += getRootBoneBonus(state, eventId)
   chance = Math.max(0.05, Math.min(0.95, chance))
 
   const success = rng.random() < chance
