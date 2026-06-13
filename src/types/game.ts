@@ -184,6 +184,12 @@ export interface Achievement {
   title: string
   description: string
   hidden?: boolean
+  reward?: {
+    type: 'stat' | 'spiritStones' | 'lifespan' | 'cultivation'
+    key?: keyof PlayerStats
+    value: number
+    label: string
+  }
 }
 
 export interface MetaProgress {

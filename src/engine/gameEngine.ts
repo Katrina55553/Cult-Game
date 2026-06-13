@@ -1,4 +1,5 @@
 import { createDefaultCultivationSystems, migrateCultivationSystems } from '../data/cultivationSystems'
+import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
 import { EVENTS } from '../data/events'
 import { REALMS } from '../data/realms'
@@ -30,6 +31,28 @@ import type {
 
 function randBetween([min, max]: [number, number]): number {
   return rng.randInt(min, max)
+}
+
+function applyAchievementRewards(player: PlayerState, meta: { unlockedAchievements: string[] }): void {
+  for (const id of meta.unlockedAchievements) {
+    const achievement = ACHIEVEMENTS.find((a) => a.id === id)
+    if (!achievement?.reward) continue
+    const { type, key, value } = achievement.reward
+    switch (type) {
+      case 'stat':
+        if (key) player.stats[key] += value
+        break
+      case 'spiritStones':
+        player.spiritStones = Math.max(0, player.spiritStones + value)
+        break
+      case 'lifespan':
+        player.lifespan += value
+        break
+      case 'cultivation':
+        player.cultivation = Math.max(0, Math.min(100, player.cultivation + value))
+        break
+    }
+  }
 }
 
 export function rollSpiritRoot(origin?: NewGameOptions['origin']): SpiritRoot {
@@ -66,6 +89,7 @@ export function createPlayer(
   name: string,
   root: SpiritRoot,
   options: { useInnateBody?: boolean; origin?: NewGameOptions['origin'] } = {},
+  meta: { unlockedAchievements: string[] } = { unlockedAchievements: [] },
 ): PlayerState {
   const player: PlayerState = {
     name,
@@ -149,6 +173,7 @@ export function createPlayer(
       break
   }
 
+  applyAchievementRewards(player, meta)
   return player
 }
 
@@ -164,7 +189,7 @@ export function createNewGame(options: NewGameOptions): GameSession {
   const player = createPlayer(options.name.trim() || '无名修士', root, {
     useInnateBody: options.useInnateBody && meta.innateBodyUnlocked,
     origin: options.origin ?? null,
-  })
+  }, meta)
   const startEvent = EVENTS.find((e) => e.id === 'enter_sect') ?? null
 
   return {

@@ -12,7 +12,10 @@ export function CodexScreen({ onClose }: Props) {
   const meta = useMemo(() => loadMeta(), [])
   const { unlocked, total } = getEndingCodexProgress(meta)
   const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
+
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
