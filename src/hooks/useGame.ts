@@ -107,9 +107,25 @@ export function useGame() {
           if (lastLog.includes('突破') || lastLog.includes('晋升')) playSound('breakthrough')
           else if (lastLog.includes('失败') || lastLog.includes('重伤') || lastLog.includes('身死')) {
             playSound('fail')
-          } else if (lastLog.includes('成功') || lastLog.includes('获')) {
+          } else if (lastLog.includes('成功') || lastLog.includes('获') || lastLog.includes('得')) {
             playSound('success')
+          } else if (lastLog.includes('心魔') || lastLog.includes('魔')) {
+            playSound('demon')
+          } else if (lastLog.includes('剑') || lastLog.includes('刀') || lastLog.includes('斩')) {
+            playSound('sword')
+          } else if (lastLog.includes('丹') || lastLog.includes('炼')) {
+            playSound('alchemy')
+          } else if (lastLog.includes('灵石') || lastLog.includes('灵石')) {
+            playSound('coin')
+          } else if (lastLog.includes('寿元') || lastLog.includes('延寿')) {
+            playSound('heal')
           }
+        }
+
+        if (next.player.spiritStones > prev.player.spiritStones && soundOnRef.current) {
+          playSound('gain')
+        } else if (next.player.spiritStones < prev.player.spiritStones && soundOnRef.current) {
+          playSound('loss')
         }
 
         if (next.phase === 'ending') {
@@ -139,11 +155,11 @@ export function useGame() {
     (itemId: string) => {
       setSession((prev) => {
         if (!prev || prev.phase !== 'shop') return prev
-        if (soundOnRef.current) playSound('click')
+        if (soundOnRef.current) playSound('coin')
         const achBefore = prev.newAchievements.length
         const next = purchaseShopItem(prev, itemId)
         if (next.player.spiritStones < prev.player.spiritStones && soundOnRef.current) {
-          playSound('success')
+          playSound('alchemy')
         }
         const fresh = next.newAchievements.slice(achBefore)
         if (fresh.length > 0) showAchievements(fresh)
