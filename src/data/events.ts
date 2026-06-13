@@ -1387,6 +1387,7 @@ const CORE_EVENTS: GameEvent[] = [
             luckBonus: 0.006,
             successEffects: [
               { type: 'divineWeapon', id: 'ancient_thunder_sword', name: '太古雷剑' },
+              { type: 'divineWeaponTier', value: 1 },
               { type: 'cultivation', value: 15 },
             ],
             failEffects: [
@@ -1406,6 +1407,7 @@ const CORE_EVENTS: GameEvent[] = [
         effects: [
           { type: 'cultivation', value: 25 },
           { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'swordTier', value: 1 },
         ],
       },
       {

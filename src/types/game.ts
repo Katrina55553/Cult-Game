@@ -25,9 +25,13 @@ export interface CultivationSystems {
   divineSense: number
   alchemyTier: number
   formationTier: number
+  swordTier: number
   bloodline: string | null
+  bloodlineTier: number
   techniques: string[]
+  techniqueTier: number
   divineWeapons: string[]
+  divineWeaponTier: number
   spiritBeast: SpiritBeastState | null
 }
 
@@ -90,6 +94,10 @@ export type Condition =
   | { type: 'divineSense'; min: number }
   | { type: 'alchemyTier'; min: number }
   | { type: 'formationTier'; min: number }
+  | { type: 'swordTier'; min: number }
+  | { type: 'bloodlineTier'; min: number }
+  | { type: 'techniqueTier'; min: number }
+  | { type: 'divineWeaponTier'; min: number }
   | { type: 'cultivationPath'; path: CultivationPath }
   | { type: 'origin'; value: NonNullable<OriginId> }
 
@@ -108,9 +116,13 @@ export type Effect =
   | { type: 'divineSense'; value: number }
   | { type: 'alchemyTier'; value: number }
   | { type: 'formationTier'; value: number }
+  | { type: 'swordTier'; value: number }
   | { type: 'bloodline'; name: string }
+  | { type: 'bloodlineTier'; value: number }
   | { type: 'technique'; name: string }
+  | { type: 'techniqueTier'; value: number }
   | { type: 'divineWeapon'; id: string; name: string }
+  | { type: 'divineWeaponTier'; value: number }
   | { type: 'spiritBeast'; name: string; tier?: number }
   | { type: 'cultivationPath'; path: CultivationPath }
 

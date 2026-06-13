@@ -1184,6 +1184,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
         effects: [
           { type: 'cultivation', value: 20 },
           { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'swordTier', value: 1 },
           { type: 'flag', key: 'sword_tomb_visited', value: true },
         ],
       },
@@ -2281,6 +2282,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
             luckBonus: 0.005,
             successEffects: [
               { type: 'divineWeapon', id: 'fire_forged_blade', name: '地火玄刃' },
+              { type: 'divineWeaponTier', value: 1 },
               { type: 'cultivation', value: 15 },
             ],
             failEffects: [

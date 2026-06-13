@@ -50,6 +50,9 @@ export function checkAchievements(
       moli_friend: 'moli_friend_first',
       wander_leader: 'wander_leader_first',
       demon_conqueror: 'demon_conqueror_first',
+      bloodline_lord: 'bloodline_lord_first',
+      weapon_master: 'weapon_master_first',
+      technique_sage: 'technique_sage_first',
     }
     if (map[ending.id]) add(map[ending.id])
 

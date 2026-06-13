@@ -1,4 +1,4 @@
-import { getAlchemyLabel, getFormationLabel, getPathLabel } from '../data/cultivationSystems'
+import { getAlchemyLabel, getBloodlineLabel, getDivineWeaponLabel, getFormationLabel, getPathLabel, getSwordLabel, getTechniqueLabel } from '../data/cultivationSystems'
 import { getRealmOrder } from '../data/realms'
 import type { Condition, PlayerState } from '../types/game'
 
@@ -41,6 +41,14 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
       return state.cultivationSystems.alchemyTier >= condition.min
     case 'formationTier':
       return state.cultivationSystems.formationTier >= condition.min
+    case 'swordTier':
+      return state.cultivationSystems.swordTier >= condition.min
+    case 'bloodlineTier':
+      return state.cultivationSystems.bloodlineTier >= condition.min
+    case 'techniqueTier':
+      return state.cultivationSystems.techniqueTier >= condition.min
+    case 'divineWeaponTier':
+      return state.cultivationSystems.divineWeaponTier >= condition.min
     case 'cultivationPath':
       return state.cultivationSystems.path === condition.path
     case 'origin':
@@ -86,6 +94,14 @@ function describeCondition(c: Condition): string {
       return `丹道≥${getAlchemyLabel(c.min)}`
     case 'formationTier':
       return `阵法≥${getFormationLabel(c.min)}`
+    case 'swordTier':
+      return `剑道≥${getSwordLabel(c.min)}`
+    case 'bloodlineTier':
+      return `血脉≥${getBloodlineLabel(c.min)}`
+    case 'techniqueTier':
+      return `功法≥${getTechniqueLabel(c.min)}`
+    case 'divineWeaponTier':
+      return `神兵≥${getDivineWeaponLabel(c.min)}`
     case 'cultivationPath':
       return `需${getPathLabel(c.path)}路线`
     case 'origin':

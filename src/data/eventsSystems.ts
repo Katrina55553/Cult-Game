@@ -199,6 +199,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
             chance: 0.55,
             successEffects: [
               { type: 'bloodline', name: '魔裔血脉' },
+              { type: 'bloodlineTier', value: 1 },
               { type: 'flag', key: 'bloodline_awakened', value: true },
               { type: 'stat', key: 'rootBone', value: 6 },
               { type: 'cultivation', value: 15 },
@@ -220,6 +221,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
             chance: 0.5,
             successEffects: [
               { type: 'bloodline', name: '天眷血脉' },
+              { type: 'bloodlineTier', value: 1 },
               { type: 'flag', key: 'bloodline_awakened', value: true },
               { type: 'flag', key: 'heavenly_bloodline', value: true },
               { type: 'stat', key: 'luck', value: 5 },
@@ -307,6 +309,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
             chance: 0.4,
             successEffects: [
               { type: 'divineWeapon', id: 'soul_blade', name: '本命神兵·青霜' },
+              { type: 'divineWeaponTier', value: 1 },
               { type: 'cultivation', value: 18 },
               { type: 'lifespan', value: -5 },
             ],
@@ -328,6 +331,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
         effects: [
           { type: 'spiritStones', value: -80 },
           { type: 'divineWeapon', id: 'forged_blade', name: '灵铸神兵' },
+          { type: 'divineWeaponTier', value: 1 },
           { type: 'cultivation', value: 10 },
         ],
       },
@@ -347,6 +351,8 @@ export const SYSTEM_EVENTS: GameEvent[] = [
         text: '取剑诀玉简，潜心研习',
         effects: [
           { type: 'technique', name: '青云剑诀' },
+          { type: 'techniqueTier', value: 1 },
+          { type: 'swordTier', value: 1 },
           { type: 'cultivation', value: 12 },
           { type: 'stat', key: 'comprehension', value: 4 },
         ],
@@ -356,6 +362,7 @@ export const SYSTEM_EVENTS: GameEvent[] = [
         text: '取炼体功法，苦修不辍',
         effects: [
           { type: 'technique', name: '龙象霸体功' },
+          { type: 'techniqueTier', value: 1 },
           { type: 'stat', key: 'rootBone', value: 5 },
           { type: 'cultivationPath', path: 'body' },
           { type: 'flag', key: 'body_path', value: true },
@@ -366,9 +373,250 @@ export const SYSTEM_EVENTS: GameEvent[] = [
         text: '取法术心法，凝神参悟',
         effects: [
           { type: 'technique', name: '九霄雷法' },
+          { type: 'techniqueTier', value: 1 },
           { type: 'divineSense', value: 8 },
           { type: 'cultivationPath', path: 'law' },
           { type: 'flag', key: 'law_path', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sword_enlightenment',
+    title: '剑意初悟',
+    description:
+      '你于悬崖之巅静坐，观山风呼啸、飞瀑倾泻。忽然心中一动，似有剑意自天道中涌来。你拔剑起舞，剑光如水，一招一式渐入佳境。',
+    weight: 10,
+    years: 2,
+    maxTimes: 3,
+    cooldown: 6,
+    choices: [
+      {
+        id: 'comprehend',
+        text: '沉浸剑意，细细领悟',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'swordTier', value: 1 },
+              { type: 'cultivation', value: 12 },
+              { type: 'stat', key: 'comprehension', value: 4 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 5 },
+              { type: 'stat', key: 'comprehension', value: 2 },
+            ],
+            narrative: {
+              success: '你悟得一丝剑意，剑道修为大进。剑光过处，落叶纷飞。',
+              fail: '剑意稍纵即逝，你未能完全领悟，但对剑道的理解略有加深。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'force',
+        text: '强行催动剑意',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'swordTier', value: 1 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -5 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以强横意志催动剑意，竟突破瓶颈，剑道大进。',
+              fail: '强行催动导致剑气反噬，你受了轻伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'observe',
+        text: '静观山川，不急于领悟',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sword_trial',
+    title: '剑阵试炼',
+    description:
+      '古籍中记载的剑阵浮现于前，千柄虚影剑悬浮半空，剑气纵横交错。你必须以剑道修为破阵，方能获得剑阵中的传承。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'swordTier', min: 1 }],
+    choices: [
+      {
+        id: 'break_sword_trial',
+        text: '以剑破阵',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'swordTier', value: 1 },
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '你以精妙剑法破开剑阵，获得剑道传承，剑意更上一层。',
+              fail: '剑阵威力超乎想象，你虽未能破阵，却在搏杀中领悟了不少。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_sword_trial',
+        text: '参悟剑阵中的剑意',
+        effects: [
+          { type: 'swordTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'bloodline_resonance',
+    title: '血脉共鸣',
+    description:
+      '体内沉寂的血脉忽然沸腾，一股古老的力量自血脉深处涌来。你感到身体正在发生蜕变，血脉之力正在觉醒更深层的力量。',
+    weight: 8,
+    years: 2,
+    maxTimes: 2,
+    cooldown: 8,
+    conditions: [{ type: 'bloodlineTier', min: 1 }],
+    choices: [
+      {
+        id: 'guide_bloodline',
+        text: '引导血脉之力',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'bloodlineTier', value: 1 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'lifespan', value: -5 },
+            ],
+            narrative: {
+              success: '你成功引导血脉之力，血脉纯度提升，肉身更加强横。',
+              fail: '血脉之力过于狂暴，你险些失控，心魔趁虚而入。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'suppress_bloodline',
+        text: '压制血脉躁动',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'rootBone', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'weapon_reforge',
+    title: '神兵重铸',
+    description:
+      '你得到一块罕见的天外陨铁，此物蕴含星辰之力，是重铸神兵的绝佳材料。若能以此提升已有法宝的品质，威力必将大增。',
+    weight: 7,
+    years: 2,
+    maxTimes: 2,
+    cooldown: 8,
+    conditions: [{ type: 'divineWeaponTier', min: 1 }],
+    choices: [
+      {
+        id: 'reforge',
+        text: '以陨铁重铸神兵',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'divineWeaponTier', value: 1 },
+              { type: 'cultivation', value: 12 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 5 },
+              { type: 'spiritStones', value: -15, set: false },
+            ],
+            narrative: {
+              success: '神兵重铸成功，品质大进，威能更胜从前。',
+              fail: '重铸失败，材料尽毁，你白白浪费了一块天外陨铁。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_weapon',
+        text: '参悟陨铁中的星辰之力',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'divineWeaponTier', value: 1 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'technique_fusion',
+    title: '功法融合',
+    description:
+      '你修炼多年，所学功法渐多，忽然领悟到万法归一之理。若能将所学功法融会贯通，必能突破现有境界。',
+    weight: 7,
+    years: 2,
+    maxTimes: 2,
+    cooldown: 8,
+    conditions: [{ type: 'techniqueTier', min: 1 }],
+    choices: [
+      {
+        id: 'merge',
+        text: '闭关融合功法',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'techniqueTier', value: 1 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你成功融合功法，领悟万法归一之理，功法修为大进。',
+              fail: '功法冲突导致灵气紊乱，你不得不中止融合。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'partial_merge',
+        text: '只融合部分功法',
+        effects: [
+          { type: 'techniqueTier', value: 1 },
+          { type: 'cultivation', value: 10 },
         ],
       },
     ],

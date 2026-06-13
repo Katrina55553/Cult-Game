@@ -55,6 +55,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'survived_plague', title: '百毒不侵', description: '扛过灵瘟肆虐' },
   { id: 'survived_qi_deviation', title: '劫后余生', description: '走火入魔后自救成功' },
   { id: 'defeated_demon_heart', title: '斩断心魔', description: '心魔幻境中斩断执念' },
+  { id: 'bloodline_lord_first', title: '血脉至尊', description: '首次达成血脉之主结局' },
+  { id: 'weapon_master_first', title: '神兵在手', description: '首次达成神兵至尊结局' },
+  { id: 'technique_sage_first', title: '万法归一', description: '首次达成功法大成结局' },
   { id: 'all_spirit_beasts', title: '百兽之王', description: '收集全部四种灵宠', hidden: true },
   { id: 'all_origins', title: '轮回百世', description: '以全部出身各通关一次', hidden: true },
 ]

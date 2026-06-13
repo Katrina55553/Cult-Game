@@ -8,6 +8,10 @@ export const PATH_LABELS: Record<CultivationPath, string> = {
 
 export const ALCHEMY_TIER_LABELS = ['未入门', '丹徒', '丹师', '丹宗'] as const
 export const FORMATION_TIER_LABELS = ['未入门', '阵徒', '阵师', '阵宗'] as const
+export const SWORD_TIER_LABELS = ['未入门', '剑徒', '剑师', '剑圣'] as const
+export const BLOODLINE_TIER_LABELS = ['未觉醒', '初觉', '半血', '纯血'] as const
+export const TECHNIQUE_TIER_LABELS = ['未入门', '功徒', '功师', '功宗'] as const
+export const DIVINE_WEAPON_TIER_LABELS = ['无', '凡器', '灵器', '仙器'] as const
 
 export function createDefaultCultivationSystems(
   bloodline: string | null = null,
@@ -17,9 +21,13 @@ export function createDefaultCultivationSystems(
     divineSense: 10,
     alchemyTier: 0,
     formationTier: 0,
+    swordTier: 0,
     bloodline,
+    bloodlineTier: bloodline ? 1 : 0,
     techniques: [],
+    techniqueTier: 0,
     divineWeapons: [],
+    divineWeaponTier: 0,
     spiritBeast: null,
   }
 }
@@ -34,6 +42,22 @@ export function getAlchemyLabel(tier: number): string {
 
 export function getFormationLabel(tier: number): string {
   return FORMATION_TIER_LABELS[Math.min(tier, FORMATION_TIER_LABELS.length - 1)]
+}
+
+export function getSwordLabel(tier: number): string {
+  return SWORD_TIER_LABELS[Math.min(tier, SWORD_TIER_LABELS.length - 1)]
+}
+
+export function getBloodlineLabel(tier: number): string {
+  return BLOODLINE_TIER_LABELS[Math.min(tier, BLOODLINE_TIER_LABELS.length - 1)]
+}
+
+export function getTechniqueLabel(tier: number): string {
+  return TECHNIQUE_TIER_LABELS[Math.min(tier, TECHNIQUE_TIER_LABELS.length - 1)]
+}
+
+export function getDivineWeaponLabel(tier: number): string {
+  return DIVINE_WEAPON_TIER_LABELS[Math.min(tier, DIVINE_WEAPON_TIER_LABELS.length - 1)]
 }
 
 export function migrateCultivationSystems(player: {

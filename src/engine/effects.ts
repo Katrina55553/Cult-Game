@@ -98,11 +98,25 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
         cultivationSystems: { ...state.cultivationSystems, formationTier },
       }
     }
+    case 'swordTier': {
+      const swordTier = clamp(state.cultivationSystems.swordTier + effect.value, 0, 3)
+      return {
+        ...state,
+        cultivationSystems: { ...state.cultivationSystems, swordTier },
+      }
+    }
     case 'bloodline':
       return {
         ...state,
         cultivationSystems: { ...state.cultivationSystems, bloodline: effect.name },
       }
+    case 'bloodlineTier': {
+      const bloodlineTier = clamp(state.cultivationSystems.bloodlineTier + effect.value, 0, 3)
+      return {
+        ...state,
+        cultivationSystems: { ...state.cultivationSystems, bloodlineTier },
+      }
+    }
     case 'technique': {
       if (state.cultivationSystems.techniques.includes(effect.name)) return state
       return {
@@ -111,6 +125,13 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
           ...state.cultivationSystems,
           techniques: [...state.cultivationSystems.techniques, effect.name],
         },
+      }
+    }
+    case 'techniqueTier': {
+      const techniqueTier = clamp(state.cultivationSystems.techniqueTier + effect.value, 0, 3)
+      return {
+        ...state,
+        cultivationSystems: { ...state.cultivationSystems, techniqueTier },
       }
     }
     case 'divineWeapon': {
@@ -122,6 +143,13 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
           ...state.cultivationSystems,
           divineWeapons: [...state.cultivationSystems.divineWeapons, label],
         },
+      }
+    }
+    case 'divineWeaponTier': {
+      const divineWeaponTier = clamp(state.cultivationSystems.divineWeaponTier + effect.value, 0, 3)
+      return {
+        ...state,
+        cultivationSystems: { ...state.cultivationSystems, divineWeaponTier },
       }
     }
     case 'spiritBeast': {

@@ -162,7 +162,7 @@ export const ENDINGS: Ending[] = [
       { type: 'realm', min: 'nascent_soul' },
       { type: 'flag', key: 'got_inheritance', value: true },
       { type: 'flag', key: 'chose_ascension', value: true },
-      { type: 'stat', key: 'rootBone', min: 80 },
+      { type: 'swordTier', min: 2 },
     ],
   },
   {
@@ -208,6 +208,39 @@ export const ENDINGS: Ending[] = [
     conditions: [
       { type: 'flag', key: 'demon_slayer', value: true },
       { type: 'stat', key: 'karma', min: 20 },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
+  {
+    id: 'bloodline_lord',
+    title: '血脉之主',
+    description:
+      '你将血脉之力修炼至极致，肉身强横无匹，举手投足间天地变色。你成为血脉修士中的传奇，被尊为「血脉之主」，受万修敬仰。',
+    priority: 69,
+    conditions: [
+      { type: 'bloodlineTier', min: 3 },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
+  {
+    id: 'weapon_master',
+    title: '神兵至尊',
+    description:
+      '你穷尽一生淬炼神兵，将其提升至仙器之境。神兵在手，所向披靡，成为修真界公认的「神兵至尊」。',
+    priority: 67,
+    conditions: [
+      { type: 'divineWeaponTier', min: 3 },
+      { type: 'realm', min: 'golden_core' },
+    ],
+  },
+  {
+    id: 'technique_sage',
+    title: '功法大成',
+    description:
+      '你融会贯通百家功法，万法归一，自成一派。虽未飞升，却成为功法一道的集大成者，被后世尊为「功法圣人」。',
+    priority: 65,
+    conditions: [
+      { type: 'techniqueTier', min: 3 },
       { type: 'realm', min: 'golden_core' },
     ],
   },
