@@ -79,4 +79,53 @@ export const SHOP_ITEMS: ShopItem[] = [
       { type: 'cultivation', value: 10 },
     ],
   },
+  {
+    id: 'spirit_sword',
+    name: '灵纹短剑',
+    description: '刻有灵纹的短剑，可增强战斗能力',
+    cost: 90,
+    effect: [
+      { type: 'artifact', id: 'spirit_sword', name: '灵纹短剑' },
+      { type: 'stat', key: 'rootBone', value: 3 },
+    ],
+  },
+  {
+    id: 'amulet',
+    name: '护身符',
+    description: '蕴含护体灵力的玉符，关键时刻可保一命',
+    cost: 40,
+    effect: [
+      { type: 'inventory', name: '护身符', description: '使用后寿元+8', usable: true },
+      { type: 'stat', key: 'luck', value: 2 },
+    ],
+  },
+  {
+    id: 'healing_pills',
+    name: '疗伤丹',
+    description: '疗伤圣药，危急时刻可恢复寿元',
+    cost: 30,
+    effect: [
+      { type: 'inventory', name: '疗伤丹', description: '使用后寿元+10', usable: true },
+    ],
+  },
+  {
+    id: 'comprehension_scroll',
+    name: '悟道卷轴',
+    description: '记载悟道心法的卷轴，研读后悟性提升',
+    cost: 75,
+    effect: [
+      { type: 'stat', key: 'comprehension', value: 6 },
+      { type: 'inventory', name: '悟道卷轴', description: '使用后悟性+5', usable: true },
+    ],
+  },
+  {
+    id: 'lucky_charm',
+    name: '转运符',
+    description: '据传佩戴后可转运消灾',
+    cost: 25,
+    effect: [
+      { type: 'stat', key: 'luck', value: 5 },
+      { type: 'stat', key: 'demonHeart', value: -3 },
+    ],
+  },
 ]

@@ -156,12 +156,33 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
                 关闭
               </button>
             </div>
-            {player.artifacts.length === 0 && player.inventory.length === 0 ? (
+            {player.artifacts.length === 0 && player.inventory.length === 0 && !player.cultivationSystems.spiritBeast ? (
               <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">背包空空如也</p>
             ) : (
-              <div className="space-y-2 flex-1 overflow-y-auto log-scroll min-h-0">
+              <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
+                {/* 灵兽 */}
+                {player.cultivationSystems.spiritBeast && (
+                  <div>
+                    <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">灵兽</p>
+                    <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                      <p className="text-[var(--color-parchment)]">{player.cultivationSystems.spiritBeast.name} · {player.cultivationSystems.spiritBeast.tier}阶</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* 血脉 */}
+                {player.cultivationSystems.bloodline && (
+                  <div>
+                    <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">血脉</p>
+                    <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                      <p className="text-[var(--color-parchment)]">{player.cultivationSystems.bloodline}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* 法宝 */}
                 {player.artifacts.length > 0 && (
-                  <div className="mb-2">
+                  <div>
                     <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">法宝</p>
                     {player.artifacts.map((id, i) => (
                       <div key={`a-${i}`} className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1">
@@ -170,6 +191,8 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
                     ))}
                   </div>
                 )}
+
+                {/* 物品 */}
                 {player.inventory.length > 0 && (
                   <div>
                     <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
