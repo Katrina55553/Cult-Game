@@ -355,4 +355,383 @@ export const WANDER_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'wander_cave',
+    title: '散修洞府',
+    description:
+      '你在深山中发现一处被遗弃的散修洞府，洞内灵气充沛，石壁上刻着前人留下的修炼心得。洞府主人似乎已坐化多年，留下了一封遗书和几件遗物。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
+    choices: [
+      {
+        id: 'inherit_cave',
+        text: '继承洞府，研读心得',
+        effects: [
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'spiritStones', value: 15 },
+        ],
+      },
+      {
+        id: 'take_items',
+        text: '取走遗物继续赶路',
+        effects: [
+          { type: 'spiritStones', value: 25 },
+          { type: 'stat', key: 'karma', value: -3 },
+        ],
+      },
+      {
+        id: 'bury_elder',
+        text: '为前辈散修立碑安葬',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'luck', value: 4 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_wilderness',
+    title: '荒野求生',
+    description:
+      '你深入无人荒野寻找天材地宝，却遭遇暴风雪。灵气紊乱，方向难辨，你必须在恶劣环境中求生。没有宗门庇护，一切只能靠自己。',
+    weight: 8,
+    years: 1,
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
+    choices: [
+      {
+        id: 'endure_storm',
+        text: '以灵气护体硬撑',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'cultivation', value: 12 },
+              { type: 'stat', key: 'luck', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'cultivation', value: 5 },
+            ],
+            narrative: {
+              success: '你在暴风雪中苦撑三日，竟意外领悟了天地灵气运转之理。',
+              fail: '暴风雪过于猛烈，你被冻伤数处，元气受损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'find_shelter',
+        text: '寻找避风处所',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'cultivation', value: 6 },
+        ],
+      },
+      {
+        id: 'turn_back',
+        text: '果断撤退',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_trade',
+    title: '散修商路',
+    description:
+      '你发现一条连接两座坊市的商路，沿途散修往来频繁。若能在此经商或护送商队，可获丰厚报酬。但商路上盗匪横行，风险不小。',
+    weight: 8,
+    years: 1,
+    maxTimes: 2,
+    cooldown: 6,
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
+    choices: [
+      {
+        id: 'escort',
+        text: '护送商队赚取报酬',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'spiritStones', value: 25 },
+              { type: 'stat', key: 'karma', value: 5 },
+            ],
+            failEffects: [
+              { type: 'spiritStones', value: -10, set: false },
+              { type: 'lifespan', value: -5 },
+            ],
+            narrative: {
+              success: '你安全护送商队抵达目的地，商队首领付你丰厚报酬。',
+              fail: '途中遭遇盗匪劫掠，你虽脱身，却丢了部分灵石。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'trade',
+        text: '自己经商倒卖灵材',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 20 }],
+        effects: [
+          { type: 'spiritStones', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'skip_trade',
+        text: '不感兴趣，继续赶路',
+        effects: [
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_festival',
+    title: '散修大会',
+    description:
+      '一年一度的散修大会在荒原上召开，数百名散修齐聚一堂。大会上有比武切磋、灵材交易、功法交流。这是散修们难得的盛会。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'realm', min: 'qi_refining_2' },
+    ],
+    choices: [
+      {
+        id: 'compete_festival',
+        text: '参加比武切磋',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'spiritStones', value: 30 },
+              { type: 'stat', key: 'karma', value: 8 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 10 },
+              { type: 'stat', key: 'demonHeart', value: 3 },
+            ],
+            narrative: {
+              success: '你在比武中力压群雄，赢得灵石与散修们的尊敬。',
+              fail: '高手如云，你惜败于半决赛，但收获了宝贵的战斗经验。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'trade_festival',
+        text: '在灵材市场淘宝',
+        effects: [
+          { type: 'spiritStones', value: 12 },
+          { type: 'stat', key: 'luck', value: 4 },
+        ],
+      },
+      {
+        id: 'socialize',
+        text: '与各方散修交流心得',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_refugee',
+    title: '流民求助',
+    description:
+      '一群凡人流民拦住你的去路，他们家园被妖兽摧毁，无处可去。老人抱着孩子跪在你面前：「仙人，求您救救我们。」你作为散修，没有宗门的资源，但你有实力。',
+    weight: 7,
+    years: 1,
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
+    choices: [
+      {
+        id: 'help_refugee',
+        text: '出手相助，清除妖兽',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'cultivation', value: 12 },
+              { type: 'stat', key: 'luck', value: 4 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'karma', value: 8 },
+            ],
+            narrative: {
+              success: '你清除妖兽，流民们感恩戴德。你的善行在民间传为佳话。',
+              fail: '妖兽凶猛，你虽击退它们，自己却受了不轻的伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'guide_refugee',
+        text: '指引他们去安全之地',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'ignore_refugee',
+        text: '自顾不暇，无力相助',
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_medical',
+    title: '悬壶济世',
+    description:
+      '你途经一座小镇，镇上瘟疫横行，百姓苦不堪言。镇上的郎中束手无策，你若懂些丹道皮毛，或许能帮上忙。',
+    weight: 7,
+    years: 1,
+    conditions: [
+      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'alchemyTier', min: 1 },
+    ],
+    choices: [
+      {
+        id: 'heal_town',
+        text: '炼制解毒丹救治百姓',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'alchemyTier', value: 1 },
+          { type: 'spiritStones', value: 15 },
+        ],
+      },
+      {
+        id: 'sell_pills',
+        text: '高价出售丹药',
+        effects: [
+          { type: 'spiritStones', value: 30 },
+          { type: 'stat', key: 'karma', value: -8 },
+        ],
+      },
+      {
+        id: 'leave_town',
+        text: '爱莫能助，继续赶路',
+        effects: [
+          { type: 'stat', key: 'karma', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_ancient_site',
+    title: '荒废宗门',
+    description:
+      '你发现一处荒废已久的宗门遗址，山门倾颓，殿宇残破。但从遗迹的规模来看，这曾是一个大宗门。废墟中或许还藏着未被发现的宝物。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'explore_ruins',
+        text: '深入废墟探索',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你在废墟中发现了一处密室，内藏大量灵石与功法残卷。',
+              fail: '废墟中残留的禁制被触发，你被阵法所伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_ruins',
+        text: '研究宗门遗迹的阵法',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'mark_ruins',
+        text: '标记位置，日后再来',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'wander_lone_wolf',
+    title: '孤狼传说',
+    description:
+      '散修圈中流传着一个传说：在极北冰原上，有一位独行千年的散修前辈，他从未加入任何宗门，却修炼到了元婴境界。有人说他已经坐化，有人说他仍在冰原上游荡。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [
+      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'realm', min: 'golden_core' },
+    ],
+    choices: [
+      {
+        id: 'seek_legend',
+        text: '前往极北冰原寻找',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'comprehension', value: 10 },
+              { type: 'lifespan', value: 10 },
+              { type: 'flag', key: 'met_lone_legend', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '你在冰原深处找到了那位传说中的散修。他传你毕生所学，然后化作冰晶消散。',
+              fail: '冰原凶险异常，你未能找到传说中的散修，却在苦寒中磨炼了意志。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'dismiss_legend',
+        text: '不过是传说罢了',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+    ],
+  },
 ]
