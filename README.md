@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# 修仙模拟器
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 一款文字修仙 Roguelike 游戏，每一次抉择皆关机缘。
 
-Currently, two official plugins are available:
+**在线体验** → https://katrina55553.github.io/Cult-Game/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 简介
 
-## React Compiler
+你是一名初入仙途的修士，从拜入宗门开始，经历修炼、奇遇、渡劫、抉择，最终走向属于你的结局。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **69 个事件** — 主线剧情、情缘支线、修炼体系、随机奇遇
+- **16 种结局** — 飞升成仙、堕魔陨落、神仙眷侣、凡人善终……
+- **42 个成就** — 包含隐藏成就等待发掘
+- **10 种出身** — 每种出身带来不同的起始加成
+- **每日天命** — 每日固定种子，与天下修士同台较量
 
-## Expanding the ESLint configuration
+## 技术栈
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 + TypeScript 6
+- Vite 8
+- Tailwind CSS 4
+- Web Audio API（音效，无外部音频文件）
+- localStorage 持久化存档
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 本地开发
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev       # 启动开发服务器
+npm run build     # 类型检查 + 生产构建
+npm run lint      # ESLint 检查
+npm run preview   # 预览生产构建
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 项目结构
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  engine/       游戏引擎（纯逻辑，无 UI 依赖）
+  data/         静态数据（事件、结局、物品、灵根）
+  components/   React 组件
+  hooks/        状态管理（useGame）
+  types/        TypeScript 类型定义
+  audio/        Web Audio 合成音效
+  styles/       Tailwind 样式
+scripts/        自动化测试脚本
+```
+
+## 部署
+
+推送到 `main` 分支自动部署到 GitHub Pages。构建时设置 `GITHUB_PAGES=true` 环境变量，Vite 会将 `base` 设为 `/Cult-Game/`。
+
+## License
+
+MIT
