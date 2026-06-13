@@ -180,7 +180,7 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'peer_trap',
     title: '同门暗算',
     description:
-      '一位同门师兄前来相邀，言称共探秘境，言辞恳切。但你察觉其目光游移闪烁，分明暗藏祸心。',
+      '同门师兄赵天行前来相邀，言称共探秘境，言辞恳切。但你察觉其目光游移闪烁，分明暗藏祸心。',
     weight: 10,
     years: 1,
     once: true,
@@ -1607,7 +1607,7 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'sect_friend',
     title: '同门之谊',
     description:
-      '演武场旁，一名同门弟子盘坐树下，满面愁容。攀谈之下，他坦言修炼瓶颈已久，若无法突破便要被遣送下山。你心生恻隐。',
+      '演武场旁，一名同门弟子盘坐树下，满面愁容。攀谈之下，他名叫林远，坦言修炼瓶颈已久，若无法突破便要被遣送下山。你心生恻隐。',
     weight: 12,
     years: 1,
     once: true,
@@ -1619,7 +1619,7 @@ const CORE_EVENTS: GameEvent[] = [
         effects: [
           { type: 'stat', key: 'karma', value: 10 },
           { type: 'stat', key: 'comprehension', value: 3 },
-          { type: 'flag', key: 'helped_sect_friend', value: true },
+          { type: 'flag', key: 'helped_lin_yuan', value: true },
         ],
       },
       {

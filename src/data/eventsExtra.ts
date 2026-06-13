@@ -3885,4 +3885,354 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'lin_yuan_breakthrough',
+    title: '林远突破',
+    description:
+      '闭关数月后，林远兴冲冲地来找你，眼中满是感激。他终于突破了瓶颈，修为更上一层楼。「若非当日你倾囊相授，我早已被遣送下山。这份恩情，林远铭记于心。」',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'helped_lin_yuan', value: true },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'encourage',
+        text: '勉励他继续努力',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+          { type: 'flag', key: 'lin_yuan_ally', value: true },
+        ],
+      },
+      {
+        id: 'spar_lin',
+        text: '提议切磋一番',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'lin_yuan_ally', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'lin_yuan_rescue',
+    title: '林远报恩',
+    description:
+      '你被苍穹阁弟子围攻之际，林远挺身而出挡在你身前。「今日我林远在此，谁敢动我师兄！」他修为虽不如你，却以命相搏，硬生生撑到援军赶到。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'lin_yuan_ally', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'grateful',
+        text: '感激林远的义气',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'lin_yuan_brother', value: true },
+        ],
+      },
+      {
+        id: 'train_lin',
+        text: '传授他更强的功法',
+        effects: [
+          { type: 'cultivation', value: 12 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'flag', key: 'lin_yuan_brother', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'su_muyan_teach',
+    title: '师姐指教',
+    description:
+      '天玄宗藏经阁中，你偶遇师姐苏暮烟。她身着素白长裙，气质清冷出尘，正翻阅一卷古籍。见你入门，她微微颔首：「你便是新来的师弟？根骨尚可，若有不解之处，可来问我。」',
+    weight: 12,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'learn_su',
+        text: '恭敬请教修炼疑难',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'flag', key: 'met_su_muyan', value: true },
+        ],
+      },
+      {
+        id: 'observe_su',
+        text: '远远观摩，不打扰',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'met_su_muyan', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'su_muyan_crisis',
+    title: '师姐之危',
+    description:
+      '苏暮烟在秘境中遭遇妖兽围困，传音符急促响起。你循声赶至，只见她孤身奋战，衣衫染血，却仍神色从容。见你到来，她淡然道：「你来了。」',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'met_su_muyan', value: true },
+      { type: 'realm', min: 'qi_refining_2' },
+    ],
+    choices: [
+      {
+        id: 'rescue_su',
+        text: '冲入重围救她',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'flag', key: 'su_muyan_ally', value: true },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'karma', value: 10 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'flag', key: 'su_muyan_ally', value: true },
+            ],
+            narrative: {
+              success: '你以凌厉剑法击退妖兽，苏暮烟微微一笑：「师弟，多谢。」',
+              fail: '你拼死救出苏暮烟，自己却身受重伤。她默默替你疗伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'plan_su',
+        text: '布阵引妖兽入瓮',
+        requirements: [{ type: 'formationTier', min: 1 }],
+        effects: [
+          { type: 'flag', key: 'su_muyan_ally', value: true },
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+      {
+        id: 'retreat_su',
+        text: '寡不敌众，先撤再说',
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'su_muyan_past',
+    title: '师姐往事',
+    description:
+      '月下，苏暮烟罕见地放下冷淡面具，与你倾诉往事。她原是世家千金，家族覆灭后被天玄宗收留。「修仙之路，我已无退路。」她望向明月，眼中似有泪光。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'su_muyan_ally', value: true }],
+    choices: [
+      {
+        id: 'comfort_su',
+        text: '静静陪伴，不发一言',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'flag', key: 'su_muyan_close', value: true },
+        ],
+      },
+      {
+        id: 'promise_su',
+        text: '许诺助她复仇',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'flag', key: 'su_muyan_close', value: true },
+          { type: 'flag', key: 'promise_su_vengeance', value: true },
+        ],
+      },
+      {
+        id: 'leave_su',
+        text: '不涉私事，告辞离去',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'zhao_tianxing_revenge',
+    title: '赵天行报复',
+    description:
+      '赵天行被你揭发后怀恨在心，暗中散布谣言说你偷学禁术。长老召你前去询问，你必须自证清白。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'qi_refining_2' },
+    ],
+    choices: [
+      {
+        id: 'prove_innocent',
+        text: '以实力证明清白',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 10 },
+              { type: 'spiritStones', value: 20 },
+              { type: 'flag', key: 'cleared_name', value: true },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'cultivation', value: -5 },
+            ],
+            narrative: {
+              success: '你以纯正功法证明清白，赵天行反被长老训斥。',
+              fail: '长老半信半疑，你虽未受重罚，名声却受损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'confront_zhao',
+        text: '当面质问赵天行',
+        effects: [
+          { type: 'flag', key: 'zhao_enemy', value: true },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'ignore_zhao',
+        text: '清者自清，不予理会',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'zhao_tianxing_duel',
+    title: '赵天行约战',
+    description:
+      '赵天行在演武场当众向你下战书。「你我之间的恩怨，今日当众了结。」围观弟子议论纷纷，此战关乎你在宗门中的颜面。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'zhao_enemy', value: true },
+      { type: 'realm', min: 'qi_refining_2' },
+    ],
+    choices: [
+      {
+        id: 'accept_duel',
+        text: '应战，正面击败他',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'karma', value: 10 },
+              { type: 'flag', key: 'beat_zhao', value: true },
+              { type: 'spiritStones', value: 15 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以精妙功法击败赵天行，围观弟子纷纷喝彩。',
+              fail: '赵天行暗藏杀招，你惜败当场，心中不甘。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'decline_duel',
+        text: '不与他一般见识',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'karma', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'zhao_tianxing_redemption',
+    title: '赵天行悔过',
+    description:
+      '数年后，赵天行独自找到你，神色复杂。「当年是我心胸狭隘，嫉贤妒能。今日特来赔罪。」他递上一壶灵酒，眼中似有悔意。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'beat_zhao', value: true }],
+    choices: [
+      {
+        id: 'forgive_zhao',
+        text: '接受赔罪，往事不提',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'flag', key: 'zhao_reconciled', value: true },
+        ],
+      },
+      {
+        id: 'reject_zhao',
+        text: '往事已矣，但信任难复',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'three_friends',
+    title: '三人同游',
+    description:
+      '春日晴好，林远提议与你和苏暮烟一同下山游历。三人行于山间小道，林远活泼话多，苏暮烟安静微笑，你走在中间，忽觉修行路上有此二友，亦是幸事。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'lin_yuan_ally', value: true },
+      { type: 'flag', key: 'su_muyan_ally', value: true },
+    ],
+    choices: [
+      {
+        id: 'enjoy',
+        text: '珍惜当下，尽情游玩',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'lifespan', value: 3 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+      {
+        id: 'train_together',
+        text: '趁机切磋交流功法',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+        ],
+      },
+    ],
+  },
 ]

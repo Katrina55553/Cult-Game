@@ -65,6 +65,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'blood_moon_cultivate', title: '血月修士', description: '在血月之夜修炼' },
   { id: 'celestial_witness', title: '天象见证', description: '目睹九星连珠' },
   { id: 'vein_war_hero', title: '灵脉之争', description: '为宗门争夺灵脉成功' },
+  { id: 'lin_yuan_brother', title: '手足之谊', description: '与林远成为生死之交' },
+  { id: 'su_muyan_close', title: '月下知心', description: '倾听苏暮烟的往事' },
+  { id: 'zhao_reconciled', title: '一笑泯恩仇', description: '与赵天行和解' },
+  { id: 'three_friends', title: '三人同行', description: '与林远、苏暮烟同游' },
   { id: 'all_spirit_beasts', title: '百兽之王', description: '收集全部灵宠', hidden: true },
   { id: 'all_origins', title: '轮回百世', description: '以全部出身各通关一次', hidden: true },
 ]
