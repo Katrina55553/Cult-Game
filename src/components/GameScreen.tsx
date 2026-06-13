@@ -57,7 +57,7 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, o
         </main>
 
         <div className="border border-[var(--color-jade)]/20 bg-[rgba(12,15,13,0.4)] p-4 sm:p-5 rounded-sm flex flex-col min-h-0 lg:max-h-[calc(100vh-10rem)]">
-          <LogPanel logs={player.log} />
+          <LogPanel logs={player.log} playerName={player.name} />
         </div>
       </div>
     </div>
