@@ -2412,4 +2412,253 @@ export const EXTRA_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'mysterious_demon_first',
+    title: '秘境黑影',
+    description:
+      '秘境深处，你察觉一道幽暗气息。循迹而去，只见一名黑袍修士独坐于枯骨遍地的石台上，周身魔气缭绕却异常内敛。他睁开双眼，目光如深渊般幽冷，淡淡扫了你一眼便闭目不语。此人修为深不可测，却孤身一人，既无敌意也无善意。',
+    weight: 7,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    act: 'foundation',
+    choices: [
+      {
+        id: 'greet_demon',
+        text: '拱手施礼，试探攀谈',
+        effects: [
+          { type: 'flag', key: 'met_moli', value: true },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'ignore_demon',
+        text: '不打扰他，自行探索',
+        effects: [
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'challenge_demon',
+        text: '趁其闭关偷袭',
+        outcomes: [
+          {
+            chance: 0.15,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'stat', key: 'demonHeart', value: 15 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            narrative: {
+              success: '你趁其不备出手，黑袍修士重伤遁走，留下一地灵石。但你清楚，此人不会善罢甘休。',
+              fail: '你刚一动杀念，黑袍修士眼都没睁，一道魔气便将你震飞十丈。你仓皇逃窜，不敢回头。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mysterious_demon_second',
+    title: '再遇墨离',
+    description:
+      '古战场遗迹中，你再次遇见那名黑袍修士。这次他正在破解一座上古禁制，手法精妙绝伦。他似乎察觉你的到来，头也不回地说：「又见面了。你若想分一杯羹，便替我挡住禁制反噬。」',
+    weight: 6,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'flag', key: 'met_moli', value: true }],
+    choices: [
+      {
+        id: 'help_moli',
+        text: '替他挡下反噬，结个善缘',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'flag', key: 'moli_ally', value: true },
+              { type: 'spiritStones', value: 35 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'cultivation', value: 10 },
+            ],
+            narrative: {
+              success: '禁制破解，墨离将一半收获分给你。临走前留下一句：「你这人，倒有几分意思。」',
+              fail: '禁制反噬猛烈，你虽挡住大部分冲击，仍被余波所伤。墨离点了点头，算是记下这份情。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'observe_moli',
+        text: '远远旁观，不插手',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'betray_moli',
+        text: '趁他专注禁制，夺其宝物',
+        outcomes: [
+          {
+            chance: 0.2,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 50 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            narrative: {
+              success: '你趁其不备夺走禁制中的宝物。墨离缓缓转身，眼中寒光一闪：「好，很好。」',
+              fail: '墨离早有防备，反手一掌将你击退。他冷冷道：「不自量力。」你重伤遁走。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mysterious_demon_third',
+    title: '墨离之邀',
+    description:
+      '你正在洞府打坐，一道传音符破空而至。墨离的声音传来：「有一处远古魔修洞府，禁制凶险，我一人难以破之。你若有意，三日后秘境入口见。」这是他第一次主动联系你，语气依旧淡漠，却似有几分信任。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'flag', key: 'moli_ally', value: true }],
+    choices: [
+      {
+        id: 'accept_moli',
+        text: '如约前往',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'artifact', id: 'demon_relic', name: '远古魔宝' },
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'flag', key: 'moli_friend', value: true },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'cultivation', value: 12 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你二人联手破开洞府禁制，各得一件远古魔宝。墨离难得露出一丝笑意：「下次有缘再见。」',
+              fail: '洞府禁制远超预料，你二人虽破开外围，却触发了自毁阵法。你重伤脱出，墨离不知所踪。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'decline_moli',
+        text: '婉拒邀约',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+      {
+        id: 'betray_moli_final',
+        text: '设下陷阱伏击墨离',
+        outcomes: [
+          {
+            chance: 0.25,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 60 },
+              { type: 'stat', key: 'demonHeart', value: 20 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -25 },
+              { type: 'stat', key: 'demonHeart', value: 15 },
+              { type: 'flag', key: 'moli_enemy', value: true },
+            ],
+            narrative: {
+              success: '你设下埋伏，趁墨离不备出手。他重伤遁走前留下一句：「我记住了。」',
+              fail: '墨离早已看穿你的意图，反将你引入他布下的魔阵。你拼死才脱身，修为大损。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'moli_revenge',
+    title: '墨离索命',
+    description:
+      '夜色如墨，你忽感一股森然魔气逼近。墨离立于月下，黑袍猎猎作响，手中一柄漆黑长刀泛着幽光。他淡淡开口：「欠我的，今日该还了。」',
+    weight: 4,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'moli_enemy', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'fight_moli',
+        text: '正面迎战',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'flag', key: 'defeated_moli', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+            ],
+            narrative: {
+              success: '你与墨离激战百招，最终以半招之差险胜。他收刀入鞘，冷冷道：「下次未必这般好运。」',
+              fail: '墨离刀法诡异莫测，你数十招便露败象。拼死逃出后，你元气大伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'apologize_moli',
+        text: '诚心赔罪',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 50 }],
+        effects: [
+          { type: 'spiritStones', value: -50 },
+          { type: 'flag', key: 'moli_enemy', value: false },
+          { type: 'flag', key: 'met_moli', value: true },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'flee_moli',
+        text: '施展遁术逃离',
+        effects: [
+          { type: 'stat', key: 'luck', value: -3 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
 ]
