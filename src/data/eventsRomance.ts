@@ -92,6 +92,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
         narrative: '你与沈霜凝对天盟誓，结为道侣。冰莲心法与你的功法相融，修为精进，心魔亦散。',
         effects: [
           { type: 'flag', key: 'has_companion', value: true },
+          { type: 'flag', key: 'su_qing_companion', value: true },
           { type: 'cultivation', value: 38 },
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'stat', key: 'demonHeart', value: -12 },
@@ -132,6 +133,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     cooldown: 4,
     conditions: [
       { type: 'flag', key: 'has_companion', value: true },
+      { type: 'flag', key: 'su_qing_companion', value: true },
       { type: 'flag', key: 'dual_cultivation_mastered', value: false },
       { type: 'realm', min: 'qi_refining_1' },
     ],
