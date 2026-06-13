@@ -149,7 +149,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       {showInventory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setShowInventory(false)}>
           <div
-            className="max-w-sm w-full border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-fade-up"
+            className="max-w-sm w-full border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">

@@ -226,7 +226,8 @@ body::before {
   .animate-float-up,
   .animate-breakthrough,
   .animate-bar-glow,
-  .animate-milestone-enter {
+  .animate-milestone-enter,
+  .animate-slide-up {
     animation: none;
   }
 
@@ -247,6 +248,21 @@ body::before {
   .log-scroll {
     max-height: 30vh;
   }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out both;
 }
 
 .safe-bottom {
