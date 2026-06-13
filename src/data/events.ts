@@ -1,7 +1,13 @@
 import type { GameEvent } from '../types/game'
-import { EXTRA_EVENTS } from './eventsExtra'
 import { ROMANCE_EVENTS } from './eventsRomance'
 import { SYSTEM_EVENTS } from './eventsSystems'
+import { SECT_EVENTS } from './eventsSect'
+import { WANDER_EVENTS } from './eventsWander'
+import { CHARACTER_EVENTS } from './eventsCharacter'
+import { SECRET_EVENTS } from './eventsSecret'
+import { BOSS_EVENTS } from './eventsBoss'
+import { CRAFT_EVENTS } from './eventsCraft'
+import { MISC_EVENTS } from './eventsMisc'
 
 const CORE_EVENTS: GameEvent[] = [
   {
@@ -1746,6 +1752,12 @@ const CORE_EVENTS: GameEvent[] = [
 export const EVENTS: GameEvent[] = [
   ...CORE_EVENTS,
   ...ROMANCE_EVENTS,
-  ...EXTRA_EVENTS,
+  ...SECT_EVENTS,
+  ...WANDER_EVENTS,
+  ...CHARACTER_EVENTS,
+  ...SECRET_EVENTS,
+  ...BOSS_EVENTS,
+  ...CRAFT_EVENTS,
+  ...MISC_EVENTS,
   ...SYSTEM_EVENTS,
 ]
