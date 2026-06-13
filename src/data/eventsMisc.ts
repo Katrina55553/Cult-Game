@@ -2094,4 +2094,356 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'explore_spirit_mountain',
+    title: '灵山福地',
+    description:
+      '你来到一处灵气充沛的仙山，山中草木皆有灵性，灵花异草随处可见。山腰处有一片灵田，几名散修正在采集灵草。山顶云雾缭绕，隐约可见一座古亭。',
+    weight: 8,
+    years: 1,
+    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
+    choices: [
+      {
+        id: 'gather_herbs',
+        text: '采集灵草',
+        effects: [
+          { type: 'spiritStones', value: 15 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'climb_peak',
+        text: '攀登山顶古亭',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 5 },
+            ],
+            narrative: {
+              success: '山顶古亭中灵气浓郁，你在此打坐半日，修为有所进益。',
+              fail: '山路崎岖，你未能登顶，但在半山腰也有所收获。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'rest_mountain',
+        text: '在山中静修一日',
+        effects: [
+          { type: 'cultivation', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_demon_mountain',
+    title: '万魔山',
+    description:
+      '万魔山魔气弥漫，山中魔修与妖兽盘踞。你小心翼翼地潜入，发现一处被魔气侵蚀的洞穴，洞内似有宝物闪烁。但洞口有一头魔化妖兽把守。',
+    weight: 7,
+    years: 2,
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'fight_demon_beast',
+        text: '斩杀魔化妖兽',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 25 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+              { type: 'cultivation', value: 12 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你斩杀魔化妖兽，洞中宝物尽归你所有。',
+              fail: '妖兽凶猛，你被魔气侵蚀，心魔暗生。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'sneak_demon',
+        text: '绕过妖兽潜入',
+        requirements: [{ type: 'stat', key: 'luck', min: 40 }],
+        effects: [
+          { type: 'spiritStones', value: 18 },
+          { type: 'stat', key: 'comprehension', value: 3 },
+        ],
+      },
+      {
+        id: 'leave_demon',
+        text: '此地凶险，速速离去',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_ancient_tomb',
+    title: '古修墓穴',
+    description:
+      '你发现一座上古修士的陵墓，墓门上刻着复杂的禁制符文。墓内机关重重，但若能破解，必有丰厚收获。入口处散落着前人留下的破阵工具。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'enter_tomb',
+        text: '破解禁制进入墓穴',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'formationTier', value: 1 },
+              { type: 'artifact', id: 'tomb_relic', name: '古修遗宝' },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你破解禁制进入墓穴深处，获得古修遗宝与大量灵石。',
+              fail: '禁制反噬，你被古阵所伤，仓皇退出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_tomb',
+        text: '研究墓门符文',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'leave_tomb',
+        text: '此地不详，不碰为妙',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_thunder_valley',
+    title: '雷泽秘境',
+    description:
+      '你踏入雷泽秘境，天空电闪雷鸣，地面处处焦痕。此地雷霆之力浓郁，是淬炼肉身的绝佳之地，但稍有不慎便会被雷电击中。',
+    weight: 6,
+    years: 2,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'train_thunder',
+        text: '引雷入体淬炼',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'rootBone', value: 6 },
+              { type: 'cultivation', value: 18 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你引雷入体，经脉被雷霆淬炼，根骨大进。',
+              fail: '雷霆之力过于狂暴，你被电得外焦里嫩，元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'gather_thunder',
+        text: '采集雷纹草',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'observe_thunder',
+        text: '远观雷霆领悟天道',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_ice_land',
+    title: '极北冰原',
+    description:
+      '万里冰封的极北之地，寒风刺骨。你艰难跋涉，发现一处冰洞，洞内似有微弱的灵光闪烁。传说此地曾有上古冰凤栖息。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'golden_core' }],
+    choices: [
+      {
+        id: 'enter_ice_cave',
+        text: '进入冰洞探索',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'spiritStones', value: 35 },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'lifespan', value: 8 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '冰洞深处藏有上古冰凤遗留的灵光，你吸收后寿元延长。',
+              fail: '冰洞深处寒气逼人，你被冻伤数处经脉。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'meditate_ice',
+        text: '在冰原上打坐修炼',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -8 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'leave_ice',
+        text: '此地过于凶险，离去',
+        effects: [
+          { type: 'stat', key: 'luck', value: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_star_ruins',
+    title: '星辰遗迹',
+    description:
+      '你来到一处陨石撞击形成的巨坑，坑底残留着浓郁的星辰之力。坑壁上刻满了上古符文，中央悬浮着一块散发星光的陨铁。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'golden_core' }],
+    choices: [
+      {
+        id: 'take_star_iron',
+        text: '取走星辰陨铁',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'artifact', id: 'star_iron', name: '星辰陨铁' },
+              { type: 'divineWeaponTier', value: 1 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你取走星辰陨铁，此物蕴含星辰之力，是炼器至宝。',
+              fail: '星辰之力反噬，你被震飞出坑。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_star',
+        text: '参悟坑壁符文',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+        ],
+      },
+      {
+        id: 'absorb_star',
+        text: '吸收星辰之力',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 60 }],
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 6 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'explore_void_rift',
+    title: '虚空裂缝',
+    description:
+      '你发现一处空间不稳定之处，裂缝中透出异界的光芒。裂缝另一侧似有宝物闪烁，但空间随时可能崩塌。',
+    weight: 3,
+    years: 3,
+    once: true,
+    rarity: 'legendary',
+    conditions: [{ type: 'realm', min: 'nascent_soul' }],
+    choices: [
+      {
+        id: 'enter_void',
+        text: '踏入虚空裂缝',
+        outcomes: [
+          {
+            chance: 0.3,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'artifact', id: 'void_artifact', name: '异界法宝' },
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'comprehension', value: 10 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你穿越虚空裂缝，在异界获得一件强大法宝后安全返回。',
+              fail: '虚空裂缝崩塌，你被空间之力撕裂，重伤逃出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_void',
+        text: '研究空间裂缝的规律',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'formationTier', value: 1 },
+        ],
+      },
+      {
+        id: 'seal_void',
+        text: '封印裂缝，防止危险',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'formationTier', value: 1 },
+        ],
+      },
+    ],
+  },
 ]
