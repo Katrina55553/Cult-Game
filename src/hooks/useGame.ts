@@ -15,7 +15,6 @@ import type { GameSession, Milestone, NewGameOptions, OriginId } from '../types/
 
 export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
-  const [currentSlot, setCurrentSlot] = useState<number>(0)
   const [soundOn, setSoundOn] = useState(true)
   const [bgmOn, setBgmOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
@@ -28,9 +27,9 @@ export function useGame() {
 
   useEffect(() => {
     if (session && session.phase !== 'start') {
-      saveGame(session, currentSlot)
+      saveGame(session)
     }
-  }, [session, currentSlot])
+  }, [session])
 
   useEffect(() => {
     setMuted(!soundOn)
@@ -59,31 +58,14 @@ export function useGame() {
   }, [])
 
   const startGame = useCallback(
-    (options: NewGameOptions & { slot?: number }) => {
-      const slot = options.slot ?? 0
+    (options: NewGameOptions) => {
       if (soundOnRef.current) playSound('start')
-      setCurrentSlot(slot)
       setSession(createNewGame(options))
       setMilestone(null)
       setAchievementToast([])
     },
     [],
   )
-
-  const loadSlot = useCallback((slot: number) => {
-    const s = loadGame(slot)
-    if (s) {
-      setCurrentSlot(slot)
-      setSession(s)
-      setMilestone(null)
-      setAchievementToast([])
-    }
-  }, [])
-
-  const deleteSlot = useCallback((slot: number) => {
-    clearSave(slot)
-    if (soundOnRef.current) playSound('click')
-  }, [])
 
   const confirmRoot = useCallback(() => {
     setSession((prev) => {
@@ -135,7 +117,7 @@ export function useGame() {
             playSound('sword')
           } else if (lastLog.includes('丹') || lastLog.includes('炼')) {
             playSound('alchemy')
-          } else if (lastLog.includes('灵石') || lastLog.includes('灵石')) {
+          } else if (lastLog.includes('灵石')) {
             playSound('coin')
           } else if (lastLog.includes('寿元') || lastLog.includes('延寿')) {
             playSound('heal')
@@ -207,12 +189,12 @@ export function useGame() {
   const dismissAchievements = useCallback(() => setAchievementToast([]), [])
 
   const restart = useCallback(() => {
-    clearSave(currentSlot)
+    clearSave()
     setSession(null)
     setMilestone(null)
     setAchievementToast([])
     if (soundOnRef.current) playSound('click')
-  }, [currentSlot])
+  }, [])
 
   const toggleSound = useCallback(() => {
     if (soundOnRef.current) playSound('click')
@@ -229,10 +211,7 @@ export function useGame() {
     bgmOn,
     milestone,
     achievementToast,
-    currentSlot,
     startGame,
-    loadSlot,
-    deleteSlot,
     confirmRoot,
     choose,
     buyItem,
@@ -250,5 +229,4 @@ export type StartGameParams = {
   dailyMode: boolean
   useInnateBody: boolean
   origin: OriginId
-  slot?: number
 }

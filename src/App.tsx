@@ -5,7 +5,7 @@ import { MilestoneToast } from './components/MilestoneToast'
 import { RootRevealScreen } from './components/RootRevealScreen'
 import { ShopScreen } from './components/ShopScreen'
 import { StartScreen } from './components/StartScreen'
-import { useGame, type StartGameParams } from './hooks/useGame'
+import { useGame } from './hooks/useGame'
 
 export default function App() {
   const {
@@ -15,8 +15,6 @@ export default function App() {
     milestone,
     achievementToast,
     startGame,
-    loadSlot,
-    deleteSlot,
     confirmRoot,
     choose,
     buyItem,
@@ -28,22 +26,10 @@ export default function App() {
     dismissAchievements,
   } = useGame()
 
-  const handleStart = (params: StartGameParams) => {
-    startGame({
-      name: params.name,
-      dailyMode: params.dailyMode,
-      useInnateBody: params.useInnateBody,
-      origin: params.origin,
-      slot: params.slot,
-    })
-  }
-
   if (!session) {
     return (
       <StartScreen
-        onStart={handleStart}
-        onLoadSlot={loadSlot}
-        onDeleteSlot={deleteSlot}
+        onStart={startGame}
         soundOn={soundOn}
         onToggleSound={toggleSound}
       />

@@ -1,48 +1,31 @@
 import { useMemo, useState } from 'react'
 import { resumeAudio } from '../audio/sounds'
 import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
-import { listSaveSlots } from '../engine/gameEngine'
 import type { OriginId } from '../types/game'
 import type { StartGameParams } from '../hooks/useGame'
 import { CodexScreen } from './CodexScreen'
 import { OriginPicker } from './OriginPicker'
-import { SaveSlotPicker } from './SaveSlotPicker'
 
 interface Props {
   onStart: (params: StartGameParams) => void
-  onLoadSlot?: (slot: number) => void
-  onDeleteSlot?: (slot: number) => void
   soundOn: boolean
   onToggleSound: () => void
 }
 
-export function StartScreen({ onStart, onLoadSlot, onDeleteSlot, soundOn, onToggleSound }: Props) {
+export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
   const [name, setName] = useState('')
   const [dailyMode, setDailyMode] = useState(false)
   const [useInnateBody, setUseInnateBody] = useState(false)
   const [origin, setOrigin] = useState<OriginId>(null)
   const [showCodex, setShowCodex] = useState(false)
-  const [selectedSlot, setSelectedSlot] = useState<number | null>(null)
-  const [showNewGame, setShowNewGame] = useState(false)
 
   const meta = useMemo(() => loadMeta(), [])
   const { unlocked, total } = getEndingCodexProgress(meta)
-  const saveSlots = useMemo(() => listSaveSlots(), [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     resumeAudio()
-    onStart({ name, dailyMode, useInnateBody, origin, slot: selectedSlot ?? 0 })
-  }
-
-  const handleNewGameSlot = (slot: number) => {
-    setSelectedSlot(slot)
-    setShowNewGame(true)
-  }
-
-  const handleLoadSlot = (slot: number) => {
-    resumeAudio()
-    onLoadSlot?.(slot)
+    onStart({ name, dailyMode, useInnateBody, origin })
   }
 
   return (
@@ -121,102 +104,74 @@ export function StartScreen({ onStart, onLoadSlot, onDeleteSlot, soundOn, onTogg
         )}
       </div>
 
-      {/* 存档选择 / 新游戏表单 */}
-      {!showNewGame ? (
-        <div className="w-full max-w-sm animate-fade-up relative z-10" style={{ animationDelay: '0.15s' }}>
-          <SaveSlotPicker
-            slots={saveSlots}
-            onSelect={handleLoadSlot}
-            onDelete={(slot) => onDeleteSlot?.(slot)}
-            onNewGame={handleNewGameSlot}
-          />
-          {saveSlots.length === 0 && (
-            <p className="text-xs text-[var(--color-mist)] text-center mt-4">
-              首次游玩？选择空存档槽开始
-            </p>
-          )}
-        </div>
-      ) : (
-        <form
-          autoComplete="off"
-          onSubmit={handleSubmit}
-          className="w-full max-w-sm space-y-5 animate-fade-up relative z-10"
-          style={{ animationDelay: '0.15s' }}
-        >
-          <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.5)] p-5 rounded-sm space-y-4">
-            <div>
-              <label htmlFor="dao-hao" className="block text-sm text-[var(--color-mist)] mb-2 tracking-wider">
-                道号
-              </label>
+      {/* 表单区域 */}
+      <form
+        autoComplete="off"
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm space-y-5 animate-fade-up relative z-10"
+        style={{ animationDelay: '0.15s' }}
+      >
+        <div className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.5)] p-5 rounded-sm space-y-4">
+          <div>
+            <label htmlFor="dao-hao" className="block text-sm text-[var(--color-mist)] mb-2 tracking-wider">
+              道号
+            </label>
+            <input
+              id="dao-hao"
+              name="dao-hao"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="请输入你的名字"
+              maxLength={12}
+              autoComplete="off"
+              className="w-full px-4 py-3 bg-[#0a0d0c] border border-[var(--color-jade)]/40 rounded-sm
+                text-[var(--color-parchment)] text-base
+                focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)]/30
+                placeholder:text-[var(--color-mist)]/50 transition-colors"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-[var(--color-mist)] mb-2 tracking-wider">出身</label>
+            <OriginPicker value={origin} onChange={setOrigin} />
+          </div>
+
+          <div className="space-y-2.5 pt-1">
+            <label className="flex items-center gap-3 text-sm text-[var(--color-parchment-dim)] cursor-pointer group">
               <input
-                id="dao-hao"
-                name="dao-hao"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="请输入你的名字"
-                maxLength={12}
-                autoComplete="off"
-                className="w-full px-4 py-3 bg-[#0a0d0c] border border-[var(--color-jade)]/40 rounded-sm
-                  text-[var(--color-parchment)] text-base
-                  focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)]/30
-                  placeholder:text-[var(--color-mist)]/50 transition-colors"
+                type="checkbox"
+                checked={dailyMode}
+                onChange={(e) => setDailyMode(e.target.checked)}
+                className="group-hover:border-[var(--color-gold)]/50 transition-colors"
               />
-            </div>
+              <span>今日天命 <span className="text-[var(--color-mist)] text-xs">每日固定机缘种子</span></span>
+            </label>
 
-            <div>
-              <label className="block text-sm text-[var(--color-mist)] mb-2 tracking-wider">出身</label>
-              <OriginPicker value={origin} onChange={setOrigin} />
-            </div>
-
-            <div className="space-y-2.5 pt-1">
-              <label className="flex items-center gap-3 text-sm text-[var(--color-parchment-dim)] cursor-pointer group">
+            {meta.innateBodyUnlocked && (
+              <label className="flex items-center gap-3 text-sm text-[var(--color-gold-dim)] cursor-pointer group">
                 <input
                   type="checkbox"
-                  checked={dailyMode}
-                  onChange={(e) => setDailyMode(e.target.checked)}
+                  checked={useInnateBody}
+                  onChange={(e) => setUseInnateBody(e.target.checked)}
                   className="group-hover:border-[var(--color-gold)]/50 transition-colors"
                 />
-                <span>今日天命 <span className="text-[var(--color-mist)] text-xs">每日固定机缘种子</span></span>
+                <span>先天道体 <span className="text-[var(--color-mist)] text-xs">根骨悟性略增</span></span>
               </label>
-
-              {meta.innateBodyUnlocked && (
-                <label className="flex items-center gap-3 text-sm text-[var(--color-gold-dim)] cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    checked={useInnateBody}
-                    onChange={(e) => setUseInnateBody(e.target.checked)}
-                    className="group-hover:border-[var(--color-gold)]/50 transition-colors"
-                  />
-                  <span>先天道体 <span className="text-[var(--color-mist)] text-xs">根骨悟性略增</span></span>
-                </label>
-              )}
-            </div>
+            )}
           </div>
+        </div>
 
-          <div className="space-y-3">
-            <button
-              type="submit"
-              className="w-full py-3.5 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
-                text-[var(--color-parchment)] font-semibold tracking-[0.3em] rounded-sm
-                transition-all cursor-pointer border border-[var(--color-cinnabar-glow)]/50
-                hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
-            >
-              踏入仙途
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setShowNewGame(false)
-                setSelectedSlot(null)
-              }}
-              className="w-full py-2.5 text-sm text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer transition-colors"
-            >
-              返回存档选择
-            </button>
-          </div>
-        </form>
-      )}
+        <button
+          type="submit"
+          className="w-full py-3.5 min-h-[44px] bg-[var(--color-cinnabar)] hover:bg-[var(--color-cinnabar-glow)]
+            text-[var(--color-parchment)] font-semibold tracking-[0.3em] rounded-sm
+            transition-all cursor-pointer border border-[var(--color-cinnabar-glow)]/50
+            hover:shadow-[0_0_20px_rgba(184,58,42,0.2)] active:scale-[0.98]"
+        >
+          踏入仙途
+        </button>
+      </form>
 
       {showCodex && <CodexScreen onClose={() => setShowCodex(false)} />}
     </div>

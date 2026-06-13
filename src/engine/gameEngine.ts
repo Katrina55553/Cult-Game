@@ -435,38 +435,19 @@ export function getRealmName(realm: PlayerState['realm']): string {
   return REALMS[realm].name
 }
 
-const SAVE_KEY_PREFIX = 'cultgame_save_'
-const SAVE_SLOT_COUNT = 3
+const SAVE_KEY = 'cultgame_save'
 
-export interface SaveSlotInfo {
-  id: number
-  player: { name: string; realm: string; age: number; spiritRoot: string }
-  phase: string
-  turn: number
-  timestamp: number
-}
-
-export function saveGame(session: GameSession, slot = 0): void {
+export function saveGame(session: GameSession): void {
   try {
-    const data = { ...session, _savedAt: Date.now() }
-    localStorage.setItem(SAVE_KEY_PREFIX + slot, JSON.stringify(data))
+    localStorage.setItem(SAVE_KEY, JSON.stringify(session))
   } catch {
     // ignore
   }
 }
 
-export function loadGame(slot?: number): GameSession | null {
-  if (slot !== undefined) return loadGameFromSlot(slot)
-  for (let i = 0; i < SAVE_SLOT_COUNT; i++) {
-    const s = loadGameFromSlot(i)
-    if (s) return s
-  }
-  return null
-}
-
-function loadGameFromSlot(slot: number): GameSession | null {
+export function loadGame(): GameSession | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY_PREFIX + slot)
+    const raw = localStorage.getItem(SAVE_KEY)
     if (!raw) return null
     const session = JSON.parse(raw) as GameSession
     if (!session.player || !session.phase) return null
@@ -496,44 +477,6 @@ function loadGameFromSlot(slot: number): GameSession | null {
   }
 }
 
-export function listSaveSlots(): SaveSlotInfo[] {
-  const slots: SaveSlotInfo[] = []
-  for (let i = 0; i < SAVE_SLOT_COUNT; i++) {
-    try {
-      const raw = localStorage.getItem(SAVE_KEY_PREFIX + i)
-      if (!raw) continue
-      const session = JSON.parse(raw) as GameSession & { _savedAt?: number }
-      if (!session.player || !session.phase) continue
-      slots.push({
-        id: i,
-        player: {
-          name: session.player.name,
-          realm: getRealmName(session.player.realm),
-          age: session.player.age,
-          spiritRoot: session.player.spiritRoot,
-        },
-        phase: session.phase,
-        turn: session.turn,
-        timestamp: session._savedAt ?? 0,
-      })
-    } catch {
-      // skip corrupt slot
-    }
-  }
-  return slots
-}
-
-export function clearSave(slot = 0): void {
-  localStorage.removeItem(SAVE_KEY_PREFIX + slot)
-}
-
-export function deleteSaveSlot(slot: number): void {
-  localStorage.removeItem(SAVE_KEY_PREFIX + slot)
-}
-
-export function hasAnySave(): boolean {
-  for (let i = 0; i < SAVE_SLOT_COUNT; i++) {
-    if (localStorage.getItem(SAVE_KEY_PREFIX + i)) return true
-  }
-  return false
+export function clearSave(): void {
+  localStorage.removeItem(SAVE_KEY)
 }
