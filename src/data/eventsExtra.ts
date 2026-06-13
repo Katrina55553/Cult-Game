@@ -1692,7 +1692,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'secret_realm_treasure',
     title: '秘境夺宝',
     description:
-      '上古秘境开启，你深入其中，发现一座被禁制封印的石殿。殿内宝光冲天，似有重宝。然而你不远处，玄天宗的天骄弟子也盯上了此处，双方剑拔弩张。',
+      '上古秘境开启，你深入其中，发现一座被禁制封印的石殿。殿内宝光冲天，似有重宝。然而你不远处，苍穹阁的天骄弟子也盯上了此处，双方剑拔弩张。',
     weight: 8,
     years: 2,
     once: true,
@@ -1708,17 +1708,17 @@ export const EXTRA_EVENTS: GameEvent[] = [
             successEffects: [
               { type: 'spiritStones', value: 50 },
               { type: 'artifact', id: 'realm_treasure', name: '秘境灵宝' },
-              { type: 'flag', key: 'rival_xuantian', value: true },
+              { type: 'flag', key: 'rival_cangqiong', value: true },
               { type: 'cultivation', value: 15 },
             ],
             failEffects: [
               { type: 'lifespan', value: -12 },
               { type: 'stat', key: 'demonHeart', value: 10 },
-              { type: 'flag', key: 'rival_xuantian', value: true },
+              { type: 'flag', key: 'rival_cangqiong', value: true },
             ],
             narrative: {
-              success: '你以迅雷之势夺下灵宝，玄天宗天骄怒目而视，立誓日后必报此仇。',
-              fail: '玄天宗天骄早有防备，一掌将你震退，灵宝落入他手。你含恨而退。',
+              success: '你以迅雷之势夺下灵宝，苍穹阁天骄怒目而视，立誓日后必报此仇。',
+              fail: '苍穹阁天骄早有防备，一掌将你震退，灵宝落入他手。你含恨而退。',
             },
           },
         ],
@@ -1746,7 +1746,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'rival_provocation',
     title: '天骄挑衅',
     description:
-      '宗门论道大会上，玄天宗一名天骄弟子当众出言不逊，嘲讽天玄宗弟子不过尔尔。他目光挑衅地看着你，周围各宗弟子纷纷注目。此乃宗门颜面之争。',
+      '宗门论道大会上，苍穹阁一名天骄弟子当众出言不逊，嘲讽天玄宗弟子不过尔尔。他目光挑衅地看着你，周围各宗弟子纷纷注目。此乃宗门颜面之争。',
     weight: 10,
     years: 1,
     once: true,
@@ -1774,8 +1774,8 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'lost_to_rival', value: true },
             ],
             narrative: {
-              success: '你以凌厉手段击败玄天宗天骄，天玄宗弟子欢呼雷动，你名震各宗。',
-              fail: '玄天宗天骄技高一筹，你惜败当场。虽败犹荣，却心有不甘。',
+              success: '你以凌厉手段击败苍穹阁天骄，天玄宗弟子欢呼雷动，你名震各宗。',
+              fail: '苍穹阁天骄技高一筹，你惜败当场。虽败犹荣，却心有不甘。',
             },
           },
         ],
@@ -1793,7 +1793,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
         id: 'scheme',
         text: '暗中记下，伺机报复',
         effects: [
-          { type: 'flag', key: 'rival_xuantian', value: true },
+          { type: 'flag', key: 'rival_cangqiong', value: true },
           { type: 'stat', key: 'demonHeart', value: 5 },
           { type: 'cultivation', value: 5 },
         ],
@@ -1804,7 +1804,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'sect_battlefield',
     title: '宗门争锋',
     description:
-      '天玄宗与玄天宗因灵脉归属争执不下，最终以弟子比斗定胜负。你作为天玄宗代表之一出战，对面是玄天宗精心培养的天骄。两宗弟子列阵观战，此战关乎宗门颜面与灵脉归属。',
+      '天玄宗与苍穹阁因灵脉归属争执不下，最终以弟子比斗定胜负。你作为天玄宗代表之一出战，对面是苍穹阁精心培养的天骄。两宗弟子列阵观战，此战关乎宗门颜面与灵脉归属。',
     weight: 6,
     years: 2,
     once: true,
@@ -1860,7 +1860,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'ancient_ruins_deep',
     title: '遗迹深处',
     description:
-      '大能遗迹深处，你发现一座悬浮的玉台，上面放着一枚散发古朴气息的储物戒指。然而另一名修士也从侧门闯入，他身着玄天宗服饰，修为与你不相上下。二人对视，空气凝固。',
+      '大能遗迹深处，你发现一座悬浮的玉台，上面放着一枚散发古朴气息的储物戒指。然而另一名修士也从侧门闯入，他身着苍穹阁服饰，修为与你不相上下。二人对视，空气凝固。',
     weight: 7,
     years: 2,
     once: true,
@@ -1885,7 +1885,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'flag', key: 'deep_rival', value: true },
             ],
             narrative: {
-              success: '你抢先一步夺下储物戒，内藏大量灵石与一件古宝。玄天宗修士恨恨离去。',
+              success: '你抢先一步夺下储物戒，内藏大量灵石与一件古宝。苍穹阁修士恨恨离去。',
               fail: '对方早有防备，一道剑气划伤你手臂，储物戒被他夺走。',
             },
           },
@@ -1914,7 +1914,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
     id: 'rival_ambush',
     title: '仇家伏击',
     description:
-      '你独自赶路时，前方道路突然被阵法封锁。数名玄天宗弟子从暗处现身，为首者正是曾败于你手的天骄。他冷笑一声：「今日，便是你的死期。」',
+      '你独自赶路时，前方道路突然被阵法封锁。数名苍穹阁弟子从暗处现身，为首者正是曾败于你手的天骄。他冷笑一声：「今日，便是你的死期。」',
     weight: 5,
     years: 2,
     once: true,
@@ -1941,7 +1941,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 15 },
             ],
             narrative: {
-              success: '你以一己之力击退数名玄天宗弟子，天骄也被你重伤遁走。你的威名更盛。',
+              success: '你以一己之力击退数名苍穹阁弟子，天骄也被你重伤遁走。你的威名更盛。',
               fail: '寡不敌众，你身受重伤，拼死突围而出，元气大损。',
             },
           },
@@ -1963,7 +1963,7 @@ export const EXTRA_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 5 },
             ],
             narrative: {
-              success: '你施展遁术瞬间消失，玄天宗弟子扑了个空。',
+              success: '你施展遁术瞬间消失，苍穹阁弟子扑了个空。',
               fail: '阵法封锁了遁术，你被迫硬接一掌才脱身。',
             },
           },
