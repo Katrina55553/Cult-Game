@@ -450,4 +450,94 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'spy_companion',
+    title: '道侣真相',
+    description:
+      '你无意中发现道侣的传音符，内容令你震惊——她竟是苍穹阁安插在你身边的暗桩，从相遇那一刻起就在监视你。但多年的相处中，她已对你动了真情，上次天劫更是拼死替你挡下一道劫雷。你握着传音符，手在发抖。',
+    weight: 4,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'su_qing_companion', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'forgive_spy',
+        text: '往事不究，她已是你的道侣',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'flag', key: 'forgave_spy', value: true },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'exile_spy',
+        text: '恩断义绝，让她离去',
+        effects: [
+          { type: 'flag', key: 'has_companion', value: false },
+          { type: 'flag', key: 'su_qing_companion', value: false },
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'use_spy',
+        text: '利用她的身份反间苍穹阁',
+        requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
+        effects: [
+          { type: 'flag', key: 'turned_spy', value: true },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'time_window',
+    title: '百年一遇',
+    description:
+      '百年一遇的灵脉秘境即将开启，机缘难得。但恰在此时，道侣的渡劫期也到了。若你去秘境，她可能渡劫失败身死道消；若你陪她，便错过这百年一遇的机缘。鱼与熊掌，不可兼得。',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'has_companion', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'go_realm',
+        text: '去秘境，机缘不可失',
+        effects: [
+          { type: 'cultivation', value: 25 },
+          { type: 'spiritStones', value: 40 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'flag', key: 'abandoned_companion', value: true },
+        ],
+      },
+      {
+        id: 'stay_companion',
+        text: '陪道侣渡劫，她比机缘重要',
+        effects: [
+          { type: 'flag', key: 'survived_together', value: true },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'find_proxy',
+        text: '请林远代为照看道侣',
+        requirements: [{ type: 'flag', key: 'lin_yuan_ally', value: true }],
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'spiritStones', value: 25 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+    ],
+  },
 ]

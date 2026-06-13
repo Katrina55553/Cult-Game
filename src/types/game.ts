@@ -75,7 +75,9 @@ export interface PlayerState {
   stats: PlayerStats
   spiritStones: number
   artifacts: string[]
-  inventory: { name: string; description: string; usable: boolean }[]
+  inventory: { name: string; description: string; usable: boolean; tier?: number }[]
+  bagCapacity: number
+  bagTier: number
   cultivationSystems: CultivationSystems
   flags: Record<string, boolean>
   history: string[]
