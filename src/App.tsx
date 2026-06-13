@@ -21,6 +21,7 @@ export default function App() {
     choose,
     buyItem,
     exitShop,
+    useItem,
     restart,
     toggleSound,
     toggleBgm,
@@ -57,6 +58,7 @@ export default function App() {
           bgmOn={bgmOn}
           onToggleBgm={toggleBgm}
           onAbandon={restart}
+          onUseItem={useItem}
         />
       )}
 

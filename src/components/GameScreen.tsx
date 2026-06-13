@@ -13,9 +13,10 @@ interface Props {
   bgmOn: boolean
   onToggleBgm: () => void
   onAbandon: () => void
+  onUseItem: (index: number) => void
 }
 
-export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon }: Props) {
+export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon, onUseItem }: Props) {
   const { player, currentEvent, turn } = session
 
   if (!currentEvent) {
@@ -48,7 +49,7 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, o
         </button>
       </div>
 
-      <StatusPanel player={player} turn={turn} />
+      <StatusPanel player={player} turn={turn} onUseItem={onUseItem} />
 
       <div className="grid lg:grid-cols-[1fr_280px] gap-4 sm:gap-6 lg:gap-8">
         <main className="border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.6)] p-4 sm:p-6 rounded-sm">

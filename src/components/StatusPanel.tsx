@@ -8,6 +8,7 @@ import type { PlayerState } from '../types/game'
 interface Props {
   player: PlayerState
   turn: number
+  onUseItem?: (index: number) => void
 }
 
 const TONE_CLASS: Record<string, string> = {
@@ -17,7 +18,7 @@ const TONE_CLASS: Record<string, string> = {
   mist: 'border-[var(--color-mist)]/30 text-[var(--color-mist)]',
 }
 
-export function StatusPanel({ player, turn }: Props) {
+export function StatusPanel({ player, turn, onUseItem }: Props) {
   const remaining = player.lifespan - player.age
   const routes = getRouteTags(player)
   const warnings = getWarnings(player)
@@ -142,9 +143,22 @@ export function StatusPanel({ player, turn }: Props) {
           </summary>
           <div className="mt-1 space-y-1">
             {player.inventory.map((item, i) => (
-              <div key={i} className="text-xs text-[var(--color-parchment-dim)] pl-2 border-l-2 border-[var(--color-jade)]/20">
-                <span className="text-[var(--color-parchment)]">{item.name}</span>
-                <span className="text-[var(--color-mist)] ml-2">{item.description}</span>
+              <div key={i} className="text-xs text-[var(--color-parchment-dim)] pl-2 border-l-2 border-[var(--color-jade)]/20 flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="text-[var(--color-parchment)]">{item.name}</span>
+                  <span className="text-[var(--color-mist)] ml-2">{item.description}</span>
+                </div>
+                {item.usable && onUseItem && (
+                  <button
+                    type="button"
+                    onClick={() => onUseItem(i)}
+                    className="shrink-0 text-xs px-2 py-0.5 border border-[var(--color-jade)]/40 rounded-sm
+                      text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                      cursor-pointer transition-colors"
+                  >
+                    使用
+                  </button>
+                )}
               </div>
             ))}
           </div>

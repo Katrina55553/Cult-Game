@@ -204,6 +204,22 @@ export function useGame() {
   const dismissMilestone = useCallback(() => setMilestone(null), [])
   const dismissAchievements = useCallback(() => setAchievementToast([]), [])
 
+  const useItem = useCallback((index: number) => {
+    setSession((prev) => {
+      if (!prev) return prev
+      const item = prev.player.inventory[index]
+      if (!item?.usable) return prev
+      const newInventory = prev.player.inventory.filter((_, i) => i !== index)
+      let player = { ...prev.player, inventory: newInventory }
+      if (item.name === '疗伤丹') player = { ...player, lifespan: player.lifespan + 10 }
+      else if (item.name === '护体残卷') player = { ...player, stats: { ...player.stats, rootBone: player.stats.rootBone + 3 } }
+      else if (item.name === '地脉灵液') player = { ...player, cultivation: Math.min(100, player.cultivation + 15) }
+      else player = { ...player, cultivation: Math.min(100, player.cultivation + 5) }
+      if (soundOnRef.current) playSound('heal')
+      return { ...prev, player }
+    })
+  }, [])
+
   const restart = useCallback(() => {
     clearSave()
     setSession(null)
@@ -233,6 +249,7 @@ export function useGame() {
     choose,
     buyItem,
     exitShop,
+    useItem,
     restart,
     toggleSound,
     toggleBgm,
