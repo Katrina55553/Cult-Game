@@ -551,6 +551,7 @@ export const SECT_EVENTS: GameEvent[] = [
       {
         id: 'fight_ambush',
         text: '以一敌众，背水一战',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 35 }],
         outcomes: [
           {
             chance: 0.35,
@@ -675,6 +676,7 @@ export const SECT_EVENTS: GameEvent[] = [
       {
         id: 'accept_qinglian',
         text: '应战，捍卫宗门颜面',
+        requirements: [{ type: 'swordTier', min: 1 }],
         outcomes: [
           {
             chance: 0.45,
@@ -880,6 +882,7 @@ export const SECT_EVENTS: GameEvent[] = [
       {
         id: 'frontline',
         text: '冲上最前线',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 30 }],
         outcomes: [
           {
             chance: 0.4,

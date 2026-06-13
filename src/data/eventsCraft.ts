@@ -408,6 +408,7 @@ export const CRAFT_EVENTS: GameEvent[] = [
       {
         id: 'fight_snake',
         text: '斩蛇取药',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 25 }],
         outcomes: [
           {
             chance: 0.5,
@@ -513,6 +514,7 @@ export const CRAFT_EVENTS: GameEvent[] = [
       {
         id: 'forge_weapon',
         text: '以地火锻造本命法宝',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 35 }],
         outcomes: [
           {
             chance: 0.4,
@@ -564,6 +566,7 @@ export const CRAFT_EVENTS: GameEvent[] = [
       {
         id: 'self_forge',
         text: '自己动手锻造',
+        requirements: [{ type: 'formationTier', min: 1 }],
         outcomes: [
           {
             chance: 0.35,
