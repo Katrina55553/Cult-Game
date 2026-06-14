@@ -18,7 +18,6 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
   const inv = player.inventory
   const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!player.cultivationSystems.spiritBeast
 
-  // 详情数据
   let detailName = ''
   let detailDesc = ''
   let detailBonus = ''
@@ -39,59 +38,49 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
 
   return createPortal(
     <div
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(0,0,0,0.6)', padding: '16px',
-      }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 px-4"
       onClick={(e) => { if ((e.target as HTMLElement).dataset.overlay) onClose() }}
     >
       <div
         data-overlay="false"
-        style={{
-          width: '100%', maxWidth: '380px', height: '420px',
-          border: '1px solid rgba(74,138,114,0.4)', background: '#0c0f0d',
-          padding: '20px', display: 'flex', flexDirection: 'column',
-        }}
+        className="max-w-sm w-full h-[420px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 flex flex-col"
       >
         {/* 标题 */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <h3 style={{ color: '#c9a84c', fontSize: '18px', fontFamily: 'var(--font-display)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
             {detail ? '详情' : '👜 乾坤袋'}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            style={{ color: '#8a9188', fontSize: '12px', cursor: 'pointer', border: '1px solid rgba(138,145,136,0.2)', padding: '2px 8px' }}
+            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-2 py-1 rounded-sm"
           >
             关闭
           </button>
         </div>
 
-        {/* 详情视图 */}
+        {/* 详情 */}
         {detail && (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ flex: 1 }}>
-              <p style={{ color: '#e8dcc8', fontSize: '16px', marginBottom: '8px', fontFamily: 'var(--font-display)' }}>
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1">
+              <p className="text-base text-[var(--color-parchment)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                 {detailName}
               </p>
-              <p style={{ color: '#8a9188', fontSize: '14px', lineHeight: 1.8, marginBottom: '12px' }}>
+              <p className="text-sm text-[var(--color-mist)] leading-relaxed mb-3">
                 {detailDesc}
               </p>
               {detailBonus && (
-                <p style={{ color: '#7ab89c', fontSize: '12px' }}>✦ {detailBonus}</p>
+                <p className="text-xs text-[var(--color-jade-light)]">✦ {detailBonus}</p>
               )}
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div className="flex gap-2">
               {detailUsable && detail.kind === 'item' && onUseItem && (
                 <button
                   type="button"
                   onClick={() => { onUseItem(detail.index); setDetail(null) }}
-                  style={{
-                    flex: 1, fontSize: '14px', padding: '8px 16px', cursor: 'pointer',
-                    border: '1px solid rgba(74,138,114,0.6)', background: 'rgba(45,90,74,0.12)',
-                    color: '#7ab89c',
-                  }}
+                  className="flex-1 text-sm px-4 py-2 border border-[var(--color-jade)]/60 rounded-sm
+                    text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                    bg-[rgba(45,90,74,0.12)] hover:bg-[rgba(45,90,74,0.25)] cursor-pointer transition-colors"
                 >
                   使用
                 </button>
@@ -99,11 +88,8 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
               <button
                 type="button"
                 onClick={() => setDetail(null)}
-                style={{
-                  flex: detailUsable && detail.kind === 'item' ? undefined : 1,
-                  fontSize: '14px', padding: '8px 16px', cursor: 'pointer',
-                  border: '1px solid rgba(138,145,136,0.2)', color: '#8a9188',
-                }}
+                className="flex-1 text-sm px-4 py-2 border border-[var(--color-mist)]/20 rounded-sm
+                  text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer transition-colors"
               >
                 返回
               </button>
@@ -113,20 +99,22 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
 
         {/* 空 */}
         {!detail && !hasContent && (
-          <p style={{ color: '#8a9188', fontSize: '14px', textAlign: 'center', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p className="text-sm text-[var(--color-mist)] text-center flex-1 flex items-center justify-center">
             乾坤袋空空如也
           </p>
         )}
 
         {/* 列表 */}
         {!detail && hasContent && (
-          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex-1 overflow-y-auto min-h-0 space-y-3" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(74,138,114,0.45) transparent' }}>
             {/* 灵兽 */}
             {player.cultivationSystems.spiritBeast && (
               <div>
-                <p style={{ color: '#e06050', fontSize: '12px', marginBottom: '6px' }}>灵兽</p>
-                <div style={{ fontSize: '12px', padding: '8px 12px', border: '1px solid rgba(224,96,80,0.2)' }}>
-                  <p style={{ color: '#e8dcc8' }}>{player.cultivationSystems.spiritBeast.name} · {player.cultivationSystems.spiritBeast.tier}阶</p>
+                <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">灵兽</p>
+                <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                  <p className="text-[var(--color-parchment)]">
+                    {player.cultivationSystems.spiritBeast.name} · {player.cultivationSystems.spiritBeast.tier}阶
+                  </p>
                 </div>
               </div>
             )}
@@ -134,52 +122,46 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
             {/* 血脉 */}
             {player.cultivationSystems.bloodline && (
               <div>
-                <p style={{ color: '#e06050', fontSize: '12px', marginBottom: '6px' }}>血脉</p>
-                <div style={{ fontSize: '12px', padding: '8px 12px', border: '1px solid rgba(224,96,80,0.2)' }}>
-                  <p style={{ color: '#e8dcc8' }}>{player.cultivationSystems.bloodline}</p>
+                <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">血脉</p>
+                <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                  <p className="text-[var(--color-parchment)]">{player.cultivationSystems.bloodline}</p>
                 </div>
               </div>
             )}
 
-            {/* 法宝 —— 可点击 */}
+            {/* 法宝 */}
             {player.artifacts.length > 0 && (
               <div>
-                <p style={{ color: '#b89a4c', fontSize: '12px', marginBottom: '6px' }}>法宝</p>
+                <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">法宝</p>
                 {player.artifacts.map((id, i) => {
                   const info = getArtifactInfo(id)
                   return (
                     <div
                       key={`a-${i}`}
                       onClick={() => setDetail({ kind: 'artifact', index: i })}
-                      style={{
-                        fontSize: '12px', padding: '8px 12px',
-                        border: '1px solid rgba(184,154,76,0.2)', marginBottom: '4px',
-                        cursor: 'pointer',
-                      }}
+                      className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1 cursor-pointer
+                        hover:border-[var(--color-gold)]/40 hover:bg-[rgba(184,154,76,0.06)] transition-colors"
                     >
-                      <p style={{ color: '#c9a84c' }}>{info.name}</p>
+                      <p className="text-[var(--color-gold)]">{info.name}</p>
                     </div>
                   )
                 })}
               </div>
             )}
 
-            {/* 物品 —— 可点击 */}
+            {/* 物品 */}
             {inv.length > 0 && (
               <div>
-                <p style={{ color: '#7ab89c', fontSize: '12px', marginBottom: '6px' }}>物品</p>
+                <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
                 {inv.map((item, i) => (
                   <div
                     key={`item-${i}`}
                     onClick={() => setDetail({ kind: 'item', index: i })}
-                    style={{
-                      fontSize: '12px', padding: '8px 12px',
-                      border: '1px solid rgba(74,138,114,0.2)', marginBottom: '4px',
-                      cursor: 'pointer',
-                    }}
+                    className="text-xs px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1 cursor-pointer
+                      hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.06)] transition-colors"
                   >
-                    <p style={{ color: '#e8dcc8' }}>{item.name}</p>
-                    <p style={{ color: '#8a9188', fontSize: '10px' }}>{item.description}</p>
+                    <p className="text-[var(--color-parchment)]">{item.name}</p>
+                    <p className="text-[var(--color-mist)] text-[10px]">{item.description}</p>
                   </div>
                 ))}
               </div>
