@@ -1990,7 +1990,10 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    conditions: [
+      { type: 'realm', min: 'qi_refining_2' },
+      { type: 'flag', key: 'has_mysterious_origin', value: true },
+    ],
     choices: [
       {
         id: 'go_cliff',

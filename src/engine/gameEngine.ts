@@ -142,6 +142,7 @@ export function createPlayer(
       player.stats.rootBone += 6
       player.stats.demonHeart += 12
       player.cultivationSystems.bloodline = '魔裔血脉'
+      player.flags.has_mysterious_origin = true
       player.log.push('16岁：魔裔宿命觉醒，体内暗流涌动。')
       break
     case 'scholar':
@@ -155,6 +156,7 @@ export function createPlayer(
     case 'hermit':
       player.lifespan += 15
       player.stats.karma += 5
+      player.flags.has_mysterious_origin = true
       player.log.push('16岁：隐世遗脉，先祖遗泽护体，寿元悠长。')
       break
     case 'sect_orphan':
