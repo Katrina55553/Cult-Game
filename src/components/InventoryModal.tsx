@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { formatArtifactName } from '../data/artifacts'
 import type { PlayerState } from '../types/game'
@@ -11,15 +11,23 @@ interface Props {
 
 export function InventoryModal({ player, onClose, onUseItem }: Props) {
   const [detailIdx, setDetailIdx] = useState<number | null>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
   const inv = player.inventory
   const detail = detailIdx !== null ? inv[detailIdx] : null
   const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!player.cultivationSystems.spiritBeast
 
+  function handleOverlayClick(e: React.MouseEvent) {
+    // 只在点击遮罩层（非内容区域）时关闭
+    if (contentRef.current && !contentRef.current.contains(e.target as Node)) {
+      onClose()
+    }
+  }
+
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={handleOverlayClick}>
       <div
+        ref={contentRef}
         className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
-        onClick={(e) => e.stopPropagation()}
       >
         {/* 标题栏 */}
         <div className="flex items-center justify-between mb-4">
@@ -79,7 +87,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
 
         {/* 列表视图 */}
         {!detail && hasContent && (
-          <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
+          <div className="space-y-3 flex-1 overflow-y-auto min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(74,138,114,0.45) transparent' }}>
             {player.cultivationSystems.spiritBeast && (
               <div>
                 <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">灵兽</p>
@@ -115,18 +123,17 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
               <div>
                 <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
                 {inv.map((item, i) => (
-                  <div
-                    key={`i-${i}`}
-                    role="button"
-                    tabIndex={0}
+                  <button
+                    key={`item-${i}`}
+                    type="button"
                     onClick={() => setDetailIdx(i)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') setDetailIdx(i) }}
-                    className="w-full text-xs text-left px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1
-                      hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.08)] cursor-pointer transition-colors"
+                    style={{ cursor: 'pointer' }}
+                    className="w-full text-left px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1
+                      hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.08)] transition-colors"
                   >
-                    <p className="text-[var(--color-parchment)]">{item.name}</p>
-                    <p className="text-[var(--color-mist)]">{item.description}</p>
-                  </div>
+                    <p className="text-xs text-[var(--color-parchment)]">{item.name}</p>
+                    <p className="text-[10px] text-[var(--color-mist)]">{item.description}</p>
+                  </button>
                 ))}
               </div>
             )}
