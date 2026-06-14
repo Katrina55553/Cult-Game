@@ -49,6 +49,82 @@ function isRomanceEvent(event: GameEvent): boolean {
   )
 }
 
+// ── 行为因子：根据玩家过往选择动态调整事件权重 ──
+
+const GOOD_EVENT_IDS = new Set([
+  'wander_refugee', 'wander_medical', 'mountain_spirit', 'demon_invasion',
+  'mortal_plight', 'spirit_stone_origin', 'righteous_dark_side',
+])
+
+const DARK_EVENT_IDS = new Set([
+  'demon_whisper', 'demon_temptation', 'blood_sacrifice', 'demon_lord_offer',
+  'inner_demon', 'blood_moon', 'soul_possession', 'soul_demand',
+  'demon_nest', 'explore_demon_mountain',
+])
+
+const COMBAT_EVENT_IDS = new Set([
+  'beast_attack', 'boss_wolf_king', 'boss_shadow_assassin', 'boss_demon_general',
+  'boss_ancient_golem', 'boss_thunder_beast', 'first_duel', 'sect_tournament',
+  'rival_provocation', 'rival_ambush', 'ancient_battlefield',
+])
+
+const ALCHEMY_EVENT_IDS = new Set([
+  'alchemy_workshop', 'alchemy_master', 'alchemy_competition', 'alchemy_mystery',
+  'rare_ingredient', 'pill_recipe', 'find_healing_pill',
+])
+
+const FORMATION_EVENT_IDS = new Set([
+  'formation_study', 'ancient_formation_battle', 'ancient_formation',
+  'realm_formation', 'explore_ancient_tomb',
+])
+
+const SWORD_EVENT_IDS = new Set([
+  'sword_enlightenment', 'sword_trial', 'sword_tomb',
+])
+
+const BEAST_EVENT_IDS = new Set([
+  'spirit_beast_train', 'spirit_crane', 'spirit_turtle', 'fire_tiger',
+  'thunder_falcon_nest', 'ice_phoenix',
+])
+
+function getBehaviorMultiplier(event: GameEvent, state: PlayerState): number {
+  let mult = 1
+  const { stats, cultivationSystems: sys } = state
+
+  // 善行倾向 → 正义/救助事件权重提升
+  if (stats.karma >= 15 && GOOD_EVENT_IDS.has(event.id)) mult *= 1.5
+  if (stats.karma >= 30 && GOOD_EVENT_IDS.has(event.id)) mult *= 1.3
+
+  // 心魔倾向 → 魔道/黑暗事件权重提升
+  if (stats.demonHeart >= 40 && DARK_EVENT_IDS.has(event.id)) mult *= 1.6
+  if (stats.demonHeart >= 60 && DARK_EVENT_IDS.has(event.id)) mult *= 1.4
+
+  // 战斗倾向（根骨高）→ 战斗事件权重提升
+  if (stats.rootBone >= 35 && COMBAT_EVENT_IDS.has(event.id)) mult *= 1.4
+
+  // 丹道倾向 → 丹道事件权重提升
+  if (sys.alchemyTier >= 1 && ALCHEMY_EVENT_IDS.has(event.id)) mult *= 1.5
+
+  // 阵法倾向 → 阵法事件权重提升
+  if (sys.formationTier >= 1 && FORMATION_EVENT_IDS.has(event.id)) mult *= 1.5
+
+  // 剑道倾向 → 剑道事件权重提升
+  if (sys.swordTier >= 1 && SWORD_EVENT_IDS.has(event.id)) mult *= 1.5
+
+  // 灵兽倾向 → 灵兽事件权重提升
+  if (sys.spiritBeast && BEAST_EVENT_IDS.has(event.id)) mult *= 1.4
+
+  // 悟性高 → 稀有事件权重微增
+  if (stats.comprehension >= 50 && (event.rarity === 'rare' || event.rarity === 'legendary')) {
+    mult *= 1.2
+  }
+
+  // 气运高 → 所有事件权重微增
+  if (stats.luck >= 40) mult *= 1.1
+
+  return mult
+}
+
 function effectiveWeight(
   event: GameEvent,
   history: string[],
@@ -97,6 +173,9 @@ function effectiveWeight(
   } else if (event.rarity === 'rare' || event.rarity === 'legendary') {
     weight *= 1.25
   }
+
+  // 行为因子：根据玩家属性/修炼方向动态调整
+  weight *= getBehaviorMultiplier(event, state)
 
   return Math.max(weight, 0.3)
 }
