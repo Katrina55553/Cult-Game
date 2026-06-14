@@ -15,6 +15,7 @@ export default function App() {
     bgmOn,
     milestone,
     achievementToast,
+    canRewind,
     startGame,
     confirmLore,
     confirmRoot,
@@ -22,6 +23,7 @@ export default function App() {
     buyItem,
     exitShop,
     useItem,
+    rewind,
     restart,
     toggleSound,
     toggleBgm,
@@ -59,6 +61,8 @@ export default function App() {
           onToggleBgm={toggleBgm}
           onAbandon={restart}
           onUseItem={useItem}
+          canRewind={canRewind}
+          onRewind={rewind}
         />
       )}
 

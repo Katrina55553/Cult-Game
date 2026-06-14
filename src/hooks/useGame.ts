@@ -13,13 +13,36 @@ import {
 } from '../engine/gameEngine'
 import type { GameSession, Milestone, NewGameOptions } from '../types/game'
 
+const REWIND_KEY = 'cultgame_rewind'
+
+function loadRewindSnapshot(): GameSession | null {
+  try {
+    const raw = localStorage.getItem(REWIND_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+function saveRewindSnapshot(s: GameSession | null) {
+  try {
+    if (s) localStorage.setItem(REWIND_KEY, JSON.stringify(s))
+    else localStorage.removeItem(REWIND_KEY)
+  } catch { /* ignore */ }
+}
+
 export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
+  const [prevSession, setPrevSession] = useState<GameSession | null>(() => loadRewindSnapshot())
+  const [rewindUsed, setRewindUsed] = useState(() => loadRewindSnapshot() !== null)
   const [soundOn, setSoundOn] = useState(true)
   const [bgmOn, setBgmOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
+  const sessionRef = useRef(session)
   const soundOnRef = useRef(soundOn)
+
+  useEffect(() => { sessionRef.current = session }, [session])
 
   useEffect(() => {
     soundOnRef.current = soundOn
@@ -96,6 +119,15 @@ export function useGame() {
   // See comment on confirmRoot for rationale.
   const choose = useCallback(
     (choiceId: string) => {
+      // 选择前保存快照（每局仅一次回溯机会）
+      if (!rewindUsed) {
+        const snap = sessionRef.current
+        if (snap && snap.phase === 'playing') {
+          setPrevSession(snap)
+          saveRewindSnapshot(snap)
+        }
+      }
+
       setSession((prev) => {
         if (!prev || prev.phase !== 'playing') return prev
 
@@ -162,6 +194,7 @@ export function useGame() {
         return next
       })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- rewindUsed intentionally excluded
     [showAchievements],
   )
 
@@ -201,6 +234,16 @@ export function useGame() {
     })
   }, [])
 
+  const rewind = useCallback(() => {
+    if (!prevSession) return
+    setSession(prevSession)
+    setPrevSession(null)
+    setRewindUsed(true)
+    saveRewindSnapshot(null)
+    setMilestone(null)
+    if (soundOnRef.current) playSound('click')
+  }, [prevSession])
+
   const dismissMilestone = useCallback(() => setMilestone(null), [])
   const dismissAchievements = useCallback(() => setAchievementToast([]), [])
 
@@ -222,7 +265,10 @@ export function useGame() {
 
   const restart = useCallback(() => {
     clearSave()
+    saveRewindSnapshot(null)
     setSession(null)
+    setPrevSession(null)
+    setRewindUsed(false)
     setMilestone(null)
     setAchievementToast([])
     if (soundOnRef.current) playSound('click')
@@ -243,6 +289,7 @@ export function useGame() {
     bgmOn,
     milestone,
     achievementToast,
+    canRewind: !rewindUsed && prevSession !== null,
     startGame,
     confirmLore,
     confirmRoot,
@@ -250,6 +297,7 @@ export function useGame() {
     buyItem,
     exitShop,
     useItem,
+    rewind,
     restart,
     toggleSound,
     toggleBgm,

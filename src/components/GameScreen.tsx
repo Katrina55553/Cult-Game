@@ -14,9 +14,11 @@ interface Props {
   onToggleBgm: () => void
   onAbandon: () => void
   onUseItem: (index: number) => void
+  canRewind: boolean
+  onRewind: () => void
 }
 
-export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon, onUseItem }: Props) {
+export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon, onUseItem, canRewind, onRewind }: Props) {
   const { player, currentEvent, turn } = session
 
   if (!currentEvent) {
@@ -30,6 +32,16 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, o
   return (
     <div className="min-h-screen px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8 max-w-6xl mx-auto relative">
       <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 sm:gap-3 z-10">
+        {canRewind && (
+          <button
+            type="button"
+            onClick={onRewind}
+            title="回溯到上一个选择（每局仅限一次）"
+            className="text-sm text-[var(--color-gold)] hover:text-[var(--color-gold-dim)] transition-colors cursor-pointer"
+          >
+            🔄
+          </button>
+        )}
         <AbandonButton onAbandon={onAbandon} />
         <button
           type="button"
