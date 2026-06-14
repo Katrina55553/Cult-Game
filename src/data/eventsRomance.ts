@@ -540,4 +540,76 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'lover_jealousy',
+    title: '道侣反目',
+    description: '你与道侣之间生出嫌隙，或是因旧日机缘纠葛，或是因修炼理念不合。数日冷战，彼此道心蒙尘。',
+    weight: 12,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'has_companion', value: true },
+    ],
+    choices: [
+      {
+        id: 'apologize',
+        text: '坦诚相告，消弭嫌隙',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'cold',
+        text: '冷淡处之，潜心修道',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'break',
+        text: '割袍断义',
+        effects: [
+          { type: 'flag', key: 'has_companion', value: false },
+          { type: 'stat', key: 'demonHeart', value: 20 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'rival_beauty',
+    title: '情敌现身',
+    description: '一名世家公子当众向你的道侣提亲，携厚礼登门，言语之间满是挑衅之意。',
+    weight: 10,
+    once: true,
+    act: 'foundation',
+    conditions: [{ type: 'flag', key: 'has_companion', value: true }],
+    choices: [
+      {
+        id: 'duel',
+        text: '公开决斗',
+        outcomes: [
+          {
+            chance: 0.55,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'karma', value: 10 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 12 },
+            ],
+            narrative: {
+              success: '你击败情敌，道侣对你更为倾心。',
+              fail: '决斗落败，心魔暗生，道侣好言宽慰。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'ignore',
+        text: '置之不理',
+        effects: [{ type: 'stat', key: 'demonHeart', value: 8 }],
+      },
+    ],
+  },
 ]

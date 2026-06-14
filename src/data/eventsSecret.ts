@@ -510,4 +510,166 @@ export const SECRET_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'spirit_crane',
+    title: '云中灵鹤',
+    description:
+      '云海之上，一只通体雪白的灵鹤盘旋而下，落在你面前的古松之上。它眸泛灵光，翅展丈余，竟是开了灵智的仙禽。灵鹤歪头看你片刻，似在考量你是否有缘。',
+    weight: 6,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'befriend_crane',
+        text: '以灵果引诱，诚心结交',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 15 }],
+        effects: [
+          { type: 'spiritStones', value: -15 },
+          { type: 'spiritBeast', name: '灵鹤', tier: 1 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'bow_crane',
+        text: '恭敬行礼，不强求缘分',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'catch_crane',
+        text: '以法术强行收服',
+        outcomes: [
+          {
+            chance: 0.25,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritBeast', name: '灵鹤', tier: 1 },
+              { type: 'cultivation', value: 10 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'karma', value: -10 },
+              { type: 'lifespan', value: -5 },
+            ],
+            narrative: {
+              success: '你以法术困住灵鹤，它挣扎片刻后认你为主。',
+              fail: '灵鹤振翅高飞，一道灵风将你掀翻在地，它扬长而去。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'spirit_turtle',
+    title: '玄潭老龟',
+    description:
+      '深潭之中浮出一只巨龟，龟甲上天然生有八卦纹路，灵光隐现。它已在此潭修行数百年，性情温吞，见你不躲不避，缓缓开口道：「小友，可愿听老朽讲一段古？」',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'listen_turtle',
+        text: '恭敬聆听老龟讲古',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'flag', key: 'befriended_turtle', value: true },
+        ],
+      },
+      {
+        id: 'bond_turtle',
+        text: '恳请老龟与你同行',
+        requirements: [{ type: 'stat', key: 'karma', min: 20 }],
+        effects: [
+          { type: 'spiritBeast', name: '玄龟', tier: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'lifespan', value: 10 },
+        ],
+      },
+      {
+        id: 'take_shell',
+        text: '夺取龟甲炼器',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'artifact', id: 'turtle_shell', name: '玄龟甲' },
+              { type: 'stat', key: 'demonHeart', value: 12 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'karma', value: -20 },
+            ],
+            narrative: {
+              success: '你趁老龟不备夺其甲壳，此甲坚不可摧，却让你因果大损。',
+              fail: '老龟虽温吞却修行深厚，一道水柱将你震飞，你重伤跌入深潭。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fire_tiger',
+    title: '赤焰幼虎',
+    description:
+      '火山熔岩旁的洞穴中，一只赤红色幼虎正在舔舐伤口。它浑身冒着微弱火焰，虎目圆睁，虽年幼却凶性十足。洞壁上留有成年妖虎的爪痕——它的母亲恐怕已经遭遇不测。',
+    weight: 6,
+    years: 1,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    choices: [
+      {
+        id: 'adopt_tiger',
+        text: '以灵泉替它疗伤，带它同行',
+        effects: [
+          { type: 'spiritBeast', name: '赤焰虎', tier: 1 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+        ],
+      },
+      {
+        id: 'leave_tiger',
+        text: '留下灵药，悄然离去',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'kill_tiger',
+        text: '击杀幼虎取其火丹',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.003,
+            successEffects: [
+              { type: 'spiritStones', value: 30 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你击杀幼虎取出火丹，火属性灵力灌入经脉，根骨有所提升。',
+              fail: '幼虎虽幼，临死反扑的火焰仍灼伤了你数处经脉。',
+            },
+          },
+        ],
+      },
+    ],
+  },
 ]

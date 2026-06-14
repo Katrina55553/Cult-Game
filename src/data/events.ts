@@ -2032,6 +2032,115 @@ const CORE_EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'spirit_vein_war',
+    title: '灵脉争夺',
+    description:
+      '你发现一处大型灵脉，但苍穹阁的弟子也同时赶到。双方剑拔弩张，灵脉归属一战即发。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'fight_vein',
+        text: '为宗门争夺灵脉',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'spiritStones', value: 40 },
+              { type: 'cultivation', value: 20 },
+              { type: 'flag', key: 'vein_war_hero', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'cultivation', value: 8 },
+            ],
+            narrative: {
+              success: '你击败苍穹阁弟子，为天玄宗夺得灵脉，声名远扬。',
+              fail: '苍穹阁弟子实力不俗，你惜败而归。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'negotiate_vein',
+        text: '提议两宗共享灵脉',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'yield_vein',
+        text: '让出灵脉，避免冲突',
+        effects: [
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_invasion',
+    title: '妖潮来袭',
+    description:
+      '天降异象，妖气冲天。大批妖兽从深山涌出，如潮水般席卷附近村镇。你所在之地也在妖潮波及范围之内，远处已传来百姓的惨叫声。',
+    weight: 7,
+    years: 1,
+    once: true,
+    minGap: 5,
+    choices: [
+      {
+        id: 'defend_village',
+        text: '挺身而出，守护百姓',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 18 },
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'cultivation', value: 5 },
+            ],
+            narrative: {
+              success: '你浴血奋战击退妖潮，百姓感恩戴德，你的道心也因此更加坚定。',
+              fail: '妖兽凶猛，你虽奋力抵抗，仍被重伤。百姓得以逃脱，你却元气大损。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'flee_invasion',
+        text: '妖潮凶猛，先保自身',
+        effects: [
+          { type: 'stat', key: 'karma', value: -10 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 3 },
+        ],
+      },
+      {
+        id: 'hunt_stragglers',
+        text: '等妖潮过后猎杀落单妖兽',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'cultivation', value: 8 },
+          { type: 'stat', key: 'karma', value: -5 },
+        ],
+      },
+    ],
+  },
 ]
 
 export const EVENTS: GameEvent[] = [
