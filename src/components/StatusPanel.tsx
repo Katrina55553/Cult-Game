@@ -28,7 +28,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   const prevCultivation = useRef(player.cultivation)
   const [barFlash, setBarFlash] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<number | null>(null)
+  const [detailIndex, setDetailIndex] = useState<number | null>(null)
   const [showStoryline, setShowStoryline] = useState(false)
 
   useEffect(() => {
@@ -153,121 +153,121 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
         </button>
       </div>
 
-      {showInventory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => { setShowInventory(false); setSelectedItem(null) }}>
-          <div
-            className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
-                {selectedItem !== null ? '物品详情' : '👜 乾坤袋'}
-              </h3>
-              <button
-                type="button"
-                onClick={() => { setShowInventory(false); setSelectedItem(null) }}
-                className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-2 py-1 rounded-sm"
-              >
-                关闭
-              </button>
-            </div>
+      {showInventory && (() => {
+        const inv = player.inventory
+        const detailItem = detailIndex !== null ? inv[detailIndex] : null
+        const close = () => { setShowInventory(false); setDetailIndex(null) }
+        const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!player.cultivationSystems.spiritBeast
 
-            {selectedItem !== null && player.inventory[selectedItem] ? (
-              /* ── 物品详情视图 ── */
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1">
-                  <p className="text-base text-[var(--color-parchment)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-                    {player.inventory[selectedItem].name}
-                  </p>
-                  <p className="text-sm text-[var(--color-mist)] leading-relaxed mb-4">
-                    {player.inventory[selectedItem].description}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  {player.inventory[selectedItem].usable && onUseItem && (
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={close}>
+            <div
+              className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
+                  {detailItem ? '物品详情' : '👜 乾坤袋'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={close}
+                  className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-2 py-1 rounded-sm"
+                >
+                  关闭
+                </button>
+              </div>
+
+              {detailItem ? (
+                /* ── 物品详情 ── */
+                <div className="flex-1 flex flex-col">
+                  <div className="flex-1">
+                    <p className="text-base text-[var(--color-parchment)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                      {detailItem.name}
+                    </p>
+                    <p className="text-sm text-[var(--color-mist)] leading-relaxed mb-4">
+                      {detailItem.description}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    {detailItem.usable && onUseItem && (
+                      <button
+                        type="button"
+                        onClick={() => { onUseItem(detailIndex!); setDetailIndex(null) }}
+                        className="flex-1 text-sm px-4 py-2 border border-[var(--color-jade)]/60 rounded-sm
+                          text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                          bg-[rgba(45,90,74,0.12)] hover:bg-[rgba(45,90,74,0.25)] cursor-pointer transition-colors"
+                      >
+                        使用
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={() => {
-                        onUseItem(selectedItem)
-                        setSelectedItem(null)
-                      }}
-                      className="flex-1 text-sm px-4 py-2 border border-[var(--color-jade)]/60 rounded-sm
-                        text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-                        bg-[rgba(45,90,74,0.12)] hover:bg-[rgba(45,90,74,0.25)] cursor-pointer transition-colors"
+                      onClick={() => setDetailIndex(null)}
+                      className="text-sm px-4 py-2 border border-[var(--color-mist)]/20 rounded-sm
+                        text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer transition-colors"
                     >
-                      使用
+                      返回
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedItem(null)}
-                    className="text-sm px-4 py-2 border border-[var(--color-mist)]/20 rounded-sm
-                      text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer transition-colors"
-                  >
-                    返回
-                  </button>
+                  </div>
                 </div>
-              </div>
-            ) : player.artifacts.length === 0 && player.inventory.length === 0 && !player.cultivationSystems.spiritBeast ? (
-              <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">乾坤袋空空如也</p>
-            ) : (
-              /* ── 列表视图 ── */
-              <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
-                {/* 灵兽 */}
-                {player.cultivationSystems.spiritBeast && (
-                  <div>
-                    <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">灵兽</p>
-                    <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
-                      <p className="text-[var(--color-parchment)]">{player.cultivationSystems.spiritBeast.name} · {player.cultivationSystems.spiritBeast.tier}阶</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* 血脉 */}
-                {player.cultivationSystems.bloodline && (
-                  <div>
-                    <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">血脉</p>
-                    <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
-                      <p className="text-[var(--color-parchment)]">{player.cultivationSystems.bloodline}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* 法宝 */}
-                {player.artifacts.length > 0 && (
-                  <div>
-                    <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">法宝</p>
-                    {player.artifacts.map((id, i) => (
-                      <div key={`a-${i}`} className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1">
-                        <p className="text-[var(--color-gold)]">{formatArtifactName(id)}</p>
+              ) : !hasContent ? (
+                <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">乾坤袋空空如也</p>
+              ) : (
+                /* ── 列表 ── */
+                <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
+                  {player.cultivationSystems.spiritBeast && (
+                    <div>
+                      <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">灵兽</p>
+                      <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                        <p className="text-[var(--color-parchment)]">{player.cultivationSystems.spiritBeast.name} · {player.cultivationSystems.spiritBeast.tier}阶</p>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                  )}
 
-                {/* 物品 */}
-                {player.inventory.length > 0 && (
-                  <div>
-                    <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
-                    {player.inventory.map((item, i) => (
-                      <button
-                        key={`i-${i}`}
-                        type="button"
-                        onClick={() => setSelectedItem(i)}
-                        className="w-full text-xs text-left px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1
-                          hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.08)] cursor-pointer transition-colors"
-                      >
-                        <p className="text-[var(--color-parchment)]">{item.name}</p>
-                        <p className="text-[var(--color-mist)]">{item.description}</p>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                  {player.cultivationSystems.bloodline && (
+                    <div>
+                      <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">血脉</p>
+                      <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
+                        <p className="text-[var(--color-parchment)]">{player.cultivationSystems.bloodline}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {player.artifacts.length > 0 && (
+                    <div>
+                      <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">法宝</p>
+                      {player.artifacts.map((id, i) => (
+                        <div key={`a-${i}`} className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1">
+                          <p className="text-[var(--color-gold)]">{formatArtifactName(id)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {inv.length > 0 && (
+                    <div>
+                      <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
+                      {inv.map((item, i) => (
+                        <button
+                          key={`i-${i}`}
+                          type="button"
+                          onClick={() => setDetailIndex(i)}
+                          className="w-full text-xs text-left px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1
+                            hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.08)] cursor-pointer transition-colors"
+                        >
+                          <p className="text-[var(--color-parchment)]">{item.name}</p>
+                          <p className="text-[var(--color-mist)]">{item.description}</p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
     </header>
