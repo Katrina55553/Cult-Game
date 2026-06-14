@@ -140,7 +140,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
             border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
         >
-          背包 ({player.artifacts.length + player.inventory.length})
+          👜 乾坤袋
         </button>
         <button
           type="button"
@@ -159,7 +159,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>背包</h3>
+              <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>👜 乾坤袋</h3>
               <button
                 type="button"
                 onClick={() => setShowInventory(false)}
@@ -169,7 +169,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
               </button>
             </div>
             {player.artifacts.length === 0 && player.inventory.length === 0 && !player.cultivationSystems.spiritBeast ? (
-              <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">背包空空如也</p>
+              <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">乾坤袋空空如也</p>
             ) : (
               <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
                 {/* 灵兽 */}
