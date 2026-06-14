@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { formatArtifactName } from '../data/artifacts'
+import { getArtifactInfo } from '../data/artifacts'
 import type { PlayerState } from '../types/game'
 
 interface Props {
@@ -9,11 +9,33 @@ interface Props {
   onUseItem?: (index: number) => void
 }
 
+type DetailTarget =
+  | { kind: 'artifact'; index: number }
+  | { kind: 'item'; index: number }
+
 export function InventoryModal({ player, onClose, onUseItem }: Props) {
-  const [detailIdx, setDetailIdx] = useState<number | null>(null)
+  const [detail, setDetail] = useState<DetailTarget | null>(null)
   const inv = player.inventory
-  const detail = detailIdx !== null ? inv[detailIdx] : null
   const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!player.cultivationSystems.spiritBeast
+
+  // 详情数据
+  let detailName = ''
+  let detailDesc = ''
+  let detailBonus = ''
+  let detailUsable = false
+  if (detail?.kind === 'artifact') {
+    const info = getArtifactInfo(player.artifacts[detail.index])
+    detailName = info.name
+    detailDesc = info.description
+    detailBonus = info.bonus ?? ''
+  } else if (detail?.kind === 'item') {
+    const item = inv[detail.index]
+    if (item) {
+      detailName = item.name
+      detailDesc = item.description
+      detailUsable = item.usable
+    }
+  }
 
   return createPortal(
     <div
@@ -22,10 +44,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: 'rgba(0,0,0,0.6)', padding: '16px',
       }}
-      onClick={(e) => {
-        // 点击遮罩关闭
-        if ((e.target as HTMLElement).dataset.overlay) onClose()
-      }}
+      onClick={(e) => { if ((e.target as HTMLElement).dataset.overlay) onClose() }}
     >
       <div
         data-overlay="false"
@@ -38,7 +57,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
         {/* 标题 */}
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
           <h3 style={{ color: '#c9a84c', fontSize: '18px', fontFamily: 'var(--font-display)' }}>
-            {detail ? '物品详情' : '👜 乾坤袋'}
+            {detail ? '详情' : '👜 乾坤袋'}
           </h3>
           <button
             type="button"
@@ -49,22 +68,25 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
           </button>
         </div>
 
-        {/* 详情 */}
+        {/* 详情视图 */}
         {detail && (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <div style={{ flex: 1 }}>
               <p style={{ color: '#e8dcc8', fontSize: '16px', marginBottom: '8px', fontFamily: 'var(--font-display)' }}>
-                {detail.name}
+                {detailName}
               </p>
-              <p style={{ color: '#8a9188', fontSize: '14px', lineHeight: 1.8 }}>
-                {detail.description}
+              <p style={{ color: '#8a9188', fontSize: '14px', lineHeight: 1.8, marginBottom: '12px' }}>
+                {detailDesc}
               </p>
+              {detailBonus && (
+                <p style={{ color: '#7ab89c', fontSize: '12px' }}>✦ {detailBonus}</p>
+              )}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {detail.usable && onUseItem && (
+              {detailUsable && detail.kind === 'item' && onUseItem && (
                 <button
                   type="button"
-                  onClick={() => { onUseItem(detailIdx!); setDetailIdx(null) }}
+                  onClick={() => { onUseItem(detail.index); setDetail(null) }}
                   style={{
                     flex: 1, fontSize: '14px', padding: '8px 16px', cursor: 'pointer',
                     border: '1px solid rgba(74,138,114,0.6)', background: 'rgba(45,90,74,0.12)',
@@ -76,8 +98,9 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
               )}
               <button
                 type="button"
-                onClick={() => setDetailIdx(null)}
+                onClick={() => setDetail(null)}
                 style={{
+                  flex: detailUsable && detail.kind === 'item' ? undefined : 1,
                   fontSize: '14px', padding: '8px 16px', cursor: 'pointer',
                   border: '1px solid rgba(138,145,136,0.2)', color: '#8a9188',
                 }}
@@ -98,6 +121,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
         {/* 列表 */}
         {!detail && hasContent && (
           <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {/* 灵兽 */}
             {player.cultivationSystems.spiritBeast && (
               <div>
                 <p style={{ color: '#e06050', fontSize: '12px', marginBottom: '6px' }}>灵兽</p>
@@ -107,6 +131,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
               </div>
             )}
 
+            {/* 血脉 */}
             {player.cultivationSystems.bloodline && (
               <div>
                 <p style={{ color: '#e06050', fontSize: '12px', marginBottom: '6px' }}>血脉</p>
@@ -116,24 +141,37 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
               </div>
             )}
 
+            {/* 法宝 —— 可点击 */}
             {player.artifacts.length > 0 && (
               <div>
                 <p style={{ color: '#b89a4c', fontSize: '12px', marginBottom: '6px' }}>法宝</p>
-                {player.artifacts.map((id, i) => (
-                  <div key={`a-${i}`} style={{ fontSize: '12px', padding: '8px 12px', border: '1px solid rgba(184,154,76,0.2)', marginBottom: '4px' }}>
-                    <p style={{ color: '#c9a84c' }}>{formatArtifactName(id)}</p>
-                  </div>
-                ))}
+                {player.artifacts.map((id, i) => {
+                  const info = getArtifactInfo(id)
+                  return (
+                    <div
+                      key={`a-${i}`}
+                      onClick={() => setDetail({ kind: 'artifact', index: i })}
+                      style={{
+                        fontSize: '12px', padding: '8px 12px',
+                        border: '1px solid rgba(184,154,76,0.2)', marginBottom: '4px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <p style={{ color: '#c9a84c' }}>{info.name}</p>
+                    </div>
+                  )
+                })}
               </div>
             )}
 
+            {/* 物品 —— 可点击 */}
             {inv.length > 0 && (
               <div>
                 <p style={{ color: '#7ab89c', fontSize: '12px', marginBottom: '6px' }}>物品</p>
                 {inv.map((item, i) => (
                   <div
                     key={`item-${i}`}
-                    onClick={() => { setDetailIdx(i) }}
+                    onClick={() => setDetail({ kind: 'item', index: i })}
                     style={{
                       fontSize: '12px', padding: '8px 12px',
                       border: '1px solid rgba(74,138,114,0.2)', marginBottom: '4px',
