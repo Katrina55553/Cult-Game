@@ -28,6 +28,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   const prevCultivation = useRef(player.cultivation)
   const [barFlash, setBarFlash] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
+  const [showStoryline, setShowStoryline] = useState(false)
 
   useEffect(() => {
     if (player.realm !== prevRealm.current) {
@@ -132,16 +133,24 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
 
       <CultivationSystemsPanel player={player} />
 
-      <StorylinePanel player={player} />
-
-      <button
-        type="button"
-        onClick={() => setShowInventory(true)}
-        className="mt-2 text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
-          border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
-      >
-        背包 ({player.artifacts.length + player.inventory.length})
-      </button>
+      <div className="flex gap-2 mt-2">
+        <button
+          type="button"
+          onClick={() => setShowInventory(true)}
+          className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+        >
+          背包 ({player.artifacts.length + player.inventory.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowStoryline(true)}
+          className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+        >
+          📜 剧情线
+        </button>
+      </div>
 
       {showInventory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setShowInventory(false)}>
@@ -225,6 +234,8 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
           </div>
         </div>
       )}
+
+      <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
     </header>
   )
 }
