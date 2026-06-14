@@ -16,7 +16,9 @@ type DetailTarget =
 export function InventoryModal({ player, onClose, onUseItem }: Props) {
   const [detail, setDetail] = useState<DetailTarget | null>(null)
   const inv = player.inventory
-  const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!player.cultivationSystems.spiritBeast
+  const sys = player.cultivationSystems
+  const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!sys.spiritBeast
+    || !!sys.bloodline || sys.techniques.length > 0 || sys.divineWeapons.length > 0
 
   let detailName = ''
   let detailDesc = ''
@@ -120,12 +122,36 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
             )}
 
             {/* 血脉 */}
-            {player.cultivationSystems.bloodline && (
+            {sys.bloodline && (
               <div>
                 <p className="text-xs text-[var(--color-cinnabar-glow)] mb-1.5">血脉</p>
                 <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
-                  <p className="text-[var(--color-parchment)]">{player.cultivationSystems.bloodline}</p>
+                  <p className="text-[var(--color-parchment)]">{sys.bloodline}</p>
                 </div>
+              </div>
+            )}
+
+            {/* 功法 */}
+            {sys.techniques.length > 0 && (
+              <div>
+                <p className="text-xs text-[var(--color-jade-light)] mb-1.5">功法</p>
+                {sys.techniques.map((name, i) => (
+                  <div key={`t-${i}`} className="text-xs px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1">
+                    <p className="text-[var(--color-jade-light)]">{name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 神兵 */}
+            {sys.divineWeapons.length > 0 && (
+              <div>
+                <p className="text-xs text-[var(--color-gold-dim)] mb-1.5">神兵</p>
+                {sys.divineWeapons.map((name, i) => (
+                  <div key={`w-${i}`} className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm mb-1">
+                    <p className="text-[var(--color-gold)]">{name}</p>
+                  </div>
+                ))}
               </div>
             )}
 
