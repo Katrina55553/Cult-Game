@@ -11,9 +11,17 @@ import {
   resolveChoice,
   saveGame,
 } from '../engine/gameEngine'
-import type { GameSession, Milestone, NewGameOptions } from '../types/game'
+import type { GameSession, Milestone, NewGameOptions, PlayerState } from '../types/game'
 
 const REWIND_KEY = 'cultgame_rewind'
+
+const ITEM_EFFECTS: Record<string, (p: PlayerState) => PlayerState> = {
+  '疗伤丹': (p) => ({ ...p, lifespan: p.lifespan + 10 }),
+  '护身符': (p) => ({ ...p, lifespan: p.lifespan + 8 }),
+  '护体残卷': (p) => ({ ...p, stats: { ...p.stats, rootBone: p.stats.rootBone + 3 } }),
+  '悟道卷轴': (p) => ({ ...p, stats: { ...p.stats, comprehension: p.stats.comprehension + 5 } }),
+  '地脉灵液': (p) => ({ ...p, cultivation: Math.min(100, p.cultivation + 15) }),
+}
 
 function loadRewindSnapshot(): GameSession | null {
   try {
@@ -253,11 +261,8 @@ export function useGame() {
       const item = prev.player.inventory[index]
       if (!item?.usable) return prev
       const newInventory = prev.player.inventory.filter((_, i) => i !== index)
-      let player = { ...prev.player, inventory: newInventory }
-      if (item.name === '疗伤丹') player = { ...player, lifespan: player.lifespan + 10 }
-      else if (item.name === '护体残卷') player = { ...player, stats: { ...player.stats, rootBone: player.stats.rootBone + 3 } }
-      else if (item.name === '地脉灵液') player = { ...player, cultivation: Math.min(100, player.cultivation + 15) }
-      else player = { ...player, cultivation: Math.min(100, player.cultivation + 5) }
+      const apply = ITEM_EFFECTS[item.name] ?? ((p: PlayerState) => ({ ...p, cultivation: Math.min(100, p.cultivation + 5) }))
+      const player = apply({ ...prev.player, inventory: newInventory })
       if (soundOnRef.current) playSound('heal')
       return { ...prev, player }
     })
