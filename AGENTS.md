@@ -2,7 +2,7 @@
 
 ## Project
 
-修仙模拟器 (Cultivation Simulator) — a single-page text RPG built with React 19, TypeScript 6, Vite 8, and Tailwind CSS 4. All UI is in Chinese. Deployed to GitHub Pages (base path `/CultGame/`).
+修仙模拟器 (Cultivation Simulator) — a single-page text RPG built with React 19, TypeScript 6, Vite 8, and Tailwind CSS 4. All UI is in Chinese. Deployed to GitHub Pages (base path `/Cult-Game/`).
 
 ## Commands
 
@@ -21,7 +21,7 @@ There is **no test framework** installed. Verification is lint + typecheck + bui
 ```
 src/
   engine/       Pure game logic — no React, no DOM. Entry: gameEngine.ts
-  data/         Static game content (events, endings, realms, items, spirit roots)
+  data/         Static game content (events, endings, realms, items, spirit roots, storylines)
   components/   React UI components (one per screen/panel)
   hooks/        useGame.ts — the single state hook that owns GameSession
   types/        game.ts — all shared types live here
@@ -35,21 +35,38 @@ src/
 
 ### Engine internals
 
-- `gameEngine.ts` — create/load/save games, resolve choices, check endings
-- `eventPicker.ts` — weighted random event selection with cooldowns and conditions
+- `gameEngine.ts` — create/load/save games, resolve choices, check endings, origin-specific flags
+- `eventPicker.ts` — weighted random event selection with cooldowns, conditions, and behavior-based weight adjustment
 - `effects.ts` — applies `Effect[]` to `PlayerState`
 - `conditions.ts` — checks `Condition[]` against `PlayerState`
 - `rng.ts` — seed-based PRNG. `setSeed()` for deterministic mode, `getDailySeed()` for daily challenge
 - `metaProgress.ts` — cross-run unlocks persisted in `localStorage` under key `cultgame_meta`
 - `achievements.ts` / `milestone.ts` — achievement and milestone detection
+- `storylineTracker.ts` — computes storyline progress from player flags
 
 ### Event content
 
-Events are split across four files and merged in `events.ts`:
-- `CORE_EVENTS` in `events.ts` — main storyline (~1100 lines)
+Events are split across 10 data files and merged in `events.ts`:
+- `CORE_EVENTS` in `events.ts` — main storyline
 - `ROMANCE_EVENTS` in `eventsRomance.ts` — romance subplot
-- `SYSTEM_EVENTS` in `eventsSystems.ts` — cultivation systems (alchemy, formations, beasts, etc.)
-- `EXTRA_EVENTS` in `eventsExtra.ts` — additional encounters (~1170 lines)
+- `SYSTEM_EVENTS` in `eventsSystems.ts` — cultivation systems
+- `SECT_EVENTS` in `eventsSect.ts` — sect conflicts
+- `WANDER_EVENTS` in `eventsWander.ts` — wandering/hermit path
+- `CHARACTER_EVENTS` in `eventsCharacter.ts` — NPC interactions
+- `SECRET_EVENTS` in `eventsSecret.ts` — secret encounters
+- `BOSS_EVENTS` in `eventsBoss.ts` — boss fights
+- `CRAFT_EVENTS` in `eventsCraft.ts` — crafting
+- `MISC_EVENTS` in `eventsMisc.ts` — miscellaneous
+
+### UI components
+
+- `StatusPanel.tsx` — top status bar with buttons for 📊属性, ⚔修炼, 👜乾坤袋, 📜剧情线
+- `AttributeModal.tsx` — player stats modal (realm, age, lifespan, stats, bloodline)
+- `CultivationModal.tsx` — cultivation systems modal (path, tiers, techniques, weapons)
+- `InventoryModal.tsx` — backpack modal (spirit stones, beasts, techniques, weapons, artifacts, items) with detail views
+- `StorylinePanel.tsx` — storyline progress modal
+- `GameScreen.tsx` — main gameplay screen with event + choices + 🔄 rewind button
+- `EventCard.tsx` / `ChoiceList.tsx` — event display and choice buttons
 
 ## Conventions
 
@@ -60,7 +77,7 @@ Events are split across four files and merged in `events.ts`:
 - **TypeScript strict-ish** — `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly` are on. No emit; bundler handles output
 - **ESLint flat config** — uses `eslint.config.js` with `typescript-eslint` recommended (not type-aware). `dist/` is globally ignored
 - **`verbatimModuleSyntax`** is enabled — use `import type` for type-only imports
-- **No comments in code** unless complexity demands it (per project convention in CLAUDE.md)
+- **No comments in code** unless complexity demands it
 - **Component pattern** — components are named exports, props typed with inline `interface Props`, no default exports except `App`
 
 ## Gotchas
@@ -68,6 +85,8 @@ Events are split across four files and merged in `events.ts`:
 - `npm run build` will **fail if typecheck fails** (`tsc -b` runs first). Fix TS errors before building
 - Game state is saved to `localStorage` on every state change. Clearing localStorage resets the game
 - The `scripts/` directory uses `tsx` (not bundled with deps — install globally or via npx). Scripts import from `../src/` directly
-- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true` env var which changes Vite `base` to `/CultGame/`. Local dev uses base `/`
+- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true` env var which changes Vite `base` to `/Cult-Game/`. Local dev uses base `/`
 - Events use `Condition[]` and `Effect[]` discriminated unions — when adding new conditions or effects, update the types in `types/game.ts` and the handler in `conditions.ts` / `effects.ts`
 - `erasableSyntaxOnly` means you cannot use `enum` or `namespace` — use `type` unions and plain objects instead
+- Modals use `createPortal` to `document.body` to avoid stacking context issues
+- Artifact data lives in `data/artifacts.ts` — when adding new artifact IDs in events, register them in the `ARTIFACTS` map

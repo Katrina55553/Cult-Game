@@ -25,7 +25,7 @@ No test framework installed — verification is lint + typecheck + build + playt
 ```
 src/
   engine/       Pure game logic — zero React/DOM dependencies. All functions are pure (immutable state transforms)
-  data/         Static game content (events, endings, realms, items, spirit roots) — all Chinese text
+  data/         Static game content (events, endings, realms, items, spirit roots, storylines, artifacts)
   components/   React UI components (one per screen/panel)
   hooks/        useGame.ts — single state hook owning GameSession, bridges engine ↔ React
   types/        game.ts — ALL shared types live here (Condition, Effect, GameEvent, PlayerState, etc.)
@@ -39,11 +39,12 @@ src/
 
 ### Key engine files
 
-- `gameEngine.ts` — create/load/save, resolve choices, purchase shop items, check endings
-- `eventPicker.ts` — weighted random event selection with cooldowns, story groups, filler logic
+- `gameEngine.ts` — create/load/save, resolve choices, purchase shop items, check endings, origin-specific flags
+- `eventPicker.ts` — weighted random event selection with cooldowns, story groups, filler logic, behavior-based weight adjustment
 - `effects.ts` / `conditions.ts` — apply and check `Effect[]`/`Condition[]` discriminated unions
 - `rng.ts` — seed-based PRNG (LCG). `setSeed()` for deterministic mode, `getDailySeed()` for daily challenge
 - `metaProgress.ts` — cross-run unlocks in `localStorage` under key `cultgame_meta`
+- `storylineTracker.ts` — computes storyline progress from player flags
 
 ### Event content structure
 
@@ -58,6 +59,17 @@ Events are split across 10 data files and merged into a single `EVENTS` array in
 - `BOSS_EVENTS` (eventsBoss.ts) — boss fights
 - `CRAFT_EVENTS` (eventsCraft.ts) — crafting
 - `MISC_EVENTS` (eventsMisc.ts) — miscellaneous
+
+### UI system
+
+Four modal buttons in StatusPanel: 📊属性, ⚔修炼, 👜乾坤袋, 📜剧情线
+
+- `AttributeModal` — stats, realm, age, lifespan, bloodline
+- `CultivationModal` — cultivation path, tiers, techniques, divine weapons
+- `InventoryModal` — spirit stones, beasts, techniques, weapons, artifacts, usable items (all clickable with detail views)
+- `StorylinePanel` — 12 storyline progress trackers
+
+Modals use `createPortal` to `document.body` to avoid stacking context issues.
 
 ## Conventions
 
@@ -77,6 +89,7 @@ Events are split across 10 data files and merged into a single `EVENTS` array in
 - `erasableSyntaxOnly` means no `enum` or `namespace` — use `type` unions and plain objects
 - `scripts/` uses `tsx` (not in deps — use `npx tsx`). Scripts import from `../src/` directly
 - Adding new `Condition` or `Effect` variants requires updating types in `types/game.ts` AND the handler in `conditions.ts` / `effects.ts`
+- Adding new artifact IDs in events requires registering them in `data/artifacts.ts` ARTIFACTS map
 - Game state auto-saves to `localStorage` on every change; clearing it resets the game
 
 See [AGENTS.md](AGENTS.md) for additional architecture details and engine internals.
