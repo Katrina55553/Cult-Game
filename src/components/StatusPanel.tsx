@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CultivationSystemsPanel } from './CultivationSystemsPanel'
+import { StorylinePanel } from './StorylinePanel'
 import { formatArtifactName } from '../data/artifacts'
 import { getRealmName } from '../engine/gameEngine'
 import { getRouteTags, getWarnings } from '../engine/routeInfo'
@@ -47,7 +48,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   }, [player.cultivation])
 
   return (
-    <header className="border-b border-[var(--color-jade)]/40 pb-4 mb-6 relative overflow-hidden">
+    <header className="border-b border-[var(--color-jade)]/40 pb-4 mb-6 relative">
       {realmFlash && (
         <div className="absolute inset-0 bg-[var(--color-gold)]/10 animate-breakthrough pointer-events-none z-10" />
       )}
@@ -130,6 +131,8 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       </div>
 
       <CultivationSystemsPanel player={player} />
+
+      <StorylinePanel player={player} />
 
       <button
         type="button"
