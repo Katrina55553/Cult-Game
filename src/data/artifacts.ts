@@ -33,6 +33,12 @@ export const ARTIFACTS: Record<string, ArtifactInfo> = {
   forged_blade: { name: '灵铸神兵', description: '由炼器大师代铸的神兵，品质上乘。', bonus: '根骨+4' },
   fire_forged_blade: { name: '地火玄刃', description: '以地火熔炉锻造的神兵，蕴含火属性灵力。', bonus: '根骨+5' },
   ancient_thunder_sword: { name: '太古雷剑', description: '古战场中取得的雷剑，剑身雷纹流转。', bonus: '根骨+7，雷属性加成' },
+  star_iron_sword: { name: '星辰铁剑', description: '以天外陨铁铸成的铁剑，剑身星光流转，威力不凡。', bonus: '根骨+3' },
+  star_iron_weapon: { name: '星辰法宝', description: '由炼器大师以天外陨铁锻造的法宝，品质上乘。', bonus: '根骨+5' },
+  inheritance_seal: { name: '大能传承印', description: '化神期大能遗留的传承法印，内藏毕生修为感悟。', bonus: '悟性+8' },
+  meteor_blade: { name: '陨星短刃', description: '以天外陨铁淬炼的短刃，星光流转。', bonus: '根骨+2' },
+  spatial_ring: { name: '上古空间戒', description: '上古传送阵中取得的空间戒指，内藏乾坤。', bonus: '灵石+80' },
+  spirit_sword: { name: '灵纹短剑', description: '坊市购得的灵纹短剑，轻巧锋利。', bonus: '根骨+2' },
 }
 
 export function formatArtifactName(value: string): string {
