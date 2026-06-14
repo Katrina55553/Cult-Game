@@ -919,4 +919,381 @@ export const SECT_EVENTS: GameEvent[] = [
       },
     ],
   },
+
+  // ──── 青莲剑宗：论剑大会 ────
+  {
+    id: 'qinglian_tournament',
+    title: '青莲论剑',
+    description:
+      '青莲剑宗广发英雄帖，邀天下剑修齐聚西山论剑。天玄宗遣你为代表前往赴会。西山之巅，千柄长剑悬于崖壁，剑气冲霄。各宗天骄已在擂台前列阵等候。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'fight_qinglian_tournament',
+        text: '登台论剑，以剑会友',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'swordTier', value: 1 },
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'flag', key: 'qinglian_champion', value: true },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 12 },
+              { type: 'stat', key: 'comprehension', value: 4 },
+            ],
+            narrative: {
+              success: '你以天玄宗剑法力压群雄，夺得论剑魁首。青莲剑宗长老赞你剑心通明，赠你一枚剑意玉简。',
+              fail: '高手如云，你惜败于半决赛。但观摩各派剑法，剑道领悟大有长进。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'observe_qinglian_tournament',
+        text: '旁观论剑，揣摩各家剑意',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'swordTier', value: 1 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'befriend_qinglian',
+        text: '与青莲弟子切磋交流',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'flag', key: 'qinglian_friend', value: true },
+        ],
+      },
+    ],
+  },
+
+  // ──── 青莲剑宗：剑道指点 ────
+  {
+    id: 'qinglian_mentor',
+    title: '青莲前辈',
+    description:
+      '你在青莲剑宗后山偶遇一位白发剑修，他独坐崖边，膝上横着一柄古朴长剑。见你走近，他淡淡道：「你的剑意尚缺一味，可愿听老夫一言？」',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [
+      { type: 'flag', key: 'qinglian_friend', value: true },
+      { type: 'swordTier', min: 1 },
+    ],
+    choices: [
+      {
+        id: 'listen_qinglian_mentor',
+        text: '恭敬请教',
+        effects: [
+          { type: 'swordTier', value: 1 },
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+        ],
+      },
+      {
+        id: 'spar_qinglian_mentor',
+        text: '请求切磋印证',
+        outcomes: [
+          {
+            chance: 0.4,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'swordTier', value: 1 },
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+            ],
+            failEffects: [
+              { type: 'cultivation', value: 10 },
+              { type: 'stat', key: 'comprehension', value: 5 },
+            ],
+            narrative: {
+              success: '你与前辈过招百招，他赞你剑中有情，传你一式青莲剑诀。',
+              fail: '前辈剑法深不可测，你十招便败。但他指点你的不足，受益匪浅。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+
+  // ──── 药谷：瘟疫求援 ────
+  {
+    id: 'yaogu_plague',
+    title: '药谷求援',
+    description:
+      '药谷急信传来：谷中突发诡异丹毒，数名丹师走火入魔，药谷谷主亲自传信向天玄宗求援。你身为宗门弟子，主动请缨前往。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'qi_refining_3' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'help_yaogu',
+        text: '以丹道知识协助解毒',
+        outcomes: [
+          {
+            chance: 0.55,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'alchemyTier', value: 1 },
+              { type: 'cultivation', value: 18 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'flag', key: 'yaogu_ally', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你以精湛丹术协助药谷解毒，谷主感激不尽，赠你一卷珍稀丹方。',
+              fail: '丹毒诡异异常，你虽尽力却未能完全化解，自己也沾染了些许丹毒。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_yaogu_plague',
+        text: '研究丹毒成因',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 药谷：大师传承 ────
+  {
+    id: 'yaogu_legacy',
+    title: '药谷传承',
+    description:
+      '药谷深处的丹房中，一位隐退多年的丹道大师正在整理毕生丹方。他见你根骨不凡，又曾助药谷度过难关，便问道：「老夫这些丹方，你可愿继承？」',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'flag', key: 'yaogu_ally', value: true }],
+    choices: [
+      {
+        id: 'accept_yaogu_legacy',
+        text: '叩首受传',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'lifespan', value: 10 },
+        ],
+      },
+      {
+        id: 'decline_yaogu_legacy',
+        text: '只取一卷丹方，不贪多',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 归一寺：封魔协助 ────
+  {
+    id: 'guiyi_seal',
+    title: '归一封魔',
+    description:
+      '归一寺方丈急召各宗弟子：寺下镇压的远古魔物蠢蠢欲动，封印日渐松动。需各方修士以灵力协助加固封印。此乃功德无量之举，却也凶险异常。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'help_guiyi_seal',
+        text: '以灵力协助加固封印',
+        outcomes: [
+          {
+            chance: 0.5,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'stat', key: 'karma', value: 20 },
+              { type: 'divineSense', value: 10 },
+              { type: 'cultivation', value: 18 },
+              { type: 'flag', key: 'guiyi_ally', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你以纯净灵力注入封印阵眼，封印重归稳固。方丈合十道：「施主功德无量。」',
+              fail: '魔物反噬猛烈，你被魔气所伤，封印勉强稳住。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'pray_guiyi',
+        text: '在寺中诵经祈福',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'divineSense', value: 5 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 归一寺：禅修顿悟 ────
+  {
+    id: 'guiyi_enlightenment',
+    title: '归一禅悟',
+    description:
+      '归一寺后山禅房，一位老僧正在打坐。你受邀入内，他递给你一杯清茶，缓缓道：「施主心中有执念。放下，方能得道。」茶香袅袅，禅意悠远。',
+    weight: 5,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'flag', key: 'guiyi_ally', value: true }],
+    choices: [
+      {
+        id: 'meditate_guiyi',
+        text: '静坐参禅，放下执念',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -20 },
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'cultivation', value: 15 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'debate_guiyi',
+        text: '与老僧论道',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'divineSense', value: 12 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 万妖殿：妖兽交易 ────
+  {
+    id: 'wanyao_trade',
+    title: '万妖殿交易',
+    description:
+      '一名万妖殿妖修在坊市中开设摊位，出售罕见的妖兽内丹和灵材。价格不菲，但货真价实。妖修见你驻足，微微一笑：「人族修士，有兴趣看看吗？」',
+    weight: 7,
+    years: 1,
+    maxTimes: 2,
+    cooldown: 6,
+    conditions: [{ type: 'realm', min: 'qi_refining_2' }],
+    choices: [
+      {
+        id: 'buy_wanyao',
+        text: '购买妖兽内丹',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 30 }],
+        effects: [
+          { type: 'spiritStones', value: -30 },
+          { type: 'cultivation', value: 18 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+        ],
+      },
+      {
+        id: 'exchange_wanyao',
+        text: '以灵草交换灵材',
+        effects: [
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 4 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'chat_wanyao',
+        text: '与妖修闲聊，打探消息',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 万妖殿：妖潮危机 ────
+  {
+    id: 'wanyao_crisis',
+    title: '万妖殿内乱',
+    description:
+      '万妖殿爆发内乱，主战派妖修失控，大批低阶妖兽涌出妖域，殃及附近村镇。万妖殿使者紧急找到你：「殿主求和，但主战派不从。你可愿助我们平息内乱？」',
+    weight: 5,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'realm', min: 'foundation' },
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+    ],
+    choices: [
+      {
+        id: 'help_wanyao',
+        text: '深入妖域协助平乱',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 25 },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'spiritStones', value: 40 },
+              { type: 'flag', key: 'wanyao_friend', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你协助万妖殿平息内乱，殿主以厚礼相赠，人妖两族关系缓和。',
+              fail: '妖域深处妖气冲天，你被主战派妖修重伤，拼死才脱身。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'defend_village_wanyao',
+        text: '守护附近村镇百姓',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'rootBone', value: 3 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'ignore_wanyao',
+        text: '万妖殿内乱与我何干',
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
 ]
