@@ -2455,7 +2455,10 @@ export const MISC_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
+    conditions: [
+      { type: 'realm', min: 'qi_refining_3' },
+      { type: 'flag', key: 'refused_all_sects', value: true },
+    ],
     choices: [
       {
         id: 'mountain_vein',
