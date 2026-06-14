@@ -1,6 +1,5 @@
 import { createPortal } from 'react-dom'
 import { getRealmName } from '../engine/gameEngine'
-import { getPathLabel, getAlchemyLabel, getFormationLabel, getSwordLabel } from '../data/cultivationSystems'
 import type { PlayerState } from '../types/game'
 
 interface Props {
@@ -20,16 +19,6 @@ export function AttributeModal({ player, onClose }: Props) {
     { label: '因果', value: s.karma, color: s.karma >= 0 ? 'var(--color-jade-light)' : 'var(--color-cinnabar)' },
     { label: '心魔', value: s.demonHeart, color: s.demonHeart >= 50 ? 'var(--color-cinnabar)' : 'var(--color-mist)' },
   ]
-
-  const cultivation = [
-    { label: '修炼路径', value: getPathLabel(sys.path) },
-    { label: '丹道', value: getAlchemyLabel(sys.alchemyTier) },
-    { label: '阵法', value: getFormationLabel(sys.formationTier) },
-    { label: '剑道', value: getSwordLabel(sys.swordTier) },
-    { label: '功法', value: sys.techniqueTier > 0 ? `${sys.techniqueTier}阶` : '未入门' },
-    { label: '神兵', value: sys.divineWeaponTier > 0 ? `${sys.divineWeaponTier}阶` : '无' },
-    { label: '神识', value: `${sys.divineSense}` },
-  ].filter((c) => c.value !== '未入门' && c.value !== '无' && c.value !== '均衡')
 
   return createPortal(
     <div
@@ -95,28 +84,13 @@ export function AttributeModal({ player, onClose }: Props) {
 
         {/* 血脉 */}
         {sys.bloodline && (
-          <div className="mb-4">
+          <div className="mb-2">
             <p className="text-xs text-[var(--color-mist)] mb-2">血脉</p>
             <div className="text-xs px-3 py-2 border border-[var(--color-cinnabar)]/20 rounded-sm">
               <p className="text-[var(--color-cinnabar-glow)]">{sys.bloodline}</p>
               {sys.bloodlineTier > 0 && (
                 <p className="text-[var(--color-mist)] text-[10px] mt-0.5">纯度 {sys.bloodlineTier} 阶</p>
               )}
-            </div>
-          </div>
-        )}
-
-        {/* 修炼体系 */}
-        {cultivation.length > 0 && (
-          <div className="mb-2">
-            <p className="text-xs text-[var(--color-mist)] mb-2">修炼体系</p>
-            <div className="grid grid-cols-2 gap-2">
-              {cultivation.map((c) => (
-                <div key={c.label} className="flex justify-between text-xs px-2 py-1.5 bg-[rgba(0,0,0,0.2)] rounded-sm">
-                  <span className="text-[var(--color-mist)]">{c.label}</span>
-                  <span className="text-[var(--color-jade-light)]">{c.value}</span>
-                </div>
-              ))}
             </div>
           </div>
         )}

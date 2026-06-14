@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AttributeModal } from './AttributeModal'
+import { CultivationModal } from './CultivationModal'
 import { CultivationSystemsPanel } from './CultivationSystemsPanel'
 import { InventoryModal } from './InventoryModal'
 import { StorylinePanel } from './StorylinePanel'
@@ -30,6 +31,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   const [barFlash, setBarFlash] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
   const [showAttr, setShowAttr] = useState(false)
+  const [showCultivation, setShowCultivation] = useState(false)
   const [showStoryline, setShowStoryline] = useState(false)
 
   useEffect(() => {
@@ -146,6 +148,14 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
         </button>
         <button
           type="button"
+          onClick={() => setShowCultivation(true)}
+          className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+        >
+          ⚔ 修炼
+        </button>
+        <button
+          type="button"
           onClick={() => setShowInventory(true)}
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
             border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
@@ -172,6 +182,10 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
 
       {showAttr && (
         <AttributeModal player={player} onClose={() => setShowAttr(false)} />
+      )}
+
+      {showCultivation && (
+        <CultivationModal player={player} onClose={() => setShowCultivation(false)} />
       )}
 
       <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
