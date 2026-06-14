@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AttributeModal } from './AttributeModal'
 import { CultivationModal } from './CultivationModal'
-import { CultivationSystemsPanel } from './CultivationSystemsPanel'
 import { InventoryModal } from './InventoryModal'
 import { StorylinePanel } from './StorylinePanel'
 import { getRealmName } from '../engine/gameEngine'
@@ -134,8 +133,6 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
         <AnimatedStat label="心魔" value={player.stats.demonHeart} warn={player.stats.demonHeart >= 50} />
         <AnimatedStat label="灵石" value={player.spiritStones} />
       </div>
-
-      <CultivationSystemsPanel player={player} />
 
       <div className="flex gap-2 mt-2">
         <button
