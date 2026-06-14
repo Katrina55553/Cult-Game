@@ -125,6 +125,14 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
         {/* 列表 */}
         {!detail && hasContent && (
           <div className="flex-1 overflow-y-auto min-h-0 space-y-3" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(74,138,114,0.45) transparent' }}>
+            {/* 灵石 */}
+            <div>
+              <p className="text-xs text-[var(--color-mist)] mb-1.5">灵石</p>
+              <div className="text-xs px-3 py-2 border border-[var(--color-gold)]/20 rounded-sm">
+                <p className="text-[var(--color-gold)]">{player.spiritStones} 枚</p>
+              </div>
+            </div>
+
             {/* 灵兽 */}
             {sys.spiritBeast && (
               <div>

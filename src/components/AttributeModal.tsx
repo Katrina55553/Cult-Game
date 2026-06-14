@@ -63,10 +63,6 @@ export function AttributeModal({ player, onClose }: Props) {
             <span className="text-[var(--color-mist)]">修为</span>
             <span className="text-[var(--color-parchment)]">{player.cultivation}%</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-[var(--color-mist)]">灵石</span>
-            <span className="text-[var(--color-gold)]">{player.spiritStones}</span>
-          </div>
         </div>
 
         {/* 六维属性 */}
