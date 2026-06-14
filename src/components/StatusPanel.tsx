@@ -28,6 +28,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
   const prevCultivation = useRef(player.cultivation)
   const [barFlash, setBarFlash] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [showStoryline, setShowStoryline] = useState(false)
 
   useEffect(() => {
@@ -153,24 +154,64 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       </div>
 
       {showInventory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setShowInventory(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => { setShowInventory(false); setSelectedItem(null) }}>
           <div
             className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>👜 乾坤袋</h3>
+              <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
+                {selectedItem !== null ? '物品详情' : '👜 乾坤袋'}
+              </h3>
               <button
                 type="button"
-                onClick={() => setShowInventory(false)}
+                onClick={() => { setShowInventory(false); setSelectedItem(null) }}
                 className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-2 py-1 rounded-sm"
               >
                 关闭
               </button>
             </div>
-            {player.artifacts.length === 0 && player.inventory.length === 0 && !player.cultivationSystems.spiritBeast ? (
+
+            {selectedItem !== null && player.inventory[selectedItem] ? (
+              /* ── 物品详情视图 ── */
+              <div className="flex-1 flex flex-col">
+                <div className="flex-1">
+                  <p className="text-base text-[var(--color-parchment)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                    {player.inventory[selectedItem].name}
+                  </p>
+                  <p className="text-sm text-[var(--color-mist)] leading-relaxed mb-4">
+                    {player.inventory[selectedItem].description}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  {player.inventory[selectedItem].usable && onUseItem && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUseItem(selectedItem)
+                        setSelectedItem(null)
+                      }}
+                      className="flex-1 text-sm px-4 py-2 border border-[var(--color-jade)]/60 rounded-sm
+                        text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
+                        bg-[rgba(45,90,74,0.12)] hover:bg-[rgba(45,90,74,0.25)] cursor-pointer transition-colors"
+                    >
+                      使用
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedItem(null)}
+                    className="text-sm px-4 py-2 border border-[var(--color-mist)]/20 rounded-sm
+                      text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer transition-colors"
+                  >
+                    返回
+                  </button>
+                </div>
+              </div>
+            ) : player.artifacts.length === 0 && player.inventory.length === 0 && !player.cultivationSystems.spiritBeast ? (
               <p className="text-sm text-[var(--color-mist)] text-center py-4 flex-1 flex items-center justify-center">乾坤袋空空如也</p>
             ) : (
+              /* ── 列表视图 ── */
               <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
                 {/* 灵兽 */}
                 {player.cultivationSystems.spiritBeast && (
@@ -209,23 +250,16 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
                   <div>
                     <p className="text-xs text-[var(--color-jade-light)] mb-1.5">物品</p>
                     {player.inventory.map((item, i) => (
-                      <div key={`i-${i}`} className="text-xs flex items-center justify-between gap-2 px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1">
-                        <div className="min-w-0">
-                          <p className="text-[var(--color-parchment)]">{item.name}</p>
-                          <p className="text-[var(--color-mist)]">{item.description}</p>
-                        </div>
-                        {item.usable && onUseItem && (
-                          <button
-                            type="button"
-                            onClick={() => onUseItem(i)}
-                            className="shrink-0 text-xs px-3 py-1 border border-[var(--color-jade)]/40 rounded-sm
-                              text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-                              cursor-pointer transition-colors"
-                          >
-                            使用
-                          </button>
-                        )}
-                      </div>
+                      <button
+                        key={`i-${i}`}
+                        type="button"
+                        onClick={() => setSelectedItem(i)}
+                        className="w-full text-xs text-left px-3 py-2 border border-[var(--color-jade)]/20 rounded-sm mb-1
+                          hover:border-[var(--color-jade)]/40 hover:bg-[rgba(45,90,74,0.08)] cursor-pointer transition-colors"
+                      >
+                        <p className="text-[var(--color-parchment)]">{item.name}</p>
+                        <p className="text-[var(--color-mist)]">{item.description}</p>
+                      </button>
                     ))}
                   </div>
                 )}

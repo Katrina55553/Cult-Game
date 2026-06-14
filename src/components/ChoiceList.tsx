@@ -6,40 +6,11 @@ interface Props {
   choices: Choice[]
   player: PlayerState
   onChoose: (choiceId: string) => void
-  onUseItem?: (index: number) => void
 }
 
-export function ChoiceList({ choices, player, onChoose, onUseItem }: Props) {
-  const usableItems = player.inventory
-    .map((item, i) => ({ ...item, index: i }))
-    .filter((item) => item.usable)
-
+export function ChoiceList({ choices, player, onChoose }: Props) {
   return (
     <div className="space-y-3">
-      {usableItems.length > 0 && onUseItem && (
-        <div className="mb-2">
-          <p className="text-xs text-[var(--color-mist)] tracking-wider mb-2">— 使用物品 —</p>
-          <div className="flex flex-wrap gap-2">
-            {usableItems.map((item) => (
-              <button
-                key={item.index}
-                type="button"
-                onClick={() => {
-                  playSound('heal')
-                  onUseItem(item.index)
-                }}
-                className="text-xs px-3 py-1.5 rounded-sm border border-[var(--color-jade)]/40
-                  text-[var(--color-jade-light)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-                  bg-[rgba(45,90,74,0.08)] hover:bg-[rgba(45,90,74,0.18)] cursor-pointer transition-colors"
-              >
-                {item.name}
-                <span className="text-[var(--color-mist)]/60 ml-1">({item.description})</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
       <p className="text-xs text-[var(--color-mist)] tracking-wider mb-2">— 抉择 —</p>
       {choices.map((choice) => {
         const canChoose = checkConditions(player, choice.requirements)
