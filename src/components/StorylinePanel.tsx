@@ -39,17 +39,17 @@ export function StorylinePanel({ player, open, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={onClose}>
       <div
-        className="max-w-sm w-full h-[400px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-5 rounded-sm animate-slide-up flex flex-col"
+        className="max-w-lg w-full h-[520px] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] p-6 rounded-sm animate-slide-up flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
+          <h3 className="text-xl text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
             📜 剧情线
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-2 py-1 rounded-sm"
+            className="text-sm text-[var(--color-mist)] hover:text-[var(--color-parchment)] cursor-pointer border border-[var(--color-mist)]/20 px-3 py-1 rounded-sm"
           >
             关闭
           </button>
@@ -60,35 +60,35 @@ export function StorylinePanel({ player, open, onClose }: Props) {
             尚无剧情线开启，做出选择后将逐步解锁……
           </p>
         ) : (
-          <div className="space-y-2.5 flex-1 overflow-y-auto log-scroll min-h-0">
+          <div className="space-y-3 flex-1 overflow-y-auto log-scroll min-h-0">
             {sorted.map((sp) => {
               const colors = TONE_COLORS[sp.storyline.tone] ?? TONE_COLORS.mist
               return (
-                <div key={sp.storyline.id} className={`border ${colors.border} rounded-sm px-3 py-2`}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={`text-xs font-medium ${colors.text}`}>
+                <div key={sp.storyline.id} className={`border ${colors.border} rounded-sm px-4 py-3`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-sm font-medium ${colors.text}`}>
                       {sp.storyline.name}
                     </span>
-                    <span className="text-[10px] text-[var(--color-mist)]">
+                    <span className="text-xs text-[var(--color-mist)]">
                       {sp.completedSteps}/{sp.totalSteps}
                     </span>
                   </div>
 
-                  <div className="h-1 bg-[rgba(0,0,0,0.3)] rounded-full overflow-hidden mb-1.5">
+                  <div className="h-1.5 bg-[rgba(0,0,0,0.3)] rounded-full overflow-hidden mb-2">
                     <div
                       className={`h-full ${colors.bar} transition-all duration-500 rounded-full`}
                       style={{ width: `${sp.percent}%` }}
                     />
                   </div>
 
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1.5">
                     {sp.storyline.steps.map((step, i) => {
                       const done = i < sp.completedSteps
                       const isCurrent = i === sp.completedSteps
                       return (
                         <span
                           key={step.flag}
-                          className={`text-[10px] px-1.5 py-0.5 rounded-sm ${
+                          className={`text-xs px-2 py-0.5 rounded-sm ${
                             done
                               ? `${colors.text} opacity-80`
                               : isCurrent
@@ -103,7 +103,7 @@ export function StorylinePanel({ player, open, onClose }: Props) {
                   </div>
 
                   {sp.nextLabel && (
-                    <p className="text-[10px] text-[var(--color-mist)]/60 mt-1.5 italic">
+                    <p className="text-xs text-[var(--color-mist)]/60 mt-2 italic">
                       下一步：{sp.nextLabel}
                     </p>
                   )}
