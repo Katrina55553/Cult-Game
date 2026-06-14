@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CultivationSystemsPanel } from './CultivationSystemsPanel'
 import { StorylinePanel } from './StorylinePanel'
 import { formatArtifactName } from '../data/artifacts'
@@ -153,7 +154,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
         </button>
       </div>
 
-      {showInventory && (() => {
+      {showInventory && createPortal((() => {
         const inv = player.inventory
         const detailItem = detailIndex !== null ? inv[detailIndex] : null
         const close = () => { setShowInventory(false); setDetailIndex(null) }
@@ -267,7 +268,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
             </div>
           </div>
         )
-      })()}
+      })(), document.body)}
 
       <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
     </header>
