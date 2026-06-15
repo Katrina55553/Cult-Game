@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { getRealmName } from '../engine/gameEngine'
 import type { PlayerState } from '../types/game'
@@ -8,6 +9,12 @@ interface Props {
 }
 
 export function AttributeModal({ player, onClose }: Props) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
   const s = player.stats
   const sys = player.cultivationSystems
   const remaining = player.lifespan - player.age

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { getArtifactInfo } from '../data/artifacts'
 import type { PlayerState } from '../types/game'
@@ -18,6 +18,13 @@ type DetailTarget =
 
 export function InventoryModal({ player, onClose, onUseItem }: Props) {
   const [detail, setDetail] = useState<DetailTarget | null>(null)
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
   const inv = player.inventory
   const sys = player.cultivationSystems
   const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!sys.spiritBeast

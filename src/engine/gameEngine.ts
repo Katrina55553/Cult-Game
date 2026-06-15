@@ -645,6 +645,12 @@ export function loadGame(): GameSession | null {
     if (!Array.isArray(session.player.spiritBeastsSeen)) {
       session.player.spiritBeastsSeen = []
     }
+    if (!session.player.flags || typeof session.player.flags !== 'object') {
+      session.player.flags = {}
+    }
+    if (!session.player.shopBuffs || typeof session.player.shopBuffs !== 'object') {
+      session.player.shopBuffs = { purchases: 0 }
+    }
     return session
   } catch {
     return null

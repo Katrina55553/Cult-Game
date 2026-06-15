@@ -13,7 +13,7 @@ export function exportAsNovel(session: GameSession): string {
   lines.push(`《${player.name}修仙传》`)
   lines.push('')
   lines.push(`结局：${ending?.title ?? '未完'}`)
-  lines.push(`灵根：${player.spiritRoot}　境界：${getRealmName(player.realm)}　寿终：${player.age} 岁`)
+  lines.push(`灵根：${player.spiritRoot} | 境界：${getRealmName(player.realm)} | 寿终：${player.age} 岁`)
   lines.push(`共历 ${turn} 回合`)
   lines.push('')
   lines.push('═'.repeat(30))

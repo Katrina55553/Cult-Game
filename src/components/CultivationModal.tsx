@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import {
   getPathLabel, getAlchemyLabel, getFormationLabel,
@@ -11,6 +12,12 @@ interface Props {
 }
 
 export function CultivationModal({ player, onClose }: Props) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
   const sys = player.cultivationSystems
 
   const items = [

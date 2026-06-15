@@ -9,7 +9,11 @@ function cloneSystems(state: PlayerState): PlayerState {
     stats: { ...state.stats },
     flags: { ...state.flags },
     artifacts: [...state.artifacts],
+    inventory: [...state.inventory],
     log: [...state.log],
+    history: [...state.history],
+    chapterCompleted: [...state.chapterCompleted],
+    spiritBeastsSeen: [...state.spiritBeastsSeen],
     shopBuffs: { ...state.shopBuffs },
     cultivationSystems: {
       ...state.cultivationSystems,

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { getActiveStorylines } from '../engine/storylineTracker'
 import type { PlayerState } from '../types/game'
 
@@ -31,6 +32,13 @@ interface Props {
 }
 
 export function StorylinePanel({ player, open, onClose }: Props) {
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [open, onClose])
+
   if (!open) return null
 
   const storylines = getActiveStorylines(player)

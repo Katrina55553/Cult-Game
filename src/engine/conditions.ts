@@ -56,7 +56,7 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
     case 'origin':
       return state.origin === condition.value
     default:
-      return true
+      return false
   }
 }
 

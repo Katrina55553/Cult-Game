@@ -25,7 +25,13 @@ const ITEM_EFFECTS: Record<string, (p: PlayerState) => PlayerState> = {
 function loadRewindSnapshot(): GameSession | null {
   try {
     const raw = localStorage.getItem(REWIND_KEY)
-    return raw ? JSON.parse(raw) : null
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    // 基本结构校验
+    if (!parsed || typeof parsed !== 'object') return null
+    if (!parsed.player || typeof parsed.player !== 'object') return null
+    if (typeof parsed.phase !== 'string') return null
+    return parsed as GameSession
   } catch {
     return null
   }
