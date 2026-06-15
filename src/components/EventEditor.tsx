@@ -78,7 +78,7 @@ export function EventEditor({ player, onClose, onChoose }: Props) {
     >
       <div
         data-overlay="false"
-        className="w-full max-w-5xl h-[85vh] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] flex flex-col rounded-sm"
+        className="w-full max-w-5xl h-[85vh] border border-[var(--color-jade)]/40 bg-[var(--color-ink)] flex flex-col rounded-sm max-md:flex-col"
       >
         {/* 标题栏 */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-jade)]/20">
@@ -114,9 +114,9 @@ export function EventEditor({ player, onClose, onChoose }: Props) {
         </div>
 
         {/* 内容区 */}
-        <div className="flex-1 flex min-h-0">
+        <div className="flex-1 flex flex-col md:flex-row min-h-0">
           {/* 左侧：JSON 编辑器 */}
-          <div className="w-1/2 flex flex-col border-r border-[var(--color-jade)]/20">
+          <div className="w-full md:w-1/2 flex flex-col border-b md:border-b-0 md:border-r border-[var(--color-jade)]/20">
             <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--color-jade)]/10">
               <span className="text-xs text-[var(--color-mist)]">JSON 数据</span>
               <button
@@ -144,7 +144,7 @@ export function EventEditor({ player, onClose, onChoose }: Props) {
           </div>
 
           {/* 右侧：游戏内预览 */}
-          <div className="w-1/2 flex flex-col">
+          <div className="w-full md:w-1/2 flex flex-col">
             <div className="px-3 py-2 border-b border-[var(--color-jade)]/10">
               <span className="text-xs text-[var(--color-mist)]">游戏内预览</span>
             </div>
