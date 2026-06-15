@@ -290,13 +290,13 @@ export function pickNextEvent(
   metaRomanceBoost = false,
   excludeId?: string,
 ): GameEvent | null {
-  // 章节制：优先从当前章节中选取下一个事件
+  // 章节制：优先从当前章节中选取事件
   const chapter = getChapter(state.currentChapter)
   if (chapter) {
-    const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
     const eventMap = new Map(events.map((e) => [e.id, e]))
 
-    // 按顺序找第一个符合条件的事件
+    // 1) 主线事件（必须完成才能推进章节）
+    const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
     for (const eventId of pending) {
       if (eventId === excludeId) continue
       const evt = eventMap.get(eventId)
@@ -306,7 +306,19 @@ export function pickNextEvent(
       return evt
     }
 
-    // 章节事件都触发过了（可能因条件不满足被跳过），插入 filler 等待
+    // 2) 支线事件（可选，不影响章节推进）
+    if (chapter.sideEvents) {
+      for (const eventId of chapter.sideEvents) {
+        if (eventId === excludeId) continue
+        if (state.history.includes(eventId)) continue
+        const evt = eventMap.get(eventId)
+        if (!evt) continue
+        if (!checkConditions(state, evt.conditions)) continue
+        return evt
+      }
+    }
+
+    // 3) 主线+支线都不满足时，插入 filler 等待
     const filler = pickFillerEvent(state, events)
     if (filler) return filler
     return null
