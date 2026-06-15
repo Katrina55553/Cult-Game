@@ -41,7 +41,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'su_muyan_teach',
       'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
-      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit', 'origin_healer_plague',
     ],
     nextChapter: 'sect_3',
   },
@@ -148,7 +148,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'herb_gather', 'night_whisper', 'alchemy_workshop',
       'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
-      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit', 'origin_healer_plague',
     ],
     nextChapter: 'wander_2',
   },
@@ -219,7 +219,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'beast_attack', 'night_whisper', 'sword_enlightenment',
       'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
-      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit', 'origin_healer_plague',
     ],
     nextChapter: 'demon_2',
   },

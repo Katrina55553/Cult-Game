@@ -2921,6 +2921,46 @@ export const MISC_EVENTS: GameEvent[] = [
     ],
   },
   {
+    id: 'origin_healer_plague',
+    title: '故人求药',
+    description:
+      '你幼年时照顾过你的老郎中托人传来消息：镇上瘟疫复发，他年迈体弱已无力炼制解毒丹。你记得他当年教你辨识百草的恩情，如今该是报答的时候了。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'origin', value: 'healer' }],
+    choices: [
+      {
+        id: 'heal_hometown',
+        text: '赶回小镇炼丹救人',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'alchemyTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'send_pills',
+        text: '托人送去丹药，自己继续修炼',
+        effects: [
+          { type: 'spiritStones', value: -15, set: false },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'ignore_healer',
+        text: '仙途要紧，顾不上凡尘旧事',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'stat', key: 'karma', value: -8 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
     id: 'origin_tomb_revisit',
     title: '古墓再探',
     description:
