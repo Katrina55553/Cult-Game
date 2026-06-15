@@ -225,6 +225,10 @@ const FILLER_EVENT_IDS = new Set([
   'daily_insight',
   'daily_sparring',
   'daily_scripture',
+  'market_rest',
+  'roadside_duel',
+  'explore_spirit_mountain',
+  'spirit_spring',
 ])
 
 function isFillerEvent(event: GameEvent): boolean {

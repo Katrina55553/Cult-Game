@@ -1780,7 +1780,6 @@ export const MISC_EVENTS: GameEvent[] = [
     years: 1,
     maxTimes: 3,
     cooldown: 6,
-    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
     choices: [
       {
         id: 'gather_herbs',
