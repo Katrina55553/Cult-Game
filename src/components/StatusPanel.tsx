@@ -63,9 +63,17 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           {player.name}
         </h2>
         <div className="flex items-center gap-2">
-          {getChapter(player.currentChapter) && (
-            <span className="text-xs text-[var(--color-jade-light)]/70">{getChapter(player.currentChapter)!.name}</span>
-          )}
+          {(() => {
+            const ch = getChapter(player.currentChapter)
+            if (!ch) return null
+            const total = ch.events.length
+            const done = player.chapterCompleted.filter((id) => ch.events.includes(id)).length
+            return (
+              <span className="text-xs text-[var(--color-jade-light)]/70">
+                {ch.name} <span className="text-[var(--color-mist)]">({done}/{total})</span>
+              </span>
+            )
+          })()}
           <span className="text-xs text-[var(--color-mist)]">第 {turn} 回合</span>
         </div>
       </div>
