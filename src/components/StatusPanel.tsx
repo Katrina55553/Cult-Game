@@ -3,6 +3,7 @@ import { AttributeModal } from './AttributeModal'
 import { CultivationModal } from './CultivationModal'
 import { InventoryModal } from './InventoryModal'
 import { StorylinePanel } from './StorylinePanel'
+import { getChapter } from '../data/chapters'
 import { getRealmName } from '../engine/gameEngine'
 import { getRouteTags, getWarnings } from '../engine/routeInfo'
 import type { PlayerState } from '../types/game'
@@ -61,7 +62,12 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
         <h2 className="text-xl text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
           {player.name}
         </h2>
-        <span className="text-xs text-[var(--color-mist)]">第 {turn} 回合</span>
+        <div className="flex items-center gap-2">
+          {getChapter(player.currentChapter) && (
+            <span className="text-xs text-[var(--color-jade-light)]/70">{getChapter(player.currentChapter)!.name}</span>
+          )}
+          <span className="text-xs text-[var(--color-mist)]">第 {turn} 回合</span>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-3">
