@@ -318,7 +318,7 @@ function finalizeAfterChoice(
   const ageLog = `${player.age}岁：${logNarrative}`
   player = { ...player, log: [...player.log, ageLog] }
 
-  player = { ...player, history: [...player.history, event.id] }
+  player = { ...player, history: [...player.history, event.id], nextEventHint: undefined }
 
   // 章节制：路线切换
   const chapterBefore = getChapter(player.currentChapter)

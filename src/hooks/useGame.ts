@@ -42,6 +42,7 @@ export function useGame() {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
   const [prevSession, setPrevSession] = useState<GameSession | null>(() => loadRewindSnapshot())
   const [rewindUsed, setRewindUsed] = useState(() => loadRewindSnapshot() !== null)
+  const rewindUsedRef = useRef(loadRewindSnapshot() !== null)
   const [soundOn, setSoundOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
@@ -108,7 +109,7 @@ export function useGame() {
   const choose = useCallback(
     (choiceId: string) => {
       // 选择前保存快照（每局仅一次回溯机会）
-      if (!rewindUsed) {
+      if (!rewindUsedRef.current) {
         const snap = sessionRef.current
         if (snap && snap.phase === 'playing') {
           setPrevSession(snap)
@@ -182,7 +183,6 @@ export function useGame() {
         return next
       })
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- rewindUsed intentionally excluded
     [showAchievements],
   )
 
@@ -227,6 +227,7 @@ export function useGame() {
     setSession(prevSession)
     setPrevSession(null)
     setRewindUsed(true)
+    rewindUsedRef.current = true
     saveRewindSnapshot(null)
     setMilestone(null)
     if (soundOnRef.current) playSound('click')
@@ -254,6 +255,7 @@ export function useGame() {
     setSession(null)
     setPrevSession(null)
     setRewindUsed(false)
+    rewindUsedRef.current = false
     setMilestone(null)
     setAchievementToast([])
     if (soundOnRef.current) playSound('click')

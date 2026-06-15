@@ -290,7 +290,6 @@ export const ROMANCE_EVENTS: GameEvent[] = [
             luckBonus: 0.003,
             successEffects: [
               { type: 'breakthrough' },
-              { type: 'cultivation', value: 20 },
               { type: 'stat', key: 'karma', value: 10 },
               { type: 'flag', key: 'survived_together', value: true },
             ],

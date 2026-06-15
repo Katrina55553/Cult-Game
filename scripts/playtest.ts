@@ -89,8 +89,6 @@ function startRun(strategy: Strategy, seed: number): RunReport {
   let session = createNewGame({ name: '试玩', origin: strategy === 'wander' ? 'hermit' : 'noble_exile' })
   session = beginPlaying(session)
 
-  const debug = false
-
   const issues: string[] = []
   const eventCounts: Record<string, number> = {}
   let fillerCount = 0

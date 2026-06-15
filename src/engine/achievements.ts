@@ -115,7 +115,7 @@ export function checkAchievements(
   const seen = player.spiritBeastsSeen ?? []
   if (ALL_BEASTS.every((b) => seen.includes(b))) add('all_spirit_beasts')
 
-  const ALL_ORIGINS = ['farmer', 'noble_exile', 'demon_blood', 'scholar', 'merchant', 'hermit', 'sect_orphan', 'tomb_raider', 'healer', 'random']
+  const ALL_ORIGINS = ['farmer', 'noble_exile', 'demon_blood', 'scholar', 'merchant', 'hermit', 'sect_orphan', 'tomb_raider', 'healer']
   if (ALL_ORIGINS.every((o) => meta.unlockedOrigins.includes(o))) add('all_origins')
 
   return newly.filter((id) => ACHIEVEMENTS.some((a) => a.id === id))

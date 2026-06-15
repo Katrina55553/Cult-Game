@@ -77,6 +77,7 @@ export function getFailedRequirements(
 function describeCondition(c: Condition): string {
   switch (c.type) {
     case 'stat':
+      if (c.min !== undefined && c.max !== undefined) return `${statName(c.key)}在${c.min}到${c.max}之间`
       return c.min !== undefined ? `${statName(c.key)}≥${c.min}` : `${statName(c.key)}≤${c.max}`
     case 'realm':
       return `境界需达${c.min}`
@@ -85,8 +86,10 @@ function describeCondition(c: Condition): string {
     case 'resource':
       return `灵石≥${c.min}`
     case 'age':
+      if (c.min !== undefined && c.max !== undefined) return `年龄在${c.min}到${c.max}之间`
       return c.min !== undefined ? `年龄≥${c.min}` : `年龄≤${c.max}`
     case 'cultivation':
+      if (c.min !== undefined && c.max !== undefined) return `修为在${c.min}%到${c.max}%之间`
       return c.min !== undefined ? `修为≥${c.min}%` : `修为≤${c.max}%`
     case 'lifespan_remaining':
       return `寿元将尽`

@@ -174,6 +174,7 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
         cultivationSystems: { ...state.cultivationSystems, path: effect.path },
       }
     case 'inventory':
+      if (state.inventory.length >= state.bagCapacity) return state
       return {
         ...state,
         inventory: [

@@ -246,6 +246,8 @@ function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | n
       const since = turnsSinceLast(state.history, e.id)
       if (since < e.cooldown) return false
     }
+    // 检查事件条件
+    if (!checkConditions(state, e.conditions)) return false
     return true
   })
   if (fillers.length === 0) return null
