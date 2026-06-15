@@ -2734,4 +2734,232 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+
+  // ──── 出身专属事件 ────
+
+  {
+    id: 'origin_noble_heirloom',
+    title: '世家遗物',
+    description:
+      '你在坊市中认出一枚玉佩，正是你家族的信物。摊主开价不菲，但玉佩中似有先辈遗留的灵力。你颤抖着双手，往事涌上心头。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'origin', value: 'noble_exile' }],
+    choices: [
+      {
+        id: 'buy_heirloom',
+        text: '倾囊购回家族信物',
+        requirements: [{ type: 'resource', key: 'spiritStones', min: 25 }],
+        effects: [
+          { type: 'spiritStones', value: -25 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'karma', value: 5 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'negotiate_heirloom',
+        text: '以理服人，说明信物来历',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'stat', key: 'comprehension', value: 6 },
+              { type: 'stat', key: 'karma', value: 8 },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '摊主被你的诚意打动，分文不取归还信物。玉佩中灵力涌入体内，悟性大增。',
+              fail: '摊主不为所动，你只能含恨离去。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_merchant_contact',
+    title: '商路旧识',
+    description:
+      '一名商人认出了你的姓氏，惊喜道：「你是商贾世家的后人？令尊当年对我有恩！」他愿以成本价供应你灵材，还透露了一条隐秘的灵石矿脉消息。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'origin', value: 'merchant' }],
+    choices: [
+      {
+        id: 'accept_deal',
+        text: '接受好意，购置灵材',
+        effects: [
+          { type: 'spiritStones', value: 30 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'share_mine',
+        text: '请他带路前往灵石矿脉',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'spiritStones', value: 60 },
+              { type: 'stat', key: 'luck', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -5 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '矿脉果然存在，你满载而归。商人世家的人脉，关键时刻还是靠得住的。',
+              fail: '矿脉早已枯竭，还遭遇了守护妖兽。你空手而归，略有损伤。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_farmer_homeland',
+    title: '故土重归',
+    description:
+      '你路过故乡的小镇，昔日的田野依旧金黄。老邻居认出了你：「是李家的娃啊！你爹娘走得早，但他们的坟我们一直在照看。」你跪在父母坟前，泪如雨下。',
+    weight: 10,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'origin', value: 'farmer' }],
+    choices: [
+      {
+        id: 'pray_parents',
+        text: '在坟前打坐，感悟生死',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'help_village',
+        text: '以修为之力造福乡里',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_scholar_text',
+    title: '家传古籍',
+    description:
+      '你在整理随身物品时，翻出一本父亲留给你的古籍。书页泛黄，字迹模糊，但你隐约辨认出其中记载着一种失传的修炼法门。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'origin', value: 'scholar' }],
+    choices: [
+      {
+        id: 'study_text',
+        text: '闭关研读古籍',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'cultivation', value: 15 },
+          { type: 'technique', name: '家传心法' },
+        ],
+      },
+      {
+        id: 'share_text',
+        text: '将古籍献给宗门藏经阁',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'spiritStones', value: 30 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_orphan_secret',
+    title: '弃婴之谜',
+    description:
+      '一位临终的老修士找到你，喘息着说：「我……我知道你的身世。当年是我把你放在宗门山门前的。你的父母……是正道通缉的魔修。他们让我告诉你——不要恨。」',
+    weight: 10,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'origin', value: 'sect_orphan' }],
+    choices: [
+      {
+        id: 'forgive_parents',
+        text: '放下仇恨，接受身世',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+      {
+        id: 'seek_parents',
+        text: '追寻父母的下落',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'cultivation', value: 12 },
+          { type: 'flag', key: 'has_mysterious_origin', value: true },
+        ],
+      },
+      {
+        id: 'reject_truth',
+        text: '不愿相信，转身离去',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_tomb_revisit',
+    title: '古墓再探',
+    description:
+      '你重返幼年求生的那座古墓。墓中机关依旧，但以你如今的修为，已非难事。在墓穴最深处，你发现了一道被封印的暗门——当年你太小，从未到达过这里。',
+    weight: 10,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'origin', value: 'tomb_raider' }],
+    choices: [
+      {
+        id: 'open_sealed_door',
+        text: '以修为强行破开封印',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'artifact', id: 'tomb_relic', name: '古墓遗宝' },
+              { type: 'stat', key: 'luck', value: 8 },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '暗门之后是一间密室，内藏上古修士的遗宝。你幼年在此求生，如今却在此得道。',
+              fail: '封印反噬，你被震退数步。暗门纹丝不动，机缘未到。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_seal',
+        text: '研究封印上的符文',
+        effects: [
+          { type: 'formationTier', value: 1 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+    ],
+  },
 ]

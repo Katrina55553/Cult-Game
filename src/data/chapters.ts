@@ -38,7 +38,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'sect',
     intro: '入门已有数月，你渐渐适应了宗门生活。日复一日的修炼中，你感到体内灵气日益充盈，修为稳步精进。',
     events: ['elder_lecture', 'herb_gather', 'sect_friend', 'night_whisper', 'cave_inheritance'],
-    sideEvents: ['su_muyan_teach'],
+    sideEvents: [
+      'su_muyan_teach',
+      'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+    ],
     nextChapter: 'sect_3',
   },
 
@@ -141,7 +145,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '你拒绝了宗门的邀请，独自踏上仙途。没有宗门庇护，一切只能靠自己。天地之大，何处不可去？',
     events: ['wander_market', 'wander_companion', 'wander_danger', 'beast_attack'],
-    sideEvents: ['herb_gather', 'night_whisper', 'alchemy_workshop'],
+    sideEvents: [
+      'herb_gather', 'night_whisper', 'alchemy_workshop',
+      'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+    ],
     nextChapter: 'wander_2',
   },
 
@@ -208,7 +216,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '心底的低语越来越清晰。魔功的诱惑难以抗拒——进境一日千里，代价却是道心沦丧。你已站在魔道的门槛上。',
     events: ['demon_whisper', 'demon_temptation', 'blood_moon', 'demon_nest'],
-    sideEvents: ['beast_attack', 'night_whisper', 'sword_enlightenment'],
+    sideEvents: [
+      'beast_attack', 'night_whisper', 'sword_enlightenment',
+      'origin_noble_heirloom', 'origin_merchant_contact', 'origin_farmer_homeland',
+      'origin_scholar_text', 'origin_orphan_secret', 'origin_tomb_revisit',
+    ],
     nextChapter: 'demon_2',
   },
 
