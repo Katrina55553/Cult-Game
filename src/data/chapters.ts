@@ -141,6 +141,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '你拒绝了宗门的邀请，独自踏上仙途。没有宗门庇护，一切只能靠自己。天地之大，何处不可去？',
     events: ['wander_market', 'wander_companion', 'wander_danger', 'beast_attack'],
+    sideEvents: ['herb_gather', 'night_whisper', 'alchemy_workshop'],
     nextChapter: 'wander_2',
   },
 
@@ -150,6 +151,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '散修之路远比想象中艰难。没有稳定的灵石来源，没有师长指点，一切都靠自己摸索。荒野之中，你学会了生存。',
     events: ['wander_hermit', 'wander_cave', 'wander_wilderness', 'wander_medical'],
+    sideEvents: ['mountain_spirit', 'formation_study', 'sword_enlightenment', 'boss_wolf_king'],
     nextChapter: 'wander_3',
   },
 
@@ -158,10 +160,10 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第三章 · 声名渐起',
     route: 'wander',
     intro: '你的名声在散修圈中渐渐传开。有人敬你胆识过人，有人视你为眼中钉。散修大会在即，各方势力齐聚。',
-    events: ['wander_festival', 'wander_reputation', 'wander_refugee'],
+    events: ['wander_festival', 'wander_reputation', 'wander_refugee', 'spirit_flood'],
+    sideEvents: ['ancient_legacy', 'secret_realm', 'mysterious_demon_first', 'divine_weapon_forge'],
     nextChapter: 'wander_4',
     branchNext: (p) => {
-      // 因果极高 → 被宗门看中，回归宗门
       if (p.stats.karma >= 40 && p.stats.demonHeart <= 10) return 'sect_5'
       return 'wander_4'
     },
@@ -173,6 +175,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '散修之路越走越远。商路、围剿、渡劫——每一步都是生死抉择。你开始思考，这条路的尽头是什么。',
     events: ['wander_trade', 'wander_crisis', 'market_duel', 'solo_tribulation'],
+    sideEvents: ['ancient_battlefield', 'heavenly_treasure', 'boss_shadow_assassin', 'alchemy_master'],
     nextChapter: 'wander_5',
   },
 
@@ -182,6 +185,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '你深入荒野，探索未知之地。废弃的宗门遗址、千年的散修传说、凡人与修士的纠葛——你见到了修真界的另一面。',
     events: ['wander_ancient_site', 'wander_lone_wolf', 'mortal_plight', 'spirit_stone_origin'],
+    sideEvents: ['demon_invasion', 'bloodline_awakening', 'technique_fusion', 'boss_ancient_golem'],
     nextChapter: 'wander_6',
   },
 
@@ -191,7 +195,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '独行千里，你终于看清了修真界的真相。正道未必光明，魔道未必黑暗。你将做出最后的抉择。',
     events: ['righteous_dark_side', 'demon_mercy', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'inheritance_battle'],
+    sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge'],
   },
 
   // ═══════════════════════════════════════
@@ -204,6 +208,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '心底的低语越来越清晰。魔功的诱惑难以抗拒——进境一日千里，代价却是道心沦丧。你已站在魔道的门槛上。',
     events: ['demon_whisper', 'demon_temptation', 'blood_moon', 'demon_nest'],
+    sideEvents: ['beast_attack', 'night_whisper', 'sword_enlightenment'],
     nextChapter: 'demon_2',
   },
 
@@ -213,10 +218,9 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '你踏过那条线，再无回头之路。血祭、心魔、走火入魔——魔道的代价，你一一品尝。修为飞涨，道心渐远。',
     events: ['blood_sacrifice', 'inner_demon', 'qi_deviation', 'demon_invasion'],
+    sideEvents: ['boss_shadow_assassin', 'alchemy_workshop', 'formation_study'],
     nextChapter: 'demon_3',
-    sideEvents: ['boss_shadow_assassin'],
     branchNext: (p) => {
-      // 心魔低 + 因果高 → 悔过自新，回归宗门
       if (p.stats.demonHeart <= 15 && p.stats.karma >= 25) return 'sect_7'
       return 'demon_3'
     },
@@ -228,7 +232,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '魔尊亲自招揽，正道联盟围剿。你在魔道中越陷越深，却也获得了前所未有的力量。何去何从？',
     events: ['demon_lord_offer', 'righteous_siege', 'soul_possession'],
-    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand'],
+    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion'],
     nextChapter: 'demon_4',
   },
 
@@ -238,7 +242,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '心魔大劫将至，寿元所剩无几。你必须做出最后的抉择——是以魔证道，还是就此陨落。',
     events: ['demon_tribulation', 'lifespan_crisis', 'final_choice'],
-    sideEvents: ['boss_demon_lord'],
+    sideEvents: ['boss_demon_lord', 'bloodline_resonance', 'weapon_reforge'],
   },
 }
 
