@@ -106,7 +106,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
         </div>
       </div>
 
-      <div className="space-y-3 mb-6">
+      <div className="grid grid-cols-2 gap-3 mb-6">
         {SHOP_ITEMS.map((item) => {
           const affordable = player.spiritStones >= item.cost
           const isSelected = selectedId === item.id
@@ -115,7 +115,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
               key={item.id}
               type="button"
               onClick={() => setSelectedId(item.id)}
-              className={`w-full text-left px-4 py-3 rounded-sm border transition-all cursor-pointer
+              className={`text-left px-3 py-2.5 rounded-sm border transition-all cursor-pointer
                 ${isSelected
                   ? 'border-[var(--color-gold)] bg-[rgba(201,162,39,0.12)] ring-1 ring-[var(--color-gold)]/40'
                   : affordable
@@ -124,12 +124,12 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
                 }`}
             >
               <div className="flex justify-between items-baseline mb-1">
-                <span className="text-[var(--color-parchment)]">{item.name}</span>
-                <span className={`text-sm ${affordable ? 'text-[var(--color-gold)]' : 'text-[var(--color-mist)]'}`}>
-                  {item.cost} 灵石
+                <span className="text-sm text-[var(--color-parchment)]">{item.name}</span>
+                <span className={`text-xs ${affordable ? 'text-[var(--color-gold)]' : 'text-[var(--color-mist)]'}`}>
+                  {item.cost}
                 </span>
               </div>
-              <p className="text-xs text-[var(--color-mist)]">{item.description}</p>
+              <p className="text-[10px] text-[var(--color-mist)] leading-snug">{item.description}</p>
             </button>
           )
         })}
