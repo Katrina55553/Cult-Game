@@ -220,8 +220,17 @@ export function beginPlaying(session: GameSession): GameSession {
   const event =
     session.currentEvent ??
     pickNextEvent(session.player, EVENTS, meta.unlockedEvents, meta.romanceBoost)
+
+  // 第一章 intro
+  let player = session.player
+  const chapter = getChapter(player.currentChapter)
+  if (chapter?.intro && !player.log.some((l) => l === chapter.intro)) {
+    player = { ...player, log: [...player.log, `— ${chapter.name} —`, chapter.intro] }
+  }
+
   return {
     ...session,
+    player,
     phase: 'playing',
     currentEvent: event,
     turn: 1,
@@ -334,8 +343,12 @@ function finalizeAfterChoice(
         ? chapterNow.branchNext(player)
         : chapterNow.nextChapter
       if (nextId && CHAPTERS[nextId]) {
+        const nextChapter = CHAPTERS[nextId]
         player = { ...player, currentChapter: nextId, chapterCompleted: [] }
-        player.log.push(`— ${CHAPTERS[nextId].name} —`)
+        player.log.push(`— ${nextChapter.name} —`)
+        if (nextChapter.intro) {
+          player.log.push(nextChapter.intro)
+        }
       }
     }
   }
