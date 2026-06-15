@@ -858,6 +858,167 @@ export const SECT_EVENTS: GameEvent[] = [
       },
     ],
   },
+  // ──── 魔道专属 ────
+
+  {
+    id: 'demon_cultivation',
+    title: '魔功初成',
+    description:
+      '你日夜修习魔功，体内魔气日益充盈。今日忽然感到一股前所未有的力量在经脉中奔涌——魔功初成，修为暴涨。但代价是心魔也在暗中滋长。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'accepted_demon_path', value: true }],
+    choices: [
+      {
+        id: 'embrace_power',
+        text: '拥抱魔力，加速修炼',
+        effects: [
+          { type: 'cultivation', value: 25 },
+          { type: 'stat', key: 'demonHeart', value: 12 },
+          { type: 'stat', key: 'rootBone', value: 4 },
+        ],
+      },
+      {
+        id: 'temper_power',
+        text: '以道心驾驭魔力',
+        effects: [
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_territory',
+    title: '魔域探索',
+    description:
+      '你深入魔域腹地，发现一处被魔气浸染的灵脉。灵脉旁有一座废弃的魔修洞府，洞壁上刻满了上古魔功秘法。空气中弥漫着血腥与灵药混合的气味。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'accepted_demon_path', value: true }],
+    choices: [
+      {
+        id: 'study_demon_art',
+        text: '参悟洞壁魔功秘法',
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+        ],
+      },
+      {
+        id: 'loot_demon_territory',
+        text: '搜刮洞府遗物',
+        effects: [
+          { type: 'spiritStones', value: 50 },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+        ],
+      },
+      {
+        id: 'purify_demon_territory',
+        text: '以灵力净化灵脉',
+        effects: [
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'stat', key: 'demonHeart', value: -8 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_alchemist',
+    title: '魔道丹师',
+    description:
+      '一名魔道丹师找上门来，他能炼制以活人精血为引的禁丹，功效远超寻常灵丹。「只要你提供材料，我保证让你修为飞涨。」他舔了舔嘴唇。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'accepted_demon_path', value: true }],
+    choices: [
+      {
+        id: 'accept_demon_pill',
+        text: '接受交易',
+        effects: [
+          { type: 'cultivation', value: 30 },
+          { type: 'stat', key: 'demonHeart', value: 20 },
+          { type: 'stat', key: 'karma', value: -25 },
+        ],
+      },
+      {
+        id: 'refuse_demon_pill',
+        text: '拒绝，这有违底线',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+      {
+        id: 'kill_demon_alchemist',
+        text: '斩杀魔丹师，夺其丹方',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'alchemyTier', value: 1 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -10 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你反杀魔丹师，夺得禁丹丹方。以魔制魔，倒也痛快。',
+              fail: '魔丹师早有防备，你被其暗算，重伤逃走。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_conscience',
+    title: '魔心动摇',
+    description:
+      '你路过一座被魔修洗劫的村庄，断壁残垣中传来孩童的哭声。你忽然想起——当年的你，也是这样无助。心底有个声音问你：这就是你想要的魔道吗？',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'accepted_demon_path', value: true }],
+    choices: [
+      {
+        id: 'help_village_demon',
+        text: '出手救助村民',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'lifespan', value: 3 },
+        ],
+      },
+      {
+        id: 'ignore_village_demon',
+        text: '魔道本就弱肉强食',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 8 },
+          { type: 'stat', key: 'karma', value: -8 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+      {
+        id: 'question_demon_path',
+        text: '驻足沉思，质疑魔道',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+
   {
     id: 'moyu_invasion',
     title: '魔域入侵',

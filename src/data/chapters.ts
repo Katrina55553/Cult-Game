@@ -230,7 +230,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '你踏过那条线，再无回头之路。血祭、心魔、走火入魔——魔道的代价，你一一品尝。修为飞涨，道心渐远。',
     events: ['blood_sacrifice', 'inner_demon', 'qi_deviation', 'demon_invasion'],
-    sideEvents: ['boss_shadow_assassin', 'alchemy_workshop', 'formation_study'],
+    sideEvents: ['boss_shadow_assassin', 'alchemy_workshop', 'formation_study', 'demon_cultivation', 'demon_conscience'],
     nextChapter: 'demon_3',
     branchNext: (p) => {
       if (p.stats.demonHeart <= 15 && p.stats.karma >= 25) return 'sect_7'
@@ -244,7 +244,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '魔尊亲自招揽，正道联盟围剿。你在魔道中越陷越深，却也获得了前所未有的力量。何去何从？',
     events: ['demon_lord_offer', 'righteous_siege', 'soul_possession'],
-    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion'],
+    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion', 'demon_territory', 'demon_alchemist'],
     nextChapter: 'demon_4',
   },
 
