@@ -278,4 +278,77 @@ export const ENDINGS: Ending[] = [
       { type: 'realm', min: 'golden_core' },
     ],
   },
+
+  // ──── 中途结局（筑基境可触发） ────
+
+  {
+    id: 'young_hero',
+    title: '少年英杰',
+    description:
+      '你年少成名，屡建奇功，被宗门视为百年难遇的天才。虽修为尚浅，却已名动四方。未来可期，仙途无限。',
+    priority: 40,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'flag', key: 'became_elder', value: true },
+      { type: 'flag', key: 'inner_disciple', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
+  {
+    id: 'wander_fame',
+    title: '散修新星',
+    description:
+      '你在散修圈中闯出名号，被众人视为后起之秀。虽未证大道，却已在这条独行之路上走出了自己的天地。',
+    priority: 38,
+    conditions: [
+      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'flag', key: 'wander_alliance', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
+  {
+    id: 'demon_disciple',
+    title: '魔道新秀',
+    description:
+      '你投入魔道，修为突飞猛进。魔尊对你青眼有加，许以高位。虽未成魔尊，却已是魔道中不可忽视的新星。',
+    priority: 42,
+    conditions: [
+      { type: 'flag', key: 'accepted_demon_path', value: true },
+      { type: 'flag', key: 'demon_lord_servant', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
+  {
+    id: 'formation_expert',
+    title: '阵法名家',
+    description:
+      '你精研阵法，已能布设精妙大阵。虽未臻至宗师之境，却已是修真界公认的阵法名家，各方势力争相邀请。',
+    priority: 36,
+    conditions: [
+      { type: 'formationTier', min: 2 },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
+  {
+    id: 'alchemy_expert',
+    title: '丹道名师',
+    description:
+      '你炼丹之术已臻化境，所炼丹药品质上乘，供不应求。虽未炼出九转金丹，却已是修真界赫赫有名的丹道名师。',
+    priority: 36,
+    conditions: [
+      { type: 'alchemyTier', min: 2 },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
+  {
+    id: 'sword_expert',
+    title: '剑道翘楚',
+    description:
+      '你以剑入道，剑法凌厉，同辈之中罕有敌手。虽未臻至剑圣之境，却已是年轻一代的剑道翘楚。',
+    priority: 36,
+    conditions: [
+      { type: 'swordTier', min: 2 },
+      { type: 'realm', min: 'foundation' },
+    ],
+  },
 ]
