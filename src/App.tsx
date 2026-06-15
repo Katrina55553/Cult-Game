@@ -12,7 +12,6 @@ export default function App() {
   const {
     session,
     soundOn,
-    bgmOn,
     milestone,
     achievementToast,
     canRewind,
@@ -26,7 +25,6 @@ export default function App() {
     rewind,
     restart,
     toggleSound,
-    toggleBgm,
     dismissMilestone,
     dismissAchievements,
   } = useGame()
@@ -57,8 +55,6 @@ export default function App() {
           onChoose={choose}
           soundOn={soundOn}
           onToggleSound={toggleSound}
-          bgmOn={bgmOn}
-          onToggleBgm={toggleBgm}
           onAbandon={restart}
           onUseItem={useItem}
           canRewind={canRewind}

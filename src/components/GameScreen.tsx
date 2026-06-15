@@ -10,15 +10,13 @@ interface Props {
   onChoose: (choiceId: string) => void
   soundOn: boolean
   onToggleSound: () => void
-  bgmOn: boolean
-  onToggleBgm: () => void
   onAbandon: () => void
   onUseItem: (index: number) => void
   canRewind: boolean
   onRewind: () => void
 }
 
-export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, onToggleBgm, onAbandon, onUseItem, canRewind, onRewind }: Props) {
+export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbandon, onUseItem, canRewind, onRewind }: Props) {
   const { player, currentEvent, turn } = session
 
   if (!currentEvent) {
@@ -43,14 +41,6 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, bgmOn, o
           </button>
         )}
         <AbandonButton onAbandon={onAbandon} />
-        <button
-          type="button"
-          onClick={onToggleBgm}
-          aria-label={bgmOn ? '关闭音乐' : '开启音乐'}
-          className="text-sm text-[var(--color-mist)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
-        >
-          {bgmOn ? '🎵' : '🔇'}
-        </button>
         <button
           type="button"
           onClick={onToggleSound}

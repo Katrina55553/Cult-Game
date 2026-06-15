@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { playSound, setMuted } from '../audio/sounds'
-import { startBgm, stopBgm, setBgmMood } from '../audio/bgm'
 import {
   beginPlaying,
   clearSave,
@@ -44,7 +43,6 @@ export function useGame() {
   const [prevSession, setPrevSession] = useState<GameSession | null>(() => loadRewindSnapshot())
   const [rewindUsed, setRewindUsed] = useState(() => loadRewindSnapshot() !== null)
   const [soundOn, setSoundOn] = useState(true)
-  const [bgmOn, setBgmOn] = useState(true)
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
   const sessionRef = useRef(session)
@@ -65,24 +63,6 @@ export function useGame() {
   useEffect(() => {
     setMuted(!soundOn)
   }, [soundOn])
-
-  useEffect(() => {
-    if (!session || !bgmOn) {
-      stopBgm()
-      return
-    }
-    const { phase, player } = session
-    if (phase === 'playing') {
-      const hasDemonHeart = player.stats.demonHeart >= 40
-      setBgmMood(hasDemonHeart ? 'tense' : 'calm')
-      startBgm()
-    } else if (phase === 'shop') {
-      setBgmMood('mystical')
-      startBgm()
-    } else if (phase === 'ending') {
-      stopBgm()
-    }
-  }, [session?.phase, session?.player?.stats?.demonHeart, bgmOn])
 
   const showAchievements = useCallback((ids: string[]) => {
     if (ids.length > 0) setAchievementToast(ids)
@@ -284,14 +264,9 @@ export function useGame() {
     setSoundOn((prev) => !prev)
   }, [])
 
-  const toggleBgm = useCallback(() => {
-    setBgmOn((prev) => !prev)
-  }, [])
-
   return {
     session,
     soundOn,
-    bgmOn,
     milestone,
     achievementToast,
     canRewind: !rewindUsed && prevSession !== null,
@@ -305,7 +280,6 @@ export function useGame() {
     rewind,
     restart,
     toggleSound,
-    toggleBgm,
     dismissMilestone,
     dismissAchievements,
   }
