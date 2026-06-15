@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import type { GameSession } from '../types/game'
 import { AbandonButton } from './AbandonButton'
 import { ChoiceList } from './ChoiceList'
 import { EventCard } from './EventCard'
+import { EventEditor } from './EventEditor'
 import { LogPanel } from './LogPanel'
 import { StatusPanel } from './StatusPanel'
 
@@ -18,6 +20,19 @@ interface Props {
 
 export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbandon, onUseItem, canRewind, onRewind }: Props) {
   const { player, currentEvent, turn } = session
+  const [showEditor, setShowEditor] = useState(false)
+
+  // Ctrl+Shift+E 打开事件编辑器
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+        e.preventDefault()
+        setShowEditor((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
 
   if (!currentEvent) {
     return (
@@ -63,6 +78,14 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbando
           <LogPanel logs={player.log} playerName={player.name} />
         </div>
       </div>
+
+      {showEditor && (
+        <EventEditor
+          player={player}
+          onClose={() => setShowEditor(false)}
+          onChoose={onChoose}
+        />
+      )}
     </div>
   )
 }
