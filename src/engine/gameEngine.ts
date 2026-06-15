@@ -349,6 +349,19 @@ function finalizeAfterChoice(
         if (nextChapter.intro) {
           player.log.push(nextChapter.intro)
         }
+        // 路线切换时更新 flag
+        if (nextChapter.route === 'sect' && !player.flags.loyal_to_sect) {
+          player = { ...player, flags: { ...player.flags, loyal_to_sect: true, refused_all_sects: false } }
+          player.log.push('你决定加入宗门，踏上新的道路。')
+        }
+        if (nextChapter.route === 'wander' && !player.flags.refused_all_sects) {
+          player = { ...player, flags: { ...player.flags, refused_all_sects: true, loyal_to_sect: false } }
+          player.log.push('你离开宗门，独行于天地之间。')
+        }
+        if (nextChapter.route === 'demon' && !player.flags.accepted_demon_path) {
+          player = { ...player, flags: { ...player.flags, accepted_demon_path: true } }
+          player.log.push('你踏入魔道，再无回头之路。')
+        }
       }
     }
   }

@@ -60,6 +60,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     events: ['spirit_flood', 'forbidden_library', 'rival_provocation', 'sect_tournament', 'boss_wolf_king'],
     sideEvents: ['mysterious_demon_first', 'zhao_tianxing_duel', 'qinglian_visit', 'yaogu_trade', 'guiyi_visit', 'formation_study', 'sword_enlightenment'],
     nextChapter: 'sect_5',
+    branchNext: (p) => {
+      // 被宗门伤透心 + 心魔高 → 叛逃散修
+      if (p.flags.zhao_enemy && p.stats.demonHeart >= 35) return 'wander_1'
+      return 'sect_5'
+    },
   },
 
   'sect_5': {
@@ -155,6 +160,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     intro: '你的名声在散修圈中渐渐传开。有人敬你胆识过人，有人视你为眼中钉。散修大会在即，各方势力齐聚。',
     events: ['wander_festival', 'wander_reputation', 'wander_refugee'],
     nextChapter: 'wander_4',
+    branchNext: (p) => {
+      // 因果极高 → 被宗门看中，回归宗门
+      if (p.stats.karma >= 40 && p.stats.demonHeart <= 10) return 'sect_5'
+      return 'wander_4'
+    },
   },
 
   'wander_4': {
@@ -205,6 +215,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     events: ['blood_sacrifice', 'inner_demon', 'qi_deviation', 'demon_invasion'],
     nextChapter: 'demon_3',
     sideEvents: ['boss_shadow_assassin'],
+    branchNext: (p) => {
+      // 心魔低 + 因果高 → 悔过自新，回归宗门
+      if (p.stats.demonHeart <= 15 && p.stats.karma >= 25) return 'sect_7'
+      return 'demon_3'
+    },
   },
 
   'demon_3': {
