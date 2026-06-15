@@ -3,6 +3,7 @@ import { ACHIEVEMENTS } from '../data/achievements'
 import { getClosestEndings } from '../engine/endingProximity'
 import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
 import { getRealmName } from '../engine/gameEngine'
+import { downloadNovel } from '../engine/novelExporter'
 import type { GameSession } from '../types/game'
 
 interface Props {
@@ -132,8 +133,18 @@ export function EndingScreen({ session, onRestart }: Props) {
         </div>
       )}
 
-      {/* 日志导出 */}
-      <div className="w-full max-w-lg mb-8">
+      {/* 导出 */}
+      <div className="w-full max-w-lg mb-8 space-y-2">
+        <button
+          type="button"
+          onClick={() => downloadNovel(session)}
+          className="w-full text-sm py-2.5 border border-[var(--color-gold)]/40 rounded-sm
+            text-[var(--color-gold)] hover:text-[var(--color-parchment)] hover:border-[var(--color-gold)]
+            hover:bg-[rgba(201,162,39,0.08)] cursor-pointer transition-colors"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          📖 导出为小说
+        </button>
         <button
           type="button"
           onClick={() => setShowLog((v) => !v)}
@@ -161,7 +172,7 @@ export function EndingScreen({ session, onRestart }: Props) {
                   text-[var(--color-parchment-dim)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
                   cursor-pointer transition-colors"
               >
-                下载 txt
+                下载日志 txt
               </button>
             </div>
             <div className="max-h-60 overflow-y-auto log-scroll space-y-1 border border-[var(--color-jade)]/20 bg-[rgba(0,0,0,0.2)] p-3 rounded-sm">
