@@ -90,6 +90,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'beauty_gratitude', 'su_muyan_past', 'zhao_tianxing_redemption', 'zhao_truth',
       'mysterious_demon_third', 'moli_backstory', 'ye_qingmei_reunion_alt', 'wanyao_encounter', 'sect_exchange',
+      'beast_bond', 'beast_evolution',
     ],
     nextChapter: 'sect_7',
     branchNext: (p) => {
@@ -108,6 +109,7 @@ export const CHAPTERS: Record<string, Chapter> = {
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
       'qinglian_tournament', 'yaogu_plague', 'guiyi_seal', 'ancient_formation_battle',
+      'beast_combat_aid', 'beast_jealousy',
     ],
     nextChapter: 'sect_8',
   },

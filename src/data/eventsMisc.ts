@@ -2920,6 +2920,159 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+  // ──── 灵兽互动 ────
+
+  {
+    id: 'beast_bond',
+    title: '灵兽通灵',
+    description:
+      '夜深人静，你的灵兽伏在膝头，忽然抬头望向你，双眸泛起灵光。你感到一股温暖的神识与你相连——灵兽正在尝试与你建立更深的灵魂共鸣。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'has_spirit_beast', value: true }],
+    choices: [
+      {
+        id: 'accept_bond',
+        text: '打开心神，接受共鸣',
+        effects: [
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 10 },
+          { type: 'flag', key: 'beast_soul_bond', value: true },
+        ],
+      },
+      {
+        id: 'reject_bond',
+        text: '保持距离，修士当以道心为本',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'beast_combat_aid',
+    title: '灵兽护主',
+    description:
+      '你遭遇强敌围攻，正处下风之际，灵兽忽然暴怒发狂，以命相搏替你挡下致命一击。敌人被灵兽的凶悍震慑，你趁机反击。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'has_spirit_beast', value: true },
+      { type: 'flag', key: 'beast_soul_bond', value: true },
+    ],
+    choices: [
+      {
+        id: 'fight_with_beast',
+        text: '与灵兽并肩作战',
+        outcomes: [
+          {
+            chance: 0.6,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'karma', value: 8 },
+              { type: 'stat', key: 'rootBone', value: 3 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你与灵兽心意相通，配合默契，以弱胜强击退敌人。灵兽虽受伤，却眼中满是信任。',
+              fail: '敌人实力超出预期，你与灵兽双双负伤。但灵兽始终挡在你身前，未曾退缩。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'protect_beast',
+        text: '拼死护住灵兽',
+        effects: [
+          { type: 'lifespan', value: -5 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'beast_evolution',
+    title: '灵兽蜕变',
+    description:
+      '你的灵兽忽然不吃不喝，蜷缩在角落瑟瑟发抖。你以神识探查，发现它体内的妖力正在剧烈翻涌——这是灵兽即将蜕变进阶的征兆。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'has_spirit_beast', value: true }],
+    choices: [
+      {
+        id: 'assist_evolution',
+        text: '以灵力辅助灵兽蜕变',
+        requirements: [{ type: 'divineSense', min: 30 }],
+        outcomes: [
+          {
+            chance: 0.55,
+            successEffects: [
+              { type: 'spiritBeast', name: '*' },
+              { type: 'cultivation', value: 15 },
+              { type: 'stat', key: 'luck', value: 5 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '灵兽蜕变成功，体型暴涨，灵光大盛。它望向你的眼中满是感激与信赖。',
+              fail: '蜕变过程中妖力失控，你拼尽全力才稳住局面。灵兽虽未进阶，却也保住了性命。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'natural_evolution',
+        text: '静待灵兽自行蜕变',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'beast jealousy',
+    title: '灵兽争宠',
+    description:
+      '你新收了一件法宝，灵兽却表现出明显的嫉妒——它对着法宝龇牙咧嘴，甚至偷偷用爪子拍打。你哭笑不得，这小家伙竟把你当成了独属于它的存在。',
+    weight: 6,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'has_spirit_beast', value: true },
+      { type: 'flag', key: 'beast_soul_bond', value: true },
+    ],
+    choices: [
+      {
+        id: 'comfort_beast',
+        text: '安抚灵兽，法宝也给它看看',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'scold_beast',
+        text: '训斥灵兽，让它守规矩',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+
   {
     id: 'origin_healer_plague',
     title: '故人求药',
