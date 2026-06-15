@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { AttributeModal } from './AttributeModal'
 import { CultivationModal } from './CultivationModal'
 import { InventoryModal } from './InventoryModal'
@@ -21,7 +21,7 @@ const TONE_CLASS: Record<string, string> = {
   mist: 'border-[var(--color-mist)]/30 text-[var(--color-mist)]',
 }
 
-export function StatusPanel({ player, turn, onUseItem }: Props) {
+export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }: Props) {
   const remaining = player.lifespan - player.age
   const routes = getRouteTags(player)
   const warnings = getWarnings(player)
@@ -194,7 +194,7 @@ export function StatusPanel({ player, turn, onUseItem }: Props) {
       <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
     </header>
   )
-}
+})
 
 function AnimatedStat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
   const prev = useRef(value)
