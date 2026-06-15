@@ -29,7 +29,7 @@ export const ENDINGS: Ending[] = [
     id: 'body_death',
     title: '身死道消',
     description:
-      '天劫之下，肉身崩毁，元神溃散。千年修行，一朝尽付东流。世人只记得，曾有一位修士，陨落于天地之间。',
+      '天劫之下，肉身崩毁，元神溃散。千年修行，一朝尽付东流。你的洞府化为废墟，储物袋中的遗物流落四方。多年后，有散修在荒野中拾到一枚残破的玉简，上面只刻着一句话：「道在心中，死亦无憾。」',
     priority: 85,
     conditions: [{ type: 'flag', key: 'died_in_tribulation', value: true }],
   },
@@ -87,7 +87,7 @@ export const ENDINGS: Ending[] = [
     id: 'mortal_life',
     title: '凡人善终',
     description:
-      '你放下修仙执念，回归凡尘，娶妻生子，平淡度日。晚年坐在院中品茶，笑谈当年修仙旧事，亦无遗憾。',
+      '你放下修仙执念，回归凡尘。在一座小镇开了一间药铺，以所学丹道知识为百姓治病。娶妻生子，平淡度日。晚年坐在院中品茶，孙儿绕膝，你笑谈当年修仙旧事，眼中满是释然。修仙千年，不如人间百年。',
     priority: 65,
     conditions: [{ type: 'flag', key: 'gave_up_cultivation', value: true }],
   },
@@ -128,7 +128,7 @@ export const ENDINGS: Ending[] = [
     id: 'natural_death',
     title: '寿尽坐化',
     description:
-      '寿元耗尽，你盘坐洞府，元神渐散。未能证道长生，却也在修行路上走过一遭，魂归天地，道消人亡。',
+      '寿元耗尽，你盘坐洞府，元神渐散。窗外月光如水，你想起年少时踏入仙途的那一刻——意气风发，以为天地尽在掌握。如今才知，修仙不过是与天争命。未能证道长生，却也在修行路上走过一遭。魂归天地，道消人亡。',
     priority: 10,
     conditions: [{ type: 'lifespan_remaining', max: 0 }],
   },
@@ -285,7 +285,7 @@ export const ENDINGS: Ending[] = [
     id: 'young_hero',
     title: '少年英杰',
     description:
-      '你年少成名，屡建奇功，被宗门视为百年难遇的天才。虽修为尚浅，却已名动四方。未来可期，仙途无限。',
+      '你年少成名，屡建奇功，被宗门视为百年难遇的天才。内门试炼中你技压群雄，长老亲授真传，同门敬仰。虽修为尚浅，却已名动四方。宗门上下皆言：此子日后必成大器。仙途漫漫，你的故事才刚刚开始。',
     priority: 40,
     conditions: [
       { type: 'flag', key: 'loyal_to_sect', value: true },
@@ -298,7 +298,7 @@ export const ENDINGS: Ending[] = [
     id: 'wander_fame',
     title: '散修新星',
     description:
-      '你在散修圈中闯出名号，被众人视为后起之秀。虽未证大道，却已在这条独行之路上走出了自己的天地。',
+      '你在散修圈中闯出名号，被众人视为后起之秀。散修盟的旗帜上多了你的名字，坊市中的修士提起你时总会压低声音：「那位独行客，可不是好惹的。」虽未证大道，却已在这条独行之路上走出了自己的天地。',
     priority: 38,
     conditions: [
       { type: 'flag', key: 'refused_all_sects', value: true },
@@ -310,7 +310,7 @@ export const ENDINGS: Ending[] = [
     id: 'demon_disciple',
     title: '魔道新秀',
     description:
-      '你投入魔道，修为突飞猛进。魔尊对你青眼有加，许以高位。虽未成魔尊，却已是魔道中不可忽视的新星。',
+      '你投入魔道，修为突飞猛进。魔尊对你青眼有加，许以高位。魔域之中，你的名号渐渐传开——那个从正道叛出的天才，如今已是魔道最锋利的一把刀。虽未成魔尊，却已是魔道中不可忽视的新星。',
     priority: 42,
     conditions: [
       { type: 'flag', key: 'accepted_demon_path', value: true },
@@ -322,7 +322,7 @@ export const ENDINGS: Ending[] = [
     id: 'formation_expert',
     title: '阵法名家',
     description:
-      '你精研阵法，已能布设精妙大阵。虽未臻至宗师之境，却已是修真界公认的阵法名家，各方势力争相邀请。',
+      '你精研阵法，已能布设精妙大阵。各方势力争相邀请你为其布设护山大阵，你的阵图被抄录流传，成为后辈阵修必读之作。虽未臻至宗师之境，却已是修真界公认的阵法名家。',
     priority: 36,
     conditions: [
       { type: 'formationTier', min: 2 },
@@ -333,7 +333,7 @@ export const ENDINGS: Ending[] = [
     id: 'alchemy_expert',
     title: '丹道名师',
     description:
-      '你炼丹之术已臻化境，所炼丹药品质上乘，供不应求。虽未炼出九转金丹，却已是修真界赫赫有名的丹道名师。',
+      '你炼丹之术已臻化境，所炼丹药品质上乘，供不应求。药谷长老亲自登门拜访，欲聘你为客座丹师。坊市中你的丹药一上架便被抢购一空。虽未炼出九转金丹，却已是修真界赫赫有名的丹道名师，弟子遍布四方。',
     priority: 36,
     conditions: [
       { type: 'alchemyTier', min: 2 },
@@ -344,7 +344,7 @@ export const ENDINGS: Ending[] = [
     id: 'sword_expert',
     title: '剑道翘楚',
     description:
-      '你以剑入道，剑法凌厉，同辈之中罕有敌手。虽未臻至剑圣之境，却已是年轻一代的剑道翘楚。',
+      '你以剑入道，剑法凌厉，同辈之中罕有敌手。青莲剑宗的长老见你出剑后沉默良久，只说了四个字：「后生可畏。」你虽未臻至剑圣之境，却已是年轻一代的剑道翘楚，剑名远播。',
     priority: 36,
     conditions: [
       { type: 'swordTier', min: 2 },
