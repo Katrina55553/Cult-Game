@@ -45,11 +45,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     description: '你孑然立于荒峰之巅，天劫将至。无宗门护法，无道侣相佐，唯凭一己道心硬抗。',
     weight: 10,
     once: true,
-    act: 'foundation',
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'cultivation', min: 85 },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'endure',
@@ -274,10 +270,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'realm', min: 'foundation' },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'join_alliance',
@@ -317,10 +310,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     weight: 5,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'realm', min: 'foundation' },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'defend_cave',
@@ -510,10 +500,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     weight: 7,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'realm', min: 'qi_refining_2' },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'compete_festival',
@@ -613,10 +600,7 @@ export const WANDER_EVENTS: GameEvent[] = [
       '你途经一座小镇，镇上瘟疫横行，百姓苦不堪言。镇上的郎中束手无策，你若懂些丹道皮毛，或许能帮上忙。',
     weight: 7,
     years: 1,
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'alchemyTier', min: 1 },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'heal_town',
@@ -652,10 +636,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'realm', min: 'foundation' },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'explore_ruins',
@@ -706,10 +687,7 @@ export const WANDER_EVENTS: GameEvent[] = [
     years: 2,
     once: true,
     rarity: 'rare',
-    conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
-      { type: 'realm', min: 'golden_core' },
-    ],
+    conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],
     choices: [
       {
         id: 'seek_legend',

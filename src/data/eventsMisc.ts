@@ -2609,7 +2609,6 @@ export const MISC_EVENTS: GameEvent[] = [
     weight: 5,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'reconsider',
