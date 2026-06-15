@@ -74,4 +74,13 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'dungeon_cleared', title: '秘境通关', description: '通关秘境副本', reward: { type: 'spiritStones', value: 10, label: '灵石+10' } },
   { id: 'all_spirit_beasts', title: '百兽之王', description: '收集全部灵宠', hidden: true, reward: { type: 'stat', key: 'luck', value: 8, label: '气运+8' } },
   { id: 'all_origins', title: '轮回百世', description: '以全部出身各通关一次', hidden: true, reward: { type: 'stat', key: 'comprehension', value: 10, label: '悟性+10' } },
+  { id: 'beast_soul_bond', title: '心意相通', description: '与灵兽建立灵魂共鸣', reward: { type: 'stat', key: 'luck', value: 3, label: '气运+3' } },
+  { id: 'route_switch', title: '改弦易辙', description: '在游戏过程中切换路线', hidden: true, reward: { type: 'stat', key: 'comprehension', value: 3, label: '悟性+3' } },
+  { id: 'spider_slayer', title: '蛛后克星', description: '斩杀蛛后妖王', reward: { type: 'stat', key: 'rootBone', value: 3, label: '根骨+3' } },
+  { id: 'wyrm_slayer', title: '屠龙者', description: '斩杀冰螭', reward: { type: 'stat', key: 'rootBone', value: 5, label: '根骨+5' } },
+  { id: 'origin_event', title: '身世之谜', description: '触发出身专属事件', reward: { type: 'stat', key: 'comprehension', value: 3, label: '悟性+3' } },
+  { id: 'qinglian_champion', title: '论剑魁首', description: '在青莲论剑中夺魁', reward: { type: 'stat', key: 'rootBone', value: 3, label: '根骨+3' } },
+  { id: 'yaogu_ally', title: '药谷之友', description: '帮助药谷度过瘟疫', reward: { type: 'stat', key: 'karma', value: 5, label: '因果+5' } },
+  { id: 'guiyi_ally', title: '佛缘深厚', description: '协助归一寺加固封印', reward: { type: 'stat', key: 'demonHeart', value: -5, label: '心魔-5' } },
+  { id: 'wanyao_friend', title: '人妖之谊', description: '帮助万妖殿平息内乱', reward: { type: 'stat', key: 'karma', value: 5, label: '因果+5' } },
 ]

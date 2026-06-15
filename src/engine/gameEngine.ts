@@ -351,7 +351,7 @@ function finalizeAfterChoice(
         }
         // 路线切换时更新 flag
         if (nextChapter.route === 'sect' && !player.flags.loyal_to_sect) {
-          player = { ...player, flags: { ...player.flags, loyal_to_sect: true, refused_all_sects: false } }
+          player = { ...player, flags: { ...player.flags, loyal_to_sect: true, refused_all_sects: false, route_switched: true } }
           player.log.push('你决定加入宗门，踏上新的道路。')
         }
         if (nextChapter.route === 'wander' && !player.flags.refused_all_sects) {
