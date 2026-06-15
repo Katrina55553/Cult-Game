@@ -24,12 +24,12 @@ No test framework installed — verification is lint + typecheck + build + playt
 
 ```
 src/
-  engine/       Pure game logic — zero React/DOM dependencies. All functions are pure (immutable state transforms)
-  data/         Static game content (events, endings, realms, items, spirit roots, storylines, artifacts)
+  engine/       Pure game logic — zero React/DOM dependencies
+  data/         Static game content (events, chapters, endings, realms, items, spirit roots, artifacts)
   components/   React UI components (one per screen/panel)
-  hooks/        useGame.ts — single state hook owning GameSession, bridges engine ↔ React
-  types/        game.ts — ALL shared types live here (Condition, Effect, GameEvent, PlayerState, etc.)
-  audio/        Procedural Web Audio API sounds — no audio files
+  hooks/        useGame.ts — single state hook owning GameSession
+  types/        game.ts — ALL shared types live here
+  audio/        Procedural Web Audio API sounds (effects only)
   styles/       Tailwind v4 with @theme custom tokens in index.css
 ```
 
@@ -37,47 +37,39 @@ src/
 
 `App.tsx` renders based on `session.phase` (start → lore → root_reveal → playing → shop → ending). No router — single-component conditional render. All state mutations flow through `useGame()`, which calls pure engine functions and auto-persists to `localStorage`.
 
+### Chapter system
+
+The game uses a **chapter-based event system**. Three routes with independent chapter sequences:
+
+- **Sect** (9 chapters): 入门 → 修行 → 崭露头角 → 天骄之争 → 秘境探索 → 情缘与暗流 → 宗门大战 → 突破之路 → 终局
+- **Wander** (6 chapters): 独行 → 求生 → 声名渐起 → 散修之路 → 探索 → 终局
+- **Demon** (4 chapters): 入魔 → 堕落 → 魔道势力 → 终局
+
+Each chapter has `events` (main, must complete), `sideEvents` (optional), `intro` (scene text), and optional `branchNext` for route switching. `eventPicker.ts` selects: main events → side events → filler events.
+
 ### Key engine files
 
-- `gameEngine.ts` — create/load/save, resolve choices, purchase shop items, check endings, origin-specific flags
-- `eventPicker.ts` — weighted random event selection with cooldowns, story groups, filler logic, behavior-based weight adjustment
+- `gameEngine.ts` — create/load/save, resolve choices, chapter progression, route switching
+- `eventPicker.ts` — chapter-based event selection with filler fallback
 - `effects.ts` / `conditions.ts` — apply and check `Effect[]`/`Condition[]` discriminated unions
-- `rng.ts` — seed-based PRNG (LCG). `setSeed()` for deterministic mode, `getDailySeed()` for daily challenge
-- `metaProgress.ts` — cross-run unlocks in `localStorage` under key `cultgame_meta`
 - `storylineTracker.ts` — computes storyline progress from player flags
-
-### Event content structure
-
-Events are split across 10 data files and merged into a single `EVENTS` array in `events.ts`:
-- `CORE_EVENTS` (events.ts) — main storyline
-- `ROMANCE_EVENTS` (eventsRomance.ts) — romance subplot
-- `SYSTEM_EVENTS` (eventsSystems.ts) — cultivation subsystems
-- `SECT_EVENTS` (eventsSect.ts) — sect conflicts
-- `WANDER_EVENTS` (eventsWander.ts) — wandering/hermit path
-- `CHARACTER_EVENTS` (eventsCharacter.ts) — NPC interactions
-- `SECRET_EVENTS` (eventsSecret.ts) — secret encounters
-- `BOSS_EVENTS` (eventsBoss.ts) — boss fights
-- `CRAFT_EVENTS` (eventsCraft.ts) — crafting
-- `MISC_EVENTS` (eventsMisc.ts) — miscellaneous
+- `novelExporter.ts` — exports playthrough as formatted novel text
 
 ### UI system
 
 Four modal buttons in StatusPanel: 📊属性, ⚔修炼, 👜乾坤袋, 📜剧情线
 
-- `AttributeModal` — stats, realm, age, lifespan, bloodline
-- `CultivationModal` — cultivation path, tiers, techniques, divine weapons
-- `InventoryModal` — spirit stones, beasts, techniques, weapons, artifacts, usable items (all clickable with detail views)
-- `StorylinePanel` — 12 storyline progress trackers
+Modals use `createPortal` to `document.body` and support ESC key. InventoryModal has clickable items with detail views. StorylinePanel tracks 12 storyline arcs.
 
-Modals use `createPortal` to `document.body` to avoid stacking context issues.
+Ending screen has novel export (📖 导出为小说) that compiles the full playthrough into a structured text file.
 
 ## Conventions
 
-- **No path aliases** — all imports use relative paths (`../engine/gameEngine`)
+- **No path aliases** — all imports use relative paths
 - **Tailwind v4** — `@import "tailwindcss"` and `@theme {}` directive, no `tailwind.config.js`
 - **Dark theme only** — `color-scheme: dark` on `<html>`
 - **Fonts** — `Ma Shan Zheng` (display), `Noto Serif SC` (body), loaded via Google Fonts
-- **TypeScript** — `erasableSyntaxOnly` (no `enum`/`namespace`), `verbatimModuleSyntax` (use `import type` for type-only imports), `noUnusedLocals`, `noUnusedParameters`
+- **TypeScript** — `erasableSyntaxOnly` (no `enum`/`namespace`), `verbatimModuleSyntax`, `noUnusedLocals`, `noUnusedParameters`
 - **ESLint flat config** — `eslint.config.js` with `typescript-eslint` (not type-aware). `dist/` ignored
 - **Component pattern** — named exports, props typed with inline `interface Props`, no default exports except `App`
 - **No comments** unless complexity demands it
@@ -85,11 +77,12 @@ Modals use `createPortal` to `document.body` to avoid stacking context issues.
 ## Gotchas
 
 - `npm run build` **fails if typecheck fails** — `tsc -b` runs first
-- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true`, changing Vite `base` to `/Cult-Game/`. Local dev uses `/`
+- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true`, changing Vite `base` to `/Cult-Game/`
 - `erasableSyntaxOnly` means no `enum` or `namespace` — use `type` unions and plain objects
-- `scripts/` uses `tsx` (not in deps — use `npx tsx`). Scripts import from `../src/` directly
-- Adding new `Condition` or `Effect` variants requires updating types in `types/game.ts` AND the handler in `conditions.ts` / `effects.ts`
+- `scripts/` uses `tsx` (not in deps — use `npx tsx`)
+- Adding new `Condition` or `Effect` variants requires updating types in `types/game.ts` AND the handler
 - Adding new artifact IDs in events requires registering them in `data/artifacts.ts` ARTIFACTS map
-- Game state auto-saves to `localStorage` on every change; clearing it resets the game
+- Chapter events should NOT have realm conditions — chapter order controls pacing, not realm gates
+- `checkCondition` default returns `false` — unknown condition types are rejected
 
 See [AGENTS.md](AGENTS.md) for additional architecture details and engine internals.

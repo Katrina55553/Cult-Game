@@ -20,73 +20,87 @@ There is **no test framework** installed. Verification is lint + typecheck + bui
 
 ```
 src/
-  engine/       Pure game logic — no React, no DOM. Entry: gameEngine.ts
-  data/         Static game content (events, endings, realms, items, spirit roots, storylines)
+  engine/       Pure game logic — no React, no DOM
+  data/         Static game content (events, chapters, endings, realms, items, spirit roots, artifacts)
   components/   React UI components (one per screen/panel)
-  hooks/        useGame.ts — the single state hook that owns GameSession
+  hooks/        useGame.ts — single state hook owning GameSession
   types/        game.ts — all shared types live here
-  audio/        Web Audio API synth sounds, no audio files
+  audio/        Web Audio API synth sounds (effects only, no BGM)
   styles/       Tailwind v4 with @theme custom tokens
 ```
 
 ### Key flow
 
-`App.tsx` renders based on `session.phase` (`start → root_reveal → playing → shop → ending`). All state mutations go through `useGame()` which calls pure functions in `gameEngine.ts` and persists to `localStorage` automatically.
+`App.tsx` renders based on `session.phase` (`start → lore → root_reveal → playing → shop → ending`). All state mutations go through `useGame()` which calls pure functions in `gameEngine.ts` and persists to `localStorage` automatically.
+
+### Chapter system
+
+Events are organized into **chapters** (`data/chapters.ts`). Three routes: **sect** (9 chapters), **wander** (6 chapters), **demon** (4 chapters). Each chapter has:
+- `events` — main storyline events (must all complete to advance)
+- `sideEvents` — optional NPC/Boss/crafting events (don't block progression)
+- `intro` — scene-setting text shown when chapter begins
+- `branchNext` — optional function for route switching
+
+`eventPicker.ts` picks events in order: main chapter events → side events → filler events. Chapter progression is tracked via `player.chapterCompleted[]`.
+
+Route switching: sect→wander (betrayed by sect), wander→sect (karma high), sect→demon (demonHeart high), demon→sect (redemption).
 
 ### Engine internals
 
-- `gameEngine.ts` — create/load/save games, resolve choices, check endings, origin-specific flags
-- `eventPicker.ts` — weighted random event selection with cooldowns, conditions, and behavior-based weight adjustment
+- `gameEngine.ts` — create/load/save games, resolve choices, check endings, chapter progression, route switching
+- `eventPicker.ts` — chapter-based event selection with filler fallback
 - `effects.ts` — applies `Effect[]` to `PlayerState`
 - `conditions.ts` — checks `Condition[]` against `PlayerState`
 - `rng.ts` — seed-based PRNG. `setSeed()` for deterministic mode, `getDailySeed()` for daily challenge
 - `metaProgress.ts` — cross-run unlocks persisted in `localStorage` under key `cultgame_meta`
 - `achievements.ts` / `milestone.ts` — achievement and milestone detection
 - `storylineTracker.ts` — computes storyline progress from player flags
+- `novelExporter.ts` — exports playthrough as a formatted novel text file
 
 ### Event content
 
 Events are split across 10 data files and merged in `events.ts`:
-- `CORE_EVENTS` in `events.ts` — main storyline
-- `ROMANCE_EVENTS` in `eventsRomance.ts` — romance subplot
-- `SYSTEM_EVENTS` in `eventsSystems.ts` — cultivation systems
-- `SECT_EVENTS` in `eventsSect.ts` — sect conflicts
-- `WANDER_EVENTS` in `eventsWander.ts` — wandering/hermit path
-- `CHARACTER_EVENTS` in `eventsCharacter.ts` — NPC interactions
-- `SECRET_EVENTS` in `eventsSecret.ts` — secret encounters
-- `BOSS_EVENTS` in `eventsBoss.ts` — boss fights
-- `CRAFT_EVENTS` in `eventsCraft.ts` — crafting
-- `MISC_EVENTS` in `eventsMisc.ts` — miscellaneous
+- `CORE_EVENTS` (events.ts) — main storyline
+- `ROMANCE_EVENTS` (eventsRomance.ts) — romance subplot
+- `SYSTEM_EVENTS` (eventsSystems.ts) — cultivation subsystems
+- `SECT_EVENTS` (eventsSect.ts) — sect conflicts + minor sect events
+- `WANDER_EVENTS` (eventsWander.ts) — wandering/hermit path
+- `CHARACTER_EVENTS` (eventsCharacter.ts) — NPC interactions (墨离, 林远, 苏暮烟, 赵天行, 叶轻眉)
+- `SECRET_EVENTS` (eventsSecret.ts) — secret encounters + spirit beasts
+- `BOSS_EVENTS` (eventsBoss.ts) — boss fights
+- `CRAFT_EVENTS` (eventsCraft.ts) — crafting + puppet systems
+- `MISC_EVENTS` (eventsMisc.ts) — miscellaneous + origin-specific events
 
-### UI components
+### UI system
 
-- `StatusPanel.tsx` — top status bar with buttons for 📊属性, ⚔修炼, 👜乾坤袋, 📜剧情线
-- `AttributeModal.tsx` — player stats modal (realm, age, lifespan, stats, bloodline)
-- `CultivationModal.tsx` — cultivation systems modal (path, tiers, techniques, weapons)
-- `InventoryModal.tsx` — backpack modal (spirit stones, beasts, techniques, weapons, artifacts, items) with detail views
-- `StorylinePanel.tsx` — storyline progress modal
-- `GameScreen.tsx` — main gameplay screen with event + choices + 🔄 rewind button
-- `EventCard.tsx` / `ChoiceList.tsx` — event display and choice buttons
+Four modal buttons in StatusPanel: 📊属性, ⚔修炼, 👜乾坤袋, 📜剧情线
+
+- `AttributeModal` — stats, realm, age, lifespan, bloodline
+- `CultivationModal` — cultivation path, tiers, techniques, divine weapons
+- `InventoryModal` — spirit stones, beasts, techniques, weapons, artifacts, usable items (all clickable with detail views)
+- `StorylinePanel` — 12 storyline progress trackers
+
+Modals use `createPortal` to `document.body`. All modals support ESC key to close.
 
 ## Conventions
 
-- **No path aliases** — all imports use relative paths (`../engine/gameEngine`)
-- **Tailwind v4** — uses `@import "tailwindcss"` and `@theme {}` directive, not `tailwind.config.js`. Custom design tokens (colors, fonts) are CSS custom properties defined in `src/styles/index.css`
-- **Fonts** — `Ma Shan Zheng` (display/headings), `Noto Serif SC` (body). Both loaded via Google Fonts in `index.html`
-- **Dark theme only** — `color-scheme: dark` on `<html>`, all colors are dark-palette CSS vars
-- **TypeScript strict-ish** — `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly` are on. No emit; bundler handles output
-- **ESLint flat config** — uses `eslint.config.js` with `typescript-eslint` recommended (not type-aware). `dist/` is globally ignored
-- **`verbatimModuleSyntax`** is enabled — use `import type` for type-only imports
-- **No comments in code** unless complexity demands it
-- **Component pattern** — components are named exports, props typed with inline `interface Props`, no default exports except `App`
+- **No path aliases** — all imports use relative paths
+- **Tailwind v4** — `@import "tailwindcss"` and `@theme {}` directive, no `tailwind.config.js`
+- **Dark theme only** — `color-scheme: dark` on `<html>`
+- **Fonts** — `Ma Shan Zheng` (display), `Noto Serif SC` (body)
+- **TypeScript** — `erasableSyntaxOnly` (no `enum`/`namespace`), `verbatimModuleSyntax`, `noUnusedLocals`, `noUnusedParameters`
+- **ESLint flat config** — `eslint.config.js` with `typescript-eslint` (not type-aware). `dist/` ignored
+- **Component pattern** — named exports, props typed with inline `interface Props`, no default exports except `App`
+- **No comments** unless complexity demands it
 
 ## Gotchas
 
-- `npm run build` will **fail if typecheck fails** (`tsc -b` runs first). Fix TS errors before building
-- Game state is saved to `localStorage` on every state change. Clearing localStorage resets the game
-- The `scripts/` directory uses `tsx` (not bundled with deps — install globally or via npx). Scripts import from `../src/` directly
-- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true` env var which changes Vite `base` to `/Cult-Game/`. Local dev uses base `/`
-- Events use `Condition[]` and `Effect[]` discriminated unions — when adding new conditions or effects, update the types in `types/game.ts` and the handler in `conditions.ts` / `effects.ts`
-- `erasableSyntaxOnly` means you cannot use `enum` or `namespace` — use `type` unions and plain objects instead
-- Modals use `createPortal` to `document.body` to avoid stacking context issues
-- Artifact data lives in `data/artifacts.ts` — when adding new artifact IDs in events, register them in the `ARTIFACTS` map
+- `npm run build` **fails if typecheck fails** — `tsc -b` runs first
+- Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true`, changing Vite `base` to `/Cult-Game/`
+- `erasableSyntaxOnly` means no `enum` or `namespace` — use `type` unions and plain objects
+- `scripts/` uses `tsx` (not in deps — use `npx tsx`)
+- Adding new `Condition` or `Effect` variants requires updating types in `types/game.ts` AND the handler in `conditions.ts` / `effects.ts`
+- Adding new artifact IDs in events requires registering them in `data/artifacts.ts` ARTIFACTS map
+- Chapter events should NOT have realm conditions (chapter order controls pacing)
+- `pickFillerEvent` checks `maxTimes`, `cooldown`, AND `checkConditions` — filler events with unmet conditions are skipped
+- `cloneSystems` in effects.ts clones ALL mutable arrays (history, inventory, chapterCompleted, spiritBeastsSeen)
