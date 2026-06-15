@@ -250,9 +250,15 @@ function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | n
   })
   if (fillers.length === 0) return null
 
+  // 排除上一个事件，避免连续重复
+  const lastEvent = state.history[state.history.length - 1]
+  const notLast = fillers.filter((e) => e.id !== lastEvent)
+  const pool1 = notLast.length > 0 ? notLast : fillers
+
+  // 优先选最近 6 回合内没出现过的
   const recent = new Set(state.history.slice(-6))
-  const fresh = fillers.filter((e) => !recent.has(e.id))
-  const pool = fresh.length > 0 ? fresh : fillers
+  const fresh = pool1.filter((e) => !recent.has(e.id))
+  const pool = fresh.length > 0 ? fresh : pool1
   return weightedPick(pool, state, false)
 }
 
