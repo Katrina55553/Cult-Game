@@ -21,15 +21,23 @@ export function exportAsNovel(session: GameSession): string {
 
   // ── 按章节分组日志 ──
   const chapterLogs = splitLogsByChapter(player.log)
+  let chapterIndex = 0
 
-  for (const { chapterName, entries } of chapterLogs) {
+  for (const { chapterName, entries, chapterId } of chapterLogs) {
+    chapterIndex++
     if (chapterName) {
       lines.push('')
+      if (chapterIndex > 1) lines.push('')
       lines.push(`【${chapterName}】`)
       lines.push('')
+      // 插入章节 intro 作为场景描写
+      const chapter = chapterId ? CHAPTERS[chapterId] : null
+      if (chapter?.intro) {
+        lines.push(chapter.intro)
+        lines.push('')
+      }
     }
     for (const entry of entries) {
-      // 清理日志格式，使其更像小说
       const cleaned = cleanLogEntry(entry)
       if (cleaned) {
         lines.push(cleaned)
@@ -49,7 +57,36 @@ export function exportAsNovel(session: GameSession): string {
     lines.push('')
   }
 
+  // ── 人物档案 ──
+  lines.push('')
+  lines.push('═'.repeat(30))
+  lines.push('')
+  lines.push('【人物档案】')
+  lines.push('')
+  lines.push(`${player.name}`)
+  lines.push(`  灵根：${player.spiritRoot}`)
+  lines.push(`  境界：${getRealmName(player.realm)}`)
+  lines.push(`  年龄：${player.age} 岁`)
+  lines.push(`  根骨：${player.stats.rootBone} | 悟性：${player.stats.comprehension} | 气运：${player.stats.luck}`)
+  lines.push(`  因果：${player.stats.karma} | 心魔：${player.stats.demonHeart}`)
+  if (player.cultivationSystems.bloodline) {
+    lines.push(`  血脉：${player.cultivationSystems.bloodline}`)
+  }
+  if (player.cultivationSystems.spiritBeast) {
+    lines.push(`  灵兽：${player.cultivationSystems.spiritBeast.name}（${player.cultivationSystems.spiritBeast.tier}阶）`)
+  }
+  if (player.cultivationSystems.techniques.length > 0) {
+    lines.push(`  功法：${player.cultivationSystems.techniques.join('、')}`)
+  }
+  if (player.cultivationSystems.divineWeapons.length > 0) {
+    lines.push(`  神兵：${player.cultivationSystems.divineWeapons.join('、')}`)
+  }
+  if (player.artifacts.length > 0) {
+    lines.push(`  法宝：${player.artifacts.join('、')}`)
+  }
+
   // ── 尾声 ──
+  lines.push('')
   lines.push('─'.repeat(30))
   lines.push('')
   lines.push('（全文完）')
@@ -58,6 +95,7 @@ export function exportAsNovel(session: GameSession): string {
 }
 
 interface ChapterLog {
+  chapterId: string | null
   chapterName: string | null
   entries: string[]
 }
@@ -67,22 +105,24 @@ interface ChapterLog {
  */
 function splitLogsByChapter(log: string[]): ChapterLog[] {
   const chapters: ChapterLog[] = []
-  let current: ChapterLog = { chapterName: null, entries: [] }
+  let current: ChapterLog = { chapterId: null, chapterName: null, entries: [] }
 
-  // 所有章节名称
-  const chapterNames = new Set(Object.values(CHAPTERS).map((c) => c.name))
+  // 章节名称 → ID 映射
+  const nameToId = new Map<string, string>()
+  for (const [id, ch] of Object.entries(CHAPTERS)) {
+    nameToId.set(ch.name, id)
+  }
 
   for (const entry of log) {
     const trimmed = entry.trim()
-    // 检测章节标记：— 第X章 · XXX —
     if (trimmed.startsWith('—') && trimmed.endsWith('—')) {
       const inner = trimmed.slice(1, -1).trim()
-      if (chapterNames.has(inner)) {
-        // 保存当前章节
+      const chapterId = nameToId.get(inner)
+      if (chapterId) {
         if (current.entries.length > 0 || current.chapterName) {
           chapters.push(current)
         }
-        current = { chapterName: inner, entries: [] }
+        current = { chapterId, chapterName: inner, entries: [] }
         continue
       }
     }
@@ -108,11 +148,6 @@ function cleanLogEntry(entry: string): string {
 
   // 跳过纯章节标记
   if (s.startsWith('—') && s.endsWith('—')) return ''
-
-  // 跳过路线切换标记
-  if (s.includes('你决定加入宗门') || s.includes('你离开宗门') || s.includes('你踏入魔道')) {
-    return s
-  }
 
   return s
 }
