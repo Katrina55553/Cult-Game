@@ -23,7 +23,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_1',
     name: '第一章 · 入门',
     route: 'sect',
-    events: ['enter_sect', 'mentor_assign', 'first_mission', 'outer_sect_life', 'first_duel'],
+    events: ['enter_sect', 'mentor_assign', 'first_mission', 'first_duel', 'outer_sect_life'],
     nextChapter: 'sect_2',
   },
 
@@ -31,7 +31,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_2',
     name: '第二章 · 修行',
     route: 'sect',
-    events: ['elder_lecture', 'herb_gather', 'sect_friend', 'cave_inheritance', 'night_whisper'],
+    events: ['elder_lecture', 'herb_gather', 'sect_friend', 'night_whisper', 'cave_inheritance'],
     nextChapter: 'sect_3',
   },
 
@@ -39,7 +39,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_3',
     name: '第三章 · 崭露头角',
     route: 'sect',
-    events: ['inner_sect_trial', 'mysterious_letter', 'peer_trap', 'mountain_spirit'],
+    events: ['mountain_spirit', 'peer_trap', 'inner_sect_trial'],
     nextChapter: 'sect_4',
   },
 
@@ -47,7 +47,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_4',
     name: '第四章 · 天骄之争',
     route: 'sect',
-    events: ['rival_provocation', 'sect_tournament', 'spirit_flood', 'forbidden_library'],
+    events: ['spirit_flood', 'forbidden_library', 'rival_provocation', 'sect_tournament'],
     nextChapter: 'sect_5',
   },
 
@@ -55,7 +55,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_5',
     name: '第五章 · 秘境探索',
     route: 'sect',
-    events: ['world_travel', 'secret_realm', 'ancient_legacy', 'ancient_battlefield', 'heavenly_treasure'],
+    events: ['world_travel', 'ancient_legacy', 'secret_realm', 'ancient_battlefield', 'heavenly_treasure'],
     nextChapter: 'sect_6',
   },
 
@@ -63,7 +63,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_6',
     name: '第六章 · 情缘与暗流',
     route: 'sect',
-    events: ['dao_companion', 'sect_politics', 'elder_confession', 'ancient_prophesy'],
+    events: ['sect_politics', 'elder_confession', 'ancient_prophesy', 'dao_companion'],
     nextChapter: 'sect_7',
     branchNext: (p) => {
       if (p.stats.demonHeart >= 30) return 'demon_1'
@@ -75,7 +75,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_7',
     name: '第七章 · 宗门大战',
     route: 'sect',
-    events: ['sect_alliance', 'moyu_invasion', 'sect_war', 'spirit_vein_war'],
+    events: ['sect_alliance', 'spirit_vein_war', 'moyu_invasion', 'sect_war'],
     nextChapter: 'sect_8',
   },
 
@@ -83,7 +83,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_8',
     name: '第八章 · 突破之路',
     route: 'sect',
-    events: ['demon_temptation', 'foundation_tribulation', 'dao_heart_trial', 'golden_tribulation'],
+    events: ['demon_temptation', 'foundation_tribulation', 'demon_tribulation', 'dao_heart_trial', 'golden_tribulation'],
     nextChapter: 'sect_9',
   },
 
@@ -91,7 +91,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_9',
     name: '第九章 · 终局',
     route: 'sect',
-    events: ['demon_tribulation', 'lifespan_crisis', 'final_choice'],
+    events: ['lifespan_crisis', 'final_choice'],
   },
 
   // ═══════════════════════════════════════

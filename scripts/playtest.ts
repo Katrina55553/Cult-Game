@@ -15,7 +15,7 @@ import { checkConditions } from '../src/engine/conditions.ts'
 import * as rng from '../src/engine/rng.ts'
 import type { Choice, GameSession } from '../src/types/game.ts'
 
-type Strategy = 'cultivate' | 'romance' | 'sect' | 'greedy' | 'random'
+type Strategy = 'cultivate' | 'romance' | 'sect' | 'greedy' | 'random' | 'wander'
 
 interface RunReport {
   strategy: Strategy
@@ -43,6 +43,17 @@ function pickChoice(
   const score = (c: Choice): number => {
     let s = 0
     const text = c.text + (c.hint ?? '')
+    // 路线选择：各策略必须选对路线
+    if (event.id === 'enter_sect') {
+      if (strategy === 'wander') { if (c.id === 'refuse') return 100; return -10 }
+      if (c.id === 'refuse') return -10  // 非 wander 策略不选散修
+      if (c.id === 'honest') return 100  // 默认走宗门
+    }
+    // 魔道选择
+    if (c.id === 'accept' && (text.includes('魔') || text.includes('堕'))) {
+      if (strategy === 'demon') s += 50
+      else s -= 10
+    }
     if (strategy === 'sect') {
       if (text.includes('宗门') || c.id === 'honest') s += 10
       if (c.id === 'refuse') s -= 8
@@ -75,8 +86,10 @@ function pickChoice(
 
 function startRun(strategy: Strategy, seed: number): RunReport {
   rng.setSeed(seed)
-  let session = createNewGame({ name: '试玩', origin: strategy === 'sect' ? null : 'noble_exile' })
+  let session = createNewGame({ name: '试玩', origin: strategy === 'wander' ? 'hermit' : 'noble_exile' })
   session = beginPlaying(session)
+
+  const debug = false
 
   const issues: string[] = []
   const eventCounts: Record<string, number> = {}
@@ -185,11 +198,11 @@ function auditEvents(): string[] {
 
 console.log('=== CultGame 自动试玩 ===\n')
 
-const strategies: Strategy[] = ['cultivate', 'romance', 'sect', 'greedy', 'random']
+const strategies: Strategy[] = ['sect', 'wander', 'romance', 'cultivate', 'greedy', 'random']
 const reports: RunReport[] = []
 
 for (const strategy of strategies) {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 4; i++) {
     reports.push(startRun(strategy, 1000 + i * 137 + strategies.indexOf(strategy) * 999))
   }
 }
@@ -201,7 +214,7 @@ if (audit.length) {
   console.log()
 }
 
-console.log('【各策略 5 局摘要】')
+console.log('【各策略摘要】')
 for (const strategy of strategies) {
   const runs = reports.filter((r) => r.strategy === strategy)
   const endings = [...new Set(runs.map((r) => r.ending))]

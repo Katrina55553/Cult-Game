@@ -299,10 +299,7 @@ export const SECT_EVENTS: GameEvent[] = [
     weight: 10,
     years: 1,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_2' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'accept_challenge',
@@ -416,10 +413,7 @@ export const SECT_EVENTS: GameEvent[] = [
     weight: 5,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'volunteer_spy',
@@ -872,10 +866,7 @@ export const SECT_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-      { type: 'realm', min: 'foundation' },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'frontline',

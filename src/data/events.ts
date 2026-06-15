@@ -72,7 +72,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 15,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_1' }],
     choices: [
       {
         id: 'force',
@@ -517,10 +516,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 20,
     years: 3,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_3' },
-      { type: 'cultivation', min: 80 },
-    ],
+    conditions: [{ type: 'cultivation', min: 80 }],
     choices: [
       {
         id: 'hard',
@@ -602,10 +598,7 @@ const CORE_EVENTS: GameEvent[] = [
     years: 2,
     maxTimes: 2,
     cooldown: 6,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'compete',
@@ -649,7 +642,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 10,
     years: 1,
     once: true,
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'reject',
@@ -716,7 +708,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 8,
     years: 3,
     once: true,
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'inherit',
@@ -776,7 +767,6 @@ const CORE_EVENTS: GameEvent[] = [
     years: 2,
     once: true,
     conditions: [
-      { type: 'realm', min: 'foundation' },
       { type: 'flag', key: 'has_companion', value: false },
       { type: 'flag', key: 'met_su_qing', value: false },
     ],
@@ -821,7 +811,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 10,
     years: 3,
     once: true,
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'explore',
@@ -924,10 +913,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 15,
     years: 5,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'cultivation', min: 90 },
-    ],
+    conditions: [{ type: 'cultivation', min: 90 }],
     choices: [
       {
         id: 'endure',
@@ -1045,10 +1031,7 @@ const CORE_EVENTS: GameEvent[] = [
     years: 3,
     maxTimes: 2,
     cooldown: 8,
-    conditions: [
-      { type: 'stat', key: 'demonHeart', min: 40 },
-      { type: 'realm', min: 'foundation' },
-    ],
+    conditions: [{ type: 'stat', key: 'demonHeart', min: 40 }],
     choices: [
       {
         id: 'face',
@@ -1091,7 +1074,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 20,
     years: 1,
     once: true,
-    conditions: [{ type: 'realm', min: 'nascent_soul' }],
     choices: [
       {
         id: 'ascend',
@@ -1140,10 +1122,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 25,
     years: 1,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_1' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'field',
@@ -1179,10 +1158,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 22,
     years: 1,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_2' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'heart',
@@ -1237,7 +1213,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 18,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'qi_refining_3' }],
     choices: [
       {
         id: 'city',
@@ -1290,10 +1265,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 8,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'defend',
@@ -1362,7 +1334,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 10,
     years: 1,
     once: true,
-    conditions: [{ type: 'realm', min: 'golden_core' }],
     choices: [
       {
         id: 'emperor',
@@ -1401,7 +1372,6 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 7,
     years: 2,
     once: true,
-    conditions: [{ type: 'realm', min: 'golden_core' }],
     choices: [
       {
         id: 'pull_sword',
@@ -1454,7 +1424,6 @@ const CORE_EVENTS: GameEvent[] = [
     years: 0,
     once: true,
     rarity: 'legendary',
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'eat',
@@ -1774,10 +1743,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 8,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'accept_mission',
@@ -1820,10 +1786,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 8,
     years: 1,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_3' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'peace',
@@ -1911,7 +1874,6 @@ const CORE_EVENTS: GameEvent[] = [
     years: 2,
     once: true,
     rarity: 'rare',
-    conditions: [{ type: 'realm', min: 'foundation' }],
     choices: [
       {
         id: 'seek_artifacts',
@@ -1990,10 +1952,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 6,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'qi_refining_2' },
-      { type: 'flag', key: 'has_mysterious_origin', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'has_mysterious_origin', value: true }],
     choices: [
       {
         id: 'go_cliff',
@@ -2043,10 +2002,7 @@ const CORE_EVENTS: GameEvent[] = [
     weight: 7,
     years: 2,
     once: true,
-    conditions: [
-      { type: 'realm', min: 'foundation' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
-    ],
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
     choices: [
       {
         id: 'fight_vein',
