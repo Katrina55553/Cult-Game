@@ -85,6 +85,8 @@ export interface PlayerState {
   nextEventHint?: string
   shopBuffs: Record<string, number>
   spiritBeastsSeen: string[]
+  currentChapter: string
+  chapterCompleted: string[]
 }
 
 export type Condition =

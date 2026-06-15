@@ -1,3 +1,4 @@
+import { CHAPTERS, getChapter } from '../data/chapters'
 import { createDefaultCultivationSystems, migrateCultivationSystems } from '../data/cultivationSystems'
 import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
@@ -119,6 +120,8 @@ export function createPlayer(
     log: [`${16}岁：踏入修仙之路，测得${root.name}。`],
     shopBuffs: { purchases: 0 },
     spiritBeastsSeen: [],
+    currentChapter: 'sect_1',
+    chapterCompleted: [],
   }
 
   if (options.useInnateBody) {
@@ -307,6 +310,35 @@ function finalizeAfterChoice(
   player = { ...player, log: [...player.log, ageLog] }
 
   player = { ...player, history: [...player.history, event.id] }
+
+  // 章节制：路线切换
+  const chapterBefore = getChapter(player.currentChapter)
+  if (player.flags.refused_all_sects && chapterBefore?.route !== 'wander') {
+    player = { ...player, currentChapter: 'wander_1', chapterCompleted: [] }
+    player.log.push('— 第一章 · 独行 —')
+  } else if (player.flags.accepted_demon_path && chapterBefore?.route !== 'demon') {
+    player = { ...player, currentChapter: 'demon_1', chapterCompleted: [] }
+    player.log.push('— 第一章 · 入魔 —')
+  }
+
+  // 章节制：标记事件完成，推进章节
+  const chapterNow = getChapter(player.currentChapter)
+  if (chapterNow && chapterNow.events.includes(event.id)) {
+    const completed = [...player.chapterCompleted, event.id]
+    player = { ...player, chapterCompleted: completed }
+
+    // 检查当前章节是否全部完成
+    const allDone = chapterNow.events.every((eid) => completed.includes(eid))
+    if (allDone) {
+      const nextId = chapterNow.branchNext
+        ? chapterNow.branchNext(player)
+        : chapterNow.nextChapter
+      if (nextId && CHAPTERS[nextId]) {
+        player = { ...player, currentChapter: nextId, chapterCompleted: [] }
+        player.log.push(`— ${CHAPTERS[nextId].name} —`)
+      }
+    }
+  }
 
   const ending = checkEnding(player)
   if (ending) {
@@ -577,6 +609,12 @@ export function loadGame(): GameSession | null {
     }
     if (!Array.isArray(session.player.log)) {
       session.player.log = []
+    }
+    if (typeof session.player.currentChapter !== 'string') {
+      session.player.currentChapter = 'sect_1'
+    }
+    if (!Array.isArray(session.player.chapterCompleted)) {
+      session.player.chapterCompleted = []
     }
     if (!Array.isArray(session.player.spiritBeastsSeen)) {
       session.player.spiritBeastsSeen = []

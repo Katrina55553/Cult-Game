@@ -1,3 +1,4 @@
+import { getChapter } from '../data/chapters'
 import { getRealmOrder } from '../data/realms'
 import { checkConditions } from './conditions'
 import * as rng from './rng'
@@ -230,15 +231,6 @@ function isFillerEvent(event: GameEvent): boolean {
   return FILLER_EVENT_IDS.has(event.id)
 }
 
-function consecutiveFillers(history: string[]): number {
-  let count = 0
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (FILLER_EVENT_IDS.has(history[i])) count++
-    else break
-  }
-  return count
-}
-
 function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | null {
   const fillers = events.filter((e) => FILLER_EVENT_IDS.has(e.id))
   if (fillers.length === 0) return null
@@ -298,33 +290,32 @@ export function pickNextEvent(
   metaRomanceBoost = false,
   excludeId?: string,
 ): GameEvent | null {
+  // 章节制：优先从当前章节中选取下一个事件
+  const chapter = getChapter(state.currentChapter)
+  if (chapter) {
+    const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
+    const eventMap = new Map(events.map((e) => [e.id, e]))
+
+    // 按顺序找第一个符合条件的事件
+    for (const eventId of pending) {
+      if (eventId === excludeId) continue
+      const evt = eventMap.get(eventId)
+      if (!evt) continue
+      if (evt.once && state.history.includes(eventId)) continue
+      if (!checkConditions(state, evt.conditions)) continue
+      return evt
+    }
+
+    // 章节事件都触发过了（可能因条件不满足被跳过），插入 filler 等待
+    const filler = pickFillerEvent(state, events)
+    if (filler) return filler
+    return null
+  }
+
+  // 兜底：没有章节时使用原来的随机逻辑
   const mainEvent = pickMainEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
   if (mainEvent) return mainEvent
 
-  if (consecutiveFillers(state.history) >= 2) {
-    const relaxed = filterEligible(state, events, unlockedEvents, {
-      excludeId,
-      skipCooldown: true,
-      skipAct: true,
-    }).filter((e) => !isFillerEvent(e))
-    if (relaxed.length > 0) {
-      return weightedPick(relaxed, state, metaRomanceBoost)
-    }
-  }
-
-  const fillerEligible = filterEligible(state, events, unlockedEvents, { excludeId }).filter((e) =>
-    isFillerEvent(e),
-  )
-  if (fillerEligible.length > 0) {
-    return pickFillerEvent(state, fillerEligible) ?? weightedPick(fillerEligible, state, metaRomanceBoost)
-  }
-
-  return pickFillerEvent(
-    state,
-    filterEligible(state, events, unlockedEvents, {
-      excludeId,
-      skipCooldown: true,
-      skipAct: true,
-    }),
-  )
+  const filler = pickFillerEvent(state, events)
+  return filler
 }
