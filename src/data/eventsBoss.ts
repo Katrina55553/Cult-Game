@@ -401,4 +401,112 @@ export const BOSS_EVENTS: GameEvent[] = [
       },
     ],
   },
+
+  // ──── 新增 Boss ────
+
+  {
+    id: 'boss_spider_queen',
+    title: '蛛后妖巢',
+    description:
+      '深山古林中弥漫着诡异的紫雾，你循迹而入，发现一棵千年古树被蛛网层层包裹。树冠上盘踞着一只丈余大的紫晶蜘蛛，八只眼睛泛着幽光，周围散落着数十具修士骸骨。蛛后吐出一道毒丝，直取你的面门。',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'fight_spider',
+        text: '以火攻破蛛网，正面迎战',
+        outcomes: [
+          {
+            chance: 0.45,
+            luckBonus: 0.005,
+            successEffects: [
+              { type: 'cultivation', value: 20 },
+              { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'spiritStones', value: 30 },
+              { type: 'flag', key: 'slayed_spider_queen', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以真火焚尽蛛网，趁蛛后惊慌之际一剑斩下其头颅。紫晶蛛丹入手，剧毒无比却蕴含精纯灵力。',
+              fail: '蛛后毒丝缠身，你中毒颇深，拼死才挣脱蛛网逃出。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'bypass_spider',
+        text: '绕道而行，不招惹它',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+      {
+        id: 'study_spider',
+        text: '远观蛛后习性，研究妖兽',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'boss_ice_wyrm',
+    title: '冰螭降世',
+    description:
+      '极北冰原深处传来震天龙吟，一头通体冰蓝的巨螭破冰而出。它是上古冰龙后裔，体内蕴含极寒之力。冰螭所过之处，万物冰封，方圆十里化为冰原。你恰好在其肆虐范围之内。',
+    weight: 4,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'golden_core' }],
+    choices: [
+      {
+        id: 'fight_wyrm',
+        text: '以金丹之力对抗冰螭',
+        outcomes: [
+          {
+            chance: 0.35,
+            luckBonus: 0.006,
+            successEffects: [
+              { type: 'cultivation', value: 30 },
+              { type: 'stat', key: 'rootBone', value: 8 },
+              { type: 'lifespan', value: 10 },
+              { type: 'flag', key: 'slayed_ice_wyrm', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -20 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你以金丹之力引动天地元气，与冰螭大战三百回合，最终将其斩杀。冰螭内丹入腹，寿元大增，体魄更加强横。',
+              fail: '冰螭寒气太盛，你被冻伤经脉，拼死才逃出冰原。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'absorb_wyrm',
+        text: '引冰螭寒气淬炼肉身',
+        requirements: [{ type: 'stat', key: 'rootBone', min: 60 }],
+        effects: [
+          { type: 'cultivation', value: 20 },
+          { type: 'stat', key: 'rootBone', value: 6 },
+          { type: 'lifespan', value: 5 },
+        ],
+      },
+      {
+        id: 'evade_wyrm',
+        text: '冰螭凶猛，速速逃离',
+        effects: [
+          { type: 'stat', key: 'luck', value: 3 },
+        ],
+      },
+    ],
+  },
 ]

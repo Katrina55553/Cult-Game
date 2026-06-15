@@ -109,7 +109,7 @@ export const CHAPTERS: Record<string, Chapter> = {
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
       'qinglian_tournament', 'yaogu_plague', 'guiyi_seal', 'ancient_formation_battle',
-      'beast_combat_aid', 'beast_jealousy',
+      'beast_combat_aid', 'beast_jealousy', 'boss_spider_queen',
     ],
     nextChapter: 'sect_8',
   },
@@ -123,7 +123,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'lovers_ascension', 'time_window', 'rival_beauty',
       'yaogu_legacy', 'guiyi_enlightenment', 'sect_master_legacy',
-      'bloodline_resonance', 'weapon_reforge', 'technique_fusion',
+      'bloodline_resonance', 'weapon_reforge', 'technique_fusion', 'boss_ice_wyrm',
     ],
     nextChapter: 'sect_9',
   },
