@@ -203,8 +203,7 @@ export const MISC_EVENTS: GameEvent[] = [
     description: '两名修士在路边斗法，剑气纵横交错。旁观者议论纷纷，似在以赌注押胜负。',
     weight: 8,
     years: 1,
-    maxTimes: 2,
-    cooldown: 8,
+    cooldown: 5,
     choices: [
       {
         id: 'join',
@@ -965,8 +964,7 @@ export const MISC_EVENTS: GameEvent[] = [
     description: '修行途中，你驻足坊市歇息。灵石在握，可购丹药符箓以助仙途。',
     weight: 9,
     years: 0,
-    maxTimes: 3,
-    cooldown: 6,
+    cooldown: 4,
     choices: [
       {
         id: 'browse',
@@ -1520,8 +1518,7 @@ export const MISC_EVENTS: GameEvent[] = [
       '深山中发现一处天然灵泉，泉水清澈见底，灵气氤氲。你犹豫是否要下去沐浴——灵泉可以洗筋伐髓，但也可能有未知风险。',
     weight: 8,
     years: 1,
-    maxTimes: 3,
-    cooldown: 6,
+    cooldown: 5,
     choices: [
       {
         id: 'bathe',
@@ -1778,8 +1775,7 @@ export const MISC_EVENTS: GameEvent[] = [
       '你来到一处灵气充沛的仙山，山中草木皆有灵性，灵花异草随处可见。山腰处有一片灵田，几名散修正在采集灵草。山顶云雾缭绕，隐约可见一座古亭。',
     weight: 8,
     years: 1,
-    maxTimes: 3,
-    cooldown: 6,
+    cooldown: 5,
     choices: [
       {
         id: 'gather_herbs',

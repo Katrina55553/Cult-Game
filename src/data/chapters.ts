@@ -42,8 +42,8 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_3',
     name: '第三章 · 崭露头角',
     route: 'sect',
-    events: ['mountain_spirit', 'peer_trap', 'inner_sect_trial'],
-    sideEvents: ['su_muyan_crisis', 'zhao_tianxing_revenge'],
+    events: ['mountain_spirit', 'peer_trap', 'inner_sect_trial', 'beast_attack'],
+    sideEvents: ['su_muyan_crisis', 'zhao_tianxing_revenge', 'alchemy_workshop'],
     nextChapter: 'sect_4',
   },
 
@@ -51,8 +51,8 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_4',
     name: '第四章 · 天骄之争',
     route: 'sect',
-    events: ['spirit_flood', 'forbidden_library', 'rival_provocation', 'sect_tournament'],
-    sideEvents: ['mysterious_demon_first', 'zhao_tianxing_duel', 'qinglian_visit', 'yaogu_trade', 'guiyi_visit'],
+    events: ['spirit_flood', 'forbidden_library', 'rival_provocation', 'sect_tournament', 'boss_wolf_king'],
+    sideEvents: ['mysterious_demon_first', 'zhao_tianxing_duel', 'qinglian_visit', 'yaogu_trade', 'guiyi_visit', 'formation_study', 'sword_enlightenment'],
     nextChapter: 'sect_5',
   },
 
@@ -60,8 +60,8 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_5',
     name: '第五章 · 秘境探索',
     route: 'sect',
-    events: ['world_travel', 'ancient_legacy', 'secret_realm', 'ancient_battlefield', 'heavenly_treasure'],
-    sideEvents: ['mysterious_demon_second', 'beauty_rescue', 'jade_pool_encounter', 'lin_yuan_breakthrough'],
+    events: ['world_travel', 'ancient_legacy', 'secret_realm', 'ancient_battlefield', 'heavenly_treasure', 'boss_ancient_golem'],
+    sideEvents: ['mysterious_demon_second', 'beauty_rescue', 'jade_pool_encounter', 'lin_yuan_breakthrough', 'alchemy_master', 'divine_weapon_forge'],
     nextChapter: 'sect_6',
   },
 
@@ -85,11 +85,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_7',
     name: '第七章 · 宗门大战',
     route: 'sect',
-    events: ['sect_alliance', 'spirit_vein_war', 'moyu_invasion', 'sect_war'],
+    events: ['sect_alliance', 'spirit_vein_war', 'moyu_invasion', 'sect_war', 'boss_demon_general'],
     sideEvents: [
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
-      'qinglian_tournament', 'yaogu_plague', 'guiyi_seal',
+      'qinglian_tournament', 'yaogu_plague', 'guiyi_seal', 'ancient_formation_battle',
     ],
     nextChapter: 'sect_8',
   },
@@ -98,10 +98,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'sect_8',
     name: '第八章 · 突破之路',
     route: 'sect',
-    events: ['demon_temptation', 'foundation_tribulation', 'demon_tribulation', 'dao_heart_trial', 'golden_tribulation'],
+    events: ['demon_temptation', 'foundation_tribulation', 'demon_tribulation', 'dao_heart_trial', 'golden_tribulation', 'boss_thunder_beast'],
     sideEvents: [
       'lovers_ascension', 'time_window', 'rival_beauty',
       'yaogu_legacy', 'guiyi_enlightenment', 'sect_master_legacy',
+      'bloodline_resonance', 'weapon_reforge', 'technique_fusion',
     ],
     nextChapter: 'sect_9',
   },
@@ -111,7 +112,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第九章 · 终局',
     route: 'sect',
     events: ['lifespan_crisis', 'final_choice'],
-    sideEvents: ['ancient_prophesy'],
+    sideEvents: ['boss_demon_lord', 'time_window', 'lovers_ascension'],
   },
 
   // ═══════════════════════════════════════
@@ -122,7 +123,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'wander_1',
     name: '第一章 · 独行',
     route: 'wander',
-    events: ['wander_market', 'wander_companion', 'wander_danger'],
+    events: ['wander_market', 'wander_companion', 'wander_danger', 'beast_attack'],
     nextChapter: 'wander_2',
   },
 
@@ -163,6 +164,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第六章 · 终局',
     route: 'wander',
     events: ['righteous_dark_side', 'demon_mercy', 'final_choice'],
+    sideEvents: ['boss_demon_lord', 'inheritance_battle'],
   },
 
   // ═══════════════════════════════════════
@@ -173,7 +175,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'demon_1',
     name: '第一章 · 入魔',
     route: 'demon',
-    events: ['demon_whisper', 'demon_temptation', 'blood_moon'],
+    events: ['demon_whisper', 'demon_temptation', 'blood_moon', 'demon_nest'],
     nextChapter: 'demon_2',
   },
 
@@ -181,8 +183,9 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'demon_2',
     name: '第二章 · 堕落',
     route: 'demon',
-    events: ['blood_sacrifice', 'inner_demon', 'qi_deviation'],
+    events: ['blood_sacrifice', 'inner_demon', 'qi_deviation', 'demon_invasion'],
     nextChapter: 'demon_3',
+    sideEvents: ['boss_shadow_assassin'],
   },
 
   'demon_3': {
@@ -190,6 +193,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第三章 · 魔道势力',
     route: 'demon',
     events: ['demon_lord_offer', 'righteous_siege', 'soul_possession'],
+    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand'],
     nextChapter: 'demon_4',
   },
 
@@ -198,6 +202,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第四章 · 终局',
     route: 'demon',
     events: ['demon_tribulation', 'lifespan_crisis', 'final_choice'],
+    sideEvents: ['boss_demon_lord'],
   },
 }
 

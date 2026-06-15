@@ -236,7 +236,18 @@ function isFillerEvent(event: GameEvent): boolean {
 }
 
 function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | null {
-  const fillers = events.filter((e) => FILLER_EVENT_IDS.has(e.id))
+  const fillers = events.filter((e) => {
+    if (!FILLER_EVENT_IDS.has(e.id)) return false
+    // 尊重 maxTimes 限制
+    const times = countInHistory(state.history, e.id)
+    if (e.maxTimes !== undefined && times >= e.maxTimes) return false
+    // 尊重 cooldown
+    if (e.cooldown !== undefined && times > 0) {
+      const since = turnsSinceLast(state.history, e.id)
+      if (since < e.cooldown) return false
+    }
+    return true
+  })
   if (fillers.length === 0) return null
 
   const recent = new Set(state.history.slice(-6))
