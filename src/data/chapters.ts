@@ -91,6 +91,13 @@ export const CHAPTERS: Record<string, Chapter> = {
       'beauty_gratitude', 'su_muyan_past', 'zhao_tianxing_redemption', 'zhao_truth',
       'mysterious_demon_third', 'moli_backstory', 'ye_qingmei_reunion_alt', 'wanyao_encounter', 'sect_exchange',
       'beast_bond', 'beast_evolution',
+      'fox_saved', 'fox_guide', 'fox_transform',
+      'found_prophecy', 'seek_artifact_1', 'seek_artifact_2', 'prophecy_choice',
+      'origin_clue', 'origin_truth', 'origin_destiny',
+      'sect_conflict', 'sect_truth', 'sect_choice',
+      'master_quest', 'master_secret', 'master_legacy',
+      'vein_found', 'vein_guardian', 'vein_harvest',
+      'battlefield_memory', 'battlefield_truth', 'battlefield_legacy',
     ],
     nextChapter: 'sect_7',
     branchNext: (p) => {
@@ -205,7 +212,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '独行千里，你终于看清了修真界的真相。正道未必光明，魔道未必黑暗。你将做出最后的抉择。',
     events: ['righteous_dark_side', 'demon_mercy', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge'],
+    sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge', 'alliance_legacy'],
   },
 
   // ═══════════════════════════════════════
@@ -246,7 +253,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '魔尊亲自招揽，正道联盟围剿。你在魔道中越陷越深，却也获得了前所未有的力量。何去何从？',
     events: ['demon_lord_offer', 'righteous_siege', 'soul_possession'],
-    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion', 'demon_territory', 'demon_alchemist'],
+    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion', 'demon_territory', 'demon_alchemist', 'demon_power', 'demon_truth'],
     nextChapter: 'demon_4',
   },
 
@@ -256,7 +263,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '心魔大劫将至，寿元所剩无几。你必须做出最后的抉择——是以魔证道，还是就此陨落。',
     events: ['demon_tribulation', 'lifespan_crisis', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'bloodline_resonance', 'weapon_reforge'],
+    sideEvents: ['boss_demon_lord', 'bloodline_resonance', 'weapon_reforge', 'demon_transcend'],
   },
 }
 

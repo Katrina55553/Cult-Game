@@ -193,4 +193,129 @@ export const STORYLINES: Storyline[] = [
       { flag: 'turned_spy', label: '反间苍穹阁' },
     ],
   },
+
+  // ──── 连锁剧情线 ────
+
+  {
+    id: 'fox_chain',
+    name: '灵狐报恩',
+    tone: 'gold',
+    entryCheck: (p) => !!p.flags.saved_fox,
+    steps: [
+      { flag: 'saved_fox', label: '救下灵狐' },
+      { flag: 'fox_return', label: '灵狐报恩' },
+      { flag: 'fox_guided', label: '灵狐引路' },
+      { flag: 'fox_companion', label: '灵狐化形' },
+    ],
+  },
+
+  {
+    id: 'prophecy_chain',
+    name: '古老预言',
+    tone: 'gold',
+    entryCheck: (p) => !!p.flags.found_prophecy,
+    steps: [
+      { flag: 'found_prophecy', label: '发现预言' },
+      { flag: 'artifact_1_found', label: '星辰碎片' },
+      { flag: 'artifact_2_found', label: '太阳碎片' },
+      { flag: 'prophecy_sacrifice', label: '预言抉择' },
+    ],
+  },
+
+  {
+    id: 'origin_chain',
+    name: '身世之谜',
+    tone: 'cinnabar',
+    entryCheck: (p) => !!p.flags.has_mysterious_origin,
+    steps: [
+      { flag: 'origin_clue', label: '身世线索' },
+      { flag: 'origin_truth', label: '身世真相' },
+      { flag: 'origin_destiny', label: '命运抉择' },
+    ],
+  },
+
+  {
+    id: 'sect_chain',
+    name: '正魔之争',
+    tone: 'jade',
+    entryCheck: (p) => !!p.flags.sect_conflict,
+    steps: [
+      { flag: 'sect_conflict', label: '宗门暗流' },
+      { flag: 'sect_truth', label: '真相大白' },
+      { flag: 'chose_sacrifice', label: '牺牲计划' },
+      { flag: 'chose_righteous', label: '坚持正道' },
+    ],
+  },
+
+  {
+    id: 'alliance_chain',
+    name: '散修盟崛起',
+    tone: 'mist',
+    entryCheck: (p) => !!p.flags.wander_leader,
+    steps: [
+      { flag: 'alliance_found', label: '散修盟成立' },
+      { flag: 'alliance_crisis', label: '散修盟危机' },
+      { flag: 'alliance_legacy', label: '散修盟传奇' },
+    ],
+  },
+
+  {
+    id: 'demon_chain',
+    name: '魔道觉醒',
+    tone: 'cinnabar',
+    entryCheck: (p) => !!p.flags.demon_power,
+    steps: [
+      { flag: 'demon_power', label: '魔道觉醒' },
+      { flag: 'demon_truth', label: '魔道真相' },
+      { flag: 'demon_transcend', label: '魔道超越' },
+    ],
+  },
+
+  {
+    id: 'master_chain',
+    name: '师徒传承',
+    tone: 'jade',
+    entryCheck: (p) => !!p.flags.master_quest,
+    steps: [
+      { flag: 'master_quest', label: '师尊之托' },
+      { flag: 'master_secret', label: '师叔的秘密' },
+      { flag: 'master_legacy', label: '师徒传承' },
+    ],
+  },
+
+  {
+    id: 'vein_chain',
+    name: '灵脉秘境',
+    tone: 'jade',
+    entryCheck: (p) => !!p.flags.vein_found,
+    steps: [
+      { flag: 'vein_found', label: '灵脉发现' },
+      { flag: 'vein_guardian', label: '灵脉守护者' },
+      { flag: 'vein_harvest', label: '灵脉丰收' },
+    ],
+  },
+
+  {
+    id: 'battlefield_chain',
+    name: '古战场遗迹',
+    tone: 'gold',
+    entryCheck: (p) => !!p.flags.battlefield_memory,
+    steps: [
+      { flag: 'battlefield_memory', label: '战场记忆' },
+      { flag: 'battlefield_truth', label: '战场真相' },
+      { flag: 'battlefield_legacy', label: '战场遗产' },
+    ],
+  },
+
+  {
+    id: 'companion_chain',
+    name: '道侣同心',
+    tone: 'gold',
+    entryCheck: (p) => !!p.flags.companion_dream,
+    steps: [
+      { flag: 'companion_dream', label: '道侣之梦' },
+      { flag: 'companion_trial', label: '道侣试炼' },
+      { flag: 'companion_eternity', label: '道侣永恒' },
+    ],
+  },
 ]

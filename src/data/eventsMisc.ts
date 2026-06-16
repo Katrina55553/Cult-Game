@@ -3155,4 +3155,1041 @@ export const MISC_EVENTS: GameEvent[] = [
       },
     ],
   },
+
+  // ═══════════════════════════════════════
+  //  连锁事件（10 条剧情链）
+  // ═══════════════════════════════════════
+
+  // ──── 1. 灵狐报恩链 ────
+
+  {
+    id: 'fox_saved',
+    title: '灵狐报恩',
+    description: '你正在修炼，一只通体雪白的灵狐叼着一株百年灵草放在你门前。它望了你一眼，正是当年你救下的那只。灵狐放下灵草后转身离去，消失在月色中。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'saved_fox', value: true }],
+    choices: [
+      {
+        id: 'accept_fox_gift',
+        text: '收下灵草，默默记下这份恩情',
+        effects: [
+          { type: 'spiritStones', value: 20 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'flag', key: 'fox_return', value: true },
+        ],
+      },
+      {
+        id: 'follow_fox',
+        text: '悄悄跟踪灵狐',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'flag', key: 'fox_return', value: true },
+              { type: 'flag', key: 'fox_den_found', value: true },
+            ],
+            failEffects: [
+              { type: 'stat', key: 'luck', value: -3 },
+            ],
+            narrative: {
+              success: '你悄然跟上灵狐，发现它的巢穴在一处隐蔽的山谷中。灵狐回头看你一眼，似是默许了你的到来。',
+              fail: '灵狐机敏异常，你跟丢了。但你记住了它的方向。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fox_guide',
+    title: '灵狐引路',
+    description: '你在深山中迷路，正焦急之际，那只白狐忽然出现在前方。它回头望你一眼，然后向前跑去，每走几步便停下来等你。你跟着它穿过迷雾，来到一处从未见过的灵泉旁。',
+    weight: 7,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'fox_return', value: true }],
+    choices: [
+      {
+        id: 'drink_spring',
+        text: '饮下灵泉水',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'lifespan', value: 8 },
+          { type: 'flag', key: 'fox_guided', value: true },
+        ],
+      },
+      {
+        id: 'thank_fox',
+        text: '向灵狐道谢并分享灵泉水',
+        effects: [
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'luck', value: 5 },
+          { type: 'flag', key: 'fox_guided', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fox_transform',
+    title: '灵狐化形',
+    description: '月圆之夜，灵狐忽然口吐人言：「恩公，我修行百年，今日终于可以化形报恩。」灵光散去，一名白衣少女出现在你面前，容貌绝美，眸中满是感激。「我愿追随恩公，直到天荒地老。」',
+    weight: 6,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'fox_guided', value: true }],
+    choices: [
+      {
+        id: 'accept_fox',
+        text: '接受灵狐的追随',
+        effects: [
+          { type: 'stat', key: 'luck', value: 10 },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'lifespan', value: 10 },
+          { type: 'flag', key: 'fox_companion', value: true },
+        ],
+      },
+      {
+        id: 'free_fox',
+        text: '让它自由修行，不必报恩',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'flag', key: 'fox_freed', value: true },
+        ],
+      },
+    ],
+  },
+
+  // ──── 2. 古老预言链 ────
+
+  {
+    id: 'found_prophecy',
+    title: '古老预言',
+    description: '你在宗门古籍中发现一段古老预言：「千年后，天地大劫将至。唯集齐七件上古神器，方能镇压浩劫。」你心中一动——这预言似乎与你有关。',
+    weight: 6,
+    years: 2,
+    once: true,
+    rarity: 'rare',
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'seek_artifacts',
+        text: '开始寻找上古神器',
+        effects: [
+          { type: 'flag', key: 'found_prophecy', value: true },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'dismiss_prophecy',
+        text: '不过是古人的妄言',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'seek_artifact_1',
+    title: '神器线索·一',
+    description: '你循着预言中的线索，在一座荒废的古庙中找到了第一件神器的线索——一块刻着星图的石板。星图指向北方冰原深处。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'found_prophecy', value: true }],
+    choices: [
+      {
+        id: 'follow_star_map',
+        text: '按星图指引前往冰原',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'artifact', id: 'void_artifact', name: '星辰碎片' },
+              { type: 'flag', key: 'artifact_1_found', value: true },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '你在冰原深处找到了星辰碎片，星光流转，蕴含天地之力。',
+              fail: '冰原凶险异常，你未能找到神器，却在苦寒中磨炼了意志。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'study_star_map',
+        text: '先研究星图的含义',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'formationTier', value: 1 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'seek_artifact_2',
+    title: '神器线索·二',
+    description: '第二件神器的线索指向南方火山。传说火山深处有一座上古祭坛，祭坛上供奉着太阳碎片。但火山中妖兽盘踞，凶险异常。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'artifact_1_found', value: true }],
+    choices: [
+      {
+        id: 'enter_volcano',
+        text: '深入火山寻找太阳碎片',
+        outcomes: [
+          {
+            chance: 0.45,
+            successEffects: [
+              { type: 'artifact', id: 'fire_forged_blade', name: '太阳碎片' },
+              { type: 'flag', key: 'artifact_2_found', value: true },
+              { type: 'cultivation', value: 20 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你以金丹之力硬抗火山高温，在祭坛上取下太阳碎片。碎片灼热，却与星辰碎片遥相呼应。',
+              fail: '火山中的守护妖兽太过强大，你被迫撤退。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'gather_allies',
+        text: '召集同伴一同前往',
+        effects: [
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'cultivation', value: 10 },
+          { type: 'flag', key: 'artifact_2_found', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'prophecy_choice',
+    title: '预言抉择',
+    description: '七件神器齐聚，天地异象骤起。预言的最后一页写道：「集齐神器者，可选择镇压大劫（牺牲自身），或驾驭神器飞升（天地自渡）。」你手握七件神器，站在命运的十字路口。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'artifact_1_found', value: true },
+      { type: 'flag', key: 'artifact_2_found', value: true },
+    ],
+    choices: [
+      {
+        id: 'sacrifice_prophecy',
+        text: '以身镇压大劫，守护苍生',
+        effects: [
+          { type: 'flag', key: 'prophecy_sacrifice', value: true },
+          { type: 'stat', key: 'karma', value: 30 },
+          { type: 'endLife' },
+        ],
+      },
+      {
+        id: 'ascend_prophecy',
+        text: '驾驭神器飞升，天地自渡',
+        effects: [
+          { type: 'flag', key: 'chose_ascension', value: true },
+          { type: 'cultivation', value: 30 },
+        ],
+      },
+      {
+        id: 'refuse_prophecy',
+        text: '预言不过是预言，我命由我',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 3. 身世之谜链 ────
+
+  {
+    id: 'origin_clue',
+    title: '身世线索',
+    description: '你在坊市中遇到一位老人，他盯着你看了许久，忽然说：「你长得像一个人……三百年前失踪的天玄宗真传弟子。」他递给你一枚玉佩：「这是那人留下的，你看看。」',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'has_mysterious_origin', value: true }],
+    choices: [
+      {
+        id: 'take_pendant',
+        text: '接过玉佩仔细查看',
+        effects: [
+          { type: 'flag', key: 'origin_clue', value: true },
+          { type: 'stat', key: 'comprehension', value: 6 },
+          { type: 'cultivation', value: 10 },
+        ],
+      },
+      {
+        id: 'refuse_pendant',
+        text: '往事如烟，不必深究',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -5 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_truth',
+    title: '身世真相',
+    description: '玉佩中封存着一段影像：你的父母并非凡人，而是上古大能的后裔。他们为了保护你，隐藏了你的血脉，将你托付给凡人。影像最后，你的母亲含泪道：「孩子，当你看到这段影像时，说明你的血脉已经觉醒。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'origin_clue', value: true }],
+    choices: [
+      {
+        id: 'embrace_bloodline',
+        text: '接受血脉觉醒',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'flag', key: 'origin_truth', value: true },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+      {
+        id: 'reject_bloodline',
+        text: '我就是我，不需要什么血脉',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -10 },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'flag', key: 'origin_truth', value: true },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'origin_destiny',
+    title: '命运抉择',
+    description: '血脉觉醒后，你感应到一处远古遗迹的召唤。遗迹深处，一面古镜映出了你的前世——你曾是上古大能，因触犯天规被贬入轮回。如今血脉觉醒，天道再次找上门来。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'origin_truth', value: true }],
+    choices: [
+      {
+        id: 'accept_destiny',
+        text: '接受前世记忆，继承大能之力',
+        effects: [
+          { type: 'flag', key: 'got_inheritance', value: true },
+          { type: 'stat', key: 'comprehension', value: 15 },
+          { type: 'cultivation', value: 25 },
+        ],
+      },
+      {
+        id: 'reject_destiny',
+        text: '斩断前世因果，今生只做自己',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -15 },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'lifespan', value: 10 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 4. 正魔之争链 ────
+
+  {
+    id: 'sect_conflict',
+    title: '宗门暗流',
+    description: '你无意中发现天玄宗内部有一个秘密组织，他们暗中与魔道勾结，以弟子性命为代价换取禁术。组织的首领竟然是一位你敬重的长老。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'foundation' },
+    ],
+    choices: [
+      {
+        id: 'investigate_sect',
+        text: '暗中调查真相',
+        effects: [
+          { type: 'flag', key: 'sect_conflict', value: true },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'stat', key: 'karma', value: 5 },
+        ],
+      },
+      {
+        id: 'ignore_sect',
+        text: '明哲保身，不涉其中',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'stat', key: 'karma', value: -5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_truth',
+    title: '真相大白',
+    description: '你调查发现，那个秘密组织的真正目的不是勾结魔道，而是在准备应对一场即将到来的天地大劫。他们用禁术是为了制造一件可以镇压大劫的神器。那位长老找到你：「你既然知道了真相，就必须做出选择。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'sect_conflict', value: true }],
+    choices: [
+      {
+        id: 'support_sect_truth',
+        text: '支持长老的计划',
+        effects: [
+          { type: 'flag', key: 'sect_truth', value: true },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'oppose_sect_truth',
+        text: '禁术就是禁术，不可饶恕',
+        effects: [
+          { type: 'flag', key: 'sect_truth', value: true },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sect_choice',
+    title: '宗门抉择',
+    description: '天地大劫的征兆越来越明显。你需要决定：是支持长老的禁术计划（牺牲少数人拯救多数人），还是坚持正道原则（即使面对灭顶之灾也不妥协）。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'sect_truth', value: true }],
+    choices: [
+      {
+        id: 'support_sacrifice',
+        text: '支持牺牲计划，拯救宗门',
+        effects: [
+          { type: 'stat', key: 'karma', value: -15 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'flag', key: 'chose_sacrifice', value: true },
+        ],
+      },
+      {
+        id: 'oppose_sacrifice',
+        text: '坚持正道，寻找其他方法',
+        effects: [
+          { type: 'stat', key: 'karma', value: 20 },
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'flag', key: 'chose_righteous', value: true },
+        ],
+      },
+    ],
+  },
+
+  // ──── 5. 散修盟崛起链 ────
+
+  {
+    id: 'alliance_found',
+    title: '散修盟成立',
+    description: '你召集了数十名散修，在荒原上成立了散修盟。你被推举为盟主，立下规矩：互帮互助，不依附宗门，不欺压弱小。散修们欢呼雀跃，终于有了归属。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'wander_leader', value: true }],
+    choices: [
+      {
+        id: 'lead_alliance',
+        text: '以身作则，带领散修盟',
+        effects: [
+          { type: 'flag', key: 'alliance_found', value: true },
+          { type: 'stat', key: 'karma', value: 12 },
+          { type: 'spiritStones', value: 30 },
+        ],
+      },
+      {
+        id: 'delegate_alliance',
+        text: '委任副手，自己专注修炼',
+        effects: [
+          { type: 'flag', key: 'alliance_found', value: true },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'alliance_crisis',
+    title: '散修盟危机',
+    description: '宗门势力对散修盟的崛起感到威胁，联合数家宗门发起清剿。散修盟面临生死存亡的考验。副手急报：「盟主，宗门大军已到百里之外！」',
+    weight: 9,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'alliance_found', value: true }],
+    choices: [
+      {
+        id: 'defend_alliance',
+        text: '率散修盟奋起抵抗',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'flag', key: 'alliance_crisis', value: true },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'cultivation', value: 20 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '散修盟上下一心，击退了宗门联军。你的威名传遍修真界。',
+              fail: '宗门势力太过强大，散修盟损失惨重。你拼死护住核心成员。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'negotiate_alliance',
+        text: '与宗门谈判，寻求共存',
+        effects: [
+          { type: 'flag', key: 'alliance_crisis', value: true },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'alliance_legacy',
+    title: '散修盟传奇',
+    description: '散修盟在你的带领下日渐壮大，成为修真界不可忽视的力量。你建立了散修坊市、散修学堂、散修医馆。散修们不再孤立无援，你的名字被刻在散修盟的石碑上。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'alliance_crisis', value: true }],
+    choices: [
+      {
+        id: 'eternal_alliance',
+        text: '继续守护散修盟',
+        effects: [
+          { type: 'flag', key: 'wander_leader', value: true },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'lifespan', value: 10 },
+        ],
+      },
+      {
+        id: 'retire_alliance',
+        text: '传位给副手，自己云游四方',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'cultivation', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -5 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 6. 魔道觉醒链 ────
+
+  {
+    id: 'demon_power',
+    title: '魔道觉醒',
+    description: '你体内的魔力忽然暴涨，一股前所未有的力量在经脉中奔涌。你感到自己可以操控天地间的魔气，甚至可以感知到远方魔修的存在。这是魔道觉醒的征兆。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'accepted_demon_path', value: true },
+      { type: 'stat', key: 'demonHeart', min: 50 },
+    ],
+    choices: [
+      {
+        id: 'embrace_demon_power',
+        text: '拥抱魔力，探索魔道极致',
+        effects: [
+          { type: 'flag', key: 'demon_power', value: true },
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'cultivation', value: 25 },
+        ],
+      },
+      {
+        id: 'control_demon_power',
+        text: '以道心驾驭魔力',
+        effects: [
+          { type: 'flag', key: 'demon_power', value: true },
+          { type: 'stat', key: 'demonHeart', value: 5 },
+          { type: 'stat', key: 'comprehension', value: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_truth',
+    title: '魔道真相',
+    description: '你在魔域深处发现了一座上古遗迹，遗迹中记载着魔道的真正起源——魔道并非邪道，而是上古大能为了对抗天地大劫而创造的另一种修炼之法。正道和魔道，本是一体两面。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'demon_power', value: true }],
+    choices: [
+      {
+        id: 'accept_demon_truth',
+        text: '接受这个真相',
+        effects: [
+          { type: 'flag', key: 'demon_truth', value: true },
+          { type: 'stat', key: 'comprehension', value: 12 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+        ],
+      },
+      {
+        id: 'reject_demon_truth',
+        text: '魔道就是魔道，不必洗白',
+        effects: [
+          { type: 'flag', key: 'demon_truth', value: true },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demon_transcend',
+    title: '魔道超越',
+    description: '你领悟了魔道的终极奥义：正魔合一。你体内的灵力和魔力开始融合，形成一种全新的力量。天地为之变色，修真界为之震动。你已超越了正魔之分。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'demon_truth', value: true }],
+    choices: [
+      {
+        id: 'transcend_demon',
+        text: '正魔合一，超越大道',
+        effects: [
+          { type: 'flag', key: 'chose_ascension', value: true },
+          { type: 'stat', key: 'demonHeart', value: -20 },
+          { type: 'cultivation', value: 30 },
+        ],
+      },
+      {
+        id: 'maintain_demon',
+        text: '保持魔道本色',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 15 },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 7. 师徒传承链 ────
+
+  {
+    id: 'master_quest',
+    title: '师尊之托',
+    description: '师尊忽然召你入密室，神色凝重。「为师有一件心愿未了——百年前，为师的师弟背叛宗门，盗走了镇派之宝。为师年事已高，无法追回。你可愿替为师完成这个心愿？」',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'loyal_to_sect', value: true }],
+    choices: [
+      {
+        id: 'accept_quest',
+        text: '领命追回镇派之宝',
+        effects: [
+          { type: 'flag', key: 'master_quest', value: true },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'cultivation', value: 12 },
+        ],
+      },
+      {
+        id: 'decline_quest',
+        text: '此事凶险，恕难从命',
+        effects: [
+          { type: 'stat', key: 'karma', value: -5 },
+          { type: 'stat', key: 'demonHeart', value: 3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'master_secret',
+    title: '师叔的秘密',
+    description: '你找到了师叔的藏身之处。他已垂垂老矣，身边放着那件镇派之宝。他看到你，苦笑道：「你来了。当年我盗走此宝，不是为了自己，而是为了阻止宗门用它做一件可怕的事。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'master_quest', value: true }],
+    choices: [
+      {
+        id: 'listen_uncle',
+        text: '听他讲述真相',
+        effects: [
+          { type: 'flag', key: 'master_secret', value: true },
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'stat', key: 'karma', value: 8 },
+        ],
+      },
+      {
+        id: 'take_treasure',
+        text: '不管真相，取回宝物',
+        effects: [
+          { type: 'flag', key: 'master_secret', value: true },
+          { type: 'spiritStones', value: 50 },
+          { type: 'stat', key: 'karma', value: -10 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'master_legacy',
+    title: '师徒传承',
+    description: '你将真相带回宗门，师尊听后沉默良久。最终他说：「你做得对。为师将毕生所学传授于你，希望你能将正道传承下去。」师尊将一枚玉简交给你，里面记载着他一生的修炼心得。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'master_secret', value: true }],
+    choices: [
+      {
+        id: 'accept_legacy',
+        text: '叩首受传',
+        effects: [
+          { type: 'flag', key: 'got_inheritance', value: true },
+          { type: 'stat', key: 'comprehension', value: 12 },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+      {
+        id: 'share_legacy',
+        text: '将心得分享给同门',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'comprehension', value: 8 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 8. 灵脉秘境链 ────
+
+  {
+    id: 'vein_found',
+    title: '灵脉发现',
+    description: '你在深山中发现了一处隐藏的灵脉，灵气浓郁得化为雾霭。但灵脉旁有一头远古守护兽，它已在此守护了千年。守护兽睁开眼看你：「你是第一个找到这里的人类。」',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'realm', min: 'foundation' }],
+    choices: [
+      {
+        id: 'negotiate_vein',
+        text: '与守护兽谈判',
+        outcomes: [
+          {
+            chance: 0.5,
+            successEffects: [
+              { type: 'flag', key: 'vein_found', value: true },
+              { type: 'stat', key: 'comprehension', value: 8 },
+              { type: 'cultivation', value: 15 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -8 },
+              { type: 'stat', key: 'demonHeart', value: 5 },
+            ],
+            narrative: {
+              success: '守护兽被你的诚意打动，允许你在此修炼。灵脉中的灵气让你修为大进。',
+              fail: '守护兽拒绝了你的请求，你被迫离开。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'fight_vein',
+        text: '以实力夺取灵脉',
+        outcomes: [
+          {
+            chance: 0.4,
+            successEffects: [
+              { type: 'flag', key: 'vein_found', value: true },
+              { type: 'spiritStones', value: 50 },
+              { type: 'cultivation', value: 20 },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你击败了守护兽，独占灵脉。灵脉中的灵气让你修为暴涨。',
+              fail: '守护兽实力远超你的想象，你被重伤。',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'vein_guardian',
+    title: '灵脉守护者',
+    description: '守护兽找到你，说：「我感应到天地大劫将至。这处灵脉是镇压大劫的关键之一。你若愿意成为灵脉的守护者，我将传你守护之法。」',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'vein_found', value: true }],
+    choices: [
+      {
+        id: 'become_guardian',
+        text: '接受守护者之责',
+        effects: [
+          { type: 'flag', key: 'vein_guardian', value: true },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'lifespan', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'refuse_guardian',
+        text: '我志不在此',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'cultivation', value: 8 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'vein_harvest',
+    title: '灵脉丰收',
+    description: '灵脉中的灵气在你的守护下日益充沛。守护兽满意地点头：「你做得很好。灵脉的力量将庇护这片土地上的所有生灵。」你感到自己的修为和心境都达到了新的高度。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'vein_guardian', value: true }],
+    choices: [
+      {
+        id: 'absorb_vein',
+        text: '吸收灵脉之力',
+        effects: [
+          { type: 'stat', key: 'rootBone', value: 8 },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+      {
+        id: 'protect_vein',
+        text: '继续守护灵脉',
+        effects: [
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'lifespan', value: 10 },
+          { type: 'stat', key: 'luck', value: 8 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 9. 古战场遗迹链 ────
+
+  {
+    id: 'battlefield_memory',
+    title: '战场记忆',
+    description: '你在远古战场中触摸到一块残破的石碑，忽然神识被吸入一段上古记忆——你看到了万年前的大战，正道和魔道联手对抗天地大劫。最终，数十位大能以身殉道，才将大劫暂时封印。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'realm', min: 'golden_core' },
+    ],
+    choices: [
+      {
+        id: 'absorb_memory',
+        text: '吸收战场记忆中的力量',
+        effects: [
+          { type: 'flag', key: 'battlefield_memory', value: true },
+          { type: 'stat', key: 'comprehension', value: 10 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'preserve_memory',
+        text: '将记忆传回宗门',
+        effects: [
+          { type: 'flag', key: 'battlefield_memory', value: true },
+          { type: 'stat', key: 'karma', value: 10 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'battlefield_truth',
+    title: '战场真相',
+    description: '你深入战场核心，发现了一具保存完好的大能遗骸。遗骸手中握着一卷玉简，上面记载着大劫的真相——大劫并非天灾，而是上古修士的实验失控所致。而那个实验，正是正道和魔道分裂的根源。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'battlefield_memory', value: true }],
+    choices: [
+      {
+        id: 'accept_battlefield_truth',
+        text: '接受这个真相',
+        effects: [
+          { type: 'flag', key: 'battlefield_truth', value: true },
+          { type: 'stat', key: 'comprehension', value: 12 },
+          { type: 'stat', key: 'demonHeart', value: -8 },
+        ],
+      },
+      {
+        id: 'hide_battlefield_truth',
+        text: '这个真相太危险，不能公开',
+        effects: [
+          { type: 'flag', key: 'battlefield_truth', value: true },
+          { type: 'stat', key: 'karma', value: 8 },
+          { type: 'stat', key: 'comprehension', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'battlefield_legacy',
+    title: '战场遗产',
+    description: '你继承了大能遗骸中的传承，获得了对抗大劫的关键知识。遗骸化作灵光消散前，留下一句话：「希望你能做到我们当年做不到的事。」你感到肩上多了一份沉甸甸的责任。',
+    weight: 8,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'battlefield_truth', value: true }],
+    choices: [
+      {
+        id: 'accept_battlefield_legacy',
+        text: '承担这份责任',
+        effects: [
+          { type: 'flag', key: 'got_inheritance', value: true },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'cultivation', value: 20 },
+        ],
+      },
+      {
+        id: 'use_battlefield_legacy',
+        text: '用这份力量追求更强',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'cultivation', value: 25 },
+        ],
+      },
+    ],
+  },
+
+  // ──── 10. 道侣同心链 ────
+
+  {
+    id: 'companion_dream',
+    title: '道侣之梦',
+    description: '你与道侣闭关修炼时，忽然进入了同一个梦境。梦中你们看到了上古时期的一对神仙眷侣，他们联手对抗天地大劫，最终双双飞升。梦醒后，你们对视一眼，心中都有了一个念头。',
+    weight: 7,
+    years: 2,
+    once: true,
+    conditions: [
+      { type: 'flag', key: 'has_companion', value: true },
+      { type: 'flag', key: 'dual_cultivation_mastered', value: true },
+    ],
+    choices: [
+      {
+        id: 'follow_dream',
+        text: '追寻那对眷侣的足迹',
+        effects: [
+          { type: 'flag', key: 'companion_dream', value: true },
+          { type: 'stat', key: 'comprehension', value: 8 },
+          { type: 'cultivation', value: 15 },
+        ],
+      },
+      {
+        id: 'dismiss_dream',
+        text: '不过是梦罢了',
+        effects: [
+          { type: 'stat', key: 'demonHeart', value: -3 },
+          { type: 'cultivation', value: 5 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'companion_trial',
+    title: '道侣试炼',
+    description: '你们找到了那对眷侣留下的试炼之地。试炼要求你们二人同心协力，通过九道关卡。每一道关卡都在考验你们的默契和信任。最后一道关卡，需要你们同时献出一半寿元。',
+    weight: 8,
+    years: 2,
+    once: true,
+    conditions: [{ type: 'flag', key: 'companion_dream', value: true }],
+    choices: [
+      {
+        id: 'accept_trial',
+        text: '携手闯关',
+        outcomes: [
+          {
+            chance: 0.6,
+            successEffects: [
+              { type: 'flag', key: 'companion_trial', value: true },
+              { type: 'stat', key: 'karma', value: 15 },
+              { type: 'cultivation', value: 25 },
+              { type: 'flag', key: 'survived_together', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -15 },
+              { type: 'stat', key: 'demonHeart', value: 8 },
+            ],
+            narrative: {
+              success: '你们携手通过了九道关卡，最后一道关卡的寿元献祭也被试炼认可，化为了修为的提升。',
+              fail: '试炼太过艰难，你们在最后一道关卡失败，双双负伤。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'retreat_trial',
+        text: '太过凶险，暂且退去',
+        effects: [
+          { type: 'stat', key: 'comprehension', value: 5 },
+          { type: 'stat', key: 'demonHeart', value: -3 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'companion_eternity',
+    title: '道侣永恒',
+    description: '试炼通过后，你们获得了眷侣留下的终极传承——双修飞升之法。道侣握住你的手：「无论前方是天堂还是地狱，我都与你同在。」你们相视而笑，天地间仿佛只剩下彼此。',
+    weight: 10,
+    years: 1,
+    once: true,
+    conditions: [{ type: 'flag', key: 'companion_trial', value: true }],
+    choices: [
+      {
+        id: 'ascend_together',
+        text: '携手飞升，共证大道',
+        effects: [
+          { type: 'flag', key: 'chose_lovers_ascension', value: true },
+          { type: 'cultivation', value: 30 },
+        ],
+      },
+      {
+        id: 'stay_together',
+        text: '留在人间，相伴到老',
+        effects: [
+          { type: 'lifespan', value: 20 },
+          { type: 'stat', key: 'karma', value: 15 },
+          { type: 'stat', key: 'demonHeart', value: -10 },
+        ],
+      },
+    ],
+  },
 ]
