@@ -54,13 +54,27 @@ function pickChoice(
       if (strategy === 'demon') s += 50
       else s -= 10
     }
+
+    // 基础分：有修为收益的选择优先，避免随机选择卡死
+    if (c.effects?.some((e) => e.type === 'cultivation')) s += 3
+    if (c.effects?.some((e) => e.type === 'breakthrough')) s += 5
+    if (c.outcomes) s += 1
+
     if (strategy === 'sect') {
       if (text.includes('宗门') || c.id === 'honest') s += 10
       if (c.id === 'refuse') s -= 8
     }
     if (strategy === 'romance') {
+      // 浪漫选项高优先
       if (text.includes('道侣') || text.includes('苏') || text.includes('守护') || c.id === 'rescue') s += 10
+      if (text.includes('双修') || text.includes('情缘') || text.includes('眷侣')) s += 8
       if (c.id === 'steal' || c.id === 'cold') s -= 5
+      // 非浪漫事件：选择有修为收益的选项，避免随机卡死
+      if (s === 0) {
+        if (c.effects?.some((e) => e.type === 'cultivation')) s += 5
+        if (c.effects?.some((e) => e.type === 'stat' && e.key === 'karma')) s += 3
+        if (c.effects?.some((e) => e.type === 'stat' && e.key === 'demonHeart')) s -= 3
+      }
     }
     if (strategy === 'cultivate' || strategy === 'greedy') {
       if (text.includes('打坐') || c.id === 'meditate' || c.id === 'contemplate') s += 8
@@ -71,8 +85,6 @@ function pickChoice(
       if (text.includes('灵石') || c.id === 'dig' || c.id === 'join' || c.id === 'buy') s += 5
       if (c.id === 'deep' || c.id === 'explore') s += 4
     }
-    if (c.outcomes) s += 1
-    if (c.effects?.some((e) => e.type === 'cultivation')) s += 3
     return s
   }
 
