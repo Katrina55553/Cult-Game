@@ -53,28 +53,28 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
   }, [player.cultivation])
 
   return (
-    <header className="border-b border-[var(--color-jade)]/40 pb-4 mb-6 relative">
+    <header className="border-b border-[var(--color-jade)]/40 pb-5 mb-6 relative">
       {realmFlash && (
         <div className="absolute inset-0 bg-[var(--color-gold)]/10 animate-breakthrough pointer-events-none z-10" />
       )}
 
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-        <h2 className="text-xl text-[var(--color-gold)]" style={{ fontFamily: 'var(--font-display)' }}>
+        <h2 className="text-2xl text-[var(--color-gold)] tracking-wide" style={{ fontFamily: 'var(--font-display)' }}>
           {player.name}
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {(() => {
             const ch = getChapter(player.currentChapter)
             if (!ch) return null
             const total = ch.events.length
             const done = player.chapterCompleted.filter((id) => ch.events.includes(id)).length
             return (
-              <span className="text-xs text-[var(--color-jade-light)]/70">
+              <span className="text-xs text-[var(--color-jade-light)]/80 tracking-wider">
                 {ch.name} <span className="text-[var(--color-mist)]">({done}/{total})</span>
               </span>
             )
           })()}
-          <span className="text-xs text-[var(--color-mist)]">第 {turn} 回合</span>
+          <span className="text-xs text-[var(--color-mist)] tracking-wider">第 {turn} 回合</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         {routes.map((r) => (
           <span
             key={r.label}
-            className={`text-xs px-2 py-0.5 rounded-sm border ${TONE_CLASS[r.tone]}`}
+            className={`text-xs px-2.5 py-0.5 rounded-sm border tracking-wider ${TONE_CLASS[r.tone]}`}
           >
             {r.label}
           </span>
@@ -105,27 +105,27 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         </p>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm text-[var(--color-parchment-dim)] mb-3">
-        <span className={realmFlash ? 'animate-stat-gain font-semibold' : ''}>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-[var(--color-parchment-dim)] mb-4">
+        <span className={`tracking-wide ${realmFlash ? 'animate-stat-gain font-semibold' : ''}`}>
           {getRealmName(player.realm)}
         </span>
-        <span className="hidden sm:inline">·</span>
+        <span className="text-[var(--color-mist)]/40">·</span>
         <span>{player.spiritRoot}</span>
-        <span className="hidden sm:inline">·</span>
+        <span className="text-[var(--color-mist)]/40">·</span>
         <span>{player.age} 岁</span>
-        <span className="hidden sm:inline">·</span>
+        <span className="text-[var(--color-mist)]/40">·</span>
         <span className={remaining <= 10 ? 'text-[var(--color-cinnabar)]' : ''}>
           寿元 {remaining} 年
         </span>
       </div>
 
-      <div className="mb-3">
-        <div className="flex justify-between text-xs text-[var(--color-mist)] mb-1">
+      <div className="mb-4">
+        <div className="flex justify-between text-xs text-[var(--color-mist)] mb-1.5 tracking-wider">
           <span>修为</span>
-          <span>{player.cultivation}%</span>
+          <span className="text-[var(--color-gold-dim)]">{player.cultivation}%</span>
         </div>
         <div
-          className={`h-1.5 bg-[rgba(0,0,0,0.3)] rounded-full overflow-hidden ${barFlash ? 'animate-bar-glow' : ''}`}
+          className={`h-2 bg-[rgba(0,0,0,0.4)] rounded-full overflow-hidden border border-[var(--color-jade)]/20 ${barFlash ? 'animate-bar-glow' : ''}`}
           role="progressbar"
           aria-valuenow={player.cultivation}
           aria-valuemin={0}
@@ -133,13 +133,13 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           aria-label="修为进度"
         >
           <div
-            className="h-full bg-gradient-to-r from-[var(--color-jade)] to-[var(--color-gold)] transition-all duration-500"
+            className="h-full bg-gradient-to-r from-[var(--color-jade)] via-[var(--color-jade-light)] to-[var(--color-gold)] transition-all duration-500 bar-shimmer"
             style={{ width: `${player.cultivation}%` }}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-xs">
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-xs mb-4">
         <AnimatedStat label="根骨" value={player.stats.rootBone} />
         <AnimatedStat label="悟性" value={player.stats.comprehension} />
         <AnimatedStat label="气运" value={player.stats.luck} />
@@ -148,12 +148,13 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         <AnimatedStat label="灵石" value={player.spiritStones} />
       </div>
 
-      <div className="flex gap-2 mt-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() => setShowAttr(true)}
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
-            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/50 px-3.5 py-1.5 rounded-sm transition-all
+            hover:bg-[var(--color-gold)]/5 tracking-wider"
         >
           📊 属性
         </button>
@@ -161,7 +162,8 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           type="button"
           onClick={() => setShowCultivation(true)}
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
-            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/50 px-3.5 py-1.5 rounded-sm transition-all
+            hover:bg-[var(--color-gold)]/5 tracking-wider"
         >
           ⚔ 修炼
         </button>
@@ -169,7 +171,8 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           type="button"
           onClick={() => setShowInventory(true)}
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
-            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/50 px-3.5 py-1.5 rounded-sm transition-all
+            hover:bg-[var(--color-gold)]/5 tracking-wider"
         >
           👜 乾坤袋
         </button>
@@ -177,7 +180,8 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           type="button"
           onClick={() => setShowStoryline(true)}
           className="text-xs text-[var(--color-jade-light)] hover:text-[var(--color-gold)] cursor-pointer
-            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/40 px-3 py-1.5 rounded-sm transition-colors"
+            border border-[var(--color-jade)]/30 hover:border-[var(--color-gold)]/50 px-3.5 py-1.5 rounded-sm transition-all
+            hover:bg-[var(--color-gold)]/5 tracking-wider"
         >
           📜 剧情线
         </button>
@@ -220,9 +224,9 @@ function AnimatedStat({ label, value, warn }: { label: string; value: number; wa
   const flashClass = flash === 'gain' ? 'animate-stat-gain' : flash === 'loss' ? 'animate-stat-loss' : ''
 
   return (
-    <div className="bg-[rgba(0,0,0,0.2)] px-2 py-1.5 rounded-sm text-center">
-      <p className="text-[var(--color-mist)]">{label}</p>
-      <p className={`${warn ? 'text-[var(--color-cinnabar)]' : 'text-[var(--color-parchment)]'} ${flashClass}`}>
+    <div className="stat-card px-2 py-1.5 rounded-sm text-center">
+      <p className="text-[10px] text-[var(--color-mist)] tracking-wider">{label}</p>
+      <p className={`text-sm font-semibold ${warn ? 'text-[var(--color-cinnabar)]' : 'text-[var(--color-parchment)]'} ${flashClass}`}>
         {value}
       </p>
     </div>

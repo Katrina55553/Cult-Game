@@ -268,3 +268,162 @@ body::before {
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* ── 装饰性元素 ── */
+
+/* 古卷面板：四角描金 */
+.scroll-panel {
+  position: relative;
+}
+
+.scroll-panel::before,
+.scroll-panel::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--color-gold);
+  border-style: solid;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.scroll-panel::before {
+  top: 6px;
+  left: 6px;
+  border-width: 1px 0 0 1px;
+}
+
+.scroll-panel::after {
+  bottom: 6px;
+  right: 6px;
+  border-width: 0 1px 1px 0;
+}
+
+/* 中式分隔线：两端渐隐 + 中心菱形 */
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-gold-dim);
+}
+
+.divider-ornament::before,
+.divider-ornament::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(138, 112, 32, 0.4) 50%,
+    transparent
+  );
+}
+
+.divider-ornament > .ornament-dot {
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: var(--color-gold-dim);
+  opacity: 0.7;
+}
+
+/* 选项序号：圆形描边 */
+.choice-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-family: var(--font-body);
+  opacity: 0.7;
+  transition: all 0.25s ease;
+}
+
+/* 状态卡：微妙的内阴影 + 渐变背景 */
+.stat-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(45, 90, 74, 0.08) 0%, rgba(0, 0, 0, 0.25) 100%);
+  border: 1px solid rgba(74, 138, 114, 0.18);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.stat-card:hover {
+  border-color: rgba(201, 162, 39, 0.35);
+  background:
+    linear-gradient(180deg, rgba(201, 162, 39, 0.06) 0%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+/* 标题装饰：左右双线 */
+.title-flanked {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title-flanked::before,
+.title-flanked::after {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    currentColor 50%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* 微弱浮云纹理（用于主要面板） */
+.mist-overlay {
+  position: relative;
+}
+
+.mist-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(74, 138, 114, 0.05) 0%, transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(201, 162, 39, 0.04) 0%, transparent 40%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* 进度条流光 */
+.bar-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 240, 200, 0.25) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: bar-sweep 2.5s ease-in-out infinite;
+}
+
+@keyframes bar-sweep {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-shimmer::after {
+    animation: none;
+  }
+}

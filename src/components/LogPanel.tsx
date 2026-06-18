@@ -49,7 +49,7 @@ export function LogPanel({ logs, playerName }: Props) {
     <aside className="h-full flex flex-col min-h-0">
       <div className="flex items-center justify-between mb-4 shrink-0">
         <h4
-          className="text-lg text-[var(--color-gold-dim)]"
+          className="text-lg text-[var(--color-gold-dim)] tracking-wider"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           修仙日志
@@ -58,7 +58,7 @@ export function LogPanel({ logs, playerName }: Props) {
           <button
             type="button"
             onClick={() => setShowExport((v) => !v)}
-            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+            className="text-xs text-[var(--color-mist)] hover:text-[var(--color-gold)] cursor-pointer transition-colors tracking-wider"
           >
             {showExport ? '收起' : '导出'}
           </button>
@@ -72,7 +72,7 @@ export function LogPanel({ logs, playerName }: Props) {
             onClick={handleCopy}
             className="flex-1 text-xs py-1.5 px-3 border border-[var(--color-jade)]/40 rounded-sm
               text-[var(--color-parchment-dim)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-              cursor-pointer transition-colors"
+              hover:bg-[var(--color-gold)]/5 cursor-pointer transition-all"
           >
             {copied ? '已复制 ✓' : '复制到剪贴板'}
           </button>
@@ -81,7 +81,7 @@ export function LogPanel({ logs, playerName }: Props) {
             onClick={handleDownload}
             className="flex-1 text-xs py-1.5 px-3 border border-[var(--color-jade)]/40 rounded-sm
               text-[var(--color-parchment-dim)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/40
-              cursor-pointer transition-colors"
+              hover:bg-[var(--color-gold)]/5 cursor-pointer transition-all"
           >
             下载 txt
           </button>
@@ -90,15 +90,16 @@ export function LogPanel({ logs, playerName }: Props) {
 
       <div
         ref={scrollRef}
-        className="log-scroll flex-1 min-h-0 overflow-y-auto space-y-2 pr-1 max-h-[40vh] lg:max-h-[calc(100vh-11rem)]"
+        className="log-scroll flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1 max-h-[40vh] lg:max-h-[calc(100vh-11rem)]"
       >
         {logs.length === 0 ? (
-          <p className="text-sm text-[var(--color-mist)]/50">尚无记录……</p>
+          <p className="text-sm text-[var(--color-mist)]/50 italic">尚无记录……</p>
         ) : (
           recentFirst.map((_entry, i) => (
             <p
               key={logs.length - 1 - i}
-              className="text-sm text-[var(--color-parchment-dim)] leading-relaxed border-l-2 border-[var(--color-jade)]/30 pl-3"
+              className="text-sm text-[var(--color-parchment-dim)] leading-relaxed border-l-2 border-[var(--color-jade)]/30 pl-3 py-0.5
+                hover:border-[var(--color-gold)]/40 transition-colors"
             >
               {highlightedEntries[i].map((segment, j) =>
                 segment.tone ? (

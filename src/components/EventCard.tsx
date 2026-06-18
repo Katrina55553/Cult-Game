@@ -6,14 +6,14 @@ interface Props {
 
 export function EventCard({ event }: Props) {
   return (
-    <article className="animate-fade-up mb-6">
+    <article className="animate-fade-up">
       <h3
-        className="text-2xl text-[var(--color-cinnabar-glow)] mb-4"
+        className="text-2xl sm:text-3xl text-[var(--color-cinnabar-glow)] mb-5 text-center tracking-wider"
         style={{ fontFamily: 'var(--font-display)' }}
       >
-        「{event.title}」
+        <span className="title-flanked">「{event.title}」</span>
       </h3>
-      <p className="text-[var(--color-parchment)] leading-[1.9] text-base whitespace-pre-wrap">
+      <p className="text-[var(--color-parchment)] leading-[2] text-base sm:text-[17px] whitespace-pre-wrap">
         {event.description}
       </p>
     </article>
