@@ -397,6 +397,89 @@ body::before {
   border-radius: inherit;
 }
 
+/* 徽标：圆角描边徽章，文字居中 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  line-height: 1;
+  line-height: 1.2;
+  font-family: var(--font-body);
+  user-select: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.badge-sm {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.badge-md {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+}
+
+/* ── outlined 版本 ── */
+.badge-jade {
+  border-color: rgba(74, 138, 114, 0.5);
+  color: var(--color-jade-light);
+  background: rgba(45, 90, 74, 0.12);
+}
+
+.badge-gold {
+  border-color: rgba(201, 162, 39, 0.5);
+  color: var(--color-gold);
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.badge-cinnabar {
+  border-color: rgba(184, 58, 42, 0.5);
+  color: var(--color-cinnabar-glow);
+  background: rgba(184, 58, 42, 0.12);
+}
+
+.badge-mist {
+  border-color: rgba(106, 122, 114, 0.3);
+  color: var(--color-parchment-dim);
+  background: rgba(106, 122, 114, 0.1);
+}
+
+/* hover 描边增亮 */
+.badge:hover {
+  opacity: 0.9;
+}
+
+/* 实心版本 (带描边 + 底色更浓郁 */
+.badge-solid-jade {
+  border-color: var(--color-jade-light);
+  color: var(--color-ink);
+  background: linear-gradient(135deg, var(--color-jade-light), rgba(74, 138, 114, 0.8));
+}
+
+.badge-solid-gold {
+  border-color: var(--color-gold);
+  color: var(--color-ink);
+  background: linear-gradient(135deg, var(--color-gold), rgba(201, 162, 39, 0.8));
+}
+
+.badge-solid-cinnabar {
+  border-color: var(--color-cinnabar-glow);
+  color: var(--color-ink);
+  background: linear-gradient(135deg, var(--color-cinnabar-glow), rgba(212, 90, 58, 0.85));
+}
+
+.badge-solid-mist {
+  border-color: var(--color-mist);
+  color: var(--color-ink);
+  background: linear-gradient(135deg, var(--color-mist), rgba(106, 122, 114, 0.8));
+}
+
 /* 进度条流光 */
 .bar-shimmer {
   position: relative;

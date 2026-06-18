@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Badge } from './Badge'
 import { resumeAudio } from '../audio/sounds'
 import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
 import type { NewGameOptions, OriginId } from '../types/game'
@@ -80,24 +81,17 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         </p>
 
         {meta.totalRuns > 0 && (
-          <div className="mt-6 flex items-center justify-center gap-6 text-xs">
-            <div className="text-center">
-              <p className="text-[var(--color-gold)] text-lg font-semibold">{meta.totalRuns}</p>
-              <p className="text-[var(--color-mist)] tracking-wider">修行次数</p>
-            </div>
-            <span className="h-8 w-px bg-[var(--color-mist)]/20" />
-            <div className="text-center">
-              <p className="text-[var(--color-gold)] text-lg font-semibold">{unlocked}/{total}</p>
-              <p className="text-[var(--color-mist)] tracking-wider">结局收集</p>
-            </div>
+          <div className="mt-6 flex items-center justify-center gap-2 flex-wrap">
+            <Badge tone="gold" size="md">
+              修行 {meta.totalRuns} 次
+            </Badge>
+            <Badge tone="jade" size="md">
+              结局 {unlocked}/{total}
+            </Badge>
             {meta.bestTurn > 0 && (
-              <>
-                <span className="h-8 w-px bg-[var(--color-mist)]/20" />
-                <div className="text-center">
-                  <p className="text-[var(--color-gold)] text-lg font-semibold">{meta.bestTurn}</p>
-                  <p className="text-[var(--color-mist)] tracking-wider">最佳回合</p>
-                </div>
-              </>
+              <Badge tone="cinnabar" size="md">
+                最佳 {meta.bestTurn} 回合
+              </Badge>
             )}
           </div>
         )}

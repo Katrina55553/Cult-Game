@@ -1,6 +1,7 @@
 import { playSound } from '../audio/sounds'
 import { checkConditions, getFailedRequirements } from '../engine/conditions'
 import type { Choice, PlayerState } from '../types/game'
+import { Badge } from './Badge'
 
 interface Props {
   choices: Choice[]
@@ -37,9 +38,9 @@ export function ChoiceList({ choices, player, onChoose }: Props) {
             `}
           >
             {canChoose && (
-              <span className="choice-index mt-0.5 group-hover:border-[var(--color-gold)] group-hover:text-[var(--color-gold)]">
+              <Badge tone="jade" size="sm" className="mt-0.5 group-hover:badge-gold">
                 {ORDINAL[idx] ?? idx + 1}
-              </span>
+              </Badge>
             )}
             <span className="flex-1 leading-relaxed">
               <span className="block">{choice.text}</span>

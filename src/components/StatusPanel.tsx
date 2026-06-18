@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { AttributeModal } from './AttributeModal'
+import { Badge } from './Badge'
 import { CultivationModal } from './CultivationModal'
 import { InventoryModal } from './InventoryModal'
 import { StorylinePanel } from './StorylinePanel'
@@ -12,13 +13,6 @@ interface Props {
   player: PlayerState
   turn: number
   onUseItem?: (index: number) => void
-}
-
-const TONE_CLASS: Record<string, string> = {
-  jade: 'border-[var(--color-jade)]/50 text-[var(--color-jade-light)]',
-  gold: 'border-[var(--color-gold)]/50 text-[var(--color-gold)]',
-  cinnabar: 'border-[var(--color-cinnabar)]/50 text-[var(--color-cinnabar-glow)]',
-  mist: 'border-[var(--color-mist)]/30 text-[var(--color-mist)]',
 }
 
 export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }: Props) {
@@ -62,39 +56,38 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         <h2 className="text-2xl text-[var(--color-gold)] tracking-wide" style={{ fontFamily: 'var(--font-display)' }}>
           {player.name}
         </h2>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {(() => {
             const ch = getChapter(player.currentChapter)
             if (!ch) return null
             const total = ch.events.length
             const done = player.chapterCompleted.filter((id) => ch.events.includes(id)).length
             return (
-              <span className="text-xs text-[var(--color-jade-light)]/80 tracking-wider">
-                {ch.name} <span className="text-[var(--color-mist)]">({done}/{total})</span>
-              </span>
+              <Badge tone="jade" size="sm">
+                {ch.name} · {done}/{total}
+              </Badge>
             )
           })()}
-          <span className="text-xs text-[var(--color-mist)] tracking-wider">第 {turn} 回合</span>
+          <Badge tone="mist" size="sm">
+            第 {turn} 回合
+          </Badge>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-3">
         {routes.map((r) => (
-          <span
-            key={r.label}
-            className={`text-xs px-2.5 py-0.5 rounded-sm border tracking-wider ${TONE_CLASS[r.tone]}`}
-          >
+          <Badge key={r.label} tone={r.tone as 'jade' | 'gold' | 'cinnabar' | 'mist'} size="md">
             {r.label}
-          </span>
+          </Badge>
         ))}
       </div>
 
       {warnings.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-3">
           {warnings.map((w) => (
-            <span key={w} className="text-xs text-[var(--color-cinnabar)] animate-pulse-glow px-2">
+            <Badge key={w} tone="cinnabar" size="sm" className="animate-pulse-glow">
               ⚠ {w}
-            </span>
+            </Badge>
           ))}
         </div>
       )}
@@ -105,18 +98,19 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         </p>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-[var(--color-parchment-dim)] mb-4">
-        <span className={`tracking-wide ${realmFlash ? 'animate-stat-gain font-semibold' : ''}`}>
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <Badge tone="gold" size="sm" className={realmFlash ? 'animate-stat-gain font-semibold' : ''}>
           {getRealmName(player.realm)}
-        </span>
-        <span className="text-[var(--color-mist)]/40">·</span>
-        <span>{player.spiritRoot}</span>
-        <span className="text-[var(--color-mist)]/40">·</span>
-        <span>{player.age} 岁</span>
-        <span className="text-[var(--color-mist)]/40">·</span>
-        <span className={remaining <= 10 ? 'text-[var(--color-cinnabar)]' : ''}>
+        </Badge>
+        <Badge tone="mist" size="sm">
+          {player.spiritRoot}
+        </Badge>
+        <Badge tone="mist" size="sm">
+          {player.age} 岁
+        </Badge>
+        <Badge tone={remaining <= 10 ? 'cinnabar' : 'mist'} size="sm">
           寿元 {remaining} 年
-        </span>
+        </Badge>
       </div>
 
       <div className="mb-4">
