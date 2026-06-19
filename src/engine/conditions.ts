@@ -1,6 +1,23 @@
-import { getAlchemyLabel, getBloodlineLabel, getDivineWeaponLabel, getFormationLabel, getPathLabel, getSwordLabel, getTechniqueLabel } from '../data/cultivationSystems'
+import {
+  getAlchemyLabel,
+  getBloodlineLabel,
+  getDivineWeaponLabel,
+  getFormationLabel,
+  getPathLabel,
+  getSwordLabel,
+  getTechniqueLabel,
+} from '../data/cultivationSystems'
 import { getRealmOrder } from '../data/realms'
 import type { Condition, PlayerState } from '../types/game'
+
+const TIER_FIELDS: { key: 'alchemyTier' | 'formationTier' | 'swordTier' | 'bloodlineTier' | 'techniqueTier' | 'divineWeaponTier'; label: string; getLabel: (n: number) => string }[] = [
+  { key: 'alchemyTier', label: '丹道', getLabel: getAlchemyLabel },
+  { key: 'formationTier', label: '阵法', getLabel: getFormationLabel },
+  { key: 'swordTier', label: '剑道', getLabel: getSwordLabel },
+  { key: 'bloodlineTier', label: '血脉', getLabel: getBloodlineLabel },
+  { key: 'techniqueTier', label: '功法', getLabel: getTechniqueLabel },
+  { key: 'divineWeaponTier', label: '神兵', getLabel: getDivineWeaponLabel },
+]
 
 export function checkConditions(state: PlayerState, conditions: Condition[] | undefined): boolean {
   if (!conditions || conditions.length === 0) return true
@@ -39,24 +56,15 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
       return state.lifespan - state.age <= condition.max
     case 'divineSense':
       return state.cultivationSystems.divineSense >= condition.min
-    case 'alchemyTier':
-      return state.cultivationSystems.alchemyTier >= condition.min
-    case 'formationTier':
-      return state.cultivationSystems.formationTier >= condition.min
-    case 'swordTier':
-      return state.cultivationSystems.swordTier >= condition.min
-    case 'bloodlineTier':
-      return state.cultivationSystems.bloodlineTier >= condition.min
-    case 'techniqueTier':
-      return state.cultivationSystems.techniqueTier >= condition.min
-    case 'divineWeaponTier':
-      return state.cultivationSystems.divineWeaponTier >= condition.min
     case 'cultivationPath':
       return state.cultivationSystems.path === condition.path
     case 'origin':
       return state.origin === condition.value
-    default:
+    default: {
+      const tier = TIER_FIELDS.find((t) => t.key === condition.type)
+      if (tier) return state.cultivationSystems[tier.key] >= condition.min
       return false
+    }
   }
 }
 
@@ -95,24 +103,15 @@ function describeCondition(c: Condition): string {
       return `寿元将尽`
     case 'divineSense':
       return `神识≥${c.min}`
-    case 'alchemyTier':
-      return `丹道≥${getAlchemyLabel(c.min)}`
-    case 'formationTier':
-      return `阵法≥${getFormationLabel(c.min)}`
-    case 'swordTier':
-      return `剑道≥${getSwordLabel(c.min)}`
-    case 'bloodlineTier':
-      return `血脉≥${getBloodlineLabel(c.min)}`
-    case 'techniqueTier':
-      return `功法≥${getTechniqueLabel(c.min)}`
-    case 'divineWeaponTier':
-      return `神兵≥${getDivineWeaponLabel(c.min)}`
     case 'cultivationPath':
       return `需${getPathLabel(c.path)}路线`
     case 'origin':
       return '需特定出身'
-    default:
+    default: {
+      const tier = TIER_FIELDS.find((t) => t.key === c.type)
+      if (tier) return `${tier.label}≥${tier.getLabel(c.min)}`
       return '条件未满足'
+    }
   }
 }
 

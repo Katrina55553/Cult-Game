@@ -1,5 +1,5 @@
 import { CHAPTERS, getChapter } from '../data/chapters'
-import { createDefaultCultivationSystems, migrateCultivationSystems } from '../data/cultivationSystems'
+import { createDefaultCultivationSystems } from '../data/cultivationSystems'
 import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
 import { EVENTS } from '../data/events'
@@ -11,6 +11,7 @@ import { checkConditions } from './conditions'
 import { applyEffects } from './effects'
 import { pickNextEvent } from './eventPicker'
 import { getEndingReason, type EndingTrigger } from './endingReason'
+import { migrateSave, SAVE_VERSION } from './migrate'
 import { detectEncounterMilestone, detectMilestone } from './milestone'
 import {
   appendEffectSummary,
@@ -212,6 +213,7 @@ export function createNewGame(options: NewGameOptions): GameSession {
     useInnateBody: !!(options.useInnateBody && meta.innateBodyUnlocked),
     newEndingUnlock: false,
     newAchievements: [],
+    version: SAVE_VERSION,
   }
 }
 
@@ -302,6 +304,87 @@ function shouldOpenShop(_session: GameSession, eventId: string, choiceId: string
   return eventId === 'market_rest' && choiceId === 'browse'
 }
 
+function applyEventTimeAndLog(
+  session: GameSession,
+  player: PlayerState,
+  narrative: string,
+): PlayerState {
+  const prevPlayer = session.player
+  const event = session.currentEvent!
+
+  const years = event.years ?? 1
+  let next = { ...player, age: player.age + years }
+
+  const logNarrative = augmentNarrativeWithBreakthrough(narrative, prevPlayer, next)
+  const ageLog = `${next.age}岁：${logNarrative}`
+  next = { ...next, log: [...next.log, ageLog] }
+  next = { ...next, history: [...next.history, event.id], nextEventHint: undefined }
+
+  return next
+}
+
+function switchRouteIfNeeded(player: PlayerState): PlayerState {
+  const chapter = getChapter(player.currentChapter)
+  if (player.flags.refused_all_sects && chapter?.route !== 'wander') {
+    const next = { ...player, currentChapter: 'wander_1', chapterCompleted: [] }
+    next.log.push('— 第一章 · 独行 —')
+    return next
+  }
+  if (player.flags.accepted_demon_path && chapter?.route !== 'demon') {
+    const next = { ...player, currentChapter: 'demon_1', chapterCompleted: [] }
+    next.log.push('— 第一章 · 入魔 —')
+    return next
+  }
+  return player
+}
+
+function advanceChapter(player: PlayerState, eventId: string): PlayerState {
+  const chapter = getChapter(player.currentChapter)
+  if (!chapter || !chapter.events.includes(eventId)) return player
+
+  const completed = [...player.chapterCompleted, eventId]
+  let next = { ...player, chapterCompleted: completed }
+
+  const allDone = chapter.events.every((eid) => completed.includes(eid))
+  if (!allDone) return next
+
+  const nextId = chapter.branchNext ? chapter.branchNext(next) : chapter.nextChapter
+  if (!nextId || !CHAPTERS[nextId]) return next
+
+  const nextChapter = CHAPTERS[nextId]
+  next = { ...next, currentChapter: nextId, chapterCompleted: [] }
+  next.log.push(`— ${nextChapter.name} —`)
+  if (nextChapter.intro) {
+    next.log.push(nextChapter.intro)
+  }
+
+  if (nextChapter.route === 'sect' && !next.flags.loyal_to_sect) {
+    next = { ...next, flags: { ...next.flags, loyal_to_sect: true, refused_all_sects: false, route_switched: true } }
+    next.log.push('你决定加入宗门，踏上新的道路。')
+  }
+  if (nextChapter.route === 'wander' && !next.flags.refused_all_sects) {
+    next = { ...next, flags: { ...next.flags, refused_all_sects: true, loyal_to_sect: false } }
+    next.log.push('你离开宗门，独行于天地之间。')
+  }
+  if (nextChapter.route === 'demon' && !next.flags.accepted_demon_path) {
+    next = { ...next, flags: { ...next.flags, accepted_demon_path: true } }
+    next.log.push('你踏入魔道，再无回头之路。')
+  }
+
+  return next
+}
+
+function buildLifespanEnding(session: GameSession, player: PlayerState): GameSession {
+  const naturalEnding = ENDINGS.find((e) => e.id === 'natural_death')
+    ?? { id: 'natural_death', title: '寿终正寝', description: '寿元耗尽，魂归天地。', priority: 0, conditions: [] }
+  return buildEndingSession(
+    session,
+    { ...player, log: [...player.log, `${player.age}岁：寿元耗尽，魂归天地。`] },
+    naturalEnding,
+    'lifespan',
+  )
+}
+
 function finalizeAfterChoice(
   session: GameSession,
   player: PlayerState,
@@ -311,60 +394,9 @@ function finalizeAfterChoice(
   const prevPlayer = session.player
   const event = session.currentEvent!
 
-  const years = event.years ?? 1
-  player = { ...player, age: player.age + years }
-
-  const logNarrative = augmentNarrativeWithBreakthrough(narrative, prevPlayer, player)
-  const ageLog = `${player.age}岁：${logNarrative}`
-  player = { ...player, log: [...player.log, ageLog] }
-
-  player = { ...player, history: [...player.history, event.id], nextEventHint: undefined }
-
-  // 章节制：路线切换
-  const chapterBefore = getChapter(player.currentChapter)
-  if (player.flags.refused_all_sects && chapterBefore?.route !== 'wander') {
-    player = { ...player, currentChapter: 'wander_1', chapterCompleted: [] }
-    player.log.push('— 第一章 · 独行 —')
-  } else if (player.flags.accepted_demon_path && chapterBefore?.route !== 'demon') {
-    player = { ...player, currentChapter: 'demon_1', chapterCompleted: [] }
-    player.log.push('— 第一章 · 入魔 —')
-  }
-
-  // 章节制：标记事件完成，推进章节
-  const chapterNow = getChapter(player.currentChapter)
-  if (chapterNow && chapterNow.events.includes(event.id)) {
-    const completed = [...player.chapterCompleted, event.id]
-    player = { ...player, chapterCompleted: completed }
-
-    // 检查当前章节是否全部完成
-    const allDone = chapterNow.events.every((eid) => completed.includes(eid))
-    if (allDone) {
-      const nextId = chapterNow.branchNext
-        ? chapterNow.branchNext(player)
-        : chapterNow.nextChapter
-      if (nextId && CHAPTERS[nextId]) {
-        const nextChapter = CHAPTERS[nextId]
-        player = { ...player, currentChapter: nextId, chapterCompleted: [] }
-        player.log.push(`— ${nextChapter.name} —`)
-        if (nextChapter.intro) {
-          player.log.push(nextChapter.intro)
-        }
-        // 路线切换时更新 flag
-        if (nextChapter.route === 'sect' && !player.flags.loyal_to_sect) {
-          player = { ...player, flags: { ...player.flags, loyal_to_sect: true, refused_all_sects: false, route_switched: true } }
-          player.log.push('你决定加入宗门，踏上新的道路。')
-        }
-        if (nextChapter.route === 'wander' && !player.flags.refused_all_sects) {
-          player = { ...player, flags: { ...player.flags, refused_all_sects: true, loyal_to_sect: false } }
-          player.log.push('你离开宗门，独行于天地之间。')
-        }
-        if (nextChapter.route === 'demon' && !player.flags.accepted_demon_path) {
-          player = { ...player, flags: { ...player.flags, accepted_demon_path: true } }
-          player.log.push('你踏入魔道，再无回头之路。')
-        }
-      }
-    }
-  }
+  player = applyEventTimeAndLog(session, player, narrative)
+  player = switchRouteIfNeeded(player)
+  player = advanceChapter(player, event.id)
 
   const ending = checkEnding(player)
   if (ending) {
@@ -372,14 +404,7 @@ function finalizeAfterChoice(
   }
 
   if (player.age >= player.lifespan) {
-    const naturalEnding = ENDINGS.find((e) => e.id === 'natural_death')
-      ?? { id: 'natural_death', title: '寿终正寝', description: '寿元耗尽，魂归天地。', priority: 0, conditions: [] }
-    return buildEndingSession(
-      session,
-      { ...player, log: [...player.log, `${player.age}岁：寿元耗尽，魂归天地。`] },
-      naturalEnding,
-      'lifespan',
-    )
+    return buildLifespanEnding(session, player)
   }
 
   const actionMilestone = detectMilestone(prevPlayer, player, narrative)
@@ -568,97 +593,10 @@ export function loadGame(): GameSession | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY)
     if (!raw) return null
-    const session = JSON.parse(raw) as GameSession
-    if (!session.player || !session.phase) return null
-    if (!session.player.stats || typeof session.player.stats !== 'object') return null
-    const stats = session.player.stats
-    if (
-      typeof stats.rootBone !== 'number' ||
-      typeof stats.comprehension !== 'number' ||
-      typeof stats.luck !== 'number' ||
-      typeof stats.karma !== 'number' ||
-      typeof stats.demonHeart !== 'number'
-    ) return null
-    stats.rootBone = clamp(stats.rootBone, 0, 999)
-    stats.comprehension = clamp(stats.comprehension, 0, 999)
-    stats.luck = clamp(stats.luck, 0, 999)
-    stats.karma = clamp(stats.karma, -100, 100)
-    stats.demonHeart = clamp(stats.demonHeart, 0, 100)
-    if (typeof session.player.age !== 'number' || session.player.age < 0) return null
-    if (typeof session.player.lifespan !== 'number' || session.player.lifespan < 1) return null
-    if (typeof session.player.cultivation !== 'number') return null
-    session.player.cultivation = clamp(session.player.cultivation, 0, 100)
-    if (typeof session.player.spiritStones !== 'number') return null
-    session.player.spiritStones = Math.max(0, session.player.spiritStones)
-    if (!session.player.shopBuffs) {
-      session.player.shopBuffs = { purchases: 0 }
-    }
-    if (session.player.origin === undefined) {
-      session.player.origin = null
-    }
-    if (!Array.isArray(session.player.artifacts)) {
-      session.player.artifacts = []
-    }
-    if (!Array.isArray(session.player.inventory)) {
-      session.player.inventory = []
-    }
-    if (typeof session.player.bagCapacity !== 'number') {
-      session.player.bagCapacity = 5
-    }
-    if (typeof session.player.bagTier !== 'number') {
-      session.player.bagTier = 0
-    }
-    if (!session.player.cultivationSystems) {
-      session.player.cultivationSystems = createDefaultCultivationSystems(null)
-    } else {
-      session.player.cultivationSystems = migrateCultivationSystems(session.player)
-      const cs = session.player.cultivationSystems
-      if (typeof cs.divineSense !== 'number') cs.divineSense = 10
-      if (typeof cs.alchemyTier !== 'number') cs.alchemyTier = 0
-      if (typeof cs.formationTier !== 'number') cs.formationTier = 0
-      if (typeof cs.swordTier !== 'number') cs.swordTier = 0
-      if (typeof cs.bloodlineTier !== 'number') cs.bloodlineTier = 0
-      if (typeof cs.techniqueTier !== 'number') cs.techniqueTier = 0
-      if (typeof cs.divineWeaponTier !== 'number') cs.divineWeaponTier = 0
-      if (!Array.isArray(cs.techniques)) cs.techniques = []
-      if (!Array.isArray(cs.divineWeapons)) cs.divineWeapons = []
-      cs.divineSense = clamp(cs.divineSense, 0, 100)
-      cs.alchemyTier = clamp(cs.alchemyTier, 0, 3)
-      cs.formationTier = clamp(cs.formationTier, 0, 3)
-      cs.swordTier = clamp(cs.swordTier, 0, 3)
-      cs.bloodlineTier = clamp(cs.bloodlineTier, 0, 3)
-      cs.techniqueTier = clamp(cs.techniqueTier, 0, 3)
-      cs.divineWeaponTier = clamp(cs.divineWeaponTier, 0, 3)
-    }
-    if (!Array.isArray(session.player.history)) {
-      session.player.history = []
-    }
-    if (!Array.isArray(session.player.log)) {
-      session.player.log = []
-    }
-    if (typeof session.player.currentChapter !== 'string') {
-      session.player.currentChapter = 'sect_1'
-    }
-    if (!Array.isArray(session.player.chapterCompleted)) {
-      session.player.chapterCompleted = []
-    }
-    if (!Array.isArray(session.player.spiritBeastsSeen)) {
-      session.player.spiritBeastsSeen = []
-    }
-    if (!session.player.flags || typeof session.player.flags !== 'object') {
-      session.player.flags = {}
-    }
-    if (!session.player.shopBuffs || typeof session.player.shopBuffs !== 'object') {
-      session.player.shopBuffs = { purchases: 0 }
-    }
-    return session
+    return migrateSave(JSON.parse(raw))
   } catch {
     return null
   }
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value))
 }
 
 export function clearSave(): void {

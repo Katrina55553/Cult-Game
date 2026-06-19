@@ -199,6 +199,7 @@ export interface Achievement {
 }
 
 export interface MetaProgress {
+  version?: number
   unlockedEndings: string[]
   unlockedAchievements: string[]
   unlockedEvents: string[]
@@ -224,6 +225,7 @@ export interface EndingProximity {
 }
 
 export interface GameSession {
+  version?: number
   phase: GamePhase
   player: PlayerState
   currentEvent: GameEvent | null

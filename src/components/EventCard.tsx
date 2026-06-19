@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import type { GameEvent } from '../types/game'
 
 interface Props {
@@ -5,8 +6,15 @@ interface Props {
 }
 
 export function EventCard({ event }: Props) {
+  const [animationKey, setAnimationKey] = useState(0)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 切换事件时需要重启动画
+    setAnimationKey((k) => k + 1)
+  }, [event.id])
+
   return (
-    <article className="animate-fade-up">
+    <article key={animationKey} className="animate-fade-up">
       <h3
         className="text-2xl sm:text-3xl text-[var(--color-cinnabar-glow)] mb-5 text-center tracking-wider"
         style={{ fontFamily: 'var(--font-display)' }}

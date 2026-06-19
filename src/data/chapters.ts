@@ -116,7 +116,7 @@ export const CHAPTERS: Record<string, Chapter> = {
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
       'qinglian_tournament', 'yaogu_plague', 'guiyi_seal', 'ancient_formation_battle',
-      'beast_combat_aid', 'beast_jealousy', 'boss_spider_queen',
+      'beast_combat_aid', 'boss_spider_queen',
     ],
     nextChapter: 'sect_8',
   },

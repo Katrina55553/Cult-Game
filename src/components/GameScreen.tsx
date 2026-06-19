@@ -74,7 +74,7 @@ export function GameScreen({ session, onChoose, soundOn, onToggleSound, onAbando
 
       <div className="grid lg:grid-cols-[1fr_300px] gap-4 sm:gap-6 lg:gap-7">
         <main className="scroll-panel mist-overlay border border-[var(--color-jade)]/30 bg-[rgba(12,15,13,0.65)] p-5 sm:p-7 rounded-sm shadow-[0_4px_30px_rgba(0,0,0,0.3)]">
-          <EventCard key={currentEvent.id} event={currentEvent} />
+          <EventCard event={currentEvent} />
           <div className="divider-ornament my-6">
             <span className="ornament-dot" />
           </div>

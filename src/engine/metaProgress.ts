@@ -1,6 +1,7 @@
 import { ENDINGS } from '../data/endings'
 import { getRealmOrder } from '../data/realms'
 import type { Ending, MetaProgress, PlayerState } from '../types/game'
+import { migrateMeta, META_VERSION } from './migrate'
 
 const META_KEY = 'cultgame_meta'
 
@@ -20,10 +21,10 @@ export const DEFAULT_META: MetaProgress = {
 export function loadMeta(): MetaProgress {
   try {
     const raw = localStorage.getItem(META_KEY)
-    if (!raw) return { ...DEFAULT_META }
-    return { ...DEFAULT_META, ...JSON.parse(raw) }
+    if (!raw) return { ...DEFAULT_META, version: META_VERSION }
+    return migrateMeta(JSON.parse(raw))
   } catch {
-    return { ...DEFAULT_META }
+    return { ...DEFAULT_META, version: META_VERSION }
   }
 }
 

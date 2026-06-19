@@ -3,6 +3,17 @@ import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
 
+const TIER_EFFECT_KEYS = [
+  'alchemyTier',
+  'formationTier',
+  'swordTier',
+  'bloodlineTier',
+  'techniqueTier',
+  'divineWeaponTier',
+] as const
+
+type TierEffectKey = typeof TIER_EFFECT_KEYS[number]
+
 function cloneSystems(state: PlayerState): PlayerState {
   return {
     ...state,
@@ -81,46 +92,19 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
       }
       return { ...state, artifacts: [...state.artifacts, label] }
     }
-    case 'divineSense': {
-      const divineSense = clamp(state.cultivationSystems.divineSense + effect.value, 0, 100)
+    case 'divineSense':
       return {
         ...state,
-        cultivationSystems: { ...state.cultivationSystems, divineSense },
+        cultivationSystems: {
+          ...state.cultivationSystems,
+          divineSense: clamp(state.cultivationSystems.divineSense + effect.value, 0, 100),
+        },
       }
-    }
-    case 'alchemyTier': {
-      const alchemyTier = clamp(state.cultivationSystems.alchemyTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, alchemyTier },
-      }
-    }
-    case 'formationTier': {
-      const formationTier = clamp(state.cultivationSystems.formationTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, formationTier },
-      }
-    }
-    case 'swordTier': {
-      const swordTier = clamp(state.cultivationSystems.swordTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, swordTier },
-      }
-    }
     case 'bloodline':
       return {
         ...state,
         cultivationSystems: { ...state.cultivationSystems, bloodline: effect.name },
       }
-    case 'bloodlineTier': {
-      const bloodlineTier = clamp(state.cultivationSystems.bloodlineTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, bloodlineTier },
-      }
-    }
     case 'technique': {
       if (state.cultivationSystems.techniques.includes(effect.name)) return state
       return {
@@ -129,13 +113,6 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
           ...state.cultivationSystems,
           techniques: [...state.cultivationSystems.techniques, effect.name],
         },
-      }
-    }
-    case 'techniqueTier': {
-      const techniqueTier = clamp(state.cultivationSystems.techniqueTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, techniqueTier },
       }
     }
     case 'divineWeapon': {
@@ -147,13 +124,6 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
           ...state.cultivationSystems,
           divineWeapons: [...state.cultivationSystems.divineWeapons, label],
         },
-      }
-    }
-    case 'divineWeaponTier': {
-      const divineWeaponTier = clamp(state.cultivationSystems.divineWeaponTier + effect.value, 0, 3)
-      return {
-        ...state,
-        cultivationSystems: { ...state.cultivationSystems, divineWeaponTier },
       }
     }
     case 'spiritBeast': {
@@ -205,8 +175,27 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
     }
     case 'hint':
       return { ...state, nextEventHint: effect.text }
-    default:
+    default: {
+      const tierKey = TIER_EFFECT_KEYS.find((k) => k === effect.type)
+      if (tierKey) {
+        return adjustCultivationSystem(state, tierKey, effect.value, 0, 3)
+      }
       return state
+    }
+  }
+}
+
+function adjustCultivationSystem(
+  state: PlayerState,
+  key: TierEffectKey,
+  delta: number,
+  min: number,
+  max: number,
+): PlayerState {
+  const value = clamp(state.cultivationSystems[key] + delta, min, max)
+  return {
+    ...state,
+    cultivationSystems: { ...state.cultivationSystems, [key]: value },
   }
 }
 
