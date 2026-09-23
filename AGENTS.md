@@ -1,8 +1,12 @@
 # AGENTS.md
 
+This is the single source of agent guidance for this repo. All AI coding tools should read this file.
+
 ## Project
 
-修仙模拟器 (Cultivation Simulator) — a single-page text RPG built with React 19, TypeScript 6, Vite 8, and Tailwind CSS 4. All UI is in Chinese. Deployed to GitHub Pages (base path `/Cult-Game/`).
+修仙模拟器 (Cultivation Simulator) — a single-page text Roguelike RPG built with React 19, TypeScript 6, Vite 8, and Tailwind CSS 4. All UI is in Chinese. Deployed to GitHub Pages (base path `/Cult-Game/`) and Gitee Pages.
+
+Live: https://katrina55553.github.io/Cult-Game/
 
 ## Commands
 
@@ -35,11 +39,17 @@ src/
 
 ### Key flow
 
-`App.tsx` renders based on `session.phase` (`start → lore → root_reveal → playing → shop → ending`). All state mutations go through `useGame()` which calls pure functions in `gameEngine.ts` and persists to `localStorage` automatically.
+`App.tsx` renders based on `session.phase` (`start → lore → root_reveal → playing → shop → ending`). No router — single-component conditional render. All state mutations go through `useGame()` which calls pure functions in `gameEngine.ts` and persists to `localStorage` automatically.
 
 ### Chapter system
 
-Events are organized into **chapters** (`data/chapters.ts`). Three routes: **sect** (9 chapters), **wander** (6 chapters), **demon** (4 chapters). Each chapter has:
+Events are organized into **chapters** (`data/chapters.ts`). Three routes with independent chapter sequences:
+
+- **Sect** (9 chapters): 入门 → 修行 → 崭露头角 → 天骄之争 → 秘境探索 → 情缘与暗流 → 宗门大战 → 突破之路 → 终局
+- **Wander** (6 chapters): 独行 → 求生 → 声名渐起 → 散修之路 → 探索 → 终局
+- **Demon** (4 chapters): 入魔 → 堕落 → 魔道势力 → 终局
+
+Each chapter has:
 - `events` — main storyline events (must all complete to advance)
 - `sideEvents` — optional NPC/Boss/crafting events (don't block progression)
 - `intro` — scene-setting text shown when chapter begins
@@ -132,6 +142,8 @@ Four modal buttons in StatusPanel: 📊属性, ⚔修炼, 👜乾坤袋, 📜剧
 - `StorylinePanel` — 12 storyline progress trackers
 
 Modals use `createPortal` to `document.body`. All modals support ESC key to close.
+
+The ending screen has a novel export (📖 导出为小说) that compiles the full playthrough into a structured text file. Each run also has one 🔄 回溯 (snapshot rollback) that rewinds to before the previous choice; the snapshot is persisted so a page refresh doesn't lose it.
 
 ## Conventions
 

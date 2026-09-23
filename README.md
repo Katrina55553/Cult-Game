@@ -1,8 +1,21 @@
+<div align="center">
+
+<img src="public/favicon.svg" width="112" height="112" alt="修仙模拟器 图标" />
+
 # 修仙模拟器
 
-> 一款文字修仙 Roguelike 游戏，每一次抉择皆关机缘。
+**一款文字修仙 Roguelike 游戏 · 每一次抉择皆关机缘**
 
-**在线体验** → https://katrina55553.github.io/Cult-Game/
+[![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-%E4%BF%AE%E4%BB%99%E6%A8%A1%E6%8B%9F%E5%99%A8-e8c547?style=for-the-badge&labelColor=0c0f0d)](https://katrina55553.github.io/Cult-Game/)
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)](#技术栈)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=flat-square&logo=typescript&logoColor=white)](#技术栈)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](#技术栈)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](#技术栈)
+[![Web Audio](https://img.shields.io/badge/Web_Audio_API-%E9%9B%B6%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6-8a7020?style=flat-square)](#技术栈)
+[![零后端](https://img.shields.io/badge/%E9%9B%B6%E5%90%8E%E7%AB%AF-GitHub_Pages_%2F_Gitee_Pages-2ea44f?style=flat-square&logo=github&logoColor=white)](https://katrina55553.github.io/Cult-Game/)
+
+</div>
 
 ---
 
@@ -223,11 +236,30 @@ npx tsx scripts/playtest-deep.ts  # 深度 playtest
 
 ## 技术栈
 
-**React 19 + TypeScript 6 + Vite 8 + Tailwind CSS 4**
+<div align="center">
 
-- **零资源依赖**：所有音效通过 Web Audio API 程序化生成，无外部音频文件
-- **离线存储**：游戏进度保存在浏览器 `localStorage` 中（`cultgame_save` / `cultgame_meta`）
-- **响应式**：桌面、平板、手机三档自适应布局
-- **零后端**：纯前端静态部署，支持 GitHub Pages
+![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-10-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+
+</div>
+
+| 层 | 技术 | 版本 | 在本项目中的用法 |
+|---|---|---|---|
+| 视图 | **React** | `^19.2` | 单组件按 `session.phase` 条件渲染，**无路由** |
+| 语言 | **TypeScript** | `~6.0` | `strict` + `erasableSyntaxOnly`（禁用 `enum` / `namespace`）、`verbatimModuleSyntax` |
+| 构建 | **Vite** | `^8.0` | 开发与生产构建，部署时切换 `base: /Cult-Game/` |
+| 样式 | **Tailwind CSS** | `^4.3` | `@import "tailwindcss"` + `@theme {}` 自定义 token，**无 `tailwind.config.js`** |
+| 规范 | **ESLint** | `^10.3` | flat config + `typescript-eslint`（非类型感知） |
+| 图标 | **内联 SVG / Emoji** | — | 界面图标全部内联绘制，无图标库依赖 |
+| 字体 | **Ma Shan Zheng · Noto Serif SC** | — | 自托管 `woff2` 子集（`src/assets/fonts/`），运行时不请求 Google Fonts |
+| 音效 | **Web Audio API** | — | 全部程序化合成，**零音频文件** |
+| 存档 | **localStorage** | — | `cultgame_save`（当前进度）/ `cultgame_meta`（跨局解锁） |
+| 工具脚本 | **tsx** | `npx` 直跑 | `scripts/playtest*.ts` 自动化试玩，未列入依赖 |
+| 部署 | **GitHub Pages / Gitee Pages** | — | 纯静态零后端，响应式适配桌面 / 平板 / 手机 |
+
+**零资源依赖**：无外部音频、无图标库、无网络字体请求，首屏只需字体子集 + 单份 JS/CSS。
 
 部署地址：`https://katrina55553.github.io/Cult-Game/`（`base: /Cult-Game/`）
