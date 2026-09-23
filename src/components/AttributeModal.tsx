@@ -29,29 +29,29 @@ export function AttributeModal({ player, onClose }: Props) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 px-4"
+      data-overlay="true"
+      className="fixed inset-0 z-[9999] flex items-center justify-center modal-backdrop px-4"
       onClick={(e) => { if ((e.target as HTMLElement).dataset.overlay) onClose() }}
     >
       <div
-        data-overlay="false"
-        className="max-w-sm w-full max-h-[520px] border border-jade/40 bg-ink p-5 flex flex-col overflow-y-auto"
+        className="modal-panel animate-modal-in max-w-md w-full max-h-[85vh] p-6 flex flex-col overflow-y-auto"
         style={{ scrollbarWidth: 'thin', scrollbarColor: 'color-mix(in srgb, var(--color-jade-light) 45%, transparent) transparent' }}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg text-gold" style={{ fontFamily: 'var(--font-display)' }}>
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="modal-heading flex-1 text-xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             📊 属性
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-xs text-mist hover:text-parchment cursor-pointer border border-mist/20 px-2 py-1 rounded-sm"
+            className="text-xs text-mist hover:text-gold cursor-pointer border border-mist/20 hover:border-gold/40 px-2.5 py-1 rounded-sm transition-colors"
           >
             关闭
           </button>
         </div>
 
         {/* 基本信息 */}
-        <div className="space-y-1 mb-4 text-xs">
+        <div className="space-y-2 mb-5 text-sm">
           <div className="flex justify-between">
             <span className="text-mist">境界</span>
             <span className="text-parchment">{getRealmName(player.realm)}</span>
@@ -73,11 +73,11 @@ export function AttributeModal({ player, onClose }: Props) {
         </div>
 
         {/* 六维属性 */}
-        <div className="mb-4">
-          <p className="text-xs text-mist mb-2">基础属性</p>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="mb-5">
+          <p className="text-sm text-mist mb-2.5">基础属性</p>
+          <div className="grid grid-cols-2 gap-2.5">
             {mainStats.map((stat) => (
-              <div key={stat.label} className="flex justify-between text-xs px-2 py-1.5 bg-black/20 rounded-sm">
+              <div key={stat.label} className="flex justify-between text-sm px-3 py-2 bg-black/20 rounded-sm">
                 <span className="text-mist">{stat.label}</span>
                 <span style={{ color: stat.color }}>{stat.value}</span>
               </div>
@@ -88,11 +88,11 @@ export function AttributeModal({ player, onClose }: Props) {
         {/* 血脉 */}
         {sys.bloodline && (
           <div className="mb-2">
-            <p className="text-xs text-mist mb-2">血脉</p>
-            <div className="text-xs px-3 py-2 border border-cinnabar/20 rounded-sm">
+            <p className="text-sm text-mist mb-2.5">血脉</p>
+            <div className="text-sm px-4 py-2.5 border border-cinnabar/20 rounded-sm">
               <p className="text-cinnabar-glow">{sys.bloodline}</p>
               {sys.bloodlineTier > 0 && (
-                <p className="text-mist text-[10px] mt-0.5">纯度 {sys.bloodlineTier} 阶</p>
+                <p className="text-mist text-xs mt-1">纯度 {sys.bloodlineTier} 阶</p>
               )}
             </div>
           </div>

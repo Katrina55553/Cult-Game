@@ -26,12 +26,12 @@ export function CodexScreen({ onClose }: Props) {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-lg max-h-[85vh] flex flex-col border border-jade bg-ink rounded-sm">
+    <div className="fixed inset-0 z-50 modal-backdrop flex items-center justify-center px-4 py-8">
+      <div className="modal-panel animate-modal-in w-full max-w-lg max-h-[85vh] flex flex-col">
         {/* 吸顶头部 */}
         <div className="flex items-center px-6 py-4 border-b border-jade/30 shrink-0
-          bg-ink sticky top-0 z-10">
-          <h2 className="text-2xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
+          sticky top-0 z-10">
+          <h2 className="modal-heading flex-1 text-2xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             修仙志
           </h2>
         </div>
@@ -95,12 +95,11 @@ export function CodexScreen({ onClose }: Props) {
         </div>
 
         {/* 底部关闭按钮 */}
-        <div className="px-6 py-3 border-t border-jade/30 shrink-0 bg-ink">
+        <div className="px-6 py-3 border-t border-jade/30 shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2 text-sm text-mist hover:text-gold
-              border border-mist/20 hover:border-gold/40 rounded-sm transition-colors cursor-pointer"
+            className="btn-ghost w-full py-2 text-sm cursor-pointer"
           >
             关闭修仙志
           </button>

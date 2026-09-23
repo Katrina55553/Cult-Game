@@ -27,12 +27,12 @@ export function MilestoneToast({ milestone, onDismiss }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6 animate-fade-up"
+      className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop px-6"
       onClick={onDismiss}
       role="presentation"
     >
       <div
-        className={`max-w-md w-full border-2 bg-ink/95 px-8 py-6 rounded-sm text-center animate-milestone-enter ${TONE[milestone.type]}`}
+        className={`max-w-md w-full border-2 bg-ink-panel/95 px-8 py-6 rounded-sm text-center shadow-lift animate-milestone-enter ${TONE[milestone.type]}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-label="里程碑通知"

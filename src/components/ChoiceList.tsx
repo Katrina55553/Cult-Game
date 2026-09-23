@@ -53,6 +53,9 @@ export function ChoiceList({ choices, player, onChoose }: Props) {
                 </span>
               )}
             </span>
+            {canChoose && (
+              <span className="choice-arrow" aria-hidden="true">▸</span>
+            )}
           </button>
         )
       })}

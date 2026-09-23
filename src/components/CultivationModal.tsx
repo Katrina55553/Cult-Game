@@ -32,21 +32,21 @@ export function CultivationModal({ player, onClose }: Props) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 px-4"
+      data-overlay="true"
+      className="fixed inset-0 z-[9999] flex items-center justify-center modal-backdrop px-4"
       onClick={(e) => { if ((e.target as HTMLElement).dataset.overlay) onClose() }}
     >
       <div
-        data-overlay="false"
-        className="max-w-sm w-full border border-jade/40 bg-ink p-5 flex flex-col"
+        className="modal-panel animate-modal-in max-w-sm w-full max-h-[85vh] overflow-y-auto p-5 flex flex-col"
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg text-gold" style={{ fontFamily: 'var(--font-display)' }}>
+          <h3 className="modal-heading flex-1 text-lg text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             ⚔ 修炼体系
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-xs text-mist hover:text-parchment cursor-pointer border border-mist/20 px-2 py-1 rounded-sm"
+            className="text-xs text-mist hover:text-gold cursor-pointer border border-mist/20 hover:border-gold/40 px-2.5 py-1 rounded-sm transition-colors"
           >
             关闭
           </button>

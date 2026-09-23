@@ -41,8 +41,7 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         <button
           type="button"
           onClick={() => setShowCodex(true)}
-          className="text-sm text-mist hover:text-gold transition-colors cursor-pointer
-            border border-mist/20 hover:border-gold/40 px-3 py-1.5 rounded-sm"
+          className="btn-ghost text-sm px-3 py-1.5 cursor-pointer"
         >
           修仙志
         </button>
@@ -64,12 +63,18 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
           <span className="h-px w-16 bg-gradient-to-l from-transparent to-gold/40" />
         </div>
 
-        <h1
-          className="text-6xl md:text-8xl mb-3 title-shimmer leading-tight"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          修仙模拟器
-        </h1>
+        <div className="relative inline-block mb-3">
+          <h1
+            className="text-6xl md:text-8xl title-shimmer leading-tight whitespace-nowrap"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            修仙模拟器
+          </h1>
+          {/* 外层 div 负责响应式隐藏：.seal-stamp 是非层叠 CSS，会压过 Tailwind 的 hidden */}
+          <div className="hidden sm:block absolute -right-16 top-2">
+            <span className="seal-stamp" aria-hidden="true">仙</span>
+          </div>
+        </div>
 
         <p className="text-mist text-sm tracking-widest mb-6">
           Cultivation Simulator
@@ -104,7 +109,8 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         className="w-full max-w-sm space-y-5 animate-fade-up relative z-10"
         style={{ animationDelay: '0.15s' }}
       >
-        <div className="scroll-panel border border-jade/30 bg-ink/50 p-5 rounded-sm space-y-4">
+        <div className="scroll-panel border border-jade/30 bg-ink/50 p-5 rounded-sm space-y-4 overflow-hidden">
+          <div className="spirit-motes" aria-hidden="true" />
           <div>
             <label htmlFor="dao-hao" className="block text-sm text-mist mb-2 tracking-wider">
               道号
@@ -157,10 +163,8 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
 
         <button
           type="submit"
-          className="w-full py-3.5 min-h-[44px] bg-cinnabar hover:bg-cinnabar-glow
-            text-parchment font-semibold tracking-[0.3em] rounded-sm
-            transition-all cursor-pointer border border-cinnabar-glow/50
-            hover:shadow-glow-cinnabar active:scale-[0.98]"
+          className="btn-cinnabar w-full py-3.5 min-h-[44px]
+            font-semibold tracking-[0.3em] cursor-pointer"
         >
           踏入仙途
         </button>

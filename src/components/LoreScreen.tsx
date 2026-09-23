@@ -130,14 +130,14 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
 
       {/* 内容区域 — 固定高度 */}
       <div className="w-full max-w-lg relative z-10 shrink-0">
-        <div className="border border-jade/30 bg-ink/60 p-6 sm:p-8 rounded-sm mb-8 h-[380px] sm:h-[400px] flex flex-col overflow-hidden">
+        <div className="scroll-panel mist-overlay border border-jade/30 bg-ink/60 p-6 sm:p-8 rounded-sm mb-8 h-[380px] sm:h-[400px] flex flex-col overflow-hidden">
           <h2
-            className="text-2xl sm:text-3xl text-gold mb-6 text-center shrink-0"
+            className="text-2xl sm:text-3xl text-gold mb-6 text-center shrink-0 relative z-10"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            {current.title}
+            <span className="title-flanked">{current.title}</span>
           </h2>
-          <div className="flex-1 overflow-y-auto log-scroll min-h-0">
+          <div className="flex-1 overflow-y-auto log-scroll min-h-0 relative z-10">
             <div className="space-y-4">
               {paragraphs.map((para, i) => (
                 <p
@@ -160,9 +160,8 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
             <button
               type="button"
               onClick={handlePrev}
-              className="flex-1 py-3 min-h-[44px] border border-mist/30 rounded-sm
-                text-mist hover:text-parchment hover:border-mist/60
-                cursor-pointer transition-all tracking-wider"
+              className="btn-ghost flex-1 py-3 min-h-[44px] text-mist hover:text-parchment
+                cursor-pointer tracking-wider"
             >
               上一页
             </button>
@@ -171,9 +170,8 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
             <button
               type="button"
               onClick={handleNext}
-              className="flex-1 py-3 min-h-[44px] border border-jade/40 rounded-sm
-                text-parchment-dim hover:text-parchment hover:border-jade-light
-                cursor-pointer transition-all tracking-wider"
+              className="btn-ghost flex-1 py-3 min-h-[44px] text-parchment-dim hover:text-parchment
+                cursor-pointer tracking-wider"
             >
               {isTyping ? '跳过当前' : '下一页'}
             </button>
@@ -182,10 +180,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
             <button
               type="button"
               onClick={handleSkipAll}
-              className="flex-1 py-3 min-h-[44px] bg-cinnabar hover:bg-cinnabar-glow
-                text-parchment tracking-[0.2em] rounded-sm transition-all cursor-pointer
-                border border-cinnabar-glow/50
-                hover:shadow-glow-cinnabar active:scale-[0.98]"
+              className="btn-cinnabar flex-1 py-3 min-h-[44px] tracking-[0.2em] cursor-pointer"
             >
               跳过全部
             </button>
@@ -194,10 +189,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
             <button
               type="button"
               onClick={onContinue}
-              className="flex-1 py-3 min-h-[44px] bg-cinnabar hover:bg-cinnabar-glow
-                text-parchment tracking-[0.2em] rounded-sm transition-all cursor-pointer
-                border border-cinnabar-glow/50
-                hover:shadow-glow-cinnabar active:scale-[0.98]"
+              className="btn-cinnabar flex-1 py-3 min-h-[44px] tracking-[0.2em] cursor-pointer"
             >
               开始修行
             </button>

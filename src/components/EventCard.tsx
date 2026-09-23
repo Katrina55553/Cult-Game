@@ -45,6 +45,11 @@ export function EventCard({ event }: Props) {
       >
         <span className="title-flanked">「{event.title}」</span>
       </h3>
+      {!revealed && lines.length > 3 && (
+        <p className="text-center text-[10px] text-mist/40 tracking-[0.3em] mb-4 animate-fade-up">
+          点击正文速览全文
+        </p>
+      )}
       {/* 长叙事会让人干等，点一下直接全部显形 */}
       <p
         className="text-parchment leading-[2] text-base sm:text-[17px] whitespace-pre-wrap"

@@ -663,6 +663,187 @@ body::after {
   animation: demon-creep 3.5s ease-in-out infinite;
 }
 
+/* ── 弹窗体系：统一墨色面板、入场动效与背景虚化 ── */
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-backdrop {
+  background: rgb(4 6 5 / 0.62);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: backdrop-in 0.25s ease-out both;
+}
+
+.animate-modal-in {
+  animation: modal-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 面板：上浮一层墨色，描边用青玉淡金双层 */
+.modal-panel {
+  background: linear-gradient(180deg, var(--color-ink-raised) 0%, var(--color-ink-panel) 100%);
+  border: 1px solid color-mix(in srgb, var(--color-jade-light) 32%, transparent);
+  border-radius: 3px;
+  box-shadow:
+    var(--shadow-lift),
+    inset 0 1px 0 rgb(232 220 200 / 0.04);
+}
+
+/* 弹窗标题下的双线分隔 */
+.modal-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-gold-dim) 35%, transparent),
+    transparent
+  );
+}
+
+/* ── 印章：朱砂方印，用于起始页标题旁 ── */
+
+.seal-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, var(--color-cinnabar-glow) 0%, var(--color-cinnabar) 70%);
+  color: var(--color-parchment);
+  border-radius: 5px;
+  transform: rotate(-5deg);
+  box-shadow:
+    inset 0 0 0 2px rgb(232 220 200 / 0.28),
+    inset 0 0 10px rgb(0 0 0 / 0.25),
+    0 3px 14px rgb(184 58 42 / 0.35);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── 渐变分隔线：替代生硬的 border-b，两端渐隐、中段描金 ── */
+
+.rule-fade {
+  position: relative;
+}
+
+.rule-fade::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-jade-light) 40%, transparent) 25%,
+    color-mix(in srgb, var(--color-gold) 45%, transparent) 55%,
+    color-mix(in srgb, var(--color-jade-light) 40%, transparent) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ── 选项：hover 时右侧浮现引导符 ── */
+
+.choice-arrow {
+  flex-shrink: 0;
+  align-self: center;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  font-size: 0.8rem;
+}
+
+.choice-ink:hover .choice-arrow,
+.choice-ink:focus-visible .choice-arrow {
+  opacity: 0.75;
+  transform: translateX(0);
+}
+
+/* ── 日志：底部渐隐，暗示还有更多往事 ── */
+
+.log-fade {
+  mask-image: linear-gradient(180deg, black 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 82%, transparent 100%);
+}
+
+/* ── 键盘可达性：描金焦点环 ── */
+
+:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--color-gold) 70%, transparent);
+  outline-offset: 2px;
+}
+
+/* ── 主按钮：朱砂渐变，比纯色多一分光泽 ── */
+
+.btn-cinnabar {
+  background: linear-gradient(180deg, var(--color-cinnabar-glow) 0%, var(--color-cinnabar) 100%);
+  color: var(--color-parchment);
+  border: 1px solid color-mix(in srgb, var(--color-cinnabar-glow) 60%, transparent);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px 0 rgb(232 220 200 / 0.12),
+    0 2px 12px rgb(184 58 42 / 0.25);
+  transition: all 0.25s ease;
+}
+
+.btn-cinnabar:hover:not(:disabled) {
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 1px 0 rgb(232 220 200 / 0.15),
+    var(--shadow-glow-cinnabar);
+}
+
+.btn-cinnabar:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-cinnabar:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── 次按钮：描边青玉，hover 转描金 ── */
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-jade-light);
+  border: 1px solid color-mix(in srgb, var(--color-jade-light) 35%, transparent);
+  border-radius: 3px;
+  transition: all 0.25s ease;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--color-gold);
+  border-color: color-mix(in srgb, var(--color-gold) 50%, transparent);
+  background: color-mix(in srgb, var(--color-gold) 6%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-pulse-glow,
@@ -675,6 +856,8 @@ body::after {
   .animate-slide-up,
   .animate-demon-creep,
   .animate-pulse-cinnabar,
+  .animate-modal-in,
+  .modal-backdrop,
   .ink-line,
   .spirit-motes::before,
   .spirit-motes::after,

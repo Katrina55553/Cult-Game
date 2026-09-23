@@ -24,13 +24,14 @@ export function RootRevealScreen({ session, onConfirm, onAbandon }: Props) {
         {player.name} 的资质
       </h2>
 
-      <div className="w-full max-w-md border border-jade bg-jade/15 p-8 rounded-sm text-center">
-        <p className="text-3xl text-cinnabar-glow mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+      <div className="scroll-panel relative w-full max-w-md border border-jade bg-jade/15 p-8 rounded-sm text-center overflow-hidden">
+        <div className="spirit-motes" aria-hidden="true" />
+        <p className="relative z-10 text-3xl text-cinnabar-glow mb-3" style={{ fontFamily: 'var(--font-display)' }}>
           {root.name}
         </p>
-        <p className="text-parchment-dim mb-8 leading-relaxed">{root.description}</p>
+        <p className="relative z-10 text-parchment-dim mb-8 leading-relaxed">{root.description}</p>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="relative z-10 grid grid-cols-2 gap-4 text-sm">
           <Stat label="根骨" value={player.stats.rootBone} />
           <Stat label="悟性" value={player.stats.comprehension} />
           <Stat label="气运" value={player.stats.luck} />
@@ -41,9 +42,7 @@ export function RootRevealScreen({ session, onConfirm, onAbandon }: Props) {
       <button
         type="button"
         onClick={onConfirm}
-        className="mt-10 px-10 py-3 bg-jade hover:bg-jade-light
-          text-parchment tracking-[0.2em] rounded-sm transition-all cursor-pointer
-          border border-jade-light/50"
+        className="btn-cinnabar mt-10 px-10 py-3 tracking-[0.2em] cursor-pointer"
       >
         开始修行
       </button>
@@ -53,8 +52,8 @@ export function RootRevealScreen({ session, onConfirm, onAbandon }: Props) {
 
 function Stat({ label, value, suffix = '' }: { label: string; value: number; suffix?: string }) {
   return (
-    <div className="bg-black/20 py-3 px-4 rounded-sm">
-      <p className="text-mist text-xs mb-1">{label}</p>
+    <div className="stat-card py-3 px-4 rounded-sm">
+      <p className="text-mist text-xs mb-1 tracking-wider">{label}</p>
       <p className="text-parchment text-lg font-semibold">
         {value}{suffix}
       </p>

@@ -28,11 +28,11 @@ export function AbandonButton({ onAbandon }: Props) {
 
       {show && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6"
+          className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop px-6"
           onClick={() => setShow(false)}
         >
           <div
-            className="max-w-sm w-full border border-jade/40 bg-ink p-6 rounded-sm text-center animate-fade-up"
+            className="modal-panel animate-modal-in max-w-sm w-full p-6 text-center"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -51,18 +51,14 @@ export function AbandonButton({ onAbandon }: Props) {
               <button
                 type="button"
                 onClick={() => setShow(false)}
-                className="flex-1 py-2.5 min-h-[44px] border border-mist/30 rounded-sm
-                  text-mist hover:text-parchment hover:border-mist/60
-                  cursor-pointer transition-colors"
+                className="btn-ghost flex-1 py-2.5 min-h-[44px] text-sm cursor-pointer"
               >
                 继续修行
               </button>
               <button
                 type="button"
                 onClick={onAbandon}
-                className="flex-1 py-2.5 min-h-[44px] bg-cinnabar hover:bg-cinnabar-glow
-                  text-parchment rounded-sm cursor-pointer transition-colors
-                  border border-cinnabar-glow/50"
+                className="btn-cinnabar flex-1 py-2.5 min-h-[44px] text-sm cursor-pointer"
               >
                 确认弃道
               </button>

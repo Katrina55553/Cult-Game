@@ -34,7 +34,7 @@ export function AchievementToast({ ids, onDismiss }: Props) {
       {items.map((a) => (
         <div
           key={a.id}
-          className="border border-gold bg-ink/95 px-4 py-3 rounded-sm animate-fade-up"
+          className="scroll-panel border border-gold/60 bg-ink-panel/95 px-4 py-3 rounded-sm shadow-lift animate-fade-up"
         >
           <p className="text-xs text-gold tracking-wider">成就解锁</p>
           <p className="text-parchment font-semibold">{a.title}</p>

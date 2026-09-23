@@ -51,8 +51,8 @@ export function OriginPicker({ value, onChange }: Props) {
 
       {open && (
         <ul
-          className="absolute z-20 bottom-full mb-1 w-full max-h-60 overflow-y-auto border border-jade/40 bg-ink-deep rounded-sm
-            shadow-lift"
+          className="absolute z-20 bottom-full mb-1.5 w-full max-h-60 overflow-y-auto border border-jade/40 bg-ink-deep rounded-sm
+            shadow-lift animate-fade-up log-scroll"
           role="listbox"
         >
           {OPTIONS.map((opt) => {
@@ -65,10 +65,10 @@ export function OriginPicker({ value, onChange }: Props) {
                     onChange(opt.value)
                     setOpen(false)
                   }}
-                  className={`w-full px-4 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors
+                  className={`w-full px-4 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors border-l-2
                     ${active
-                      ? 'bg-jade/60 text-parchment'
-                      : 'text-parchment hover:bg-ink-raised'
+                      ? 'bg-jade/25 text-parchment border-gold/60'
+                      : 'text-parchment hover:bg-ink-raised border-transparent hover:border-jade/40'
                     }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-3 min-w-0">

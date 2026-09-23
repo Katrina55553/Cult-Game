@@ -45,19 +45,19 @@ export function StorylinePanel({ player, open, onClose }: Props) {
   const sorted = [...storylines].sort((a, b) => b.percent - a.percent)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop px-4" onClick={onClose}>
       <div
-        className="max-w-lg w-full h-[520px] border border-jade/40 bg-ink p-6 rounded-sm animate-slide-up flex flex-col"
+        className="modal-panel animate-modal-in max-w-lg w-full h-[520px] p-6 flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
+          <h3 className="modal-heading flex-1 text-xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             📜 剧情线
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-sm text-mist hover:text-parchment cursor-pointer border border-mist/20 px-3 py-1 rounded-sm"
+            className="text-xs text-mist hover:text-gold cursor-pointer border border-mist/20 hover:border-gold/40 px-2.5 py-1 rounded-sm transition-colors"
           >
             关闭
           </button>

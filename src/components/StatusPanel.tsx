@@ -49,12 +49,13 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
   const lowLifespan = remaining <= 10
 
   return (
-    <header className="border-b border-jade/40 pb-5 mb-6 relative">
+    <header className="rule-fade pb-5 mb-6 relative">
       {realmFlash && (
         <div className="absolute inset-0 bg-gold/10 animate-breakthrough pointer-events-none z-10" />
       )}
 
-      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+      {/* pr-28 给右上角绝对定位工具栏让位，防止章节/回合徽标被压住 */}
+      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3 pr-28">
         <h2 className="text-2xl text-gold tracking-wide" style={{ fontFamily: 'var(--font-display)' }}>
           {player.name}
         </h2>
@@ -98,7 +99,7 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
           </div>
         </div>
         <div
-          className={`shrink-0 px-3 py-1 rounded-sm border text-right ${
+          className={`shrink-0 px-3 py-1 rounded-sm border text-right bg-ink/40 ${
             lowLifespan ? 'border-cinnabar/50 animate-pulse-cinnabar' : 'border-jade/20'
           }`}
         >
@@ -162,36 +163,28 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         <button
           type="button"
           onClick={() => setShowAttr(true)}
-          className="text-xs text-jade-light hover:text-gold cursor-pointer
-            border border-jade/30 hover:border-gold/50 px-3.5 py-1.5 rounded-sm transition-all
-            hover:bg-gold/5 tracking-wider"
+          className="btn-ghost text-xs px-3.5 py-1.5 tracking-wider cursor-pointer"
         >
           📊 属性
         </button>
         <button
           type="button"
           onClick={() => setShowCultivation(true)}
-          className="text-xs text-jade-light hover:text-gold cursor-pointer
-            border border-jade/30 hover:border-gold/50 px-3.5 py-1.5 rounded-sm transition-all
-            hover:bg-gold/5 tracking-wider"
+          className="btn-ghost text-xs px-3.5 py-1.5 tracking-wider cursor-pointer"
         >
           ⚔ 修炼
         </button>
         <button
           type="button"
           onClick={() => setShowInventory(true)}
-          className="text-xs text-jade-light hover:text-gold cursor-pointer
-            border border-jade/30 hover:border-gold/50 px-3.5 py-1.5 rounded-sm transition-all
-            hover:bg-gold/5 tracking-wider"
+          className="btn-ghost text-xs px-3.5 py-1.5 tracking-wider cursor-pointer"
         >
           👜 乾坤袋
         </button>
         <button
           type="button"
           onClick={() => setShowStoryline(true)}
-          className="text-xs text-jade-light hover:text-gold cursor-pointer
-            border border-jade/30 hover:border-gold/50 px-3.5 py-1.5 rounded-sm transition-all
-            hover:bg-gold/5 tracking-wider"
+          className="btn-ghost text-xs px-3.5 py-1.5 tracking-wider cursor-pointer"
         >
           📜 剧情线
         </button>

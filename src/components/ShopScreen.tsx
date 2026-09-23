@@ -48,7 +48,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
     <div className="min-h-screen px-3 sm:px-4 py-6 sm:py-8 max-w-lg mx-auto animate-fade-up relative safe-bottom">
       {purchaseToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 animate-fade-up">
-          <div className="border border-gold bg-ink/95 px-4 py-4 rounded-sm text-center">
+          <div className="scroll-panel border border-gold/60 bg-ink-panel/95 px-4 py-4 rounded-sm shadow-lift text-center">
             <p className="text-xs text-gold tracking-wider mb-1">— 交易成功 —</p>
             <p className="text-parchment font-semibold">
               购得「{purchaseToast.name}」
@@ -115,11 +115,11 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
               key={item.id}
               type="button"
               onClick={() => setSelectedId(item.id)}
-              className={`text-left px-3 py-2.5 rounded-sm border transition-all cursor-pointer
+              className={`text-left px-3 py-2.5 rounded-sm border transition-all duration-200 cursor-pointer
                 ${isSelected
-                  ? 'border-gold bg-gold/12 ring-1 ring-gold/40'
+                  ? 'border-gold bg-gold/12 ring-1 ring-gold/40 shadow-glow-cinnabar'
                   : affordable
-                    ? 'border-jade/60 bg-jade/12 hover:bg-jade/25'
+                    ? 'border-jade/60 bg-jade/12 hover:bg-jade/25 hover:-translate-y-0.5 hover:border-jade-light'
                     : 'border-mist/20 bg-ink/40 opacity-60'
                 }`}
             >
@@ -142,7 +142,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
           onClick={handleConfirm}
           className={`w-full py-3.5 min-h-[44px] tracking-wider rounded-sm transition-all
             ${canConfirm
-              ? 'bg-cinnabar hover:bg-cinnabar-glow text-parchment cursor-pointer border border-cinnabar-glow/50'
+              ? 'btn-cinnabar cursor-pointer'
               : 'bg-jade/15 text-mist cursor-not-allowed border border-mist/20'
             }`}
         >
@@ -166,8 +166,8 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
 
 function MiniStat({ label, value, warn }: { label: string; value: string | number; warn?: boolean }) {
   return (
-    <div className="bg-black/20 px-2 py-1.5 rounded-sm text-center">
-      <p className="text-mist">{label}</p>
+    <div className="stat-card px-2 py-1.5 rounded-sm text-center">
+      <p className="text-mist text-[10px] tracking-wider">{label}</p>
       <p className={warn ? 'text-cinnabar' : 'text-parchment'}>{value}</p>
     </div>
   )

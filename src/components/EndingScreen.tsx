@@ -79,11 +79,11 @@ export function EndingScreen({ session, onRestart }: Props) {
         </p>
       )}
 
-      <div className="w-full max-w-lg border border-jade/40 bg-jade/10 p-8 rounded-sm mb-6">
-        <p className="text-parchment leading-[1.9] text-center mb-6">
+      <div className="scroll-panel mist-overlay relative w-full max-w-lg border border-jade/40 bg-jade/10 p-8 rounded-sm mb-6">
+        <p className="relative z-10 text-parchment leading-[1.9] text-center mb-6">
           {ending.description}
         </p>
-        <div className="text-sm text-mist space-y-1 text-center">
+        <div className="relative z-10 text-sm text-mist space-y-1 text-center">
           <p>
             {player.name} · {player.spiritRoot} · {getRealmName(player.realm)} · {player.age} 岁
           </p>
@@ -96,7 +96,7 @@ export function EndingScreen({ session, onRestart }: Props) {
       </div>
 
       {closest.length > 0 && (
-        <div className="w-full max-w-lg mb-6 border border-gold/20 p-4 rounded-sm">
+        <div className="w-full max-w-lg mb-6 border border-gold/20 bg-gold/[0.04] p-4 rounded-sm">
           <p className="text-xs text-gold-dim tracking-wider mb-3 text-center">
             差一点达成的结局
           </p>
@@ -189,9 +189,8 @@ export function EndingScreen({ session, onRestart }: Props) {
       <button
         type="button"
         onClick={onRestart}
-        className="w-full sm:w-auto px-10 py-3.5 min-h-[44px] bg-cinnabar hover:bg-cinnabar-glow
-          text-parchment tracking-[0.2em] rounded-sm transition-all cursor-pointer
-          border border-cinnabar-glow/50"
+        className="btn-cinnabar w-full sm:w-auto px-10 py-3.5 min-h-[44px]
+          tracking-[0.2em] cursor-pointer"
       >
         再入仙途
       </button>
