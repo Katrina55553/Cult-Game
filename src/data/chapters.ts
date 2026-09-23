@@ -86,8 +86,11 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第六章 · 情缘与暗流',
     route: 'sect',
     intro: '秘境归来，你的修为和见识都大有长进。然而宗门内部暗流涌动，外部势力蠢蠢欲动。一段情缘，也可能在此悄然降临。',
-    events: ['sect_politics', 'elder_confession', 'ancient_prophesy', 'dao_companion'],
+    // dao_companion 要求「尚未遇见苏暮烟」，作为主线会永久卡死走过情缘链的玩家，
+    // 因此降为支线（内容仍可达，只是不再阻塞章节推进）。
+    events: ['sect_politics', 'elder_confession', 'ancient_prophesy'],
     sideEvents: [
+      'dao_companion',
       'beauty_gratitude', 'su_muyan_past', 'zhao_tianxing_redemption', 'zhao_truth',
       'mysterious_demon_third', 'moli_backstory', 'ye_qingmei_reunion_alt', 'wanyao_encounter', 'sect_exchange',
       'beast_bond', 'beast_evolution',
@@ -126,8 +129,14 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第八章 · 突破之路',
     route: 'sect',
     intro: '大战过后，修真界元气大伤。你闭关苦修，修为逼近瓶颈。突破还是陨落，在此一举。',
-    events: ['demon_temptation', 'foundation_tribulation', 'demon_tribulation', 'dao_heart_trial', 'golden_tribulation', 'boss_thunder_beast'],
+    // demon_tribulation 要求 demonHeart ≥ 40，正道玩家永远满足不了；作为主线会让
+    // sect_8 永久无法推进（第八章是长线局的必经节点，卡住＝整局再也收不了尾）。
+    // 魔道线的 demon_4 仍保留它作为主线。
+    events: ['demon_temptation', 'foundation_tribulation', 'dao_heart_trial', 'golden_tribulation', 'boss_thunder_beast'],
     sideEvents: [
+      'demon_tribulation',
+      'righteous_dark_side', // 原属 wander_6 主线，但其条件要求宗门的 loyal_to_sect，
+      // 散修路线永远拿不到 → 既不可达又会卡死 wander_6。移到宗门后期作为可选内容。
       'lovers_ascension', 'time_window', 'rival_beauty',
       'yaogu_legacy', 'guiyi_enlightenment', 'sect_master_legacy',
       'bloodline_resonance', 'weapon_reforge', 'technique_fusion', 'boss_ice_wyrm',
@@ -140,8 +149,10 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第九章 · 终局',
     route: 'sect',
     intro: '天地异象骤起，飞升通道洞开于前。千年修行，一念之间。你将做出此生最重要的抉择。',
-    events: ['lifespan_crisis', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'time_window', 'lovers_ascension'],
+    // lifespan_crisis 要求「剩余寿命 ≤ 15 年」，只有濒死才满足；作为主线会让终章
+    // 永远无法推进，全部飞升类结局因此不可达。降为支线后终章只剩 final_choice 可结算。
+    events: ['final_choice'],
+    sideEvents: ['lifespan_crisis', 'boss_demon_lord', 'time_window', 'lovers_ascension'],
   },
 
   // ═══════════════════════════════════════
@@ -211,7 +222,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第六章 · 终局',
     route: 'wander',
     intro: '独行千里，你终于看清了修真界的真相。正道未必光明，魔道未必黑暗。你将做出最后的抉择。',
-    events: ['righteous_dark_side', 'demon_mercy', 'final_choice'],
+    events: ['demon_mercy', 'final_choice'],
     sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge', 'alliance_legacy'],
   },
 
@@ -262,8 +273,8 @@ export const CHAPTERS: Record<string, Chapter> = {
     name: '第四章 · 终局',
     route: 'demon',
     intro: '心魔大劫将至，寿元所剩无几。你必须做出最后的抉择——是以魔证道，还是就此陨落。',
-    events: ['demon_tribulation', 'lifespan_crisis', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'bloodline_resonance', 'weapon_reforge', 'demon_transcend'],
+    events: ['demon_tribulation', 'final_choice'],
+    sideEvents: ['lifespan_crisis', 'boss_demon_lord', 'bloodline_resonance', 'weapon_reforge', 'demon_transcend'],
   },
 }
 

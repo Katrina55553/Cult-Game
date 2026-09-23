@@ -8,6 +8,13 @@ interface ValidationIssue {
   message: string
 }
 
+/** 各路线**不**该出现的主线前置 flag：出现即说明事件放错了路线 */
+const ROUTE_CONFLICT_FLAGS: Record<string, string[]> = {
+  sect: ['refused_all_sects', 'accepted_demon_path'],
+  wander: ['loyal_to_sect', 'accepted_demon_path'],
+  demon: ['loyal_to_sect', 'refused_all_sects'],
+}
+
 function validateGameData(): ValidationIssue[] {
   const issues: ValidationIssue[] = []
   const eventMap = new Map<string, GameEvent>()
@@ -79,6 +86,46 @@ function validateGameData(): ValidationIssue[] {
   for (const event of EVENTS) {
     if (event.choices.length === 0) {
       issues.push({ type: 'warning', message: `事件 ${event.id} 没有任何 choice` })
+    }
+  }
+
+  // 7. 章节主线必须与所在路线相容
+  //
+  // 章节推进要求 `events` 全部完成，因此任何一个「条件永远无法满足」的主线都会让该章
+  // 永久卡死——整局再也收不了尾，只能靠死亡结束。历史上这条规则缺失时，
+  // 曾有 5 个章节中招（wander_6 / sect_6 / sect_9 / demon_4 / sect_8），
+  // 直接导致全部飞升类结局不可达。此处把它变成可自动检出的错误。
+  for (const chapter of Object.values(CHAPTERS)) {
+    const conflictingFlags = ROUTE_CONFLICT_FLAGS[chapter.route] ?? []
+    for (const eventId of chapter.events) {
+      const event = eventMap.get(eventId)
+      if (!event) continue
+      for (const cond of event.conditions ?? []) {
+        if (cond.type === 'flag' && cond.value === true && conflictingFlags.includes(cond.key)) {
+          issues.push({
+            type: 'error',
+            message: `章节 ${chapter.id}（${chapter.route} 线）的主线 ${eventId} 要求 ${cond.key}=true，与所在路线互斥，该章永远无法完成 → 应移入 sideEvents`,
+          })
+        }
+        if (cond.type === 'lifespan_remaining') {
+          issues.push({
+            type: 'error',
+            message: `章节 ${chapter.id} 的主线 ${eventId} 要求剩余寿命 ≤${String(cond.max)}，只有濒死时才满足，该章无法正常完成 → 应移入 sideEvents`,
+          })
+        }
+        if (cond.type === 'stat' && cond.key === 'demonHeart' && cond.min !== undefined && chapter.route !== 'demon') {
+          issues.push({
+            type: 'error',
+            message: `章节 ${chapter.id}（${chapter.route} 线）的主线 ${eventId} 要求心魔 ≥${cond.min}，正道玩法无法满足，该章会永久卡死 → 应移入 sideEvents`,
+          })
+        }
+        if (cond.type === 'stat' && cond.key === 'karma' && cond.min !== undefined && chapter.route === 'demon') {
+          issues.push({
+            type: 'error',
+            message: `章节 ${chapter.id}（魔道线）的主线 ${eventId} 要求善业 ≥${cond.min}，与魔道路线互斥，该章会永久卡死 → 应移入 sideEvents`,
+          })
+        }
+      }
     }
   }
 

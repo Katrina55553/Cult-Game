@@ -15,7 +15,7 @@ import { checkConditions } from '../src/engine/conditions.ts'
 import * as rng from '../src/engine/rng.ts'
 import type { Choice, GameSession } from '../src/types/game.ts'
 
-type Strategy = 'cultivate' | 'romance' | 'sect' | 'greedy' | 'random' | 'wander'
+type Strategy = 'cultivate' | 'romance' | 'sect' | 'greedy' | 'random' | 'wander' | 'demon'
 
 interface RunReport {
   strategy: Strategy
@@ -85,6 +85,13 @@ function pickChoice(
       if (text.includes('灵石') || c.id === 'dig' || c.id === 'join' || c.id === 'buy') s += 5
       if (c.id === 'deep' || c.id === 'explore') s += 4
     }
+    if (strategy === 'demon') {
+      // 魔道入口是 sect_6 的 branchNext（要求 demonHeart ≥30），
+      // 所以要先留在宗门、一路堆心魔，再接受魔道邀请。
+      if (c.effects?.some((e) => e.type === 'stat' && e.key === 'demonHeart')) s += 6
+      if (text.includes('魔') || text.includes('血') || text.includes('杀') || text.includes('夺')) s += 4
+      if (c.id === 'refuse' || c.id === 'cold' || c.id === 'righteous') s -= 3
+    }
     return s
   }
 
@@ -98,7 +105,11 @@ function pickChoice(
 
 function startRun(strategy: Strategy, seed: number): RunReport {
   rng.setSeed(seed)
-  let session = createNewGame({ name: '试玩', origin: strategy === 'wander' ? 'hermit' : 'noble_exile' })
+  let session = createNewGame({
+    name: '试玩',
+    origin:
+      strategy === 'wander' ? 'hermit' : strategy === 'demon' ? 'demon_blood' : 'noble_exile',
+  })
   session = beginPlaying(session)
 
   const issues: string[] = []
@@ -125,7 +136,11 @@ function startRun(strategy: Strategy, seed: number): RunReport {
       break
     }
 
-    const before = session.player
+    // 注意是 session 而不是 session.player：
+    // resolveChoice 在「选项不存在 / 条件不满足」时返回**同一个 session 引用**，
+    // 只有捕获 session 本身才能检出这种空转。原先写成 session.player 会与
+    // GameSession 比较（类型不重叠），运行时恒为 false，这个断言从未生效过。
+    const before = session
     const eventId = session.currentEvent?.id ?? '?'
     eventCounts[eventId] = (eventCounts[eventId] ?? 0) + 1
     if (FILLER_IDS.has(eventId)) fillerCount++
@@ -208,7 +223,15 @@ function auditEvents(): string[] {
 
 console.log('=== CultGame 自动试玩 ===\n')
 
-const strategies: Strategy[] = ['sect', 'wander', 'romance', 'cultivate', 'greedy', 'random']
+const strategies: Strategy[] = [
+  'sect',
+  'wander',
+  'romance',
+  'cultivate',
+  'greedy',
+  'random',
+  'demon',
+]
 const reports: RunReport[] = []
 
 for (const strategy of strategies) {

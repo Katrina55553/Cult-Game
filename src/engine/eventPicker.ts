@@ -1,5 +1,12 @@
-import { getChapter } from '../data/chapters'
+import { CHAPTERS, getChapter } from '../data/chapters'
+import { getEventTags } from '../data/eventTags'
 import { getRealmOrder } from '../data/realms'
+import {
+  computeAffinity,
+  globalAffinity,
+  TAG_BIAS,
+  type AffinityVector,
+} from './affinity'
 import { checkConditions } from './conditions'
 import * as rng from './rng'
 import type { EventAct, GameEvent, PlayerState } from '../types/game'
@@ -50,78 +57,27 @@ function isRomanceEvent(event: GameEvent): boolean {
   )
 }
 
-// ── 行为因子：根据玩家过往选择动态调整事件权重 ──
+// ── 行为因子：根据玩家倾向连续调整事件权重 ──
+// 分类信息来自事件自身（`event.tags` 或 data/eventTags.ts 的历史表），
+// 这里不再出现任何具体事件 id。
 
-const GOOD_EVENT_IDS = new Set([
-  'wander_refugee', 'wander_medical', 'mountain_spirit', 'demon_invasion',
-  'mortal_plight', 'spirit_stone_origin', 'righteous_dark_side',
-])
-
-const DARK_EVENT_IDS = new Set([
-  'demon_whisper', 'demon_temptation', 'blood_sacrifice', 'demon_lord_offer',
-  'inner_demon', 'blood_moon', 'soul_possession', 'soul_demand',
-  'demon_nest', 'explore_demon_mountain',
-])
-
-const COMBAT_EVENT_IDS = new Set([
-  'beast_attack', 'boss_wolf_king', 'boss_shadow_assassin', 'boss_demon_general',
-  'boss_ancient_golem', 'boss_thunder_beast', 'first_duel', 'sect_tournament',
-  'rival_provocation', 'rival_ambush', 'ancient_battlefield',
-])
-
-const ALCHEMY_EVENT_IDS = new Set([
-  'alchemy_workshop', 'alchemy_master', 'alchemy_competition', 'alchemy_mystery',
-  'rare_ingredient', 'pill_recipe', 'find_healing_pill',
-])
-
-const FORMATION_EVENT_IDS = new Set([
-  'formation_study', 'ancient_formation_battle', 'ancient_formation',
-  'realm_formation', 'explore_ancient_tomb',
-])
-
-const SWORD_EVENT_IDS = new Set([
-  'sword_enlightenment', 'sword_trial', 'sword_tomb',
-])
-
-const BEAST_EVENT_IDS = new Set([
-  'spirit_beast_train', 'spirit_crane', 'spirit_turtle', 'fire_tiger',
-  'thunder_falcon_nest', 'ice_phoenix',
-])
-
-function getBehaviorMultiplier(event: GameEvent, state: PlayerState): number {
+function affinityMultiplier(
+  event: GameEvent,
+  affinity: AffinityVector,
+  global: { insight: number; fortune: number },
+): number {
   let mult = 1
-  const { stats, cultivationSystems: sys } = state
 
-  // 善行倾向 → 正义/救助事件权重提升
-  if (stats.karma >= 15 && GOOD_EVENT_IDS.has(event.id)) mult *= 1.5
-  if (stats.karma >= 30 && GOOD_EVENT_IDS.has(event.id)) mult *= 1.3
-
-  // 心魔倾向 → 魔道/黑暗事件权重提升
-  if (stats.demonHeart >= 40 && DARK_EVENT_IDS.has(event.id)) mult *= 1.6
-  if (stats.demonHeart >= 60 && DARK_EVENT_IDS.has(event.id)) mult *= 1.4
-
-  // 战斗倾向（根骨高）→ 战斗事件权重提升
-  if (stats.rootBone >= 35 && COMBAT_EVENT_IDS.has(event.id)) mult *= 1.4
-
-  // 丹道倾向 → 丹道事件权重提升
-  if (sys.alchemyTier >= 1 && ALCHEMY_EVENT_IDS.has(event.id)) mult *= 1.5
-
-  // 阵法倾向 → 阵法事件权重提升
-  if (sys.formationTier >= 1 && FORMATION_EVENT_IDS.has(event.id)) mult *= 1.5
-
-  // 剑道倾向 → 剑道事件权重提升
-  if (sys.swordTier >= 1 && SWORD_EVENT_IDS.has(event.id)) mult *= 1.5
-
-  // 灵兽倾向 → 灵兽事件权重提升
-  if (sys.spiritBeast && BEAST_EVENT_IDS.has(event.id)) mult *= 1.4
-
-  // 悟性高 → 稀有事件权重微增
-  if (stats.comprehension >= 50 && (event.rarity === 'rare' || event.rarity === 'legendary')) {
-    mult *= 1.2
+  for (const tag of getEventTags(event)) {
+    const bias = event.bias?.[tag] ?? TAG_BIAS[tag]
+    mult *= 1 + (bias - 1) * affinity[tag]
   }
 
-  // 气运高 → 所有事件权重微增
-  if (stats.luck >= 40) mult *= 1.1
+  // 悟性只在稀有事件上生效（保留旧语义），气运对所有事件生效
+  if (event.rarity === 'rare' || event.rarity === 'legendary') {
+    mult *= 1 + 0.2 * global.insight
+  }
+  mult *= 1 + 0.1 * global.fortune
 
   return mult
 }
@@ -130,6 +86,8 @@ function effectiveWeight(
   event: GameEvent,
   history: string[],
   state: PlayerState,
+  affinity: AffinityVector,
+  global: { insight: number; fortune: number },
   metaRomanceBoost: boolean,
 ): number {
   let weight = event.weight
@@ -175,10 +133,13 @@ function effectiveWeight(
     weight *= 1.25
   }
 
-  // 行为因子：根据玩家属性/修炼方向动态调整
-  weight *= getBehaviorMultiplier(event, state)
+  // 行为因子：根据玩家倾向连续调整
+  weight *= affinityMultiplier(event, affinity, global)
 
-  return Math.max(weight, 0.3)
+  // 仅作数值保护，不再用 0.3 这类「地板」——
+  // 旧地板会把冷却衰减一并吃掉（基础权重 3 的事件设计上要衰减 20 倍，
+  // 压到 0.15 后又被抬回 0.3，实际只衰减 10 倍）。
+  return Math.max(weight, 1e-4)
 }
 
 interface PickOptions {
@@ -264,6 +225,58 @@ function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | n
   return weightedPick(pool, state, false)
 }
 
+// ── 全局池：章节制之前的老事件池 ──
+// 章节制上线后，pickNextEvent 只从当前章节的 events/sideEvents 里取，
+// 导致未被任何章节登记的事件永远不会出现。这里把它们收拢成「等待期」内容源。
+const CHAPTER_REGISTERED_IDS = new Set<string>()
+for (const chapter of Object.values(CHAPTERS)) {
+  for (const id of chapter.events) CHAPTER_REGISTERED_IDS.add(id)
+  for (const id of chapter.sideEvents ?? []) CHAPTER_REGISTERED_IDS.add(id)
+}
+
+/** 从「未被任何章节登记」的事件中按权重抽取，条件/冷却/互斥规则与主线一致 */
+function pickGlobalPoolEvent(
+  state: PlayerState,
+  events: GameEvent[],
+  unlockedEvents: string[],
+  metaRomanceBoost: boolean,
+  excludeId?: string,
+): GameEvent | null {
+  const tiers: PickOptions[] = [
+    { excludeId },
+    { excludeId, skipCooldown: true },
+    { excludeId, skipCooldown: true, skipAct: true },
+  ]
+
+  for (const options of tiers) {
+    const eligible = filterEligible(state, events, unlockedEvents, options).filter(
+      (e) => !isFillerEvent(e) && !CHAPTER_REGISTERED_IDS.has(e.id),
+    )
+    if (eligible.length > 0) return weightedPick(eligible, state, metaRomanceBoost)
+  }
+
+  return null
+}
+
+/**
+ * 等待期事件：章节主线与支线都暂时抽不出来时，在「全局池」与「日常事件」之间二选一。
+ * 五五开是刻意的——全给全局池会让 market_rest（唯一进入坊市的入口）和日常修炼
+ * 事件几乎消失，全给日常则那批老事件继续永久失效。
+ */
+function pickWaitingEvent(
+  state: PlayerState,
+  events: GameEvent[],
+  unlockedEvents: string[],
+  metaRomanceBoost: boolean,
+  excludeId?: string,
+): GameEvent | null {
+  const globalEvent = pickGlobalPoolEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
+  const filler = pickFillerEvent(state, events)
+  if (!globalEvent) return filler
+  if (!filler) return globalEvent
+  return rng.random() < 0.5 ? filler : globalEvent
+}
+
 function pickMainEvent(
   state: PlayerState,
   events: GameEvent[],
@@ -294,7 +307,12 @@ function weightedPick(
   state: PlayerState,
   metaRomanceBoost: boolean,
 ): GameEvent {
-  const weights = eligible.map((e) => effectiveWeight(e, state.history, state, metaRomanceBoost))
+  // 整批共用一份倾向向量，避免每个事件重算一遍
+  const affinity = computeAffinity(state)
+  const global = globalAffinity(state)
+  const weights = eligible.map((e) =>
+    effectiveWeight(e, state.history, state, affinity, global, metaRomanceBoost),
+  )
   const totalWeight = weights.reduce((sum, w) => sum + w, 0)
   let roll = rng.random() * totalWeight
 
@@ -330,21 +348,25 @@ export function pickNextEvent(
     }
 
     // 2) 支线事件（可选，不影响章节推进）
-    if (chapter.sideEvents) {
-      for (const eventId of chapter.sideEvents) {
+    //    这里是**加权抽取**而不是按书写顺序取第一个：支线本来就不承担推进职责，
+    //    顺序无所谓，但用权重抽才能让倾向标签真正影响玩家体验到什么。
+    //    （主线仍是队列——那条线的先后顺序是作者编排的，不能打乱。）
+    const sideIds = chapter.sideEvents
+    if (sideIds) {
+      const sideEvents: GameEvent[] = []
+      for (const eventId of sideIds) {
         if (eventId === excludeId) continue
         if (state.history.includes(eventId)) continue
         const evt = eventMap.get(eventId)
         if (!evt) continue
         if (!checkConditions(state, evt.conditions)) continue
-        return evt
+        sideEvents.push(evt)
       }
+      if (sideEvents.length > 0) return weightedPick(sideEvents, state, metaRomanceBoost)
     }
 
-    // 3) 主线+支线都不满足时，插入 filler 等待
-    const filler = pickFillerEvent(state, events)
-    if (filler) return filler
-    return null
+    // 3) 主线+支线暂时都抽不出时，用等待期事件（老全局池 + 日常）过渡
+    return pickWaitingEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
   }
 
   // 兜底：没有章节时使用原来的随机逻辑

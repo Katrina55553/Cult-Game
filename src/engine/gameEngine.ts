@@ -242,11 +242,34 @@ export function beginPlaying(session: GameSession): GameSession {
 
 const SORTED_ENDINGS = [...ENDINGS].sort((a, b) => b.priority - a.priority)
 
-export function checkEnding(state: PlayerState): Ending | null {
+/**
+ * 结局判定：按 priority 取首个命中的结局。
+ *
+ * 只有 `kind: 'terminal'`（玩家显式终局：飞升 / 双修飞升 / 放弃修行 / 轮回 / 称霸，
+ * 以及死亡：天劫身死 / 堕魔 / 寿尽）随时参与判定；其余成就、关系、传承、专精类结局
+ * 只在 `includeMilestones` 为真时参与，即**路线走完**（`isRouteExhausted`）或**再无事件可抽**。
+ *
+ * 这样「结束」是被动结算的结果，而不是主动打断的动作。旧实现是所有结局每回合都参与，
+ * 于是「阵法 ≥2 阶 + 筑基」这类浅条件会在约第五章掐断整局，元婴/化神与全部飞升线都看不到。
+ * 哪些结局属于终局类由数据声明（`endings.ts` 的 `kind`），引擎不维护 id 白名单。
+ */
+export function checkEnding(
+  state: PlayerState,
+  options: { includeMilestones?: boolean } = {},
+): Ending | null {
   for (const ending of SORTED_ENDINGS) {
+    if (!options.includeMilestones && ending.kind !== 'terminal') continue
     if (checkConditions(state, ending.conditions)) return ending
   }
   return null
+}
+
+/** 当前路线是否已走到尽头（本章主线全清，且没有下一章） */
+function isRouteExhausted(player: PlayerState): boolean {
+  const chapter = getChapter(player.currentChapter)
+  if (!chapter) return true
+  if (!chapter.events.every((id) => player.chapterCompleted.includes(id))) return false
+  return !chapter.nextChapter && !chapter.branchNext
 }
 
 function getTalentBonus(state: PlayerState, eventId: string): number {
@@ -325,14 +348,32 @@ function applyEventTimeAndLog(
 
 function switchRouteIfNeeded(player: PlayerState): PlayerState {
   const chapter = getChapter(player.currentChapter)
-  if (player.flags.refused_all_sects && chapter?.route !== 'wander') {
-    const next = { ...player, currentChapter: 'wander_1', chapterCompleted: [] }
-    next.log.push('— 第一章 · 独行 —')
+
+  // 「拒绝所有宗门」与「接受魔道」可以同时为真（散修途中接下魔道邀约）。
+  // 两条分支若各自只看自己的 flag，就会互相把对方拉回去：
+  //   wander → demon → wander → …
+  // 而且每次跳转都会清空 `chapterCompleted`，于是章节**永远无法完成**，
+  // 同一批事件被反复抽出（实测表现为单个事件在一局里出现 21 次）。
+  // 因此切换时必须**清掉竞争路线的 flag**，让状态收敛。
+  // 魔道优先：接下魔道邀约是更晚、更强的承诺，应覆盖此前的散修立场。
+  if (player.flags.accepted_demon_path && chapter?.route !== 'demon') {
+    const next = {
+      ...player,
+      currentChapter: 'demon_1',
+      chapterCompleted: [],
+      flags: { ...player.flags, refused_all_sects: false, loyal_to_sect: false },
+    }
+    next.log.push('— 第一章 · 入魔 —')
     return next
   }
-  if (player.flags.accepted_demon_path && chapter?.route !== 'demon') {
-    const next = { ...player, currentChapter: 'demon_1', chapterCompleted: [] }
-    next.log.push('— 第一章 · 入魔 —')
+  if (player.flags.refused_all_sects && chapter?.route !== 'wander') {
+    const next = {
+      ...player,
+      currentChapter: 'wander_1',
+      chapterCompleted: [],
+      flags: { ...player.flags, accepted_demon_path: false, loyal_to_sect: false },
+    }
+    next.log.push('— 第一章 · 独行 —')
     return next
   }
   return player
@@ -398,7 +439,7 @@ function finalizeAfterChoice(
   player = switchRouteIfNeeded(player)
   player = advanceChapter(player, event.id)
 
-  const ending = checkEnding(player)
+  const ending = checkEnding(player, { includeMilestones: isRouteExhausted(player) })
   if (ending) {
     return buildEndingSession(session, player, ending, 'condition')
   }
@@ -449,7 +490,7 @@ function resolveNoEventEnding(player: PlayerState): {
   ending: Ending
   trigger: EndingTrigger
 } {
-  const matched = checkEnding(player)
+  const matched = checkEnding(player, { includeMilestones: true })
   if (matched) {
     return { ending: matched, trigger: 'condition' }
   }

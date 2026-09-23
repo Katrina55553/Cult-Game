@@ -10,6 +10,31 @@ export type RealmId =
 
 export type EventAct = 'qi' | 'foundation' | 'golden' | 'any'
 export type EventRarity = 'common' | 'rare' | 'legendary'
+
+/**
+ * 事件倾向标签。玩家在对应维度上的「倾向度」是连续值（0~1），
+ * 标签决定该事件吃哪些维度的加成——取代原先手写的 *_EVENT_IDS 集合。
+ */
+export type EventTag = 'good' | 'dark' | 'combat' | 'alchemy' | 'formation' | 'sword' | 'beast'
+
+/**
+ * 结局性质：
+ * - `terminal`  玩家显式选择终局（飞升 / 双修飞升 / 放弃修行 / 轮回 / 称霸魔道）
+ *   或死亡（天劫身死 / 堕魔 / 寿尽坐化）→ 随时结算。这是玩家的主动决定或既成事实，
+ *   推迟它反而会吞掉玩家刚做出的选择。
+ * - `milestone` 默认：成就、关系、传承、专精类 → **只在路线走完、或无事件可抽时结算**
+ *
+ * 「结束」应当是被动结算的结果，而不是主动打断的动作。旧实现是所有结局每回合按
+ * priority 取首个命中者，于是「阵法 ≥2 阶 + 筑基」这种浅条件会在约第五章掐断整局，
+ * 元婴/化神与全部飞升线都看不到。
+ *
+ * 彻底的做法是把成就类一律推迟，其前提是每条路线都能走完。此前
+ * `wander_6`（主线要求 loyal_to_sect，与散修路线互斥）、`sect_6`（主线要求
+ * `met_su_qing=false`）、`sect_9` 与 `demon_4`（主线要求剩余寿命 ≤15）都存在结构性
+ * 不可完成的主线，一旦推迟整局就只能靠死亡结束。这些主线已在 `chapters.ts` 修正
+ * （互斥事件降为支线），故本方案现在成立。
+ */
+export type EndingKind = 'terminal' | 'milestone'
 export type MilestoneType = 'breakthrough' | 'lifespan_low' | 'cultivation_full' | 'rare_event'
 export type GamePhase = 'start' | 'lore' | 'root_reveal' | 'playing' | 'shop' | 'ending'
 export type OriginId = 'farmer' | 'noble_exile' | 'demon_blood' | 'scholar' | 'merchant' | 'hermit' | 'sect_orphan' | 'tomb_raider' | 'healer' | null
@@ -165,6 +190,10 @@ export interface GameEvent {
   act?: EventAct
   rarity?: EventRarity
   requiresUnlock?: string
+  /** 倾向标签；不写则回退到 data/eventTags.ts 的历史表 */
+  tags?: EventTag[]
+  /** 按标签覆写权重系数（默认取 affinity.ts 的 TAG_BIAS） */
+  bias?: Partial<Record<EventTag, number>>
   conditions?: Condition[]
   choices: Choice[]
 }
@@ -174,6 +203,8 @@ export interface Ending {
   title: string
   description: string
   priority: number
+  /** 不写按 milestone 处理（只在路线走完 / 无事件可抽时结算） */
+  kind?: EndingKind
   conditions: Condition[]
 }
 

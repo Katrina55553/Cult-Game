@@ -7,6 +7,7 @@ export const ENDINGS: Ending[] = [
     description:
       '九霄雷劫过后，你肉身成圣，元神飞升仙界。回首凡间，千年修行化作一念，自此逍遥天外，与天地同寿。',
     priority: 100,
+    kind: 'terminal',
     conditions: [
       { type: 'realm', min: 'nascent_soul' },
       { type: 'stat', key: 'demonHeart', max: 30 },
@@ -20,6 +21,7 @@ export const ENDINGS: Ending[] = [
     description:
       '心魔吞噬道心，你堕入魔道。最后一战，正道群雄围剿，魔躯崩碎，魂飞魄散，千年修为化为乌有。',
     priority: 90,
+    kind: 'terminal',
     conditions: [
       { type: 'stat', key: 'demonHeart', min: 80 },
       { type: 'flag', key: 'accepted_demon_path', value: true },
@@ -31,6 +33,7 @@ export const ENDINGS: Ending[] = [
     description:
       '天劫之下，肉身崩毁，元神溃散。千年修行，一朝尽付东流。你的洞府化为废墟，储物袋中的遗物流落四方。多年后，有散修在荒野中拾到一枚残破的玉简，上面只刻着一句话：「道在心中，死亦无憾。」',
     priority: 85,
+    kind: 'terminal',
     conditions: [{ type: 'flag', key: 'died_in_tribulation', value: true }],
   },
   {
@@ -63,6 +66,7 @@ export const ENDINGS: Ending[] = [
     description:
       '你与道侣双修圆满，情丝与道心相融。破境之时，你们携手飞升，成为修真界千古传颂的神仙眷侣，比翼双飞，同享长生。',
     priority: 82,
+    kind: 'terminal',
     conditions: [
       { type: 'flag', key: 'has_companion', value: true },
       { type: 'flag', key: 'dual_cultivation_mastered', value: true },
@@ -89,6 +93,7 @@ export const ENDINGS: Ending[] = [
     description:
       '你放下修仙执念，回归凡尘。在一座小镇开了一间药铺，以所学丹道知识为百姓治病。娶妻生子，平淡度日。晚年坐在院中品茶，孙儿绕膝，你笑谈当年修仙旧事，眼中满是释然。修仙千年，不如人间百年。',
     priority: 65,
+    kind: 'terminal',
     conditions: [{ type: 'flag', key: 'gave_up_cultivation', value: true }],
   },
   {
@@ -97,6 +102,7 @@ export const ENDINGS: Ending[] = [
     description:
       '你击败正道联盟，魔威盖世，统领荒域。虽未飞升，却成一代魔尊，令修真界闻风丧胆。',
     priority: 78,
+    kind: 'terminal',
     conditions: [
       { type: 'flag', key: 'demon_overlord', value: true },
       { type: 'realm', min: 'golden_core' },
@@ -107,7 +113,7 @@ export const ENDINGS: Ending[] = [
     title: '凡俗首富',
     description:
       '你以灵石为道，坊市为家，富甲修真界。虽无大道修为，却享尽人间荣华，善终富贵。',
-    priority: 55,
+    priority: 66,
     conditions: [
       { type: 'resource', key: 'spiritStones', min: 500 },
       { type: 'flag', key: 'gave_up_cultivation', value: true },
@@ -119,6 +125,7 @@ export const ENDINGS: Ending[] = [
     description:
       '寿尽之时，你保留一丝元神投入轮回。来世，你将以新的灵根再踏仙途——这一世的故事，成为传说。',
     priority: 45,
+    kind: 'terminal',
     conditions: [
       { type: 'flag', key: 'past_life_chosen', value: true },
       { type: 'realm', min: 'foundation' },
@@ -130,6 +137,7 @@ export const ENDINGS: Ending[] = [
     description:
       '寿元耗尽，你盘坐洞府，元神渐散。窗外月光如水，你想起年少时踏入仙途的那一刻——意气风发，以为天地尽在掌握。如今才知，修仙不过是与天争命。未能证道长生，却也在修行路上走过一遭。魂归天地，道消人亡。',
     priority: 10,
+    kind: 'terminal',
     conditions: [{ type: 'lifespan_remaining', max: 0 }],
   },
   {
@@ -158,6 +166,7 @@ export const ENDINGS: Ending[] = [
     description:
       '你以剑入道，一剑破万法。太古雷剑在手，剑意通天。最终以剑证道，肉身化剑，成为传说中的剑道圣者。',
     priority: 101,
+    kind: 'terminal',
     conditions: [
       { type: 'realm', min: 'nascent_soul' },
       { type: 'flag', key: 'got_inheritance', value: true },
