@@ -1,7 +1,6 @@
 import { EVENTS } from '../src/data/events.ts'
 import { beginPlaying, createNewGame, leaveShop, resolveChoice } from '../src/engine/gameEngine.ts'
 import { checkConditions } from '../src/engine/conditions.ts'
-import * as rng from '../src/engine/rng.ts'
 import type { GameSession } from '../src/types/game.ts'
 
 const PRIORITY: Record<string, string[]> = {
@@ -29,8 +28,7 @@ function pick(session: GameSession): string | null {
   return viable[0]?.id ?? e.choices[0]?.id ?? null
 }
 
-rng.setSeed(42)
-let s = beginPlaying(createNewGame({ name: '情缘', origin: 'noble_exile' }))
+let s = beginPlaying(createNewGame({ name: '情缘', origin: 'noble_exile', seed: 42 }))
 const seen: string[] = []
 const ending = { title: '' }
 

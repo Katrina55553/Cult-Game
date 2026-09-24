@@ -18,11 +18,17 @@ Live: https://katrina55553.github.io/Cult-Game/
 | Preview production build | `npm run preview` |
 | Automated playtest | `npx tsx scripts/playtest.ts` |
 | Deep playtest | `npx tsx scripts/playtest-deep.ts` |
+| Validate game data | `npx tsx scripts/validate-game-data.ts` |
+| Chapter progression regression | `npx tsx scripts/check-chapter-progress.ts` |
 | Deploy to Gitee Pages | `bash scripts/deploy-gitee-pages.sh` (requires `GITEE_TOKEN` env var) |
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.
 
 Playtest strategies: `cultivate`, `romance`, `sect`, `greedy`, `random`, `wander`. The helper `playtest-helpers.ts` defines `FILLER_IDS` (daily_cultivation, daily_insight, daily_sparring, daily_scripture) used to distinguish main events from filler.
+
+Playtest runs are seeded: pass `seed` through `NewGameOptions` (e.g. `createNewGame({ name, origin, seed })`). Calling `rng.setSeed()` before `createNewGame` has **no effect** — `createNewGame` reseeds internally, so runs would not be reproducible.
+
+`check-chapter-progress.ts` guards the cross-route chapter deadlock described below. Note the playtest strategies never take those branches, so `playtest.ts` alone cannot catch a regression there.
 
 ## Architecture
 
@@ -56,6 +62,8 @@ Each chapter has:
 - `branchNext` — optional function for route switching
 
 `eventPicker.ts` picks events in order: main chapter events → side events → filler events. Chapter progression is tracked via `player.chapterCompleted[]`.
+
+**Cross-route chapter deadlock (guarded).** `pickNextEvent` skips any `once` event already in `player.history`, and every chapter transition resets `chapterCompleted`. If the same `once` event is registered as a main in chapter A and (as main or side) in chapter B, reaching B later used to freeze it forever — the run could never reach another chapter and ended only by lifespan. `reconcileChapterProgress()` in `gameEngine.ts` back-fills any `once` main event already in `history` when entering a chapter, `tryAdvanceChapter()` cascades if that immediately completes it, and `loadGame()` repairs saves already stuck this way. `scripts/validate-game-data.ts` warns when a `once` main event is registered in more than one chapter — prefer registering it in exactly one place.
 
 Event weighting in `eventPicker.ts`:
 - **Cooldown decay**: recently-seen events get 0.15x (<3 turns) or 0.4x (<5 turns) weight

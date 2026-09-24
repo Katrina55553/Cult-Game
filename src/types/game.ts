@@ -276,4 +276,9 @@ export interface NewGameOptions {
   dailyMode?: boolean
   useInnateBody?: boolean
   origin?: OriginId
+  /**
+   * 固定随机种子。仅供自动化试玩 / 回归脚本使用。
+   * 不传时按真实时间随机（真实玩家的正常开局）。
+   */
+  seed?: number
 }

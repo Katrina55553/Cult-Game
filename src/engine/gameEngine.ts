@@ -190,6 +190,10 @@ export function createNewGame(options: NewGameOptions): GameSession {
   const meta = loadMeta()
   if (options.dailyMode) {
     rng.setSeed(rng.getDailySeed())
+  } else if (options.seed !== undefined) {
+    // 自动化试玩/回归脚本需要可复现：不认这个种子的话，脚本自己 setSeed 也会被这里覆盖，
+    // 每次跑出来的结局都不一样，对比就失去意义。
+    rng.setSeed(options.seed)
   } else {
     rng.setSeed(Date.now())
   }
@@ -346,57 +350,49 @@ function applyEventTimeAndLog(
   return next
 }
 
-function switchRouteIfNeeded(player: PlayerState): PlayerState {
-  const chapter = getChapter(player.currentChapter)
+const EVENT_BY_ID = new Map(EVENTS.map((event) => [event.id, event]))
 
-  // 「拒绝所有宗门」与「接受魔道」可以同时为真（散修途中接下魔道邀约）。
-  // 两条分支若各自只看自己的 flag，就会互相把对方拉回去：
-  //   wander → demon → wander → …
-  // 而且每次跳转都会清空 `chapterCompleted`，于是章节**永远无法完成**，
-  // 同一批事件被反复抽出（实测表现为单个事件在一局里出现 21 次）。
-  // 因此切换时必须**清掉竞争路线的 flag**，让状态收敛。
-  // 魔道优先：接下魔道邀约是更晚、更强的承诺，应覆盖此前的散修立场。
-  if (player.flags.accepted_demon_path && chapter?.route !== 'demon') {
-    const next = {
-      ...player,
-      currentChapter: 'demon_1',
-      chapterCompleted: [],
-      flags: { ...player.flags, refused_all_sects: false, loyal_to_sect: false },
-    }
-    next.log.push('— 第一章 · 入魔 —')
-    return next
-  }
-  if (player.flags.refused_all_sects && chapter?.route !== 'wander') {
-    const next = {
-      ...player,
-      currentChapter: 'wander_1',
-      chapterCompleted: [],
-      flags: { ...player.flags, accepted_demon_path: false, loyal_to_sect: false },
-    }
-    next.log.push('— 第一章 · 独行 —')
-    return next
-  }
-  return player
+function isOnceEvent(eventId: string): boolean {
+  return EVENT_BY_ID.get(eventId)?.once === true
 }
 
-function advanceChapter(player: PlayerState, eventId: string): PlayerState {
+/**
+ * 把本章主线里「只出现一次、且早已在 history 中」的事件补记为已完成。
+ *
+ * 为什么必须补：跨路线切换会清空 `chapterCompleted`，而 `pickNextEvent` 对 `once`
+ * 事件一旦出现在 history 中就直接跳过。于是「同一事件既是 A 章主线、又被 B 章当主线
+ * 或支线登记」时，B 章既抽不到它、也不会把它计为完成 —— 该章永久无法完成，
+ * 整局再也推不到下一章，只能等寿尽收尾。
+ * 已确认的死锁路径：宗门第四章叛逃 → 散修第一章（beast_attack）；
+ * 魔道第一章 → 宗门第八章（demon_temptation）；散修第三章 → 宗门第五章
+ * （ancient_legacy / secret_realm 若已作支线消耗）。详见 scripts/validate-game-data.ts。
+ */
+function reconcileChapterProgress(player: PlayerState): PlayerState {
   const chapter = getChapter(player.currentChapter)
-  if (!chapter || !chapter.events.includes(eventId)) return player
+  if (!chapter) return player
 
-  const completed = [...player.chapterCompleted, eventId]
-  let next = { ...player, chapterCompleted: completed }
+  const completed = [...player.chapterCompleted]
+  for (const eventId of chapter.events) {
+    if (completed.includes(eventId)) continue
+    if (isOnceEvent(eventId) && player.history.includes(eventId)) completed.push(eventId)
+  }
 
-  const allDone = chapter.events.every((eid) => completed.includes(eid))
-  if (!allDone) return next
+  if (completed.length === player.chapterCompleted.length) return player
+  return { ...player, chapterCompleted: completed }
+}
 
-  const nextId = chapter.branchNext ? chapter.branchNext(next) : chapter.nextChapter
-  if (!nextId || !CHAPTERS[nextId]) return next
+/**
+ * 进入指定章节：重置本章进度、写入章节过渡文字、同步路线立场 flag，
+ * 并补记「早已消耗过的一次性主线」（见 reconcileChapterProgress）。
+ */
+function enterChapter(player: PlayerState, nextChapterId: string): PlayerState {
+  const nextChapter = CHAPTERS[nextChapterId]
+  if (!nextChapter) return player
 
-  const nextChapter = CHAPTERS[nextId]
-  next = { ...next, currentChapter: nextId, chapterCompleted: [] }
-  next.log.push(`— ${nextChapter.name} —`)
+  let next: PlayerState = { ...player, currentChapter: nextChapterId, chapterCompleted: [] }
+  next = { ...next, log: [...next.log, `— ${nextChapter.name} —`] }
   if (nextChapter.intro) {
-    next.log.push(nextChapter.intro)
+    next = { ...next, log: [...next.log, nextChapter.intro] }
   }
 
   if (nextChapter.route === 'sect' && !next.flags.loyal_to_sect) {
@@ -412,7 +408,60 @@ function advanceChapter(player: PlayerState, eventId: string): PlayerState {
     next.log.push('你踏入魔道，再无回头之路。')
   }
 
-  return next
+  return reconcileChapterProgress(next)
+}
+
+/**
+ * 本章主线全部完成时推进到下一章。
+ * 新章若因为「一次性主线早已消耗」而立刻满足推进条件，就继续级联推进；
+ * depth 只是防御性上限，正常数据下不会触到。
+ */
+function tryAdvanceChapter(player: PlayerState, depth = 0): PlayerState {
+  const chapter = getChapter(player.currentChapter)
+  if (!chapter) return player
+  if (!chapter.events.every((eventId) => player.chapterCompleted.includes(eventId))) return player
+
+  const nextChapterId = chapter.branchNext ? chapter.branchNext(player) : chapter.nextChapter
+  if (!nextChapterId || !CHAPTERS[nextChapterId]) return player
+
+  const entered = enterChapter(player, nextChapterId)
+  if (depth >= 16) return entered
+  return tryAdvanceChapter(entered, depth + 1)
+}
+
+function switchRouteIfNeeded(player: PlayerState): PlayerState {
+  const chapter = getChapter(player.currentChapter)
+
+  // 「拒绝所有宗门」与「接受魔道」可以同时为真（散修途中接下魔道邀约）。
+  // 两条分支若各自只看自己的 flag，就会互相把对方拉回去：
+  //   wander → demon → wander → …
+  // 而且每次跳转都会清空 `chapterCompleted`，于是章节**永远无法完成**，
+  // 同一批事件被反复抽出（实测表现为单个事件在一局里出现 21 次）。
+  // 因此切换时必须**清掉竞争路线的 flag**，让状态收敛。
+  // 魔道优先：接下魔道邀约是更晚、更强的承诺，应覆盖此前的散修立场。
+  if (player.flags.accepted_demon_path && chapter?.route !== 'demon') {
+    return enterChapter(
+      { ...player, flags: { ...player.flags, refused_all_sects: false, loyal_to_sect: false } },
+      'demon_1',
+    )
+  }
+  if (player.flags.refused_all_sects && chapter?.route !== 'wander') {
+    return enterChapter(
+      { ...player, flags: { ...player.flags, accepted_demon_path: false, loyal_to_sect: false } },
+      'wander_1',
+    )
+  }
+  return player
+}
+
+function advanceChapter(player: PlayerState, eventId: string): PlayerState {
+  const chapter = getChapter(player.currentChapter)
+  if (!chapter || !chapter.events.includes(eventId)) return player
+
+  const completed = player.chapterCompleted.includes(eventId)
+    ? player.chapterCompleted
+    : [...player.chapterCompleted, eventId]
+  return tryAdvanceChapter({ ...player, chapterCompleted: completed })
 }
 
 function buildLifespanEnding(session: GameSession, player: PlayerState): GameSession {
@@ -634,7 +683,14 @@ export function loadGame(): GameSession | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY)
     if (!raw) return null
-    return migrateSave(JSON.parse(raw))
+    const session = migrateSave(JSON.parse(raw))
+    if (!session) return null
+
+    // 修复历史存档：旧版本跨路线切换后可能卡在「主线事件早已消耗」的章节里，
+    // 补记一次性主线让这些存档能继续推进（详见 reconcileChapterProgress）。
+    const repaired = reconcileChapterProgress(session.player)
+    if (repaired === session.player) return session
+    return { ...session, player: repaired }
   } catch {
     return null
   }

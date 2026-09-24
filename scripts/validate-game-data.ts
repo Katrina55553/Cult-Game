@@ -1,6 +1,7 @@
 import { ARTIFACTS } from '../src/data/artifacts'
 import { CHAPTERS } from '../src/data/chapters'
 import { EVENTS } from '../src/data/events'
+import { STORYLINES } from '../src/data/storylines'
 import type { Choice, Effect, GameEvent } from '../src/types/game'
 
 interface ValidationIssue {
@@ -126,6 +127,66 @@ function validateGameData(): ValidationIssue[] {
           })
         }
       }
+    }
+  }
+
+  // 8. 跨章节重复登记「只出现一次」的事件
+  //
+  // `pickNextEvent` 对 `once` 事件一旦出现在 `history` 中就直接跳过，而每次章节跳转
+  // 都会清空 `chapterCompleted`。于是同一事件若既是 A 章主线、又被 B 章登记，B 章就抽不到它、
+  // 也无法把它计为完成。引擎侧 `reconcileChapterProgress` 会自动补记（所以不再会卡死），
+  // 但代价是**玩家静默少看一个主线节拍**——所以这里仍然报警，提醒作者收敛到一处。
+  // 只有「既是主线、又在多处登记」才值得报；纯支线之间的复用不影响推进。
+  const registeredIn = new Map<string, { main: string[]; side: string[] }>()
+  for (const chapter of Object.values(CHAPTERS)) {
+    for (const eventId of chapter.events) {
+      const entry = registeredIn.get(eventId) ?? { main: [], side: [] }
+      entry.main.push(chapter.id)
+      registeredIn.set(eventId, entry)
+    }
+    for (const eventId of chapter.sideEvents ?? []) {
+      const entry = registeredIn.get(eventId) ?? { main: [], side: [] }
+      if (entry.main.includes(chapter.id)) {
+        issues.push({
+          type: 'error',
+          message: `章节 ${chapter.id} 同时把 ${eventId} 列进 events 和 sideEvents，主线判定会与自身冲突`,
+        })
+      }
+      entry.side.push(chapter.id)
+      registeredIn.set(eventId, entry)
+    }
+  }
+  for (const [eventId, where] of registeredIn) {
+    if (eventMap.get(eventId)?.once !== true) continue
+    if (where.main.length === 0) continue
+    if (where.main.length + where.side.length < 2) continue
+    issues.push({
+      type: 'warning',
+      message: `事件 ${eventId} 是 once 主线，却还被别章登记（主线[${where.main.join(', ')}] 支线[${where.side.join(', ') || '无'}]）`
+        + '：先被消耗的章节会让后到的章节静默跳过这个节拍 → 建议只登记一处',
+    })
+  }
+
+  // 9. 剧情线的每个步骤 flag 必须有来源
+  //
+  // `storylineTracker` 用 `player.flags[step.flag]` 判断步骤是否完成。若某个 step flag
+  // 从未被任何事件设置过，玩家在「剧情线」面板里会看到进度永远停在倒数第二步。
+  // 历史上 10 条连锁剧情线里有 7 条中招（步骤 flag 名取了事件 id，但事件实际设的是别的 flag）。
+  const sourceFlags = new Set<string>()
+  for (const event of EVENTS) {
+    for (const choice of event.choices) {
+      for (const effect of collectEffects(choice)) {
+        if (effect.type === 'flag') sourceFlags.add(effect.key)
+      }
+    }
+  }
+  for (const storyline of STORYLINES) {
+    for (const step of storyline.steps) {
+      if (sourceFlags.has(step.flag)) continue
+      issues.push({
+        type: 'error',
+        message: `剧情线 ${storyline.id}（${storyline.name}）的步骤「${step.label}」要求 flag ${step.flag}，但没有任何事件设置它 → 该步骤永远无法点亮`,
+      })
     }
   }
 

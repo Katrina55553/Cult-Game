@@ -104,11 +104,13 @@ function pickChoice(
 }
 
 function startRun(strategy: Strategy, seed: number): RunReport {
-  rng.setSeed(seed)
+  // 种子必须经由 createNewGame 传入：它内部会 setSeed，直接在这里 setSeed 会被覆盖，
+  // 于是「固定种子的自动试玩」其实每次结果都不同。
   let session = createNewGame({
     name: '试玩',
     origin:
       strategy === 'wander' ? 'hermit' : strategy === 'demon' ? 'demon_blood' : 'noble_exile',
+    seed,
   })
   session = beginPlaying(session)
 

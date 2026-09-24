@@ -3490,6 +3490,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'accept_destiny',
         text: '接受前世记忆，继承大能之力',
         effects: [
+          { type: 'flag', key: 'origin_destiny', value: true },
           { type: 'flag', key: 'got_inheritance', value: true },
           { type: 'stat', key: 'comprehension', value: 15 },
           { type: 'cultivation', value: 25 },
@@ -3499,6 +3500,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'reject_destiny',
         text: '斩断前世因果，今生只做自己',
         effects: [
+          { type: 'flag', key: 'origin_destiny', value: true },
           { type: 'stat', key: 'demonHeart', value: -15 },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'lifespan', value: 10 },
@@ -3685,6 +3687,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'eternal_alliance',
         text: '继续守护散修盟',
         effects: [
+          { type: 'flag', key: 'alliance_legacy', value: true },
           { type: 'flag', key: 'wander_leader', value: true },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'lifespan', value: 10 },
@@ -3694,6 +3697,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'retire_alliance',
         text: '传位给副手，自己云游四方',
         effects: [
+          { type: 'flag', key: 'alliance_legacy', value: true },
           { type: 'stat', key: 'comprehension', value: 10 },
           { type: 'cultivation', value: 15 },
           { type: 'stat', key: 'demonHeart', value: -5 },
@@ -3778,6 +3782,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'transcend_demon',
         text: '正魔合一，超越大道',
         effects: [
+          { type: 'flag', key: 'demon_transcend', value: true },
           { type: 'flag', key: 'chose_ascension', value: true },
           { type: 'stat', key: 'demonHeart', value: -20 },
           { type: 'cultivation', value: 30 },
@@ -3787,6 +3792,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'maintain_demon',
         text: '保持魔道本色',
         effects: [
+          { type: 'flag', key: 'demon_transcend', value: true },
           { type: 'stat', key: 'demonHeart', value: 15 },
           { type: 'cultivation', value: 20 },
         ],
@@ -3866,6 +3872,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'accept_legacy',
         text: '叩首受传',
         effects: [
+          { type: 'flag', key: 'master_legacy', value: true },
           { type: 'flag', key: 'got_inheritance', value: true },
           { type: 'stat', key: 'comprehension', value: 12 },
           { type: 'cultivation', value: 20 },
@@ -3875,6 +3882,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'share_legacy',
         text: '将心得分享给同门',
         effects: [
+          { type: 'flag', key: 'master_legacy', value: true },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'stat', key: 'comprehension', value: 8 },
         ],
@@ -3981,6 +3989,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'absorb_vein',
         text: '吸收灵脉之力',
         effects: [
+          { type: 'flag', key: 'vein_harvest', value: true },
           { type: 'stat', key: 'rootBone', value: 8 },
           { type: 'cultivation', value: 20 },
         ],
@@ -3989,6 +3998,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'protect_vein',
         text: '继续守护灵脉',
         effects: [
+          { type: 'flag', key: 'vein_harvest', value: true },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'lifespan', value: 10 },
           { type: 'stat', key: 'luck', value: 8 },
@@ -4073,6 +4083,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'accept_battlefield_legacy',
         text: '承担这份责任',
         effects: [
+          { type: 'flag', key: 'battlefield_legacy', value: true },
           { type: 'flag', key: 'got_inheritance', value: true },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'cultivation', value: 20 },
@@ -4082,6 +4093,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'use_battlefield_legacy',
         text: '用这份力量追求更强',
         effects: [
+          { type: 'flag', key: 'battlefield_legacy', value: true },
           { type: 'stat', key: 'demonHeart', value: 10 },
           { type: 'cultivation', value: 25 },
         ],
@@ -4177,6 +4189,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'ascend_together',
         text: '携手飞升，共证大道',
         effects: [
+          { type: 'flag', key: 'companion_eternity', value: true },
           { type: 'flag', key: 'chose_lovers_ascension', value: true },
           { type: 'cultivation', value: 30 },
         ],
@@ -4185,6 +4198,7 @@ export const MISC_EVENTS: GameEvent[] = [
         id: 'stay_together',
         text: '留在人间，相伴到老',
         effects: [
+          { type: 'flag', key: 'companion_eternity', value: true },
           { type: 'lifespan', value: 20 },
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'stat', key: 'demonHeart', value: -10 },
