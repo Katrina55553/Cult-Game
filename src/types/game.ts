@@ -10,6 +10,7 @@ export type RealmId =
 
 export type EventAct = 'qi' | 'foundation' | 'golden' | 'any'
 export type EventRarity = 'common' | 'rare' | 'legendary'
+export type RouteId = 'sect' | 'wander' | 'demon'
 
 /**
  * 事件倾向标签。玩家在对应维度上的「倾向度」是连续值（0~1），
@@ -112,12 +113,14 @@ export interface PlayerState {
   spiritBeastsSeen: string[]
   currentChapter: string
   chapterCompleted: string[]
+  routeIntent?: RouteId
 }
 
 export type Condition =
   | { type: 'stat'; key: keyof PlayerStats; min?: number; max?: number }
   | { type: 'realm'; min: RealmId }
   | { type: 'flag'; key: string; value: boolean }
+  | { type: 'route'; route: RouteId }
   | { type: 'resource'; key: 'spiritStones'; min: number }
   | { type: 'age'; min?: number; max?: number }
   | { type: 'cultivation'; min?: number; max?: number }
@@ -138,6 +141,7 @@ export type Effect =
   | { type: 'lifespan'; value: number }
   | { type: 'spiritStones'; value: number; set?: boolean }
   | { type: 'flag'; key: string; value: boolean }
+  | { type: 'route'; route: RouteId }
   | { type: 'artifact'; id: string; name?: string }
   | { type: 'log'; text: string }
   | { type: 'age'; value: number }

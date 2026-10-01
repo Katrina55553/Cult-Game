@@ -22,7 +22,7 @@
 
 ## 1. 宗门主线
 
-**触发条件**：`enter_sect` 选择「坦然展露灵根」→ 设置 `loyal_to_sect = true`
+**触发条件**：`enter_sect` 选择「坦然展露灵根」→ 发出 `route: sect` 路线意图
 
 ### 流程
 
@@ -456,9 +456,12 @@
 
 | Flag | 设置于 | 控制 |
 |---|---|---|
-| `loyal_to_sect` | `enter_sect`（坦诚） | 宗门线全部事件 |
-| `refused_all_sects` | `enter_sect`（拒绝） | 散修线全部事件 |
-| `accepted_demon_path` | 多个事件 | 魔道线全部事件 |
+| `currentChapter → route` | `storyProgression` | 当前宗门 / 散修 / 魔道路线（唯一事实来源） |
+| `ever_joined_sect` | 首次进入宗门线 | 宗门路线历史 |
+| `ever_walked_wander_path` | 首次进入散修线 | 散修路线历史 |
+| `ever_walked_demon_path` | 首次进入魔道线 | 魔道路线历史 |
+
+> 表格中仍出现的 `loyal_to_sect`、`refused_all_sects`、`accepted_demon_path` 是旧事件数据的条件别名；conditions Adapter 会根据 `currentChapter` 派生判断，它们不会写入玩家 flags。新事件统一使用 `route` condition/effect。
 
 ### 关系 Flag
 

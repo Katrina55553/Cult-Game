@@ -102,6 +102,12 @@ function validateGameData(): ValidationIssue[] {
       const event = eventMap.get(eventId)
       if (!event) continue
       for (const cond of event.conditions ?? []) {
+        if (cond.type === 'route' && cond.route !== chapter.route) {
+          issues.push({
+            type: 'error',
+            message: `章节 ${chapter.id}（${chapter.route} 线）的主线 ${eventId} 要求 ${cond.route} 路线，与所在路线互斥，该章永远无法完成`,
+          })
+        }
         if (cond.type === 'flag' && cond.value === true && conflictingFlags.includes(cond.key)) {
           issues.push({
             type: 'error',
@@ -172,7 +178,11 @@ function validateGameData(): ValidationIssue[] {
   // `storylineTracker` 用 `player.flags[step.flag]` 判断步骤是否完成。若某个 step flag
   // 从未被任何事件设置过，玩家在「剧情线」面板里会看到进度永远停在倒数第二步。
   // 历史上 10 条连锁剧情线里有 7 条中招（步骤 flag 名取了事件 id，但事件实际设的是别的 flag）。
-  const sourceFlags = new Set<string>()
+  const sourceFlags = new Set<string>([
+    'ever_joined_sect',
+    'ever_walked_wander_path',
+    'ever_walked_demon_path',
+  ])
   for (const event of EVENTS) {
     for (const choice of event.choices) {
       for (const effect of collectEffects(choice)) {

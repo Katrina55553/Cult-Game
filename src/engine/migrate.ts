@@ -1,8 +1,9 @@
 import { migrateCultivationSystems } from '../data/cultivationSystems'
 import { resolveArtifactId } from '../data/artifacts'
+import { getChapter } from '../data/chapters'
 import type { GameSession, MetaProgress, PlayerState } from '../types/game'
 
-export const SAVE_VERSION = 1
+export const SAVE_VERSION = 2
 export const META_VERSION = 1
 
 const DEFAULT_PLAYER_FIELDS: Partial<PlayerState> = {
@@ -37,6 +38,15 @@ export function migrateSave(data: unknown): GameSession | null {
   if (!s.phase || typeof s.phase !== 'string') return null
 
   const rawPlayer = s.player as Partial<PlayerState>
+  const currentChapter = rawPlayer.currentChapter ?? 'sect_1'
+  const flags = { ...(rawPlayer.flags ?? {}) }
+  const currentRoute = getChapter(currentChapter)?.route
+  if (flags.loyal_to_sect || currentRoute === 'sect') flags.ever_joined_sect = true
+  if (flags.refused_all_sects || currentRoute === 'wander') flags.ever_walked_wander_path = true
+  if (flags.accepted_demon_path || currentRoute === 'demon') flags.ever_walked_demon_path = true
+  delete flags.loyal_to_sect
+  delete flags.refused_all_sects
+  delete flags.accepted_demon_path
 
   // 旧存档可能没有 cultivationSystems，需从 flags/origin 推断
   const defaultSystems = migrateCultivationSystems(rawPlayer as PlayerState)
@@ -80,13 +90,14 @@ export function migrateSave(data: unknown): GameSession | null {
         : defaultSystems.spiritBeast,
       path: rawPlayer.cultivationSystems?.path ?? defaultSystems.path,
     },
-    flags: { ...(rawPlayer.flags ?? {}) },
+    flags,
     history: [...(rawPlayer.history ?? [])],
     log: [...(rawPlayer.log ?? [])],
     shopBuffs: { purchases: 0, ...(rawPlayer.shopBuffs ?? {}) },
     spiritBeastsSeen: [...(rawPlayer.spiritBeastsSeen ?? [])],
-    currentChapter: rawPlayer.currentChapter ?? 'sect_1',
+    currentChapter,
     chapterCompleted: [...(rawPlayer.chapterCompleted ?? [])],
+    routeIntent: undefined,
   }
 
   return {

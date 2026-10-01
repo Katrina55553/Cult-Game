@@ -1,5 +1,6 @@
 import { getAlchemyLabel, getFormationLabel, getPathLabel } from '../data/cultivationSystems'
 import type { PlayerState } from '../types/game'
+import { getCurrentRoute } from './storyProgression'
 
 export interface RouteTag {
   label: string
@@ -8,8 +9,9 @@ export interface RouteTag {
 
 export function getRouteTags(player: PlayerState): RouteTag[] {
   const tags: RouteTag[] = []
+  const route = getCurrentRoute(player)
 
-  if (player.flags.accepted_demon_path || player.stats.demonHeart >= 60) {
+  if (route === 'demon' || player.stats.demonHeart >= 60) {
     tags.push({ label: '魔道线', tone: 'cinnabar' })
   }
   if (player.flags.has_companion) {
@@ -24,10 +26,10 @@ export function getRouteTags(player: PlayerState): RouteTag[] {
   } else if (player.flags.met_lin_wanyue) {
     tags.push({ label: '情缘·叶轻眉', tone: 'gold' })
   }
-  if (player.flags.loyal_to_sect) {
+  if (route === 'sect') {
     tags.push({ label: '宗门线', tone: 'jade' })
   }
-  if (player.flags.refused_all_sects) {
+  if (route === 'wander') {
     tags.push({ label: '散修线', tone: 'mist' })
   }
   const sys = player.cultivationSystems

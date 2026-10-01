@@ -61,7 +61,7 @@ export function checkAchievements(
 
     if (player.spiritRoot === '五灵根') add('penta_root')
     if (player.spiritRoot === '天灵根') add('heaven_root')
-    if (player.flags.refused_all_sects) add('no_sect')
+    if (player.flags.ever_walked_wander_path) add('no_sect')
     if (session.dailySeed !== null) add('daily_player')
     if (session.useInnateBody) add('innate_body')
     if (session.turn <= 10) add('speed_run')

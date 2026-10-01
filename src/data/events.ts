@@ -23,7 +23,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'honest',
         text: '坦然展露灵根，诚心求入',
         effects: [
-          { type: 'flag', key: 'loyal_to_sect', value: true },
+          { type: 'route', route: 'sect' },
           { type: 'cultivation', value: 15 },
           { type: 'log', text: '16岁：拜入天玄宗，列为外门弟子。' },
         ],
@@ -36,12 +36,12 @@ const CORE_EVENTS: GameEvent[] = [
             chance: 0.3,
             luckBonus: 0.005,
             successEffects: [
-              { type: 'flag', key: 'loyal_to_sect', value: true },
+              { type: 'route', route: 'sect' },
               { type: 'cultivation', value: 25 },
               { type: 'spiritStones', value: 50 },
             ],
             failEffects: [
-              { type: 'flag', key: 'loyal_to_sect', value: true },
+              { type: 'route', route: 'sect' },
               { type: 'stat', key: 'karma', value: -10 },
               { type: 'cultivation', value: 10 },
             ],
@@ -56,7 +56,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'refuse',
         text: '拒入宗门，甘为散修',
         effects: [
-          { type: 'flag', key: 'refused_all_sects', value: true },
+          { type: 'route', route: 'wander' },
           { type: 'stat', key: 'luck', value: 5 },
           { type: 'cultivation', value: 12 },
           { type: 'log', text: '16岁：婉拒宗门，独行于天地之间。' },
@@ -485,7 +485,7 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 15 },
             ],
             failEffects: [
-              { type: 'flag', key: 'accepted_demon_path', value: true },
+              { type: 'route', route: 'demon' },
               { type: 'stat', key: 'demonHeart', value: 30 },
               { type: 'cultivation', value: 10 },
             ],
@@ -669,7 +669,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'accept',
         text: '纳受魔功，献祭无辜',
         effects: [
-          { type: 'flag', key: 'accepted_demon_path', value: true },
+          { type: 'route', route: 'demon' },
           { type: 'stat', key: 'demonHeart', value: 35 },
           { type: 'stat', key: 'karma', value: -40 },
           { type: 'cultivation', value: 35 },
@@ -688,7 +688,7 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'comprehension', value: 5 },
             ],
             failEffects: [
-              { type: 'flag', key: 'accepted_demon_path', value: true },
+              { type: 'route', route: 'demon' },
               { type: 'stat', key: 'demonHeart', value: 20 },
             ],
             narrative: {
@@ -1046,7 +1046,7 @@ const CORE_EVENTS: GameEvent[] = [
             ],
             failEffects: [
               { type: 'stat', key: 'demonHeart', value: 25 },
-              { type: 'flag', key: 'accepted_demon_path', value: true },
+              { type: 'route', route: 'demon' },
             ],
             narrative: {
               success: '心魔应声而灭，道心澄澈如镜，修为突飞猛进。',
@@ -1059,7 +1059,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'merge',
         text: '与心魔合一，以魔入道',
         effects: [
-          { type: 'flag', key: 'accepted_demon_path', value: true },
+          { type: 'route', route: 'demon' },
           { type: 'stat', key: 'demonHeart', value: 40 },
           { type: 'cultivation', value: 40 },
         ],
@@ -1100,7 +1100,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'demon',
         text: '以魔证道，打破飞升天规',
         effects: [
-          { type: 'flag', key: 'accepted_demon_path', value: true },
+          { type: 'route', route: 'demon' },
           { type: 'stat', key: 'demonHeart', value: 50 },
           { type: 'cultivation', value: 30 },
         ],

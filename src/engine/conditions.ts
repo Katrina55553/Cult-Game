@@ -7,8 +7,9 @@ import {
   getSwordLabel,
   getTechniqueLabel,
 } from '../data/cultivationSystems'
+import { getChapter } from '../data/chapters'
 import { getRealmOrder } from '../data/realms'
-import type { Condition, PlayerState } from '../types/game'
+import type { Condition, PlayerState, RouteId } from '../types/game'
 
 const TIER_FIELDS: { key: 'alchemyTier' | 'formationTier' | 'swordTier' | 'bloodlineTier' | 'techniqueTier' | 'divineWeaponTier'; label: string; getLabel: (n: number) => string }[] = [
   { key: 'alchemyTier', label: '丹道', getLabel: getAlchemyLabel },
@@ -18,6 +19,12 @@ const TIER_FIELDS: { key: 'alchemyTier' | 'formationTier' | 'swordTier' | 'blood
   { key: 'techniqueTier', label: '功法', getLabel: getTechniqueLabel },
   { key: 'divineWeaponTier', label: '神兵', getLabel: getDivineWeaponLabel },
 ]
+
+const LEGACY_ROUTE_FLAGS: Partial<Record<string, RouteId>> = {
+  loyal_to_sect: 'sect',
+  refused_all_sects: 'wander',
+  accepted_demon_path: 'demon',
+}
 
 export function checkConditions(state: PlayerState, conditions: Condition[] | undefined): boolean {
   if (!conditions || conditions.length === 0) return true
@@ -35,9 +42,16 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
     case 'realm':
       return getRealmOrder(state.realm) >= getRealmOrder(condition.min)
     case 'flag': {
+      const legacyRoute = LEGACY_ROUTE_FLAGS[condition.key]
+      if (legacyRoute) {
+        const matches = getChapter(state.currentChapter)?.route === legacyRoute
+        return matches === condition.value
+      }
       const actual = state.flags[condition.key] ?? false
       return actual === condition.value
     }
+    case 'route':
+      return getChapter(state.currentChapter)?.route === condition.route
     case 'resource': {
       const resources: Record<string, number> = { spiritStones: state.spiritStones }
       return (resources[condition.key] ?? 0) >= condition.min
@@ -91,6 +105,10 @@ function describeCondition(c: Condition): string {
       return `境界需达${c.min}`
     case 'flag':
       return '需满足特定条件'
+    case 'route': {
+      const labels: Record<RouteId, string> = { sect: '宗门', wander: '散修', demon: '魔道' }
+      return `需处于${labels[c.route]}路线`
+    }
     case 'resource':
       return `灵石≥${c.min}`
     case 'age':

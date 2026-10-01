@@ -150,7 +150,21 @@ console.log('\n3. 散修转正道 → 宗门第五章')
 }
 
 // ── 4. 旧存档修复：卡在宗门第八章的存档读档后应能继续推进 ──
-console.log('\n4. 旧存档读档修复')
+console.log('\n4. 宗门转魔道 → 魔道第一章')
+{
+  const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'demon_blood', seed: 20260924 })), 'sect_6', {
+    history: ['enter_sect'],
+    flags: {},
+    lastMainId: 'ancient_prophesy',
+    stats: { demonHeart: 35 },
+  })
+  const next = play(session)
+  check('切换到了魔道第一章', next.player.currentChapter === 'demon_1', next.player.currentChapter)
+  check('记录踏入魔道的历史事实', !!next.player.flags.ever_walked_demon_path)
+}
+
+// ── 5. 旧存档修复：卡在宗门第八章的存档读档后应能继续推进 ──
+console.log('\n5. 旧存档读档修复')
 {
   const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'noble_exile', seed: 20260924 })), 'sect_8', {
     history: ['enter_sect', 'demon_temptation'],
@@ -168,14 +182,14 @@ console.log('\n4. 旧存档读档修复')
   const loaded = loadGame()
   check('存档读取成功', loaded !== null)
   check(
-    '读档时补记了 demon_temptation',
-    !!loaded?.player.chapterCompleted.includes('demon_temptation'),
-    `chapterCompleted=[${loaded?.player.chapterCompleted.join(', ')}]`,
+    '读档补记后级联推进到宗门第九章',
+    loaded?.player.currentChapter === 'sect_9',
+    `currentChapter=${loaded?.player.currentChapter}`,
   )
 }
 
-// ── 5. 反向保护：正常情况下不得凭空补记未发生的事件 ──
-console.log('\n5. 反向保护')
+// ── 6. 反向保护：正常情况下不得凭空补记未发生的事件 ──
+console.log('\n6. 反向保护')
 {
   const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'noble_exile', seed: 20260924 })), 'sect_4', {
     history: ['enter_sect'],

@@ -1,6 +1,6 @@
-import type { PlayerState } from '../types/game'
+import type { PlayerState, RouteId } from '../types/game'
 
-export type RouteId = 'sect' | 'wander' | 'demon'
+export type { RouteId } from '../types/game'
 
 export interface Chapter {
   id: string

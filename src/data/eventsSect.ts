@@ -27,7 +27,7 @@ export const SECT_EVENTS: GameEvent[] = [
               { type: 'lifespan', value: -25 },
               { type: 'cultivation', value: -20 },
               { type: 'stat', key: 'demonHeart', value: 15 },
-              { type: 'flag', key: 'loyal_to_sect', value: false },
+              { type: 'route', route: 'wander' },
               { type: 'flag', key: 'grievously_wounded', value: true },
             ],
             narrative: {
@@ -45,14 +45,13 @@ export const SECT_EVENTS: GameEvent[] = [
           {
             chance: 0.65,
             successEffects: [
-              { type: 'flag', key: 'loyal_to_sect', value: false },
-              { type: 'flag', key: 'refused_all_sects', value: true },
+              { type: 'route', route: 'wander' },
               { type: 'cultivation', value: 15 },
             ],
             failEffects: [
               { type: 'lifespan', value: -15 },
               { type: 'stat', key: 'demonHeart', value: 12 },
-              { type: 'flag', key: 'loyal_to_sect', value: false },
+              { type: 'route', route: 'wander' },
             ],
             narrative: {
               success: '你趁夜遁走，自此脱离宗门，沦为散修。',
@@ -167,7 +166,7 @@ export const SECT_EVENTS: GameEvent[] = [
         text: '参与血祭',
         hint: '修为+++ · 因果---',
         effects: [
-          { type: 'flag', key: 'accepted_demon_path', value: true },
+          { type: 'route', route: 'demon' },
           { type: 'cultivation', value: 40 },
           { type: 'stat', key: 'karma', value: -40 },
           { type: 'stat', key: 'demonHeart', value: 30 },

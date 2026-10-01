@@ -3,6 +3,12 @@ import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
 
+const LEGACY_ROUTE_FLAGS = new Set([
+  'loyal_to_sect',
+  'refused_all_sects',
+  'accepted_demon_path',
+])
+
 const TIER_EFFECT_KEYS = [
   'alchemyTier',
   'formationTier',
@@ -84,7 +90,20 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
       return { ...state, spiritStones: Math.max(0, state.spiritStones + effect.value) }
     }
     case 'flag':
+      if (LEGACY_ROUTE_FLAGS.has(effect.key)) {
+        if (!effect.value) return state
+        return {
+          ...state,
+          routeIntent: effect.key === 'loyal_to_sect'
+            ? 'sect'
+            : effect.key === 'refused_all_sects'
+              ? 'wander'
+              : 'demon',
+        }
+      }
       return { ...state, flags: { ...state.flags, [effect.key]: effect.value } }
+    case 'route':
+      return { ...state, routeIntent: effect.route }
     case 'artifact': {
       if (state.artifacts.some((value) => resolveArtifactId(value) === effect.id)) {
         return state

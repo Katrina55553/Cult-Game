@@ -77,12 +77,10 @@ Event weighting in `eventPicker.ts`:
 
 Events with a `storyGroup` field are mutually exclusive — once one event from a group is in history, others in the same group are skipped.
 
-Route switching: sect→wander (betrayed by sect), wander→sect (karma high), sect→demon (demonHeart high), demon→sect (redemption).
+Route switching: sect→wander (betrayed by sect), wander→sect (karma high), sect→demon (demonHeart high), demon→sect (redemption). `currentChapter` is the only source of truth for the current route; use `getCurrentRoute()` rather than route flags. Event choices request a switch with the `route` effect, and `storyProgression.ts` consumes that transient intent. Legacy route flag conditions remain as a compatibility Adapter only.
 
-Key flags that control major branches:
-- `loyal_to_sect` — sect path; mutually exclusive with `refused_all_sects`
-- `refused_all_sects` — wander path; gates all wander events
-- `accepted_demon_path` — demon path
+Key historical/branch flags:
+- `ever_joined_sect` / `ever_walked_wander_path` / `ever_walked_demon_path` — route history; never current-route state
 - `has_companion` / `su_qing_companion` — romance chain
 - `met_su_qing` — romance event gate
 - `became_elder` — sect advancement
@@ -105,7 +103,8 @@ heaven (3%) → single (10%) → dual (20%) → triple (30%) → quad (25%) → 
 
 ### Engine internals
 
-- `gameEngine.ts` — create/load/save games, resolve choices, check endings, chapter progression, route switching
+- `gameEngine.ts` — create/load/save games, resolve choices, check endings
+- `storyProgression.ts` — current route, chapter entry/progress/reconciliation, route switching, old-save repair
 - `eventPicker.ts` — chapter-based event selection with filler fallback
 - `effects.ts` — applies `Effect[]` to `PlayerState`
 - `conditions.ts` — checks `Condition[]` against `PlayerState`

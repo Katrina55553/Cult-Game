@@ -5,6 +5,7 @@ import { applyEffects } from '../src/engine/effects.ts'
 import { beginPlaying, createNewGame, resolveChoice } from '../src/engine/gameEngine.ts'
 import { pickNextEvent } from '../src/engine/eventPicker.ts'
 import { migrateSave } from '../src/engine/migrate.ts'
+import { getCurrentRoute } from '../src/engine/storyProgression.ts'
 import {
   loadPersistedRewindState,
   persistRewindAvailable,
@@ -49,6 +50,16 @@ function baseSession(): GameSession {
 
 console.log('=== 已知缺陷回归检查 ===\n')
 
+console.log('0. 路线效果通过推进 Module 一次性消费')
+{
+  const wandered = resolveChoice(baseSession(), 'refuse')
+  check('拒入宗门后进入散修第一章', wandered.player.currentChapter === 'wander_1')
+  check('记录散修路线历史', !!wandered.player.flags.ever_walked_wander_path)
+  check('路线意图不会残留到下一回合', wandered.player.routeIntent === undefined)
+}
+
+console.log('')
+
 console.log('1. 魔道赎罪后保持宗门路线')
 {
   const base = baseSession()
@@ -63,16 +74,19 @@ console.log('1. 魔道赎罪后保持宗门路线')
       chapterCompleted: CHAPTERS.demon_2.events.filter((id) => id !== lastMainId),
       flags: {
         ...base.player.flags,
-        accepted_demon_path: true,
-        loyal_to_sect: false,
-        refused_all_sects: false,
+        ever_walked_demon_path: true,
       },
       stats: { ...base.player.stats, demonHeart: 10, karma: 30 },
     },
   }
   const redeemed = resolveChoice(staged, 'continue')
   check('赎罪后进入宗门第七章', redeemed.player.currentChapter === 'sect_7', redeemed.player.currentChapter)
-  check('进入宗门时清除魔道立场', !redeemed.player.flags.accepted_demon_path)
+  check('当前路线由章节确定为宗门', getCurrentRoute(redeemed.player) === 'sect')
+  check('魔道经历作为历史事实保留', !!redeemed.player.flags.ever_walked_demon_path)
+  check(
+    '不再保存旧路线立场 flag',
+    !('accepted_demon_path' in redeemed.player.flags),
+  )
 
   const following = resolveChoice(
     { ...redeemed, currentEvent: noopEvent('sect_alliance'), phase: 'playing' },

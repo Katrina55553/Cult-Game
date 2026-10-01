@@ -24,7 +24,7 @@ export const ENDINGS: Ending[] = [
     kind: 'terminal',
     conditions: [
       { type: 'stat', key: 'demonHeart', min: 80 },
-      { type: 'flag', key: 'accepted_demon_path', value: true },
+      { type: 'route', route: 'demon' },
     ],
   },
   {
@@ -56,7 +56,7 @@ export const ENDINGS: Ending[] = [
     priority: 75,
     conditions: [
       { type: 'realm', min: 'golden_core' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'route', route: 'sect' },
       { type: 'flag', key: 'became_elder', value: true },
     ],
   },
@@ -84,7 +84,7 @@ export const ENDINGS: Ending[] = [
     priority: 70,
     conditions: [
       { type: 'realm', min: 'golden_core' },
-      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'route', route: 'wander' },
     ],
   },
   {
@@ -157,7 +157,7 @@ export const ENDINGS: Ending[] = [
     conditions: [
       { type: 'flag', key: 'war_hero', value: true },
       { type: 'realm', min: 'golden_core' },
-      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'route', route: 'sect' },
     ],
   },
   {
@@ -205,7 +205,7 @@ export const ENDINGS: Ending[] = [
     conditions: [
       { type: 'flag', key: 'wander_leader', value: true },
       { type: 'realm', min: 'golden_core' },
-      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'route', route: 'wander' },
     ],
   },
   {
@@ -297,7 +297,7 @@ export const ENDINGS: Ending[] = [
       '你年少成名，屡建奇功，被宗门视为百年难遇的天才。内门试炼中你技压群雄，长老亲授真传，同门敬仰。虽修为尚浅，却已名动四方。宗门上下皆言：此子日后必成大器。仙途漫漫，你的故事才刚刚开始。',
     priority: 40,
     conditions: [
-      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'route', route: 'sect' },
       { type: 'flag', key: 'became_elder', value: true },
       { type: 'flag', key: 'inner_disciple', value: true },
       { type: 'realm', min: 'foundation' },
@@ -310,7 +310,7 @@ export const ENDINGS: Ending[] = [
       '你在散修圈中闯出名号，被众人视为后起之秀。散修盟的旗帜上多了你的名字，坊市中的修士提起你时总会压低声音：「那位独行客，可不是好惹的。」虽未证大道，却已在这条独行之路上走出了自己的天地。',
     priority: 38,
     conditions: [
-      { type: 'flag', key: 'refused_all_sects', value: true },
+      { type: 'route', route: 'wander' },
       { type: 'flag', key: 'wander_alliance', value: true },
       { type: 'realm', min: 'foundation' },
     ],
@@ -322,7 +322,7 @@ export const ENDINGS: Ending[] = [
       '你投入魔道，修为突飞猛进。魔尊对你青眼有加，许以高位。魔域之中，你的名号渐渐传开——那个从正道叛出的天才，如今已是魔道最锋利的一把刀。虽未成魔尊，却已是魔道中不可忽视的新星。',
     priority: 42,
     conditions: [
-      { type: 'flag', key: 'accepted_demon_path', value: true },
+      { type: 'route', route: 'demon' },
       { type: 'flag', key: 'demon_lord_servant', value: true },
       { type: 'realm', min: 'foundation' },
     ],

@@ -31,6 +31,12 @@ const FLAG_PHRASES: Record<string, string> = {
   grievously_wounded: '重伤脱身，道途未绝',
 }
 
+const ROUTE_PHRASES = {
+  sect: '拜入天玄宗，成为宗门弟子',
+  wander: '决意独行，踏上散修之路',
+  demon: '踏上魔道，修为精进却因果深重',
+} as const
+
 function formatSigned(label: string, value: number): string {
   const sign = value >= 0 ? '+' : ''
   return `${label} ${sign}${value}`
@@ -62,6 +68,9 @@ export function summarizeEffects(effects: Effect[]): string {
       }
       case 'flag':
         if (FLAG_PHRASES[effect.key]) extras.push(FLAG_PHRASES[effect.key])
+        break
+      case 'route':
+        extras.push(ROUTE_PHRASES[effect.route])
         break
       case 'artifact':
         extras.push(`得${effect.name ?? '法宝'}`)

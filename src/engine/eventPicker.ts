@@ -108,7 +108,7 @@ function effectiveWeight(
     weight *= metaRomanceBoost ? 2.2 : 2
   }
 
-  if (state.flags.refused_all_sects && !state.flags.met_su_qing && event.id === 'beauty_rescue') {
+  if (getChapter(state.currentChapter)?.route === 'wander' && !state.flags.met_su_qing && event.id === 'beauty_rescue') {
     weight *= 3
   }
   if (state.flags.met_su_qing && !state.flags.has_companion && event.id === 'beauty_gratitude') {

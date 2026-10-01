@@ -21,6 +21,10 @@ function describeMissing(c: Condition): string {
       return `境界达${REALMS[c.min].name}`
     case 'flag':
       return c.value ? '达成特定剧情' : '未触发禁忌剧情'
+    case 'route': {
+      const labels = { sect: '宗门', wander: '散修', demon: '魔道' }
+      return `处于${labels[c.route]}路线`
+    }
     case 'resource':
       return `灵石≥${c.min}`
     case 'cultivation':
