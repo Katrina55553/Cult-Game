@@ -3130,7 +3130,7 @@ export const MISC_EVENTS: GameEvent[] = [
           {
             chance: 0.5,
             successEffects: [
-              { type: 'artifact', id: 'tomb_relic', name: '古墓遗宝' },
+              { type: 'artifact', id: 'tomb_relic', name: '古修遗宝' },
               { type: 'stat', key: 'luck', value: 8 },
               { type: 'cultivation', value: 15 },
             ],
@@ -3310,7 +3310,7 @@ export const MISC_EVENTS: GameEvent[] = [
           {
             chance: 0.5,
             successEffects: [
-              { type: 'artifact', id: 'void_artifact', name: '星辰碎片' },
+              { type: 'artifact', id: 'celestial_fragment', name: '星辰碎片' },
               { type: 'flag', key: 'artifact_1_found', value: true },
               { type: 'cultivation', value: 15 },
             ],
@@ -3351,7 +3351,7 @@ export const MISC_EVENTS: GameEvent[] = [
           {
             chance: 0.45,
             successEffects: [
-              { type: 'artifact', id: 'fire_forged_blade', name: '太阳碎片' },
+              { type: 'artifact', id: 'solar_fragment', name: '太阳碎片' },
               { type: 'flag', key: 'artifact_2_found', value: true },
               { type: 'cultivation', value: 20 },
             ],

@@ -3,55 +3,95 @@ import type { GameSession } from '../types/game'
 
 const REWIND_KEY = 'cultgame_rewind'
 
-function loadRewindSnapshot(): GameSession | null {
+interface PersistedRewindState {
+  snapshot: GameSession | null
+  used: boolean
+}
+
+interface StoredRewindAvailable {
+  version: 1
+  status: 'available'
+  snapshot: GameSession
+}
+
+interface StoredRewindUsed {
+  version: 1
+  status: 'used'
+}
+
+export function loadPersistedRewindState(): PersistedRewindState {
   try {
     const raw = localStorage.getItem(REWIND_KEY)
-    if (!raw) return null
+    if (!raw) return { snapshot: null, used: false }
     const parsed = JSON.parse(raw)
-    if (!parsed || typeof parsed !== 'object') return null
-    if (!parsed.player || typeof parsed.player !== 'object') return null
-    if (typeof parsed.phase !== 'string') return null
-    return parsed as GameSession
+    if (!parsed || typeof parsed !== 'object') return { snapshot: null, used: false }
+
+    if (parsed.version === 1 && parsed.status === 'used') {
+      return { snapshot: null, used: true }
+    }
+    if (parsed.version === 1 && parsed.status === 'available') {
+      const snapshot = parsed.snapshot
+      if (!snapshot?.player || typeof snapshot.player !== 'object') {
+        return { snapshot: null, used: false }
+      }
+      if (typeof snapshot.phase !== 'string') return { snapshot: null, used: false }
+      return { snapshot: snapshot as GameSession, used: false }
+    }
+
+    // 兼容旧格式：历史版本直接把 GameSession 存在该 key 下。
+    if (!parsed.player || typeof parsed.player !== 'object') return { snapshot: null, used: false }
+    if (typeof parsed.phase !== 'string') return { snapshot: null, used: false }
+    return { snapshot: parsed as GameSession, used: false }
   } catch {
-    return null
+    return { snapshot: null, used: false }
   }
 }
 
-function saveRewindSnapshot(s: GameSession | null) {
+export function persistRewindAvailable(snapshot: GameSession): void {
   try {
-    if (s) localStorage.setItem(REWIND_KEY, JSON.stringify(s))
-    else localStorage.removeItem(REWIND_KEY)
+    const stored: StoredRewindAvailable = { version: 1, status: 'available', snapshot }
+    localStorage.setItem(REWIND_KEY, JSON.stringify(stored))
+  } catch { /* ignore */ }
+}
+
+export function persistRewindUsed(): void {
+  try {
+    const stored: StoredRewindUsed = { version: 1, status: 'used' }
+    localStorage.setItem(REWIND_KEY, JSON.stringify(stored))
+  } catch { /* ignore */ }
+}
+
+function clearPersistedRewind(): void {
+  try {
+    localStorage.removeItem(REWIND_KEY)
   } catch { /* ignore */ }
 }
 
 export function useRewind() {
-  const [prevSession, setPrevSession] = useState<GameSession | null>(() => loadRewindSnapshot())
-  const [rewindUsed, setRewindUsed] = useState(() => loadRewindSnapshot() !== null)
-  const rewindUsedRef = useRef(rewindUsed)
+  const [rewindState, setRewindState] = useState(loadPersistedRewindState)
+  const rewindUsedRef = useRef(rewindState.used)
 
-  const canRewind = !rewindUsed && prevSession !== null
+  const canRewind = !rewindState.used && rewindState.snapshot !== null
 
   const capture = useCallback((session: GameSession | null) => {
     if (rewindUsedRef.current || !session || session.phase !== 'playing') return
-    setPrevSession(session)
-    saveRewindSnapshot(session)
+    setRewindState({ snapshot: session, used: false })
+    persistRewindAvailable(session)
   }, [])
 
   const consume = useCallback((): GameSession | null => {
-    if (!prevSession) return null
-    const snap = prevSession
-    setPrevSession(null)
-    setRewindUsed(true)
+    if (!rewindState.snapshot) return null
+    const snap = rewindState.snapshot
+    setRewindState({ snapshot: null, used: true })
     rewindUsedRef.current = true
-    saveRewindSnapshot(null)
+    persistRewindUsed()
     return snap
-  }, [prevSession])
+  }, [rewindState.snapshot])
 
   const reset = useCallback(() => {
-    setPrevSession(null)
-    setRewindUsed(false)
+    setRewindState({ snapshot: null, used: false })
     rewindUsedRef.current = false
-    saveRewindSnapshot(null)
+    clearPersistedRewind()
   }, [])
 
   return { canRewind, capture, consume, reset }

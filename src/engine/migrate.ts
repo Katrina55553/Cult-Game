@@ -1,4 +1,5 @@
 import { migrateCultivationSystems } from '../data/cultivationSystems'
+import { resolveArtifactId } from '../data/artifacts'
 import type { GameSession, MetaProgress, PlayerState } from '../types/game'
 
 export const SAVE_VERSION = 1
@@ -57,7 +58,7 @@ export function migrateSave(data: unknown): GameSession | null {
       demonHeart: clamp(rawPlayer.stats?.demonHeart ?? 0, 0, 100),
     },
     spiritStones: Math.max(0, rawPlayer.spiritStones ?? 10),
-    artifacts: [...(rawPlayer.artifacts ?? [])],
+    artifacts: [...new Set((rawPlayer.artifacts ?? []).map(resolveArtifactId))],
     inventory: [...(rawPlayer.inventory ?? [])],
     bagCapacity: rawPlayer.bagCapacity ?? 5,
     bagTier: rawPlayer.bagTier ?? 0,

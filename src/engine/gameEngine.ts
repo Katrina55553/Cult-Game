@@ -9,7 +9,7 @@ import { SPIRIT_ROOTS } from '../data/spiritRoots'
 import { checkAchievements } from './achievements'
 import { checkConditions } from './conditions'
 import { applyEffects } from './effects'
-import { pickNextEvent } from './eventPicker'
+import { isEventPermanentlyUnavailable, pickNextEvent } from './eventPicker'
 import { getEndingReason, type EndingTrigger } from './endingReason'
 import { migrateSave, SAVE_VERSION } from './migrate'
 import { detectEncounterMilestone, detectMilestone } from './milestone'
@@ -352,12 +352,8 @@ function applyEventTimeAndLog(
 
 const EVENT_BY_ID = new Map(EVENTS.map((event) => [event.id, event]))
 
-function isOnceEvent(eventId: string): boolean {
-  return EVENT_BY_ID.get(eventId)?.once === true
-}
-
 /**
- * 把本章主线里「只出现一次、且早已在 history 中」的事件补记为已完成。
+ * 把本章主线里已经永久无法再次出现的事件补记为已完成。
  *
  * 为什么必须补：跨路线切换会清空 `chapterCompleted`，而 `pickNextEvent` 对 `once`
  * 事件一旦出现在 history 中就直接跳过。于是「同一事件既是 A 章主线、又被 B 章当主线
@@ -374,7 +370,8 @@ function reconcileChapterProgress(player: PlayerState): PlayerState {
   const completed = [...player.chapterCompleted]
   for (const eventId of chapter.events) {
     if (completed.includes(eventId)) continue
-    if (isOnceEvent(eventId) && player.history.includes(eventId)) completed.push(eventId)
+    const event = EVENT_BY_ID.get(eventId)
+    if (event && isEventPermanentlyUnavailable(player, event, EVENTS)) completed.push(eventId)
   }
 
   if (completed.length === player.chapterCompleted.length) return player
@@ -389,22 +386,32 @@ function enterChapter(player: PlayerState, nextChapterId: string): PlayerState {
   const nextChapter = CHAPTERS[nextChapterId]
   if (!nextChapter) return player
 
-  let next: PlayerState = { ...player, currentChapter: nextChapterId, chapterCompleted: [] }
+  const currentRoute = getChapter(player.currentChapter)?.route
+  const routeSwitched = currentRoute !== undefined && currentRoute !== nextChapter.route
+  let next: PlayerState = {
+    ...player,
+    currentChapter: nextChapterId,
+    chapterCompleted: [],
+    flags: {
+      ...player.flags,
+      loyal_to_sect: nextChapter.route === 'sect',
+      refused_all_sects: nextChapter.route === 'wander',
+      accepted_demon_path: nextChapter.route === 'demon',
+      route_switched: player.flags.route_switched || routeSwitched,
+    },
+  }
   next = { ...next, log: [...next.log, `— ${nextChapter.name} —`] }
   if (nextChapter.intro) {
     next = { ...next, log: [...next.log, nextChapter.intro] }
   }
 
-  if (nextChapter.route === 'sect' && !next.flags.loyal_to_sect) {
-    next = { ...next, flags: { ...next.flags, loyal_to_sect: true, refused_all_sects: false, route_switched: true } }
+  if (routeSwitched && nextChapter.route === 'sect') {
     next.log.push('你决定加入宗门，踏上新的道路。')
   }
-  if (nextChapter.route === 'wander' && !next.flags.refused_all_sects) {
-    next = { ...next, flags: { ...next.flags, refused_all_sects: true, loyal_to_sect: false } }
+  if (routeSwitched && nextChapter.route === 'wander') {
     next.log.push('你离开宗门，独行于天地之间。')
   }
-  if (nextChapter.route === 'demon' && !next.flags.accepted_demon_path) {
-    next = { ...next, flags: { ...next.flags, accepted_demon_path: true } }
+  if (routeSwitched && nextChapter.route === 'demon') {
     next.log.push('你踏入魔道，再无回头之路。')
   }
 
@@ -456,12 +463,12 @@ function switchRouteIfNeeded(player: PlayerState): PlayerState {
 
 function advanceChapter(player: PlayerState, eventId: string): PlayerState {
   const chapter = getChapter(player.currentChapter)
-  if (!chapter || !chapter.events.includes(eventId)) return player
+  if (!chapter) return player
 
-  const completed = player.chapterCompleted.includes(eventId)
-    ? player.chapterCompleted
-    : [...player.chapterCompleted, eventId]
-  return tryAdvanceChapter({ ...player, chapterCompleted: completed })
+  const completed = chapter.events.includes(eventId) && !player.chapterCompleted.includes(eventId)
+    ? [...player.chapterCompleted, eventId]
+    : player.chapterCompleted
+  return tryAdvanceChapter(reconcileChapterProgress({ ...player, chapterCompleted: completed }))
 }
 
 function buildLifespanEnding(session: GameSession, player: PlayerState): GameSession {

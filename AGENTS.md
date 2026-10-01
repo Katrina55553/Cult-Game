@@ -20,6 +20,7 @@ Live: https://katrina55553.github.io/Cult-Game/
 | Deep playtest | `npx tsx scripts/playtest-deep.ts` |
 | Validate game data | `npx tsx scripts/validate-game-data.ts` |
 | Chapter progression regression | `npx tsx scripts/check-chapter-progress.ts` |
+| Known bug regressions | `npx tsx scripts/check-known-regressions.ts` |
 | Deploy to Gitee Pages | `bash scripts/deploy-gitee-pages.sh` (requires `GITEE_TOKEN` env var) |
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.

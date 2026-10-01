@@ -39,10 +39,27 @@ export const ARTIFACTS: Record<string, ArtifactInfo> = {
   meteor_blade: { name: '陨星短刃', description: '以天外陨铁淬炼的短刃，星光流转。', bonus: '根骨+2' },
   spatial_ring: { name: '上古空间戒', description: '上古传送阵中取得的空间戒指，内藏乾坤。', bonus: '灵石+80' },
   spirit_sword: { name: '灵纹短剑', description: '坊市购得的灵纹短剑，轻巧锋利。', bonus: '根骨+2' },
+  celestial_fragment: { name: '星辰碎片', description: '自北方冰原寻得的上古神器碎片，星光在其中缓缓流转。', bonus: '七神器之一' },
+  solar_fragment: { name: '太阳碎片', description: '供奉于火山祭坛的上古神器碎片，蕴含炽烈的太阳之力。', bonus: '七神器之一' },
+}
+
+const ARTIFACT_ID_BY_NAME = new Map(
+  Object.entries(ARTIFACTS).map(([id, info]) => [info.name, id]),
+)
+
+const LEGACY_ARTIFACT_ALIASES: Record<string, string> = {
+  古墓遗宝: 'tomb_relic',
+  星辰碎片: 'celestial_fragment',
+  太阳碎片: 'solar_fragment',
+}
+
+export function resolveArtifactId(value: string): string {
+  if (ARTIFACTS[value]) return value
+  return LEGACY_ARTIFACT_ALIASES[value] ?? ARTIFACT_ID_BY_NAME.get(value) ?? value
 }
 
 export function formatArtifactName(value: string): string {
-  return ARTIFACTS[value]?.name ?? value
+  return ARTIFACTS[resolveArtifactId(value)]?.name ?? value
 }
 
 export function resolveArtifactLabel(id: string, name?: string): string {
@@ -50,5 +67,6 @@ export function resolveArtifactLabel(id: string, name?: string): string {
 }
 
 export function getArtifactInfo(id: string): ArtifactInfo {
-  return ARTIFACTS[id] ?? { name: id, description: '未知法宝' }
+  const resolvedId = resolveArtifactId(id)
+  return ARTIFACTS[resolvedId] ?? { name: id, description: '未知法宝' }
 }

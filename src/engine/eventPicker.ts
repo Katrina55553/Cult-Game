@@ -148,37 +148,55 @@ interface PickOptions {
   skipAct?: boolean
 }
 
+function isEventEligible(
+  state: PlayerState,
+  event: GameEvent,
+  allEvents: GameEvent[],
+  unlockedEvents: string[],
+  options: PickOptions = {},
+): boolean {
+  if (options.excludeId && event.id === options.excludeId) return false
+  if (isEventPermanentlyUnavailable(state, event, allEvents)) return false
+
+  const times = countInHistory(state.history, event.id)
+  if (!options.skipCooldown && event.cooldown !== undefined && times > 0) {
+    const since = turnsSinceLast(state.history, event.id)
+    if (since < event.cooldown) return false
+  }
+
+  if (event.minGap !== undefined && times > 0) {
+    const since = turnsSinceLast(state.history, event.id)
+    if (since < event.minGap) return false
+  }
+
+  const act = getPlayerAct(state)
+  if (!options.skipAct && event.act && event.act !== 'any' && event.act !== act) return false
+  if (event.requiresUnlock && !unlockedEvents.includes(event.requiresUnlock)) return false
+
+  return checkConditions(state, event.conditions)
+}
+
+export function isEventPermanentlyUnavailable(
+  state: PlayerState,
+  event: GameEvent,
+  allEvents: GameEvent[],
+): boolean {
+  const times = countInHistory(state.history, event.id)
+  if (event.once && times > 0) return true
+  if (event.maxTimes !== undefined && times >= event.maxTimes) return true
+  return storyGroupSeen(state.history, event, allEvents)
+}
+
 function filterEligible(
   state: PlayerState,
-  events: GameEvent[],
+  candidates: GameEvent[],
+  allEvents: GameEvent[],
   unlockedEvents: string[],
   options: PickOptions = {},
 ): GameEvent[] {
-  const act = getPlayerAct(state)
-
-  return events.filter((event) => {
-    if (options.excludeId && event.id === options.excludeId) return false
-    if (event.once && state.history.includes(event.id)) return false
-    if (storyGroupSeen(state.history, event, events)) return false
-
-    const times = countInHistory(state.history, event.id)
-    if (event.maxTimes !== undefined && times >= event.maxTimes) return false
-
-    if (!options.skipCooldown && event.cooldown !== undefined && times > 0) {
-      const since = turnsSinceLast(state.history, event.id)
-      if (since < event.cooldown) return false
-    }
-
-    if (event.minGap !== undefined && times > 0) {
-      const since = turnsSinceLast(state.history, event.id)
-      if (since < event.minGap) return false
-    }
-
-    if (!options.skipAct && event.act && event.act !== 'any' && event.act !== act) return false
-    if (event.requiresUnlock && !unlockedEvents.includes(event.requiresUnlock)) return false
-
-    return checkConditions(state, event.conditions)
-  })
+  return candidates.filter((event) =>
+    isEventEligible(state, event, allEvents, unlockedEvents, options),
+  )
 }
 
 const FILLER_EVENT_IDS = new Set([
@@ -196,21 +214,12 @@ function isFillerEvent(event: GameEvent): boolean {
   return FILLER_EVENT_IDS.has(event.id)
 }
 
-function pickFillerEvent(state: PlayerState, events: GameEvent[]): GameEvent | null {
-  const fillers = events.filter((e) => {
-    if (!FILLER_EVENT_IDS.has(e.id)) return false
-    // 尊重 maxTimes 限制
-    const times = countInHistory(state.history, e.id)
-    if (e.maxTimes !== undefined && times >= e.maxTimes) return false
-    // 尊重 cooldown
-    if (e.cooldown !== undefined && times > 0) {
-      const since = turnsSinceLast(state.history, e.id)
-      if (since < e.cooldown) return false
-    }
-    // 检查事件条件
-    if (!checkConditions(state, e.conditions)) return false
-    return true
-  })
+function pickFillerEvent(
+  state: PlayerState,
+  events: GameEvent[],
+  unlockedEvents: string[],
+): GameEvent | null {
+  const fillers = filterEligible(state, events, events, unlockedEvents).filter(isFillerEvent)
   if (fillers.length === 0) return null
 
   // 排除上一个事件，避免连续重复
@@ -249,7 +258,7 @@ function pickGlobalPoolEvent(
   ]
 
   for (const options of tiers) {
-    const eligible = filterEligible(state, events, unlockedEvents, options).filter(
+    const eligible = filterEligible(state, events, events, unlockedEvents, options).filter(
       (e) => !isFillerEvent(e) && !CHAPTER_REGISTERED_IDS.has(e.id),
     )
     if (eligible.length > 0) return weightedPick(eligible, state, metaRomanceBoost)
@@ -271,7 +280,7 @@ function pickWaitingEvent(
   excludeId?: string,
 ): GameEvent | null {
   const globalEvent = pickGlobalPoolEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
-  const filler = pickFillerEvent(state, events)
+  const filler = pickFillerEvent(state, events, unlockedEvents)
   if (!globalEvent) return filler
   if (!filler) return globalEvent
   return rng.random() < 0.5 ? filler : globalEvent
@@ -291,7 +300,7 @@ function pickMainEvent(
   ]
 
   for (const options of tiers) {
-    const eligible = filterEligible(state, events, unlockedEvents, options).filter(
+    const eligible = filterEligible(state, events, events, unlockedEvents, options).filter(
       (e) => !isFillerEvent(e),
     )
     if (eligible.length > 0) {
@@ -339,11 +348,9 @@ export function pickNextEvent(
     // 1) 主线事件（必须完成才能推进章节）
     const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
     for (const eventId of pending) {
-      if (eventId === excludeId) continue
       const evt = eventMap.get(eventId)
       if (!evt) continue
-      if (evt.once && state.history.includes(eventId)) continue
-      if (!checkConditions(state, evt.conditions)) continue
+      if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
       return evt
     }
 
@@ -355,11 +362,9 @@ export function pickNextEvent(
     if (sideIds) {
       const sideEvents: GameEvent[] = []
       for (const eventId of sideIds) {
-        if (eventId === excludeId) continue
-        if (state.history.includes(eventId)) continue
         const evt = eventMap.get(eventId)
         if (!evt) continue
-        if (!checkConditions(state, evt.conditions)) continue
+        if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
         sideEvents.push(evt)
       }
       if (sideEvents.length > 0) return weightedPick(sideEvents, state, metaRomanceBoost)
@@ -373,6 +378,6 @@ export function pickNextEvent(
   const mainEvent = pickMainEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
   if (mainEvent) return mainEvent
 
-  const filler = pickFillerEvent(state, events)
+  const filler = pickFillerEvent(state, events, unlockedEvents)
   return filler
 }

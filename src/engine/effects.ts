@@ -1,4 +1,4 @@
-import { resolveArtifactLabel } from '../data/artifacts'
+import { resolveArtifactId } from '../data/artifacts'
 import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
@@ -86,11 +86,10 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
     case 'flag':
       return { ...state, flags: { ...state.flags, [effect.key]: effect.value } }
     case 'artifact': {
-      const label = resolveArtifactLabel(effect.id, effect.name)
-      if (state.artifacts.includes(effect.id) || state.artifacts.includes(label)) {
+      if (state.artifacts.some((value) => resolveArtifactId(value) === effect.id)) {
         return state
       }
-      return { ...state, artifacts: [...state.artifacts, label] }
+      return { ...state, artifacts: [...state.artifacts, effect.id] }
     }
     case 'divineSense':
       return {
