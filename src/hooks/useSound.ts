@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { playSound, setMuted } from '../audio/sounds'
 
-export function useSound() {
-  const [soundOn, setSoundOn] = useState(true)
+export function useSound(initialSoundOn = true) {
+  const [soundOn, setSoundOn] = useState(initialSoundOn)
   const soundOnRef = useRef(soundOn)
 
   useEffect(() => { soundOnRef.current = soundOn }, [soundOn])

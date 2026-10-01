@@ -1,38 +1,33 @@
-import { AchievementToast } from './components/AchievementToast'
-import { EndingScreen } from './components/EndingScreen'
-import { GameScreen } from './components/GameScreen'
-import { LoreScreen } from './components/LoreScreen'
-import { MilestoneToast } from './components/MilestoneToast'
-import { RootRevealScreen } from './components/RootRevealScreen'
-import { ShopScreen } from './components/ShopScreen'
+import { lazy, Suspense, useState } from 'react'
 import { StartScreen } from './components/StartScreen'
-import { useGame } from './hooks/useGame'
+import { SAVE_KEY } from './engine/storageKeys'
+import { useSound } from './hooks/useSound'
+import type { NewGameOptions } from './types/game'
+
+const GameRuntime = lazy(() =>
+  import('./components/GameRuntime').then((module) => ({ default: module.GameRuntime })),
+)
+
+function hasSavedGame(): boolean {
+  try {
+    return localStorage.getItem(SAVE_KEY) !== null
+  } catch {
+    return false
+  }
+}
 
 export default function App() {
-  const {
-    session,
-    soundOn,
-    milestone,
-    achievementToast,
-    canRewind,
-    startGame,
-    confirmLore,
-    confirmRoot,
-    choose,
-    buyItem,
-    exitShop,
-    useItem,
-    rewind,
-    restart,
-    toggleSound,
-    dismissMilestone,
-    dismissAchievements,
-  } = useGame()
+  const [shouldLoadRuntime, setShouldLoadRuntime] = useState(hasSavedGame)
+  const [initialOptions, setInitialOptions] = useState<NewGameOptions | null>(null)
+  const { soundOn, toggle: toggleSound } = useSound()
 
-  if (!session) {
+  if (!shouldLoadRuntime) {
     return (
       <StartScreen
-        onStart={startGame}
+        onStart={(options) => {
+          setInitialOptions(options)
+          setShouldLoadRuntime(true)
+        }}
         soundOn={soundOn}
         onToggleSound={toggleSound}
       />
@@ -40,41 +35,12 @@ export default function App() {
   }
 
   return (
-    <>
-      {session.phase === 'lore' && (
-        <LoreScreen onContinue={confirmLore} onAbandon={restart} />
-      )}
-
-      {session.phase === 'root_reveal' && (
-        <RootRevealScreen session={session} onConfirm={confirmRoot} onAbandon={restart} />
-      )}
-
-      {session.phase === 'playing' && (
-        <GameScreen
-          session={session}
-          onChoose={choose}
-          soundOn={soundOn}
-          onToggleSound={toggleSound}
-          onAbandon={restart}
-          onUseItem={useItem}
-          canRewind={canRewind}
-          onRewind={rewind}
-        />
-      )}
-
-      {session.phase === 'shop' && (
-        <ShopScreen session={session} onBuy={buyItem} onLeave={exitShop} onAbandon={restart} />
-      )}
-
-      {session.phase === 'ending' && (
-        <EndingScreen session={session} onRestart={restart} />
-      )}
-
-      <MilestoneToast
-        milestone={session.phase === 'ending' ? null : milestone}
-        onDismiss={dismissMilestone}
-      />
-      <AchievementToast ids={achievementToast} onDismiss={dismissAchievements} />
-    </>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center text-mist" role="status">
+        正在载入修仙世界……
+      </div>
+    }>
+      <GameRuntime initialOptions={initialOptions} initialSoundOn={soundOn} />
+    </Suspense>
   )
 }

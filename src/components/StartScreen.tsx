@@ -1,10 +1,13 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { Badge } from './Badge'
 import { resumeAudio } from '../audio/sounds'
 import { getEndingCodexProgress, loadMeta } from '../engine/metaProgress'
 import type { NewGameOptions, OriginId } from '../types/game'
-import { CodexScreen } from './CodexScreen'
 import { OriginPicker } from './OriginPicker'
+
+const CodexScreen = lazy(() =>
+  import('./CodexScreen').then((module) => ({ default: module.CodexScreen })),
+)
 
 interface Props {
   onStart: (params: NewGameOptions) => void
@@ -170,7 +173,9 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
         </button>
       </form>
 
-      {showCodex && <CodexScreen onClose={() => setShowCodex(false)} />}
+      <Suspense fallback={null}>
+        {showCodex && <CodexScreen onClose={() => setShowCodex(false)} />}
+      </Suspense>
     </div>
   )
 }

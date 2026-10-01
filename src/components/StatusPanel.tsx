@@ -1,13 +1,22 @@
-import { memo, useEffect, useRef, useState } from 'react'
-import { AttributeModal } from './AttributeModal'
+import { lazy, memo, Suspense, useEffect, useRef, useState } from 'react'
 import { Badge } from './Badge'
-import { CultivationModal } from './CultivationModal'
-import { InventoryModal } from './InventoryModal'
-import { StorylinePanel } from './StorylinePanel'
 import { getChapter } from '../data/chapters'
 import { getRealmName } from '../engine/gameEngine'
 import { getRouteTags, getWarnings } from '../engine/routeInfo'
 import type { PlayerState } from '../types/game'
+
+const AttributeModal = lazy(() =>
+  import('./AttributeModal').then((module) => ({ default: module.AttributeModal })),
+)
+const CultivationModal = lazy(() =>
+  import('./CultivationModal').then((module) => ({ default: module.CultivationModal })),
+)
+const InventoryModal = lazy(() =>
+  import('./InventoryModal').then((module) => ({ default: module.InventoryModal })),
+)
+const StorylinePanel = lazy(() =>
+  import('./StorylinePanel').then((module) => ({ default: module.StorylinePanel })),
+)
 
 interface Props {
   player: PlayerState
@@ -190,23 +199,27 @@ export const StatusPanel = memo(function StatusPanel({ player, turn, onUseItem }
         </button>
       </div>
 
-      {showInventory && (
-        <InventoryModal
-          player={player}
-          onClose={() => setShowInventory(false)}
-          onUseItem={onUseItem}
-        />
-      )}
+      <Suspense fallback={null}>
+        {showInventory && (
+          <InventoryModal
+            player={player}
+            onClose={() => setShowInventory(false)}
+            onUseItem={onUseItem}
+          />
+        )}
 
-      {showAttr && (
-        <AttributeModal player={player} onClose={() => setShowAttr(false)} />
-      )}
+        {showAttr && (
+          <AttributeModal player={player} onClose={() => setShowAttr(false)} />
+        )}
 
-      {showCultivation && (
-        <CultivationModal player={player} onClose={() => setShowCultivation(false)} />
-      )}
+        {showCultivation && (
+          <CultivationModal player={player} onClose={() => setShowCultivation(false)} />
+        )}
 
-      <StorylinePanel player={player} open={showStoryline} onClose={() => setShowStoryline(false)} />
+        {showStoryline && (
+          <StorylinePanel player={player} open onClose={() => setShowStoryline(false)} />
+        )}
+      </Suspense>
     </header>
   )
 })

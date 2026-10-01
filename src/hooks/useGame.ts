@@ -33,12 +33,12 @@ type SoundId =
   | 'coin'
   | 'heal'
 
-export function useGame() {
+export function useGame(initialSoundOn = true) {
   const [session, setSession] = useState<GameSession | null>(() => loadGame())
   const [milestone, setMilestone] = useState<Milestone | null>(null)
   const [achievementToast, setAchievementToast] = useState<string[]>([])
 
-  const { soundOn, play, toggle: toggleSound } = useSound()
+  const { soundOn, play, toggle: toggleSound } = useSound(initialSoundOn)
   const { canRewind, capture, consume, reset: resetRewind } = useRewind()
 
   const sessionRef = useRef(session)

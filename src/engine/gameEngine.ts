@@ -20,6 +20,7 @@ import {
 } from './narrative'
 import { loadMeta, recordEndingRun, unlockAchievements } from './metaProgress'
 import * as rng from './rng'
+import { SAVE_KEY } from './storageKeys'
 import { advanceStory, isRouteExhausted, repairStoryProgress } from './storyProgression'
 import type {
   Choice,
@@ -546,8 +547,6 @@ export function leaveShop(session: GameSession): GameSession {
 export function getRealmName(realm: PlayerState['realm']): string {
   return REALMS[realm].name
 }
-
-const SAVE_KEY = 'cultgame_save'
 
 export function saveGame(session: GameSession): void {
   try {
