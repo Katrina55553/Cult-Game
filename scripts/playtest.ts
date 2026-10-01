@@ -258,7 +258,7 @@ for (const strategy of strategies) {
   const allIssues = runs.flatMap((r) => r.issues)
   console.log(`\n${strategy}:`)
   console.log(`  结局: ${endings.join(' / ')}`)
-  console.log(`  均回合: ${avgTurns}  日常占比: ${avgFiller}%  养成: ${runs.map((r) => r.systems || '无').join(' | ')}`)
+  console.log(`  均回合: ${avgTurns}  等待期占比: ${avgFiller}%  养成: ${runs.map((r) => r.systems || '无').join(' | ')}`)
   if (allIssues.length) console.log(`  问题: ${[...new Set(allIssues)].join('; ')}`)
 }
 

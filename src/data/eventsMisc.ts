@@ -704,7 +704,6 @@ export const MISC_EVENTS: GameEvent[] = [
     weight: 7,
     years: 1,
     once: true,
-    act: 'foundation',
     choices: [
       {
         id: 'fight',

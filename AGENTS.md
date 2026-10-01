@@ -25,7 +25,7 @@ Live: https://katrina55553.github.io/Cult-Game/
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.
 
-Playtest strategies: `cultivate`, `romance`, `sect`, `greedy`, `random`, `wander`. The helper `playtest-helpers.ts` defines `FILLER_IDS` (daily_cultivation, daily_insight, daily_sparring, daily_scripture) used to distinguish main events from filler.
+Playtest strategies: `cultivate`, `romance`, `sect`, `greedy`, `random`, `wander`, `demon`. The canonical `FILLER_EVENT_IDS` lives in `src/data/eventCategories.ts`; `playtest-helpers.ts` re-exports it as `FILLER_IDS` so engine and playtests classify waiting-period events identically.
 
 Playtest runs are seeded: pass `seed` through `NewGameOptions` (e.g. `createNewGame({ name, origin, seed })`). Calling `rng.setSeed()` before `createNewGame` has **no effect** — `createNewGame` reseeds internally, so runs would not be reproducible.
 

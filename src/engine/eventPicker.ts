@@ -1,4 +1,5 @@
 import { CHAPTERS, getChapter } from '../data/chapters'
+import { FILLER_EVENT_IDS } from '../data/eventCategories'
 import { getEventTags } from '../data/eventTags'
 import { getRealmOrder } from '../data/realms'
 import {
@@ -199,17 +200,6 @@ function filterEligible(
   )
 }
 
-const FILLER_EVENT_IDS = new Set([
-  'daily_cultivation',
-  'daily_insight',
-  'daily_sparring',
-  'daily_scripture',
-  'market_rest',
-  'roadside_duel',
-  'explore_spirit_mountain',
-  'spirit_spring',
-])
-
 function isFillerEvent(event: GameEvent): boolean {
   return FILLER_EVENT_IDS.has(event.id)
 }
@@ -251,20 +241,10 @@ function pickGlobalPoolEvent(
   metaRomanceBoost: boolean,
   excludeId?: string,
 ): GameEvent | null {
-  const tiers: PickOptions[] = [
-    { excludeId },
-    { excludeId, skipCooldown: true },
-    { excludeId, skipCooldown: true, skipAct: true },
-  ]
-
-  for (const options of tiers) {
-    const eligible = filterEligible(state, events, events, unlockedEvents, options).filter(
-      (e) => !isFillerEvent(e) && !CHAPTER_REGISTERED_IDS.has(e.id),
-    )
-    if (eligible.length > 0) return weightedPick(eligible, state, metaRomanceBoost)
-  }
-
-  return null
+  const eligible = filterEligible(state, events, events, unlockedEvents, { excludeId }).filter(
+    (event) => !isFillerEvent(event) && !CHAPTER_REGISTERED_IDS.has(event.id),
+  )
+  return eligible.length > 0 ? weightedPick(eligible, state, metaRomanceBoost) : null
 }
 
 /**

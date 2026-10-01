@@ -6,7 +6,6 @@ export const WANDER_EVENTS: GameEvent[] = [
     title: '坊市争霸',
     description: '坊市举办斗宝盛会，夺魁者可获海量灵石与珍稀丹方。你手头灵石宽裕，可要一试？',
     weight: 9,
-    act: 'qi',
     maxTimes: 2,
     cooldown: 6,
     conditions: [{ type: 'flag', key: 'refused_all_sects', value: true }],

@@ -214,6 +214,7 @@ export const CRAFT_EVENTS: GameEvent[] = [
       '你得到一块罕见的天外陨铁，此物蕴含星辰之力，是重铸法宝的绝佳材料。炼器师说若能找到合适的辅材，可将你的法宝品质提升一个档次。',
     weight: 7,
     years: 1,
+    once: true,
     choices: [
       {
         id: 'reforge_weapon',

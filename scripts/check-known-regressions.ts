@@ -6,6 +6,7 @@ import { beginPlaying, createNewGame, resolveChoice } from '../src/engine/gameEn
 import { pickNextEvent } from '../src/engine/eventPicker.ts'
 import { migrateSave } from '../src/engine/migrate.ts'
 import { getCurrentRoute } from '../src/engine/storyProgression.ts'
+import { FILLER_IDS } from './playtest-helpers.ts'
 import {
   loadPersistedRewindState,
   persistRewindAvailable,
@@ -138,22 +139,6 @@ console.log('\n3. 法宝始终以 canonical ID 保存')
 console.log('\n4. 章节事件遵守统一资格规则')
 {
   const base = baseSession().player
-  const mortalDemon: PlayerState = {
-    ...base,
-    realm: 'mortal',
-    currentChapter: 'demon_1',
-    chapterCompleted: CHAPTERS.demon_1.events.filter((id) => id !== 'demon_nest'),
-    flags: { ...base.flags, accepted_demon_path: true },
-  }
-  const picked = pickNextEvent(mortalDemon, EVENTS)
-  check('凡人境不会抽到要求筑基阶段的主线', picked?.id !== 'demon_nest', String(picked?.id))
-
-  const foundationDemon: PlayerState = { ...mortalDemon, realm: 'foundation' }
-  check(
-    '达到要求阶段后仍能抽到该主线',
-    pickNextEvent(foundationDemon, EVENTS)?.id === 'demon_nest',
-  )
-
   const repeatableSide: PlayerState = {
     ...base,
     currentChapter: 'sect_3',
@@ -180,6 +165,35 @@ console.log('\n4. 章节事件遵守统一资格规则')
   check(
     '达到 maxTimes 后支线不再出现',
     pickNextEvent(exhaustedSide, EVENTS)?.id !== 'alchemy_workshop',
+  )
+}
+
+console.log('\n5. 等待期事件遵守统一分类和硬冷却')
+{
+  check(
+    '引擎等待期事件不会被试玩误报为普通事件',
+    ['market_rest', 'roadside_duel', 'explore_spirit_mountain', 'spirit_spring']
+      .every((id) => FILLER_IDS.has(id)),
+  )
+
+  const artifactReforge = EVENTS.find((event) => event.id === 'artifact_reforge')
+  check('天外陨铁重铸事件只出现一次', artifactReforge?.once === true)
+
+  const cooldownProbe: GameEvent = {
+    id: 'global_cooldown_probe',
+    title: '冷却探针',
+    description: '验证全局池不会绕过冷却。',
+    weight: 1,
+    cooldown: 10,
+    choices: [{ id: 'continue', text: '继续' }],
+  }
+  const coolingDown: PlayerState = {
+    ...baseSession().player,
+    history: [cooldownProbe.id],
+  }
+  check(
+    '全局池没有严格候选时不会绕过 cooldown',
+    pickNextEvent(coolingDown, [cooldownProbe]) === null,
   )
 }
 

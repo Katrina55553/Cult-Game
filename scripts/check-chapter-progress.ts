@@ -206,6 +206,19 @@ console.log('\n6. 反向保护')
   )
 }
 
+// ── 7. 高境界转入魔道时，第一章主线不能因 act 门槛永久失效 ──
+console.log('\n7. 高境界转入魔道')
+{
+  const player: PlayerState = {
+    ...beginPlaying(createNewGame({ name: '测试', origin: 'demon_blood', seed: 7131 })).player,
+    realm: 'deity',
+    currentChapter: 'demon_1',
+    chapterCompleted: CHAPTERS.demon_1.events.filter((id) => id !== 'demon_nest'),
+  }
+  const picked = pickNextEvent(player, EVENTS)
+  check('化神境仍能继续魔道第一章主线', picked?.id === 'demon_nest', String(picked?.id))
+}
+
 console.log('')
 if (failures.length) {
   console.error(`发现 ${failures.length} 项失败：`)

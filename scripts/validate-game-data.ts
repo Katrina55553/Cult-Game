@@ -101,6 +101,12 @@ function validateGameData(): ValidationIssue[] {
     for (const eventId of chapter.events) {
       const event = eventMap.get(eventId)
       if (!event) continue
+      if (event.act && event.act !== 'any') {
+        issues.push({
+          type: 'error',
+          message: `章节 ${chapter.id} 的主线 ${eventId} 使用精确 act=${event.act}；玩家跨路线时可能已经越过该阶段，导致事件永久不可选`,
+        })
+      }
       for (const cond of event.conditions ?? []) {
         if (cond.type === 'route' && cond.route !== chapter.route) {
           issues.push({

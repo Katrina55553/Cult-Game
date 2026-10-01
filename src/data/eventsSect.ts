@@ -158,7 +158,6 @@ export const SECT_EVENTS: GameEvent[] = [
     description: '魔修邀你共参血祭禁阵，可一日破境飞升，然须屠戮凡人村落以祭。',
     weight: 8,
     once: true,
-    act: 'foundation',
     conditions: [{ type: 'stat', key: 'demonHeart', min: 30 }],
     choices: [
       {
@@ -198,7 +197,6 @@ export const SECT_EVENTS: GameEvent[] = [
     description: '魔尊分身亲至，许以魔道至尊功法为酬，条件是献祭正道挚友。',
     weight: 7,
     once: true,
-    act: 'golden',
     rarity: 'rare',
     conditions: [{ type: 'flag', key: 'accepted_demon_path', value: true }],
     choices: [
@@ -241,7 +239,6 @@ export const SECT_EVENTS: GameEvent[] = [
     description: '你魔名远播，正道联盟倾巢围剿。是力战群雄，还是遁入蛮荒？',
     weight: 10,
     once: true,
-    act: 'golden',
     conditions: [
       { type: 'flag', key: 'accepted_demon_path', value: true },
       { type: 'realm', min: 'golden_core' },
