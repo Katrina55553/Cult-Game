@@ -1,4 +1,4 @@
-import { resolveArtifactId } from '../data/artifacts'
+import { normalizeArtifactIds, resolveArtifactId } from '../data/artifacts'
 import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
@@ -105,10 +105,10 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
     case 'route':
       return { ...state, routeIntent: effect.route }
     case 'artifact': {
-      if (state.artifacts.some((value) => resolveArtifactId(value) === effect.id)) {
-        return state
-      }
-      return { ...state, artifacts: [...state.artifacts, effect.id] }
+      const artifactId = resolveArtifactId(effect.id)
+      const artifacts = normalizeArtifactIds(state.artifacts)
+      if (artifacts.includes(artifactId)) return { ...state, artifacts }
+      return { ...state, artifacts: [...artifacts, artifactId] }
     }
     case 'divineSense':
       return {

@@ -2,6 +2,7 @@ import { ACHIEVEMENTS } from '../data/achievements'
 import { EVENTS } from '../data/events'
 import { ENDINGS } from '../data/endings'
 import { getRealmOrder } from '../data/realms'
+import { normalizeArtifactIds } from '../data/artifacts'
 import type { Ending, GameSession, MetaProgress } from '../types/game'
 
 const SYSTEM_EVENT_IDS = [
@@ -105,7 +106,7 @@ export function checkAchievements(
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')
   if (player.spiritStones >= 300) add('rich')
-  if (player.artifacts.length >= 3) add('artifact_3')
+  if (normalizeArtifactIds(player.artifacts).length >= 3) add('artifact_3')
   if (getRealmOrder(player.realm) >= getRealmOrder('golden_core')) add('golden_core')
   if (getRealmOrder(player.realm) >= getRealmOrder('nascent_soul')) add('nascent_soul')
   const rareEventIds = new Set(

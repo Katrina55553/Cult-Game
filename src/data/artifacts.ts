@@ -58,6 +58,10 @@ export function resolveArtifactId(value: string): string {
   return LEGACY_ARTIFACT_ALIASES[value] ?? ARTIFACT_ID_BY_NAME.get(value) ?? value
 }
 
+export function normalizeArtifactIds(values: readonly string[]): string[] {
+  return [...new Set(values.map(resolveArtifactId))]
+}
+
 export function formatArtifactName(value: string): string {
   return ARTIFACTS[resolveArtifactId(value)]?.name ?? value
 }

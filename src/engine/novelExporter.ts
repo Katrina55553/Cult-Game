@@ -1,4 +1,5 @@
 import { CHAPTERS } from '../data/chapters'
+import { formatArtifactName } from '../data/artifacts'
 import { getRealmName } from './gameEngine'
 import type { GameSession } from '../types/game'
 
@@ -82,7 +83,7 @@ export function exportAsNovel(session: GameSession): string {
     lines.push(`  神兵：${player.cultivationSystems.divineWeapons.join('、')}`)
   }
   if (player.artifacts.length > 0) {
-    lines.push(`  法宝：${player.artifacts.join('、')}`)
+    lines.push(`  法宝：${player.artifacts.map(formatArtifactName).join('、')}`)
   }
 
   // ── 尾声 ──

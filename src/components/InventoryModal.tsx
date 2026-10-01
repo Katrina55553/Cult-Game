@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { getArtifactInfo } from '../data/artifacts'
+import { getArtifactInfo, normalizeArtifactIds } from '../data/artifacts'
 import type { PlayerState } from '../types/game'
 
 interface Props {
@@ -13,7 +13,7 @@ type DetailTarget =
   | { kind: 'beast' }
   | { kind: 'technique'; index: number }
   | { kind: 'weapon'; index: number }
-  | { kind: 'artifact'; index: number }
+  | { kind: 'artifact'; id: string }
   | { kind: 'item'; index: number }
 
 export function InventoryModal({ player, onClose, onUseItem }: Props) {
@@ -27,7 +27,8 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
 
   const inv = player.inventory
   const sys = player.cultivationSystems
-  const hasContent = player.artifacts.length > 0 || inv.length > 0 || !!sys.spiritBeast
+  const artifactIds = normalizeArtifactIds(player.artifacts)
+  const hasContent = artifactIds.length > 0 || inv.length > 0 || !!sys.spiritBeast
     || sys.techniques.length > 0 || sys.divineWeapons.length > 0
 
   // 详情数据
@@ -48,7 +49,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
     detailDesc = '已铸炼的神兵利器。'
     detailExtra = sys.divineWeaponTier > 0 ? `当前品质 ${sys.divineWeaponTier} 阶` : ''
   } else if (detail?.kind === 'artifact') {
-    const info = getArtifactInfo(player.artifacts[detail.index])
+    const info = getArtifactInfo(detail.id)
     detailName = info.name
     detailDesc = info.description
     detailExtra = info.bonus ?? ''
@@ -189,15 +190,15 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
             )}
 
             {/* 法宝 */}
-            {player.artifacts.length > 0 && (
+            {artifactIds.length > 0 && (
               <div>
                 <p className="text-xs text-gold-dim mb-1.5">法宝</p>
-                {player.artifacts.map((id, i) => {
+                {artifactIds.map((id) => {
                   const info = getArtifactInfo(id)
                   return (
                     <div
-                      key={`a-${i}`}
-                      onClick={() => setDetail({ kind: 'artifact', index: i })}
+                      key={id}
+                      onClick={() => setDetail({ kind: 'artifact', id })}
                       className="text-xs px-3 py-2 border border-gold/20 rounded-sm mb-1 cursor-pointer
                         hover:border-gold/40 hover:bg-gold-soft/6 transition-colors"
                     >
