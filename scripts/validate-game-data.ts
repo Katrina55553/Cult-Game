@@ -53,6 +53,11 @@ function validateGameData(): ValidationIssue[] {
         issues.push({ type: 'error', message: `章节 ${chapter.id} 引用了不存在的事件：${eventId}` })
       }
     }
+    for (const eventId of chapter.triggeredEvents ?? []) {
+      if (!eventMap.has(eventId)) {
+        issues.push({ type: 'error', message: `章节 ${chapter.id} 的 triggeredEvents 引用了不存在的事件：${eventId}` })
+      }
+    }
     for (const eventId of chapter.sideEvents ?? []) {
       if (!eventMap.has(eventId)) {
         issues.push({ type: 'error', message: `章节 ${chapter.id} 的 sideEvents 引用了不存在的事件：${eventId}` })

@@ -10,6 +10,8 @@ export interface Chapter {
   intro: string
   /** 主线事件ID列表，必须全部完成才能推进章节 */
   events: string[]
+  /** 由玩家状态触发的前置事件，优先于本章主线出现，不阻塞章节推进 */
+  triggeredEvents?: string[]
   /** 支线事件ID列表，可选，不影响章节推进 */
   sideEvents?: string[]
   /** 下一章节ID（固定路线时使用） */
@@ -92,10 +94,10 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'dao_companion',
       'beauty_gratitude', 'su_muyan_past', 'zhao_tianxing_redemption', 'zhao_truth',
-      'mysterious_demon_third', 'moli_backstory', 'ye_qingmei_reunion_alt', 'wanyao_encounter', 'sect_exchange',
+      'mysterious_demon_third', 'moli_backstory', 'ye_qingmei_reunion', 'ye_qingmei_help', 'wanyao_encounter', 'sect_exchange',
       'beast_bond', 'beast_evolution',
       'fox_saved', 'fox_guide', 'fox_transform',
-      'found_prophecy', 'seek_artifact_1', 'seek_artifact_2', 'prophecy_choice',
+      'seek_artifact_1', 'seek_artifact_2', 'prophecy_choice',
       'origin_clue', 'origin_truth', 'origin_destiny',
       'sect_conflict', 'sect_truth', 'sect_choice',
       'master_quest', 'master_secret', 'master_legacy',
@@ -115,6 +117,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'sect',
     intro: '血云压境，魔道六宗联军将天玄宗团团围困。山门护阵摇摇欲坠，长老们浴血厮杀。此战关乎存亡。',
     events: ['sect_alliance', 'spirit_vein_war', 'moyu_invasion', 'sect_war', 'boss_demon_general'],
+    triggeredEvents: ['seal_crisis'],
     sideEvents: [
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
@@ -272,7 +275,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'demon_4',
     name: '第四章 · 终局',
     route: 'demon',
-    intro: '心魔大劫将至，寿元所剩无几。你必须做出最后的抉择——是以魔证道，还是就此陨落。',
+    intro: '心魔大劫将至。你必须做出最后的抉择——是以魔证道，还是就此陨落。',
     events: ['demon_tribulation', 'final_choice'],
     sideEvents: ['lifespan_crisis', 'boss_demon_lord', 'bloodline_resonance', 'weapon_reforge', 'demon_transcend'],
   },

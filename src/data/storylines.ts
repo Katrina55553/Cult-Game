@@ -57,7 +57,7 @@ export const STORYLINES: Storyline[] = [
       { flag: 'met_lin_wanyue', label: '灵泉偶遇' },
       { flag: 'ye_qingmei_friend', label: '品茶叙旧' },
       { flag: 'ye_qingmei_close', label: '携手探险' },
-      { flag: 'has_companion', label: '结为道侣', extraCheck: (p) => !!p.flags.met_lin_wanyue },
+      { flag: 'ye_qingmei_companion', label: '结为道侣' },
     ],
   },
 

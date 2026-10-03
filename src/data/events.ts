@@ -1779,6 +1779,58 @@ const CORE_EVENTS: GameEvent[] = [
     ],
   },
   {
+    id: 'seal_crisis',
+    title: '封印危机',
+    description:
+      '魔道联军攻山之际，你当年留在地底的阵印突然传来警示。远古凶兽借满山魔气冲击封印，新生的裂纹已蔓延至山门大阵。若不立刻处置，天玄宗将腹背受敌。',
+    weight: 20,
+    years: 1,
+    once: true,
+    tags: ['formation'],
+    conditions: [
+      { type: 'flag', key: 'loyal_to_sect', value: true },
+      { type: 'flag', key: 'fortified_seal', value: true },
+    ],
+    choices: [
+      {
+        id: 'reinforce_again',
+        text: '深入地底，再度加固封印',
+        outcomes: [
+          {
+            chance: 0.6,
+            luckBonus: 0.004,
+            successEffects: [
+              { type: 'formationTier', value: 1 },
+              { type: 'cultivation', value: 24 },
+              { type: 'stat', key: 'karma', value: 12 },
+              { type: 'flag', key: 'seal_crisis_resolved', value: true },
+            ],
+            failEffects: [
+              { type: 'lifespan', value: -12 },
+              { type: 'stat', key: 'demonHeart', value: 10 },
+            ],
+            narrative: {
+              success: '你循着旧日阵纹重布大阵，以自身灵力补全裂隙。凶兽的咆哮渐渐沉寂，山门大阵也重新稳固。',
+              fail: '凶兽猛然撞击阵眼，你以寿元为代价才将裂缝强行合拢，却也被涌出的魔气侵入道心。',
+            },
+          },
+        ],
+      },
+      {
+        id: 'redirect_beast_rage',
+        text: '引导凶兽之力，反击魔道联军',
+        narrative: '你改写封印一角，将凶兽的怒火沿地脉引向山外。魔军大阵顷刻大乱，但你也因操弄凶兽之力而心魔渐长。',
+        effects: [
+          { type: 'cultivation', value: 30 },
+          { type: 'stat', key: 'rootBone', value: 5 },
+          { type: 'stat', key: 'karma', value: -8 },
+          { type: 'stat', key: 'demonHeart', value: 10 },
+          { type: 'flag', key: 'seal_beast_weaponized', value: true },
+        ],
+      },
+    ],
+  },
+  {
     id: 'sect_politics',
     title: '宗门暗流',
     description:
@@ -1869,7 +1921,7 @@ const CORE_EVENTS: GameEvent[] = [
     id: 'ancient_prophesy',
     title: '古老预言',
     description:
-      '你在宗门古籍中发现一段古老预言：「千年后，天地大劫将至。唯集齐七件上古神器，方能镇压浩劫。」你心中一动——这预言似乎与你有关。',
+      '你在宗门古籍中发现一段古老预言：「千年后，天地大劫将至。唯寻得星辰与太阳两枚核心碎片，方能重启镇劫大阵。」你心中一动——这预言似乎与你有关。',
     weight: 6,
     years: 2,
     once: true,
@@ -1877,9 +1929,9 @@ const CORE_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'seek_artifacts',
-        text: '开始寻找上古神器',
+        text: '追寻两枚核心碎片',
         effects: [
-          { type: 'flag', key: 'seeking_artifacts', value: true },
+          { type: 'flag', key: 'found_prophecy', value: true },
           { type: 'stat', key: 'comprehension', value: 6 },
           { type: 'cultivation', value: 12 },
         ],

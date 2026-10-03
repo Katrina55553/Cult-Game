@@ -229,6 +229,7 @@ function pickFillerEvent(
 const CHAPTER_REGISTERED_IDS = new Set<string>()
 for (const chapter of Object.values(CHAPTERS)) {
   for (const id of chapter.events) CHAPTER_REGISTERED_IDS.add(id)
+  for (const id of chapter.triggeredEvents ?? []) CHAPTER_REGISTERED_IDS.add(id)
   for (const id of chapter.sideEvents ?? []) CHAPTER_REGISTERED_IDS.add(id)
 }
 
@@ -312,7 +313,15 @@ export function pickNextEvent(
   if (chapter) {
     const eventMap = new Map(events.map((e) => [e.id, e]))
 
-    // 1) 主线事件（必须完成才能推进章节）
+    // 1) 条件触发事件（优先响应早先选择造成的后果）
+    for (const eventId of chapter.triggeredEvents ?? []) {
+      const evt = eventMap.get(eventId)
+      if (!evt) continue
+      if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
+      return evt
+    }
+
+    // 2) 主线事件（必须完成才能推进章节）
     const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
     for (const eventId of pending) {
       const evt = eventMap.get(eventId)
@@ -321,7 +330,7 @@ export function pickNextEvent(
       return evt
     }
 
-    // 2) 支线事件（可选，不影响章节推进）
+    // 3) 支线事件（可选，不影响章节推进）
     //    这里是**加权抽取**而不是按书写顺序取第一个：支线本来就不承担推进职责，
     //    顺序无所谓，但用权重抽才能让倾向标签真正影响玩家体验到什么。
     //    （主线仍是队列——那条线的先后顺序是作者编排的，不能打乱。）
@@ -337,7 +346,7 @@ export function pickNextEvent(
       if (sideEvents.length > 0) return weightedPick(sideEvents, state, metaRomanceBoost)
     }
 
-    // 3) 主线+支线暂时都抽不出时，用等待期事件（老全局池 + 日常）过渡
+    // 4) 主线+支线暂时都抽不出时，用等待期事件（老全局池 + 日常）过渡
     return pickWaitingEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
   }
 

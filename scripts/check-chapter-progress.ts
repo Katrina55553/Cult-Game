@@ -219,6 +219,26 @@ console.log('\n7. 高境界转入魔道')
   check('化神境仍能继续魔道第一章主线', picked?.id === 'demon_nest', String(picked?.id))
 }
 
+// ── 8. 早期加固过封印时，宗门大战章应先响应封印危机 ──
+console.log('\n8. fortified_seal 触发封印危机')
+{
+  const basePlayer = beginPlaying(createNewGame({ name: '测试', origin: 'noble_exile', seed: 7132 })).player
+  const player: PlayerState = {
+    ...basePlayer,
+    currentChapter: 'sect_7',
+    chapterCompleted: [],
+    flags: { ...basePlayer.flags, loyal_to_sect: true, fortified_seal: true },
+  }
+  const triggered = pickNextEvent(player, EVENTS)
+  check('加固过封印时优先触发危机', triggered?.id === 'seal_crisis', String(triggered?.id))
+
+  const untriggered = pickNextEvent({
+    ...player,
+    flags: { ...player.flags, fortified_seal: false },
+  }, EVENTS)
+  check('未加固封印时继续正常主线', untriggered?.id === 'sect_alliance', String(untriggered?.id))
+}
+
 console.log('')
 if (failures.length) {
   console.error(`发现 ${failures.length} 项失败：`)

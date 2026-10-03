@@ -3265,42 +3265,17 @@ export const MISC_EVENTS: GameEvent[] = [
   // ──── 2. 古老预言链 ────
 
   {
-    id: 'found_prophecy',
-    title: '古老预言',
-    description: '你在宗门古籍中发现一段古老预言：「千年后，天地大劫将至。唯集齐七件上古神器，方能镇压浩劫。」你心中一动——这预言似乎与你有关。',
-    weight: 6,
-    years: 2,
-    once: true,
-    rarity: 'rare',
-    conditions: [{ type: 'realm', min: 'foundation' }],
-    choices: [
-      {
-        id: 'seek_artifacts',
-        text: '开始寻找上古神器',
-        effects: [
-          { type: 'flag', key: 'found_prophecy', value: true },
-          { type: 'stat', key: 'comprehension', value: 6 },
-          { type: 'cultivation', value: 12 },
-        ],
-      },
-      {
-        id: 'dismiss_prophecy',
-        text: '不过是古人的妄言',
-        effects: [
-          { type: 'stat', key: 'demonHeart', value: -3 },
-          { type: 'cultivation', value: 5 },
-        ],
-      },
-    ],
-  },
-  {
     id: 'seek_artifact_1',
     title: '神器线索·一',
     description: '你循着预言中的线索，在一座荒废的古庙中找到了第一件神器的线索——一块刻着星图的石板。星图指向北方冰原深处。',
     weight: 7,
     years: 2,
-    once: true,
-    conditions: [{ type: 'flag', key: 'found_prophecy', value: true }],
+    maxTimes: 3,
+    cooldown: 4,
+    conditions: [
+      { type: 'flag', key: 'found_prophecy', value: true },
+      { type: 'flag', key: 'artifact_1_found', value: false },
+    ],
     choices: [
       {
         id: 'follow_star_map',
@@ -3326,8 +3301,11 @@ export const MISC_EVENTS: GameEvent[] = [
       },
       {
         id: 'study_star_map',
-        text: '先研究星图的含义',
+        text: '推演星图，谨慎取回碎片',
+        narrative: '你以阵纹推演出一条安全路径，最终在冰原深处寻得星辰碎片。',
         effects: [
+          { type: 'artifact', id: 'celestial_fragment', name: '星辰碎片' },
+          { type: 'flag', key: 'artifact_1_found', value: true },
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'formationTier', value: 1 },
         ],
@@ -3340,8 +3318,12 @@ export const MISC_EVENTS: GameEvent[] = [
     description: '第二件神器的线索指向南方火山。传说火山深处有一座上古祭坛，祭坛上供奉着太阳碎片。但火山中妖兽盘踞，凶险异常。',
     weight: 7,
     years: 2,
-    once: true,
-    conditions: [{ type: 'flag', key: 'artifact_1_found', value: true }],
+    maxTimes: 3,
+    cooldown: 4,
+    conditions: [
+      { type: 'flag', key: 'artifact_1_found', value: true },
+      { type: 'flag', key: 'artifact_2_found', value: false },
+    ],
     choices: [
       {
         id: 'enter_volcano',
@@ -3367,8 +3349,10 @@ export const MISC_EVENTS: GameEvent[] = [
       },
       {
         id: 'gather_allies',
-        text: '召集同伴一同前往',
+        text: '召集同伴前往火山',
+        narrative: '同伴助你牵制守护妖兽，你趁机取下太阳碎片。',
         effects: [
+          { type: 'artifact', id: 'solar_fragment', name: '太阳碎片' },
           { type: 'stat', key: 'karma', value: 8 },
           { type: 'cultivation', value: 10 },
           { type: 'flag', key: 'artifact_2_found', value: true },
@@ -3379,7 +3363,7 @@ export const MISC_EVENTS: GameEvent[] = [
   {
     id: 'prophecy_choice',
     title: '预言抉择',
-    description: '七件神器齐聚，天地异象骤起。预言的最后一页写道：「集齐神器者，可选择镇压大劫（牺牲自身），或驾驭神器飞升（天地自渡）。」你手握七件神器，站在命运的十字路口。',
+    description: '星辰与太阳两枚核心碎片终于齐聚，天地异象骤起。预言的最后一页写道：「持碎片者，可选择重启镇劫大阵（牺牲自身），或驾驭碎片飞升（天地自渡）。」你站在命运的十字路口。',
     weight: 10,
     years: 1,
     once: true,
@@ -3390,7 +3374,7 @@ export const MISC_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'sacrifice_prophecy',
-        text: '以身镇压大劫，守护苍生',
+        text: '以身重启镇劫大阵，守护苍生',
         effects: [
           { type: 'flag', key: 'prophecy_sacrifice', value: true },
           { type: 'stat', key: 'karma', value: 30 },
@@ -3399,9 +3383,10 @@ export const MISC_EVENTS: GameEvent[] = [
       },
       {
         id: 'ascend_prophecy',
-        text: '驾驭神器飞升，天地自渡',
+        text: '驾驭碎片飞升，天地自渡',
         effects: [
           { type: 'flag', key: 'chose_ascension', value: true },
+          { type: 'flag', key: 'got_inheritance', value: true },
           { type: 'cultivation', value: 30 },
         ],
       },

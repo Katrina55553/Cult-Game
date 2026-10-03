@@ -231,13 +231,17 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'companion_path',
         text: '以灵泉为媒，结为道侣',
-        requirements: [{ type: 'stat', key: 'luck', min: 35 }],
+        requirements: [
+          { type: 'stat', key: 'luck', min: 35 },
+          { type: 'flag', key: 'has_companion', value: false },
+        ],
         outcomes: [
           {
             chance: 0.55,
             successEffects: [
               { type: 'flag', key: 'has_companion', value: true },
               { type: 'flag', key: 'met_lin_wanyue', value: true },
+              { type: 'flag', key: 'ye_qingmei_companion', value: true },
               { type: 'cultivation', value: 22 },
               { type: 'stat', key: 'luck', value: 5 },
             ],
@@ -373,10 +377,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     weight: 14,
     years: 1,
     once: true,
-    conditions: [
-      { type: 'flag', key: 'met_lin_wanyue', value: true },
-      { type: 'flag', key: 'has_companion', value: false },
-    ],
+    conditions: [{ type: 'flag', key: 'met_lin_wanyue', value: true }],
     choices: [
       {
         id: 'tea',
@@ -390,9 +391,13 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'ask_companion',
         text: '试探结为道侣之意',
-        requirements: [{ type: 'stat', key: 'luck', min: 40 }],
+        requirements: [
+          { type: 'stat', key: 'luck', min: 40 },
+          { type: 'flag', key: 'has_companion', value: false },
+        ],
         effects: [
           { type: 'flag', key: 'has_companion', value: true },
+          { type: 'flag', key: 'ye_qingmei_companion', value: true },
           { type: 'cultivation', value: 18 },
           { type: 'stat', key: 'luck', value: 3 },
         ],
