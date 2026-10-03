@@ -187,10 +187,10 @@ export const STORYLINES: Storyline[] = [
     id: 'spy',
     name: '道侣真相',
     tone: 'cinnabar',
-    entryCheck: (p) => !!p.flags.forgave_spy || !!p.flags.turned_spy,
+    entryCheck: (p) => !!p.flags.spy_truth_revealed,
     steps: [
-      { flag: 'forgave_spy', label: '往事不究' },
-      { flag: 'turned_spy', label: '反间苍穹阁' },
+      { flag: 'spy_truth_revealed', label: '真相揭露' },
+      { flag: 'spy_aftermath_resolved', label: '关系抉择' },
     ],
   },
 
@@ -242,8 +242,8 @@ export const STORYLINES: Storyline[] = [
     steps: [
       { flag: 'sect_conflict', label: '宗门暗流' },
       { flag: 'sect_truth', label: '真相大白' },
-      { flag: 'chose_sacrifice', label: '牺牲计划' },
-      { flag: 'chose_righteous', label: '坚持正道' },
+      { flag: 'sect_choice_made', label: '宗门抉择' },
+      { flag: 'sect_choice_resolved', label: '承担后果' },
     ],
   },
 

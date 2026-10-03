@@ -80,7 +80,7 @@
 
 ## 2. 散修线
 
-**触发条件**：`enter_sect` 选择「拒入宗门」→ 设置 `refused_all_sects = true`
+**触发条件**：`enter_sect` 选择「拒入宗门」→ 发出 `route: wander` 路线意图
 
 ### 流程
 
@@ -116,11 +116,11 @@
 
 ## 3. 魔道线
 
-**触发条件**：多种方式设置 `accepted_demon_path = true`
+**触发条件**：玩家明确选择修魔，发出 `route: demon` 路线意图。心魔数值只解锁抉择，不会自动更换路线。
 
 | 进入方式 | 事件 | 选择 |
 |---|---|---|
-| 心魔萌动 | `demon_whisper` | 「侧耳倾听」（失败时） |
+| 心魔岔路 | `demon_path_choice` | 「收下魔功，离宗入魔」 |
 | 魔修引诱 | `demon_temptation` | 「纳受魔功」 |
 | 心魔大劫 | `demon_tribulation` | 「与心魔合一」 |
 | 飞升抉择 | `final_choice` | 「以魔证道」 |
@@ -462,6 +462,28 @@
 | `ever_walked_demon_path` | 首次进入魔道线 | 魔道路线历史 |
 
 > 表格中仍出现的 `loyal_to_sect`、`refused_all_sects`、`accepted_demon_path` 是旧事件数据的条件别名；conditions Adapter 会根据 `currentChapter` 派生判断，它们不会写入玩家 flags。新事件统一使用 `route` condition/effect。
+
+### 支线出场与路线抉择
+
+主线之间插入满足条件的支线，已开放章节的未完成支线可跨章续接。情缘、人物和连锁剧情的后续节点优先于新支线；支线的冷却、次数和前置条件仍然生效。
+
+| 事件 | 解锁条件 | 玩家选择 |
+|---|---|---|
+| 去留之问 `sect_departure_choice` | 宗门第四章，赵天行敌对、心魔 ≥35 | 留宗／转入散修第一章 |
+| 心魔岔路 `demon_path_choice` | 宗门第六章，心魔 ≥30 | 抵抗／转入魔道第一章 |
+| 山门再邀 `wander_sect_invitation` | 散修第三章，善业 ≥40、心魔 ≤10 | 继续独行／以客卿身份进入宗门第五章 |
+| 回头之路 `demon_redemption_choice` | 魔道第二章，善业 ≥25、心魔 ≤15 | 留在魔道／援助宗门第七章 |
+
+### 重大选择的后果
+
+| 先前选择 | 后续事件 | 结果分歧 |
+|---|---|---|
+| 百年一遇：去秘境，留下道侣独自渡劫 | 归来无灯 `companion_abandonment` | 付出灵石和寿元疗伤、重建信任，或承认无法相守而分开 |
+| 道侣真相：反间苍穹阁 | 反间回响 `spy_counterplot` | 商定退路后公开暗线证据，或放弃诱捕、护她脱身 |
+| 宗门抉择：支持献祭 | 阵后余声 `sect_sacrifice_aftermath` | 公开真相、承担责任，或隐瞒死因、背负谎言 |
+| 宗门抉择：拒绝献祭 | 另一条生路 `sect_alternative_plan` | 以自身精血护阵，或放弃部分山门、疏散众人 |
+
+后果事件优先于下一段主线，并且只出现一次。分手会清除当前道侣身份及共修进度；新道侣不会继承旧关系的渡劫经历。
 
 ### 关系 Flag
 

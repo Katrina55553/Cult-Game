@@ -3163,6 +3163,7 @@ export const MISC_EVENTS: GameEvent[] = [
 
   {
     id: 'fox_saved',
+    followUpOf: ['mountain_spirit'],
     title: '灵狐报恩',
     description: '你正在修炼，一只通体雪白的灵狐叼着一株百年灵草放在你门前。它望了你一眼，正是当年你救下的那只。灵狐放下灵草后转身离去，消失在月色中。',
     weight: 8,
@@ -3204,6 +3205,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'fox_guide',
+    followUpOf: ['fox_saved'],
     title: '灵狐引路',
     description: '你在深山中迷路，正焦急之际，那只白狐忽然出现在前方。它回头望你一眼，然后向前跑去，每走几步便停下来等你。你跟着它穿过迷雾，来到一处从未见过的灵泉旁。',
     weight: 7,
@@ -3233,6 +3235,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'fox_transform',
+    followUpOf: ['fox_guide'],
     title: '灵狐化形',
     description: '月圆之夜，灵狐忽然口吐人言：「恩公，我修行百年，今日终于可以化形报恩。」灵光散去，一名白衣少女出现在你面前，容貌绝美，眸中满是感激。「我愿追随恩公，直到天荒地老。」',
     weight: 6,
@@ -3266,6 +3269,7 @@ export const MISC_EVENTS: GameEvent[] = [
 
   {
     id: 'seek_artifact_1',
+    followUpOf: ['ancient_prophesy'],
     title: '神器线索·一',
     description: '你循着预言中的线索，在一座荒废的古庙中找到了第一件神器的线索——一块刻着星图的石板。星图指向北方冰原深处。',
     weight: 7,
@@ -3314,6 +3318,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'seek_artifact_2',
+    followUpOf: ['seek_artifact_1'],
     title: '神器线索·二',
     description: '第二件神器的线索指向南方火山。传说火山深处有一座上古祭坛，祭坛上供奉着太阳碎片。但火山中妖兽盘踞，凶险异常。',
     weight: 7,
@@ -3362,6 +3367,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'prophecy_choice',
+    followUpOf: ['seek_artifact_2'],
     title: '预言抉择',
     description: '星辰与太阳两枚核心碎片终于齐聚，天地异象骤起。预言的最后一页写道：「持碎片者，可选择重启镇劫大阵（牺牲自身），或驾驭碎片飞升（天地自渡）。」你站在命运的十字路口。',
     weight: 10,
@@ -3433,6 +3439,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'origin_truth',
+    followUpOf: ['origin_clue'],
     title: '身世真相',
     description: '玉佩中封存着一段影像：你的父母并非凡人，而是上古大能的后裔。他们为了保护你，隐藏了你的血脉，将你托付给凡人。影像最后，你的母亲含泪道：「孩子，当你看到这段影像时，说明你的血脉已经觉醒。」',
     weight: 8,
@@ -3463,6 +3470,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'origin_destiny',
+    followUpOf: ['origin_truth'],
     title: '命运抉择',
     description: '血脉觉醒后，你感应到一处远古遗迹的召唤。遗迹深处，一面古镜映出了你的前世——你曾是上古大能，因触犯天规被贬入轮回。如今血脉觉醒，天道再次找上门来。',
     weight: 8,
@@ -3528,6 +3536,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'sect_truth',
+    followUpOf: ['sect_conflict'],
     title: '真相大白',
     description: '你调查发现，那个秘密组织的真正目的不是勾结魔道，而是在准备应对一场即将到来的天地大劫。他们用禁术是为了制造一件可以镇压大劫的神器。那位长老找到你：「你既然知道了真相，就必须做出选择。」',
     weight: 8,
@@ -3557,6 +3566,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'sect_choice',
+    followUpOf: ['sect_truth'],
     title: '宗门抉择',
     description: '天地大劫的征兆越来越明显。你需要决定：是支持长老的禁术计划（牺牲少数人拯救多数人），还是坚持正道原则（即使面对灭顶之灾也不妥协）。',
     weight: 10,
@@ -3571,6 +3581,7 @@ export const MISC_EVENTS: GameEvent[] = [
           { type: 'stat', key: 'karma', value: -15 },
           { type: 'stat', key: 'demonHeart', value: 10 },
           { type: 'flag', key: 'chose_sacrifice', value: true },
+          { type: 'flag', key: 'sect_choice_made', value: true },
         ],
       },
       {
@@ -3580,6 +3591,7 @@ export const MISC_EVENTS: GameEvent[] = [
           { type: 'stat', key: 'karma', value: 20 },
           { type: 'stat', key: 'comprehension', value: 10 },
           { type: 'flag', key: 'chose_righteous', value: true },
+          { type: 'flag', key: 'sect_choice_made', value: true },
         ],
       },
     ],
@@ -3816,6 +3828,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'master_secret',
+    followUpOf: ['master_quest'],
     title: '师叔的秘密',
     description: '你找到了师叔的藏身之处。他已垂垂老矣，身边放着那件镇派之宝。他看到你，苦笑道：「你来了。当年我盗走此宝，不是为了自己，而是为了阻止宗门用它做一件可怕的事。」',
     weight: 8,
@@ -3845,6 +3858,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'master_legacy',
+    followUpOf: ['master_secret'],
     title: '师徒传承',
     description: '你将真相带回宗门，师尊听后沉默良久。最终他说：「你做得对。为师将毕生所学传授于你，希望你能将正道传承下去。」师尊将一枚玉简交给你，里面记载着他一生的修炼心得。',
     weight: 8,
@@ -3933,6 +3947,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'vein_guardian',
+    followUpOf: ['vein_found'],
     title: '灵脉守护者',
     description: '守护兽找到你，说：「我感应到天地大劫将至。这处灵脉是镇压大劫的关键之一。你若愿意成为灵脉的守护者，我将传你守护之法。」',
     weight: 8,
@@ -3962,6 +3977,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'vein_harvest',
+    followUpOf: ['vein_guardian'],
     title: '灵脉丰收',
     description: '灵脉中的灵气在你的守护下日益充沛。守护兽满意地点头：「你做得很好。灵脉的力量将庇护这片土地上的所有生灵。」你感到自己的修为和心境都达到了新的高度。',
     weight: 8,
@@ -4027,6 +4043,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'battlefield_truth',
+    followUpOf: ['battlefield_memory'],
     title: '战场真相',
     description: '你深入战场核心，发现了一具保存完好的大能遗骸。遗骸手中握着一卷玉简，上面记载着大劫的真相——大劫并非天灾，而是上古修士的实验失控所致。而那个实验，正是正道和魔道分裂的根源。',
     weight: 8,
@@ -4056,6 +4073,7 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'battlefield_legacy',
+    followUpOf: ['battlefield_truth'],
     title: '战场遗产',
     description: '你继承了大能遗骸中的传承，获得了对抗大劫的关键知识。遗骸化作灵光消散前，留下一句话：「希望你能做到我们当年做不到的事。」你感到肩上多了一份沉甸甸的责任。',
     weight: 8,
@@ -4120,12 +4138,13 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'companion_trial',
+    followUpOf: ['companion_dream'],
     title: '道侣试炼',
     description: '你们找到了那对眷侣留下的试炼之地。试炼要求你们二人同心协力，通过九道关卡。每一道关卡都在考验你们的默契和信任。最后一道关卡，需要你们同时献出一半寿元。',
     weight: 8,
     years: 2,
     once: true,
-    conditions: [{ type: 'flag', key: 'companion_dream', value: true }],
+    conditions: [{ type: 'flag', key: 'companion_dream', value: true }, { type: 'flag', key: 'has_companion', value: true }, { type: 'flag', key: 'companion_estranged', value: false }],
     choices: [
       {
         id: 'accept_trial',
@@ -4162,12 +4181,13 @@ export const MISC_EVENTS: GameEvent[] = [
   },
   {
     id: 'companion_eternity',
+    followUpOf: ['companion_trial'],
     title: '道侣永恒',
     description: '试炼通过后，你们获得了眷侣留下的终极传承——双修飞升之法。道侣握住你的手：「无论前方是天堂还是地狱，我都与你同在。」你们相视而笑，天地间仿佛只剩下彼此。',
     weight: 10,
     years: 1,
     once: true,
-    conditions: [{ type: 'flag', key: 'companion_trial', value: true }],
+    conditions: [{ type: 'flag', key: 'companion_trial', value: true }, { type: 'flag', key: 'has_companion', value: true }, { type: 'flag', key: 'companion_estranged', value: false }],
     choices: [
       {
         id: 'ascend_together',

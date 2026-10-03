@@ -1,4 +1,4 @@
-import { CHAPTERS, getChapter } from '../data/chapters'
+import { CHAPTERS, getChapter, getVisitedChapters } from '../data/chapters'
 import { FILLER_EVENT_IDS } from '../data/eventCategories'
 import { getEventTags } from '../data/eventTags'
 import { getRealmOrder } from '../data/realms'
@@ -147,7 +147,7 @@ interface PickOptions {
   excludeId?: string
 }
 
-function isEventEligible(
+export function isEventEligible(
   state: PlayerState,
   event: GameEvent,
   allEvents: GameEvent[],
@@ -171,6 +171,7 @@ function isEventEligible(
   const act = getPlayerAct(state)
   if (event.act && event.act !== 'any' && event.act !== act) return false
   if (event.requiresUnlock && !unlockedEvents.includes(event.requiresUnlock)) return false
+  if (event.followUpOf && !event.followUpOf.some((id) => state.history.includes(id))) return false
 
   return checkConditions(state, event.conditions)
 }
@@ -224,7 +225,7 @@ function pickFillerEvent(
 }
 
 // ── 全局池：章节制之前的老事件池 ──
-// 章节制上线后，pickNextEvent 只从当前章节的 events/sideEvents 里取，
+// 主线与已开放章节的支线之外，
 // 导致未被任何章节登记的事件永远不会出现。这里把它们收拢成「等待期」内容源。
 const CHAPTER_REGISTERED_IDS = new Set<string>()
 for (const chapter of Object.values(CHAPTERS)) {
@@ -308,6 +309,9 @@ export function pickNextEvent(
   metaRomanceBoost = false,
   excludeId?: string,
 ): GameEvent | null {
+  const consequences = filterEligible(state, events.filter((event) => event.priority === 'consequence'), events, unlockedEvents, { excludeId })
+  if (consequences.length > 0) return consequences[0]
+
   // 章节制：优先从当前章节中选取事件
   const chapter = getChapter(state.currentChapter)
   if (chapter) {
@@ -321,6 +325,18 @@ export function pickNextEvent(
       return evt
     }
 
+    const sideIds = new Set(getVisitedChapters(state).flatMap((entry) => entry.sideEvents ?? []))
+    const sideEvents = filterEligible(state, events.filter((event) =>
+      sideIds.has(event.id) && !chapter.events.includes(event.id),
+    ), events, unlockedEvents, { excludeId })
+    const pickSide = () => {
+      const followUps = sideEvents.filter((event) => event.followUpOf)
+      return weightedPick(followUps.length > 0 ? followUps : sideEvents, state, metaRomanceBoost)
+    }
+    const lastEventId = state.history[state.history.length - 1]
+    const afterMain = Object.values(CHAPTERS).some((entry) => entry.events.includes(lastEventId))
+    if (afterMain && sideEvents.length > 0) return pickSide()
+
     // 2) 主线事件（必须完成才能推进章节）
     const pending = chapter.events.filter((id) => !state.chapterCompleted.includes(id))
     for (const eventId of pending) {
@@ -330,21 +346,7 @@ export function pickNextEvent(
       return evt
     }
 
-    // 3) 支线事件（可选，不影响章节推进）
-    //    这里是**加权抽取**而不是按书写顺序取第一个：支线本来就不承担推进职责，
-    //    顺序无所谓，但用权重抽才能让倾向标签真正影响玩家体验到什么。
-    //    （主线仍是队列——那条线的先后顺序是作者编排的，不能打乱。）
-    const sideIds = chapter.sideEvents
-    if (sideIds) {
-      const sideEvents: GameEvent[] = []
-      for (const eventId of sideIds) {
-        const evt = eventMap.get(eventId)
-        if (!evt) continue
-        if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
-        sideEvents.push(evt)
-      }
-      if (sideEvents.length > 0) return weightedPick(sideEvents, state, metaRomanceBoost)
-    }
+    if (sideEvents.length > 0) return pickSide()
 
     // 4) 主线+支线暂时都抽不出时，用等待期事件（老全局池 + 日常）过渡
     return pickWaitingEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)

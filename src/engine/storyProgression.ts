@@ -1,4 +1,4 @@
-import { CHAPTERS, getChapter, getFirstChapter } from '../data/chapters'
+import { CHAPTERS, SHARED_CHAPTER_EVENTS, getChapter, getFirstChapter, getVisitedChapters } from '../data/chapters'
 import { EVENTS } from '../data/events'
 import type { PlayerState, RouteId } from '../types/game'
 import { isEventPermanentlyUnavailable } from './eventPicker'
@@ -32,14 +32,19 @@ function reconcileChapterProgress(player: PlayerState): PlayerState {
   if (!chapter) return player
 
   const completed = [...player.chapterCompleted]
+  const memories: string[] = []
   for (const eventId of chapter.events) {
     if (completed.includes(eventId)) continue
     const event = EVENT_BY_ID.get(eventId)
-    if (event && isEventPermanentlyUnavailable(player, event, EVENTS)) completed.push(eventId)
+    if (!event || !isEventPermanentlyUnavailable(player, event, EVENTS)) continue
+    completed.push(eventId)
+    if (event.once && player.history.includes(eventId) && SHARED_CHAPTER_EVENTS[eventId]?.chapters.includes(chapter.id)) {
+      memories.push(`${player.age}岁：你想起此前经历的「${event.title}」，当时的抉择仍在此生留下痕迹。`)
+    }
   }
 
   if (completed.length === player.chapterCompleted.length) return player
-  return { ...player, chapterCompleted: completed }
+  return { ...player, chapterCompleted: completed, log: memories.length ? [...player.log, ...memories] : player.log }
 }
 
 function enterChapter(player: PlayerState, nextChapterId: string): PlayerState {
@@ -52,7 +57,9 @@ function enterChapter(player: PlayerState, nextChapterId: string): PlayerState {
     ...player,
     currentChapter: nextChapterId,
     chapterCompleted: [],
+    visitedChapters: [...new Set([...getVisitedChapters(player).map((chapter) => chapter.id), nextChapterId])],
     routeIntent: undefined,
+    routeChapterIntent: undefined,
     flags: {
       ...player.flags,
       route_switched: player.flags.route_switched || routeSwitched,
@@ -85,9 +92,10 @@ function consumeRouteIntent(player: PlayerState): PlayerState {
   if (!route) return player
 
   const currentRoute = getCurrentRoute(player)
-  const marked = markRouteVisited({ ...player, routeIntent: undefined }, route)
+  const destination = player.routeChapterIntent
+  const marked = markRouteVisited({ ...player, routeIntent: undefined, routeChapterIntent: undefined }, route)
   if (route === currentRoute) return marked
-  return enterChapter(marked, getFirstChapter(route))
+  return enterChapter(marked, destination && getChapter(destination)?.route === route ? destination : getFirstChapter(route))
 }
 
 export function advanceStory(player: PlayerState, completedEventId: string): PlayerState {
@@ -115,6 +123,8 @@ export function repairStoryProgress(player: PlayerState): PlayerState {
     currentChapter,
     chapterCompleted: validCompleted,
     routeIntent: undefined,
+    routeChapterIntent: undefined,
+    visitedChapters: getVisitedChapters({ ...player, currentChapter }).map((entry) => entry.id),
   }
   repaired = markRouteVisited(repaired, chapter.route)
   return tryAdvanceChapter(reconcileChapterProgress(repaired))

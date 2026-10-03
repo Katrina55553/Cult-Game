@@ -40,7 +40,11 @@ export default function App() {
         正在载入修仙世界……
       </div>
     }>
-      <GameRuntime initialOptions={initialOptions} initialSoundOn={soundOn} />
+      <GameRuntime
+        initialOptions={initialOptions}
+        initialSoundOn={soundOn}
+        onInitialRunStarted={() => setInitialOptions(null)}
+      />
     </Suspense>
   )
 }

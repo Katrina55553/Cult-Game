@@ -2,6 +2,7 @@ import { normalizeArtifactIds, resolveArtifactId } from '../data/artifacts'
 import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
+import { applyRelationshipFlag } from './relationships'
 
 const LEGACY_ROUTE_FLAGS = new Set([
   'loyal_to_sect',
@@ -30,6 +31,7 @@ function cloneSystems(state: PlayerState): PlayerState {
     log: [...state.log],
     history: [...state.history],
     chapterCompleted: [...state.chapterCompleted],
+    visitedChapters: state.visitedChapters ? [...state.visitedChapters] : undefined,
     spiritBeastsSeen: [...state.spiritBeastsSeen],
     shopBuffs: { ...state.shopBuffs },
     cultivationSystems: {
@@ -101,9 +103,9 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
               : 'demon',
         }
       }
-      return { ...state, flags: { ...state.flags, [effect.key]: effect.value } }
+      return { ...state, flags: applyRelationshipFlag(state.flags, effect.key, effect.value) }
     case 'route':
-      return { ...state, routeIntent: effect.route }
+      return { ...state, routeIntent: effect.route, routeChapterIntent: effect.chapter }
     case 'artifact': {
       const artifactId = resolveArtifactId(effect.id)
       const artifacts = normalizeArtifactIds(state.artifacts)

@@ -8,6 +8,7 @@ import { SECRET_EVENTS } from './eventsSecret'
 import { BOSS_EVENTS } from './eventsBoss'
 import { CRAFT_EVENTS } from './eventsCraft'
 import { MISC_EVENTS } from './eventsMisc'
+import { CONSEQUENCE_EVENTS } from './eventsConsequences'
 
 const CORE_EVENTS: GameEvent[] = [
   {
@@ -485,13 +486,12 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: 15 },
             ],
             failEffects: [
-              { type: 'route', route: 'demon' },
               { type: 'stat', key: 'demonHeart', value: 30 },
               { type: 'cultivation', value: 10 },
             ],
             narrative: {
               success: '你堪堪驾驭魔音，偶有所悟，修为小进。',
-              fail: '魔音反客为主，你被推向魔道深渊，心魔大炽。',
+              fail: '魔音反噬，道心动摇。你及时中断运功，尚能决定是否真正踏入魔道。',
             },
           },
         ],
@@ -688,12 +688,11 @@ const CORE_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'comprehension', value: 5 },
             ],
             failEffects: [
-              { type: 'route', route: 'demon' },
               { type: 'stat', key: 'demonHeart', value: 20 },
             ],
             narrative: {
               success: '趁其不备反杀成功，夺取魔修储物袋。',
-              fail: '伪装被识破，你被迫修习魔功，心魔大炽。',
+              fail: '伪装被识破，魔气侵入经脉。你拼力脱身，心魔大炽，却没有答应入魔。',
             },
           },
         ],
@@ -2155,6 +2154,7 @@ const CORE_EVENTS: GameEvent[] = [
 ]
 
 export const EVENTS: GameEvent[] = [
+  ...CONSEQUENCE_EVENTS,
   ...CORE_EVENTS,
   ...ROMANCE_EVENTS,
   ...SECT_EVENTS,

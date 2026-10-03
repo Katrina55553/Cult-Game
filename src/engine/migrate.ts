@@ -1,7 +1,8 @@
 import { migrateCultivationSystems } from '../data/cultivationSystems'
 import { normalizeArtifactIds } from '../data/artifacts'
-import { getChapter } from '../data/chapters'
+import { getChapter, getVisitedChapters } from '../data/chapters'
 import type { GameSession, MetaProgress, PlayerState } from '../types/game'
+import { repairRelationships } from './relationships'
 
 export const SAVE_VERSION = 2
 export const META_VERSION = 1
@@ -47,6 +48,11 @@ export function migrateSave(data: unknown): GameSession | null {
   delete flags.loyal_to_sect
   delete flags.refused_all_sects
   delete flags.accepted_demon_path
+  if (flags.chose_sacrifice || flags.chose_righteous) flags.sect_choice_made = true
+  if (flags.forgave_spy || flags.turned_spy || rawPlayer.history?.includes('spy_companion')) {
+    flags.spy_truth_revealed = true
+    if (!flags.turned_spy) flags.spy_aftermath_resolved = true
+  }
 
   // 旧存档可能没有 cultivationSystems，需从 flags/origin 推断
   const defaultSystems = migrateCultivationSystems(rawPlayer as PlayerState)
@@ -90,14 +96,16 @@ export function migrateSave(data: unknown): GameSession | null {
         : defaultSystems.spiritBeast,
       path: rawPlayer.cultivationSystems?.path ?? defaultSystems.path,
     },
-    flags,
+    flags: repairRelationships(flags),
     history: [...(rawPlayer.history ?? [])],
     log: [...(rawPlayer.log ?? [])],
     shopBuffs: { purchases: 0, ...(rawPlayer.shopBuffs ?? {}) },
     spiritBeastsSeen: [...(rawPlayer.spiritBeastsSeen ?? [])],
     currentChapter,
     chapterCompleted: [...(rawPlayer.chapterCompleted ?? [])],
+    visitedChapters: getVisitedChapters({ currentChapter, visitedChapters: rawPlayer.visitedChapters, log: rawPlayer.log ?? [] }).map((chapter) => chapter.id),
     routeIntent: undefined,
+    routeChapterIntent: undefined,
   }
 
   return {

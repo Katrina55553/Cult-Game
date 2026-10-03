@@ -2,7 +2,7 @@ import { CHAPTERS } from '../src/data/chapters.ts'
 import { EVENTS } from '../src/data/events.ts'
 import { getArtifactInfo } from '../src/data/artifacts.ts'
 import { applyEffects } from '../src/engine/effects.ts'
-import { beginPlaying, createNewGame, resolveChoice } from '../src/engine/gameEngine.ts'
+import { beginPlaying, createNewGame, loadGame, resolveChoice, saveGame } from '../src/engine/gameEngine.ts'
 import { pickNextEvent } from '../src/engine/eventPicker.ts'
 import { migrateSave } from '../src/engine/migrate.ts'
 import { getCurrentRoute } from '../src/engine/storyProgression.ts'
@@ -64,11 +64,11 @@ console.log('')
 console.log('1. 魔道赎罪后保持宗门路线')
 {
   const base = baseSession()
-  const lastMainId = 'demon_invasion'
+  const lastMainId = 'demon_redemption_choice'
   const staged: GameSession = {
     ...base,
     phase: 'playing',
-    currentEvent: noopEvent(lastMainId),
+    currentEvent: EVENTS.find((event) => event.id === lastMainId) ?? null,
     player: {
       ...base.player,
       currentChapter: 'demon_2',
@@ -80,7 +80,7 @@ console.log('1. 魔道赎罪后保持宗门路线')
       stats: { ...base.player.stats, demonHeart: 10, karma: 30 },
     },
   }
-  const redeemed = resolveChoice(staged, 'continue')
+  const redeemed = resolveChoice(staged, 'redeem')
   check('赎罪后进入宗门第七章', redeemed.player.currentChapter === 'sect_7', redeemed.player.currentChapter)
   check('当前路线由章节确定为宗门', getCurrentRoute(redeemed.player) === 'sect')
   check('魔道经历作为历史事实保留', !!redeemed.player.flags.ever_walked_demon_path)
@@ -195,6 +195,24 @@ console.log('\n5. 等待期事件遵守统一分类和硬冷却')
     '全局池没有严格候选时不会绕过 cooldown',
     pickNextEvent(coolingDown, [cooldownProbe]) === null,
   )
+}
+
+console.log('\n6. 旧存档中的失效关系事件会重新选择')
+{
+  const base = baseSession()
+  saveGame({
+    ...base,
+    currentEvent: EVENTS.find((event) => event.id === 'spy_companion') ?? null,
+    player: {
+      ...base.player,
+      currentChapter: 'sect_7',
+      realm: 'foundation',
+      flags: { has_companion: false, su_qing_companion: true, survived_together: true },
+    },
+  })
+  const repaired = loadGame()
+  check('读档后清除失效道侣身份', repaired?.player.flags.su_qing_companion === false)
+  check('读档后不再展示旧道侣真相', !!repaired?.currentEvent && repaired.currentEvent.id !== 'spy_companion')
 }
 
 console.log('')

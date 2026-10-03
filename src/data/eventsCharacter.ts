@@ -56,6 +56,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'mysterious_demon_second',
+    followUpOf: ['mysterious_demon_first'],
     title: '再遇墨离',
     description:
       '古战场遗迹中，你再次遇见那名黑袍修士。这次他正在破解一座上古禁制，手法精妙绝伦。他似乎察觉你的到来，头也不回地说：「又见面了。你若想分一杯羹，便替我挡住禁制反噬。」',
@@ -63,7 +64,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
     years: 2,
     once: true,
     rarity: 'rare',
-    conditions: [{ type: 'flag', key: 'met_moli', value: true }],
+    conditions: [{ type: 'flag', key: 'met_moli', value: true }, { type: 'flag', key: 'moli_enemy', value: false }],
     choices: [
       {
         id: 'help_moli',
@@ -124,6 +125,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'mysterious_demon_third',
+    followUpOf: ['mysterious_demon_second'],
     title: '墨离之邀',
     description:
       '你正在洞府打坐，一道传音符破空而至。墨离的声音传来：「有一处远古魔修洞府，禁制凶险，我一人难以破之。你若有意，三日后秘境入口见。」这是他第一次主动联系你，语气依旧淡漠，却似有几分信任。',
@@ -131,7 +133,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
     years: 2,
     once: true,
     rarity: 'rare',
-    conditions: [{ type: 'flag', key: 'moli_ally', value: true }],
+    conditions: [{ type: 'flag', key: 'moli_ally', value: true }, { type: 'flag', key: 'moli_enemy', value: false }],
     choices: [
       {
         id: 'accept_moli',
@@ -253,13 +255,14 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'moli_backstory',
+    followUpOf: ['mysterious_demon_second'],
     title: '墨离往事',
     description:
       '篝火旁，墨离罕见地开口说起往事。他原是北荒散修之子，父母被宗门弟子所杀，从此独行修魔。「我不恨正道，我只是不信任何人。」他望着火焰，语气平淡如水。',
     weight: 6,
     years: 2,
     once: true,
-    conditions: [{ type: 'flag', key: 'moli_ally', value: true }],
+    conditions: [{ type: 'flag', key: 'moli_ally', value: true }, { type: 'flag', key: 'moli_enemy', value: false }],
     choices: [
       {
         id: 'empathize',
@@ -289,13 +292,14 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'moli_sacrifice',
+    followUpOf: ['moli_backstory'],
     title: '墨离挡刀',
     description:
       '你与墨离并肩作战之际，一道暗箭直射你后心。墨离身形一闪，以肉身替你挡下这一击。他单膝跪地，嘴角溢血，淡淡道：「别误会，只是还你之前的人情。」',
     weight: 5,
     years: 2,
     once: true,
-    conditions: [{ type: 'flag', key: 'moli_trusted', value: true }],
+    conditions: [{ type: 'flag', key: 'moli_trusted', value: true }, { type: 'flag', key: 'moli_enemy', value: false }],
     choices: [
       {
         id: 'heal_moli',
@@ -318,6 +322,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'lin_yuan_breakthrough',
+    followUpOf: ['sect_friend'],
     title: '林远突破',
     description:
       '闭关数月后，林远兴冲冲地来找你，眼中满是感激。他终于突破了瓶颈，修为更上一层楼。「若非当日你倾囊相授，我早已被遣送下山。这份恩情，林远铭记于心。」',
@@ -351,6 +356,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'lin_yuan_rescue',
+    followUpOf: ['lin_yuan_breakthrough'],
     title: '林远报恩',
     description:
       '你被苍穹阁弟子围攻之际，林远挺身而出挡在你身前。「今日我林远在此，谁敢动我师兄！」他修为虽不如你，却以命相搏，硬生生撑到援军赶到。',
@@ -413,6 +419,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'su_muyan_crisis',
+    followUpOf: ['su_muyan_teach'],
     title: '师姐之危',
     description:
       '苏暮烟在秘境中遭遇妖兽围困，传音符急促响起。你循声赶至，只见她孤身奋战，衣衫染血，却仍神色从容。见你到来，她淡然道：「你来了。」',
@@ -469,6 +476,7 @@ export const CHARACTER_EVENTS: GameEvent[] = [
   },
   {
     id: 'su_muyan_past',
+    followUpOf: ['su_muyan_crisis'],
     title: '师姐往事',
     description:
       '月下，苏暮烟罕见地放下冷淡面具，与你倾诉往事。她原是世家千金，家族覆灭后被天玄宗收留。「修仙之路，我已无退路。」她望向明月，眼中似有泪光。',

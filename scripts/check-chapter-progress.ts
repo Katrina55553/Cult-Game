@@ -94,16 +94,21 @@ console.log('1. 宗门第四章叛逃 → 散修第一章')
   const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'noble_exile', seed: 20260924 })), 'sect_4', {
     history: ['enter_sect', 'beast_attack'],
     flags: { loyal_to_sect: true, zhao_enemy: true },
-    lastMainId: 'boss_wolf_king',
+    lastMainId: 'sect_departure_choice',
     stats: { demonHeart: 40 },
   })
-  const next = play(session)
+  const next = resolveChoice(session, 'leave')
   check('切换到了散修第一章', next.player.currentChapter === 'wander_1', next.player.currentChapter)
   check(
     'beast_attack 被补记为已完成',
     next.player.chapterCompleted.includes('beast_attack'),
     `chapterCompleted=[${next.player.chapterCompleted.join(', ')}]`,
   )
+  const memory = `你想起此前经历的「${EVENT_BY_ID.get('beast_attack')!.title}」`
+  check('转线时承接妖狼遭遇的回忆', next.player.log.filter((line) => line.includes(memory)).length === 1)
+  check('转线不会重演妖狼事件', next.player.history.filter((id) => id === 'beast_attack').length === 1)
+  saveGame(next)
+  check('读档不重复追加同章回忆', loadGame()?.player.log.filter((line) => line.includes(memory)).length === 1)
   const picked = pickNextEvent(next.player, EVENTS, [], false)
   check('本章仍能继续抽出事件', picked !== null, String(picked?.id))
 }
@@ -132,10 +137,10 @@ console.log('\n3. 散修转正道 → 宗门第五章')
   const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'noble_exile', seed: 20260924 })), 'wander_3', {
     history: ['enter_sect', 'wander_market', 'ancient_legacy', 'secret_realm'],
     flags: { refused_all_sects: true },
-    lastMainId: 'spirit_flood',
+    lastMainId: 'wander_sect_invitation',
     stats: { karma: 40, demonHeart: 0 },
   })
-  const next = play(session)
+  const next = resolveChoice(session, 'join')
   check('切换到了宗门第五章', next.player.currentChapter === 'sect_5', next.player.currentChapter)
   check(
     'ancient_legacy 被补记为已完成',
@@ -155,10 +160,10 @@ console.log('\n4. 宗门转魔道 → 魔道第一章')
   const session = stage(beginPlaying(createNewGame({ name: '测试', origin: 'demon_blood', seed: 20260924 })), 'sect_6', {
     history: ['enter_sect'],
     flags: {},
-    lastMainId: 'ancient_prophesy',
+    lastMainId: 'demon_path_choice',
     stats: { demonHeart: 35 },
   })
-  const next = play(session)
+  const next = resolveChoice(session, 'accept')
   check('切换到了魔道第一章', next.player.currentChapter === 'demon_1', next.player.currentChapter)
   check('记录踏入魔道的历史事实', !!next.player.flags.ever_walked_demon_path)
 }
@@ -186,6 +191,13 @@ console.log('\n5. 旧存档读档修复')
     loaded?.player.currentChapter === 'sect_9',
     `currentChapter=${loaded?.player.currentChapter}`,
   )
+  const memory = `你想起此前经历的「${EVENT_BY_ID.get('demon_temptation')!.title}」`
+  check('旧存档修复时承接魔修诱惑的回忆', loaded?.player.log.filter((line) => line.includes(memory)).length === 1)
+  check('旧存档修复不重新结算经历的效果', loaded?.player.spiritStones === stuck.player.spiritStones
+    && loaded?.player.cultivation === stuck.player.cultivation
+    && JSON.stringify(loaded?.player.stats) === JSON.stringify(stuck.player.stats))
+  if (loaded) saveGame(loaded)
+  check('修复后的存档再次读取不会重复回忆', loadGame()?.player.log.filter((line) => line.includes(memory)).length === 1)
 }
 
 // ── 6. 反向保护：正常情况下不得凭空补记未发生的事件 ──

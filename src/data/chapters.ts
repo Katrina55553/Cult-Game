@@ -20,6 +20,74 @@ export interface Chapter {
   branchNext?: (player: PlayerState) => string
 }
 
+export interface SharedChapterEvent {
+  chapters: string[]
+  reason: string
+}
+
+export const SHARED_CHAPTER_EVENTS: Record<string, SharedChapterEvent> = {
+  herb_gather: {
+    chapters: ['sect_2', 'wander_1'],
+    reason: '采药既可作为宗门修行，也可作为散修谋生；同一次遭遇的收获随转线保留。',
+  },
+  night_whisper: {
+    chapters: ['sect_2', 'wander_1', 'demon_1'],
+    reason: '夜间心魔低语可在三条道路出现，一生只回应一次诱惑。',
+  },
+  mountain_spirit: {
+    chapters: ['sect_3', 'wander_2'],
+    reason: '山灵机缘向宗门弟子和散修开放，转线不重复领取机缘。',
+  },
+  beast_attack: {
+    chapters: ['sect_3', 'wander_1', 'demon_1'],
+    reason: '妖狼袭击是野外共同遭遇，宗门与散修均以此推进历练，魔道可选参与。',
+  },
+  spirit_flood: {
+    chapters: ['sect_4', 'wander_3'],
+    reason: '灵气潮汐是共同的天地异象，两条道路承接同一次选择。',
+  },
+  boss_wolf_king: {
+    chapters: ['sect_4', 'wander_2'],
+    reason: '宗门历练和散修探索均可挑战狼王，战果在转线后保留。',
+  },
+  ancient_legacy: {
+    chapters: ['sect_5', 'wander_3'],
+    reason: '上古传承可由宗门探索或散修偶遇获得，已获得的传承无需再次寻访。',
+  },
+  secret_realm: {
+    chapters: ['sect_5', 'wander_3'],
+    reason: '同一秘境向两条道路开放，先前的探索结果随转线保留。',
+  },
+  ancient_battlefield: {
+    chapters: ['sect_5', 'wander_4'],
+    reason: '上古战场可随宗门历练或独行探索抵达，一生只经历一次。',
+  },
+  heavenly_treasure: {
+    chapters: ['sect_5', 'wander_4'],
+    reason: '天地灵宝由两条道路共同争夺，转线不会重新生成同一灵宝。',
+  },
+  boss_ancient_golem: {
+    chapters: ['sect_5', 'wander_5'],
+    reason: '遗迹守卫可由宗门或散修挑战，已完成的战斗不因转线重演。',
+  },
+  demon_temptation: {
+    chapters: ['sect_8', 'demon_1'],
+    reason: '魔道入门和正道突破都可面对魔修诱惑，先前抉择继续生效。',
+  },
+  boss_thunder_beast: {
+    chapters: ['sect_8', 'wander_6'],
+    reason: '雷兽是两条道路突破前的共同挑战，一生只结算一次战果。',
+  },
+  final_choice: {
+    chapters: ['sect_9', 'wander_6', 'demon_4'],
+    reason: '三条道路共用最终抉择，转线保留已经作出的终局决定。',
+  },
+  demon_invasion: {
+    chapters: ['demon_2', 'wander_5'],
+    reason: '妖潮同时波及魔道与散修，转线承接已经经历的灾劫。',
+  },
+}
+
 export const CHAPTERS: Record<string, Chapter> = {
   // ═══════════════════════════════════════
   //  宗门线
@@ -66,18 +134,14 @@ export const CHAPTERS: Record<string, Chapter> = {
     events: ['spirit_flood', 'forbidden_library', 'rival_provocation', 'sect_tournament', 'boss_wolf_king'],
     sideEvents: ['mysterious_demon_first', 'zhao_tianxing_duel', 'qinglian_visit', 'yaogu_trade', 'guiyi_visit', 'formation_study', 'sword_enlightenment'],
     nextChapter: 'sect_5',
-    branchNext: (p) => {
-      // 被宗门伤透心 + 心魔高 → 叛逃散修
-      if (p.flags.zhao_enemy && p.stats.demonHeart >= 35) return 'wander_1'
-      return 'sect_5'
-    },
+    triggeredEvents: ['sect_departure_choice'],
   },
 
   'sect_5': {
     id: 'sect_5',
     name: '第五章 · 秘境探索',
     route: 'sect',
-    intro: '上古秘境裂空而出，各方修士闻风而动。你奉师命下山历练，红尘滚滚，机缘与凶险并存。',
+    intro: '上古秘境裂空而出，各方修士闻风而动。你与宗门修士下山历练，红尘滚滚，机缘与凶险并存。',
     events: ['world_travel', 'ancient_legacy', 'secret_realm', 'ancient_battlefield', 'heavenly_treasure', 'boss_ancient_golem'],
     sideEvents: ['mysterious_demon_second', 'beauty_rescue', 'jade_pool_encounter', 'lin_yuan_breakthrough', 'alchemy_master', 'divine_weapon_forge'],
     nextChapter: 'sect_6',
@@ -105,10 +169,7 @@ export const CHAPTERS: Record<string, Chapter> = {
       'battlefield_memory', 'battlefield_truth', 'battlefield_legacy',
     ],
     nextChapter: 'sect_7',
-    branchNext: (p) => {
-      if (p.stats.demonHeart >= 30) return 'demon_1'
-      return 'sect_7'
-    },
+    triggeredEvents: ['demon_path_choice'],
   },
 
   'sect_7': {
@@ -121,6 +182,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     sideEvents: [
       'moli_sacrifice', 'lin_yuan_rescue', 'three_friends',
       'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy',
+      'companion_dream', 'companion_trial', 'companion_eternity',
       'qinglian_tournament', 'yaogu_plague', 'guiyi_seal', 'ancient_formation_battle',
       'beast_combat_aid', 'boss_spider_queen',
     ],
@@ -166,7 +228,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     id: 'wander_1',
     name: '第一章 · 独行',
     route: 'wander',
-    intro: '你拒绝了宗门的邀请，独自踏上仙途。没有宗门庇护，一切只能靠自己。天地之大，何处不可去？',
+    intro: '你选择独行于天地之间。没有宗门庇护，往后的路要靠自己走。天地之大，何处不可去？',
     events: ['wander_market', 'wander_companion', 'wander_danger', 'beast_attack'],
     sideEvents: [
       'herb_gather', 'night_whisper', 'alchemy_workshop',
@@ -192,12 +254,9 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '你的名声在散修圈中渐渐传开。有人敬你胆识过人，有人视你为眼中钉。散修大会在即，各方势力齐聚。',
     events: ['wander_festival', 'wander_reputation', 'wander_refugee', 'spirit_flood'],
-    sideEvents: ['ancient_legacy', 'secret_realm', 'mysterious_demon_first', 'divine_weapon_forge'],
+    sideEvents: ['ancient_legacy', 'secret_realm', 'mysterious_demon_first', 'divine_weapon_forge', 'beauty_rescue', 'jade_pool_encounter', 'beauty_gratitude', 'ye_qingmei_reunion', 'ye_qingmei_help'],
     nextChapter: 'wander_4',
-    branchNext: (p) => {
-      if (p.stats.karma >= 40 && p.stats.demonHeart <= 10) return 'sect_5'
-      return 'wander_4'
-    },
+    triggeredEvents: ['wander_sect_invitation'],
   },
 
   'wander_4': {
@@ -206,7 +265,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '散修之路越走越远。商路、围剿、渡劫——每一步都是生死抉择。你开始思考，这条路的尽头是什么。',
     events: ['wander_trade', 'wander_crisis', 'market_duel', 'solo_tribulation'],
-    sideEvents: ['ancient_battlefield', 'heavenly_treasure', 'boss_shadow_assassin', 'alchemy_master'],
+    sideEvents: ['ancient_battlefield', 'heavenly_treasure', 'boss_shadow_assassin', 'alchemy_master', 'dual_cultivation', 'companion_tribulation', 'spy_companion', 'lover_jealousy', 'companion_dream', 'companion_trial', 'companion_eternity'],
     nextChapter: 'wander_5',
   },
 
@@ -226,7 +285,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'wander',
     intro: '独行千里，你终于看清了修真界的真相。正道未必光明，魔道未必黑暗。你将做出最后的抉择。',
     events: ['demon_mercy', 'final_choice'],
-    sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge', 'alliance_legacy'],
+    sideEvents: ['boss_demon_lord', 'boss_thunder_beast', 'inheritance_battle', 'bloodline_resonance', 'weapon_reforge', 'alliance_legacy', 'lovers_ascension', 'time_window'],
   },
 
   // ═══════════════════════════════════════
@@ -255,10 +314,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     events: ['blood_sacrifice', 'inner_demon', 'qi_deviation', 'demon_invasion'],
     sideEvents: ['boss_shadow_assassin', 'alchemy_workshop', 'formation_study', 'demon_cultivation', 'demon_conscience'],
     nextChapter: 'demon_3',
-    branchNext: (p) => {
-      if (p.stats.demonHeart <= 15 && p.stats.karma >= 25) return 'sect_7'
-      return 'demon_3'
-    },
+    triggeredEvents: ['demon_redemption_choice'],
   },
 
   'demon_3': {
@@ -267,7 +323,7 @@ export const CHAPTERS: Record<string, Chapter> = {
     route: 'demon',
     intro: '魔尊亲自招揽，正道联盟围剿。你在魔道中越陷越深，却也获得了前所未有的力量。何去何从？',
     events: ['demon_lord_offer', 'righteous_siege', 'soul_possession'],
-    sideEvents: ['boss_demon_general', 'bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion', 'demon_territory', 'demon_alchemist', 'demon_power', 'demon_truth'],
+    sideEvents: ['bloodline_awakening', 'soul_demand', 'divine_weapon_forge', 'technique_fusion', 'demon_territory', 'demon_alchemist', 'demon_power', 'demon_truth'],
     nextChapter: 'demon_4',
   },
 
@@ -287,4 +343,15 @@ export function getChapter(id: string): Chapter | undefined {
 
 export function getFirstChapter(route: RouteId): string {
   return route === 'wander' ? 'wander_1' : route === 'demon' ? 'demon_1' : 'sect_1'
+}
+
+export function getVisitedChapters(player: Pick<PlayerState, 'currentChapter' | 'visitedChapters' | 'log'>): Chapter[] {
+  const current = getChapter(player.currentChapter)
+  if (!current) return []
+  const chapters = Object.values(CHAPTERS)
+  const visited = player.visitedChapters ?? chapters.filter((chapter) =>
+    player.log.includes(`— ${chapter.name} —`)
+    || (chapter.route === current.route && chapters.indexOf(chapter) <= chapters.indexOf(current)),
+  ).map((chapter) => chapter.id)
+  return [...new Set([...visited, current.id])].map(getChapter).filter((chapter): chapter is Chapter => !!chapter)
 }

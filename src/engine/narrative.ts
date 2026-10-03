@@ -67,7 +67,8 @@ export function summarizeEffects(effects: Effect[]): string {
         break
       }
       case 'flag':
-        if (FLAG_PHRASES[effect.key]) extras.push(FLAG_PHRASES[effect.key])
+        if (effect.value && FLAG_PHRASES[effect.key]) extras.push(FLAG_PHRASES[effect.key])
+        if (effect.key === 'has_companion' && !effect.value) extras.push('道侣缘尽，各自前行')
         break
       case 'route':
         extras.push(ROUTE_PHRASES[effect.route])

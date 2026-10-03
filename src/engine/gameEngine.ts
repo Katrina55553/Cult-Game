@@ -9,7 +9,7 @@ import { SPIRIT_ROOTS } from '../data/spiritRoots'
 import { checkAchievements } from './achievements'
 import { checkConditions } from './conditions'
 import { applyEffects } from './effects'
-import { pickNextEvent } from './eventPicker'
+import { isEventEligible, pickNextEvent } from './eventPicker'
 import { getEndingReason, type EndingTrigger } from './endingReason'
 import { migrateSave, SAVE_VERSION } from './migrate'
 import { detectEncounterMilestone, detectMilestone } from './milestone'
@@ -125,6 +125,7 @@ export function createPlayer(
     spiritBeastsSeen: [],
     currentChapter: 'sect_1',
     chapterCompleted: [],
+    visitedChapters: ['sect_1'],
   }
 
   if (options.useInnateBody) {
@@ -564,8 +565,13 @@ export function loadGame(): GameSession | null {
     if (!session) return null
 
     const repaired = repairStoryProgress(session.player)
-    if (repaired === session.player) return session
-    return { ...session, player: repaired }
+    if (session.phase !== 'playing') return { ...session, player: repaired }
+    const meta = loadMeta()
+    const current = EVENTS.find((event) => event.id === session.currentEvent?.id)
+    const currentEvent = current && isEventEligible(repaired, current, EVENTS, meta.unlockedEvents)
+      ? current
+      : pickNextEvent(repaired, EVENTS, meta.unlockedEvents, meta.romanceBoost)
+    return { ...session, player: repaired, currentEvent }
   } catch {
     return null
   }

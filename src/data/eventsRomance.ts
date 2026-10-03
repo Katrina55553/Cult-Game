@@ -57,6 +57,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
             failEffects: [
               { type: 'lifespan', value: -10 },
               { type: 'stat', key: 'demonHeart', value: 5 },
+              { type: 'flag', key: 'met_su_qing', value: true },
             ],
             narrative: {
               success: '符箓连环引爆，妖狼溃散。沈霜凝惊叹你心机缜密，赠灵石以表谢意。',
@@ -78,6 +79,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'beauty_gratitude',
+    followUpOf: ['beauty_rescue'],
     title: '佳人答谢',
     description:
       '沈霜凝持灵茶亲访你的居所，言称那日救命之恩未报，愿以家传心法相赠，并试探你是否愿与她结为道侣，共参大道。',
@@ -92,6 +94,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       {
         id: 'companion',
         text: '欣然应允，结为道侣',
+        requirements: [{ type: 'flag', key: 'has_companion', value: false }],
         narrative: '你与沈霜凝对天盟誓，结为道侣。冰莲心法与你的功法相融，修为精进，心魔亦散。',
         effects: [
           { type: 'flag', key: 'has_companion', value: true },
@@ -127,6 +130,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'dual_cultivation',
+    followUpOf: ['beauty_gratitude'],
     title: '月下双修',
     description:
       '月圆之夜，沈霜凝在你洞府外驻足。她提议以双修之法引动阴阳二气，助你们共同冲击修炼瓶颈——此法若成，修为一日千里；若心志不坚，则易生心魔。',
@@ -138,6 +142,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       { type: 'flag', key: 'has_companion', value: true },
       { type: 'flag', key: 'su_qing_companion', value: true },
       { type: 'flag', key: 'dual_cultivation_mastered', value: false },
+      { type: 'flag', key: 'companion_estranged', value: false },
       { type: 'realm', min: 'qi_refining_1' },
     ],
     choices: [
@@ -214,7 +219,6 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     once: true,
     conditions: [
       { type: 'age', min: 18 },
-      { type: 'flag', key: 'met_su_qing', value: false },
     ],
     choices: [
       {
@@ -271,6 +275,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'companion_tribulation',
+    followUpOf: ['dual_cultivation'],
     title: '道侣共渡劫',
     description:
       '天雷滚滚，你修为将破。道侣执意以双修之法与你共抗天劫——若成，你们双双进阶；若败，则同赴黄泉。',
@@ -281,6 +286,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       { type: 'flag', key: 'has_companion', value: true },
       { type: 'flag', key: 'su_qing_companion', value: true },
       { type: 'flag', key: 'dual_cultivation_mastered', value: true },
+      { type: 'flag', key: 'companion_estranged', value: false },
       { type: 'realm', min: 'foundation' },
       { type: 'cultivation', min: 72 },
     ],
@@ -333,6 +339,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'lovers_ascension',
+    followUpOf: ['companion_tribulation', 'time_window'],
     title: '眷侣证道',
     description:
       '你与道侣双修圆满，又曾共渡天劫，金丹大道已成。天地灵气交汇，似在催促你们做出抉择——是携手证道，还是继续求索？',
@@ -346,6 +353,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
       { type: 'realm', min: 'golden_core' },
       { type: 'stat', key: 'demonHeart', max: 40 },
       { type: 'flag', key: 'chose_lovers_ascension', value: false },
+      { type: 'flag', key: 'su_qing_companion', value: true },
+      { type: 'flag', key: 'companion_estranged', value: false },
     ],
     choices: [
       {
@@ -371,6 +380,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'ye_qingmei_reunion',
+    followUpOf: ['jade_pool_encounter'],
     title: '再遇叶轻眉',
     description:
       '坊市之中，你忽闻一阵幽香。回首望去，正是当日灵泉边的青衣女修叶轻眉。她见到你，浅浅一笑：「缘分不浅，又见面了。」',
@@ -413,6 +423,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'ye_qingmei_help',
+    followUpOf: ['ye_qingmei_reunion'],
     title: '叶轻眉求助',
     description:
       '叶轻眉传音于你，语气少见地焦急。她发现了一处上古遗迹，但禁制凶险，需要帮手。「我信得过你。」',
@@ -456,14 +467,17 @@ export const ROMANCE_EVENTS: GameEvent[] = [
   },
   {
     id: 'spy_companion',
+    followUpOf: ['companion_tribulation', 'time_window'],
     title: '道侣真相',
     description:
-      '你无意中发现道侣的传音符，内容令你震惊——她竟是苍穹阁安插在你身边的暗桩，从相遇那一刻起就在监视你。但多年的相处中，她已对你动了真情，上次天劫更是拼死替你挡下一道劫雷。你握着传音符，手在发抖。',
+      '你无意中发现道侣的传音符，内容令你震惊——她竟是苍穹阁安插在你身边的暗桩，从相遇那一刻起就在监视你。但多年的相处中，她已对你动了真情。想起你们共同经历的凶险与扶持，你握着传音符，手在发抖。',
     weight: 4,
     years: 2,
     once: true,
     conditions: [
       { type: 'flag', key: 'su_qing_companion', value: true },
+      { type: 'flag', key: 'has_companion', value: true },
+      { type: 'flag', key: 'survived_together', value: true },
       { type: 'realm', min: 'foundation' },
     ],
     choices: [
@@ -474,6 +488,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
           { type: 'stat', key: 'karma', value: 15 },
           { type: 'stat', key: 'demonHeart', value: -10 },
           { type: 'flag', key: 'forgave_spy', value: true },
+          { type: 'flag', key: 'spy_truth_revealed', value: true },
+          { type: 'flag', key: 'spy_aftermath_resolved', value: true },
           { type: 'lifespan', value: 5 },
         ],
       },
@@ -483,6 +499,8 @@ export const ROMANCE_EVENTS: GameEvent[] = [
         effects: [
           { type: 'flag', key: 'has_companion', value: false },
           { type: 'flag', key: 'su_qing_companion', value: false },
+          { type: 'flag', key: 'spy_truth_revealed', value: true },
+          { type: 'flag', key: 'spy_aftermath_resolved', value: true },
           { type: 'stat', key: 'demonHeart', value: 15 },
           { type: 'stat', key: 'comprehension', value: 5 },
         ],
@@ -493,6 +511,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
         requirements: [{ type: 'stat', key: 'comprehension', min: 50 }],
         effects: [
           { type: 'flag', key: 'turned_spy', value: true },
+          { type: 'flag', key: 'spy_truth_revealed', value: true },
           { type: 'stat', key: 'comprehension', value: 8 },
           { type: 'stat', key: 'demonHeart', value: 5 },
         ],
@@ -520,6 +539,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
           { type: 'spiritStones', value: 40 },
           { type: 'stat', key: 'demonHeart', value: 10 },
           { type: 'flag', key: 'abandoned_companion', value: true },
+          { type: 'flag', key: 'companion_estranged', value: true },
         ],
       },
       {

@@ -113,7 +113,9 @@ export interface PlayerState {
   spiritBeastsSeen: string[]
   currentChapter: string
   chapterCompleted: string[]
+  visitedChapters?: string[]
   routeIntent?: RouteId
+  routeChapterIntent?: string
 }
 
 export type Condition =
@@ -141,7 +143,7 @@ export type Effect =
   | { type: 'lifespan'; value: number }
   | { type: 'spiritStones'; value: number; set?: boolean }
   | { type: 'flag'; key: string; value: boolean }
-  | { type: 'route'; route: RouteId }
+  | { type: 'route'; route: RouteId; chapter?: string }
   | { type: 'artifact'; id: string; name?: string }
   | { type: 'log'; text: string }
   | { type: 'age'; value: number }
@@ -194,6 +196,8 @@ export interface GameEvent {
   act?: EventAct
   rarity?: EventRarity
   requiresUnlock?: string
+  followUpOf?: string[]
+  priority?: 'consequence'
   /** 倾向标签；不写则回退到 data/eventTags.ts 的历史表 */
   tags?: EventTag[]
   /** 按标签覆写权重系数（默认取 affinity.ts 的 TAG_BIAS） */

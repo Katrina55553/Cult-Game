@@ -22,9 +22,10 @@ const ShopScreen = lazy(() =>
 interface Props {
   initialOptions: NewGameOptions | null
   initialSoundOn: boolean
+  onInitialRunStarted: () => void
 }
 
-export function GameRuntime({ initialOptions, initialSoundOn }: Props) {
+export function GameRuntime({ initialOptions, initialSoundOn, onInitialRunStarted }: Props) {
   const {
     session,
     soundOn,
@@ -50,10 +51,11 @@ export function GameRuntime({ initialOptions, initialSoundOn }: Props) {
     if (!initialOptions || startedInitialRun.current) return
     startedInitialRun.current = true
     startGame(initialOptions)
-  }, [initialOptions, startGame])
+    onInitialRunStarted()
+  }, [initialOptions, startGame, onInitialRunStarted])
 
   if (!session) {
-    if (initialOptions && !startedInitialRun.current) {
+    if (initialOptions) {
       return (
         <div className="min-h-screen flex items-center justify-center text-mist" role="status">
           正在载入修仙世界……

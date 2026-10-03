@@ -20,7 +20,9 @@ Live: https://katrina55553.github.io/Cult-Game/
 | Deep playtest | `npx tsx scripts/playtest-deep.ts` |
 | Validate game data | `npx tsx scripts/validate-game-data.ts` |
 | Chapter progression regression | `npx tsx scripts/check-chapter-progress.ts` |
+| Chapter registration regression | `npx tsx scripts/check-chapter-validation.ts` |
 | Known bug regressions | `npx tsx scripts/check-known-regressions.ts` |
+| Story continuity regression | `npx tsx scripts/check-story-continuity.ts` |
 | Deploy to Gitee Pages | `bash scripts/deploy-gitee-pages.sh` (requires `GITEE_TOKEN` env var) |
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.
@@ -62,9 +64,9 @@ Each chapter has:
 - `intro` — scene-setting text shown when chapter begins
 - `branchNext` — optional function for route switching
 
-`eventPicker.ts` picks events in order: main chapter events → side events → filler events. Chapter progression is tracked via `player.chapterCompleted[]`.
+`eventPicker.ts` responds to consequence events and chapter-triggered decisions first, then alternates eligible side events with the ordered main storyline. Opened chapters are recorded in `player.visitedChapters[]`; unfinished side events remain available after a chapter transition. Side events never block advancement. `followUpOf` names prerequisite encounters and prioritizes continuation of an opened chain over unrelated side stories. Chapter progression is tracked via `player.chapterCompleted[]`.
 
-**Cross-route chapter deadlock (guarded).** `pickNextEvent` skips any `once` event already in `player.history`, and every chapter transition resets `chapterCompleted`. If the same `once` event is registered as a main in chapter A and (as main or side) in chapter B, reaching B later used to freeze it forever — the run could never reach another chapter and ended only by lifespan. `reconcileChapterProgress()` in `gameEngine.ts` back-fills any `once` main event already in `history` when entering a chapter, `tryAdvanceChapter()` cascades if that immediately completes it, and `loadGame()` repairs saves already stuck this way. `scripts/validate-game-data.ts` warns when a `once` main event is registered in more than one chapter — prefer registering it in exactly one place.
+**Cross-route chapter deadlock (guarded).** `pickNextEvent` skips any `once` event already in `player.history`, and every chapter transition resets `chapterCompleted`. If the same `once` event is registered as a main in chapter A and (as main or side) in chapter B, reaching B later used to freeze it forever — the run could never reach another chapter and ended only by lifespan. `reconcileChapterProgress()` in `storyProgression.ts` back-fills any `once` main event already in `history` when entering a chapter, `tryAdvanceChapter()` cascades if that immediately completes it, and `loadGame()` repairs saves already stuck this way. Intentional cross-route encounters are declared in `SHARED_CHAPTER_EVENTS` with their exact chapter list and a reason; reconciliation adds a memory to the story log without replaying rewards. `scripts/validate-game-data.ts` warns on undeclared reuse and rejects stale declarations, same-route duplicates, and route-incompatible main or side events. `check-chapter-validation.ts` guards these rules.
 
 Event weighting in `eventPicker.ts`:
 - **Cooldown decay**: recently-seen events get 0.15x (<3 turns) or 0.4x (<5 turns) weight
@@ -77,7 +79,9 @@ Event weighting in `eventPicker.ts`:
 
 Events with a `storyGroup` field are mutually exclusive — once one event from a group is in history, others in the same group are skipped.
 
-Route switching: sect→wander (betrayed by sect), wander→sect (karma high), sect→demon (demonHeart high), demon→sect (redemption). `currentChapter` is the only source of truth for the current route; use `getCurrentRoute()` rather than route flags. Event choices request a switch with the `route` effect, and `storyProgression.ts` consumes that transient intent. Legacy route flag conditions remain as a compatibility Adapter only.
+Route switching: sect→wander (去留之问), wander→sect (山门再邀), sect→demon (心魔岔路), demon→sect (回头之路). Stats unlock these decisions; only an explicit choice changes the route. `currentChapter` is the only source of truth for the current route; use `getCurrentRoute()` rather than route flags. Event choices request a switch with the `route` effect, optionally naming a destination `chapter`, and `storyProgression.ts` consumes that transient intent. Legacy route flag conditions remain as a compatibility Adapter only.
+
+`relationships.ts` clears partner identity and shared relationship progress when a companion leaves, prevents simultaneous partner identities, and reconciles hostile/friendly 墨离 flags. Old saves receive the same repair in `migrate.ts`.
 
 Key historical/branch flags:
 - `ever_joined_sect` / `ever_walked_wander_path` / `ever_walked_demon_path` — route history; never current-route state
@@ -116,7 +120,7 @@ heaven (3%) → single (10%) → dual (20%) → triple (30%) → quad (25%) → 
 
 ### Event content
 
-Events are split across 10 data files and merged in `events.ts`:
+Events are split across 11 data files and merged in `events.ts`:
 - `CORE_EVENTS` (events.ts) — main storyline
 - `ROMANCE_EVENTS` (eventsRomance.ts) — romance subplot
 - `SYSTEM_EVENTS` (eventsSystems.ts) — cultivation subsystems
@@ -127,6 +131,7 @@ Events are split across 10 data files and merged in `events.ts`:
 - `BOSS_EVENTS` (eventsBoss.ts) — boss fights
 - `CRAFT_EVENTS` (eventsCraft.ts) — crafting + puppet systems
 - `MISC_EVENTS` (eventsMisc.ts) — miscellaneous + origin-specific events
+- `CONSEQUENCE_EVENTS` (eventsConsequences.ts) — explicit route decisions and follow-ups for abandonment, counterespionage, and sect sacrifice choices
 
 Additional data files: `talents.ts` (12 talents across 4 categories), `exploreAreas.ts`, `sects.ts`, `cultivationSystems.ts` (tier labels + defaults). Full storyline docs in `STORYLINES.md`.
 
@@ -135,6 +140,8 @@ Additional data files: `talents.ts` (12 talents across 4 categories), `exploreAr
 `GameEvent`: `id`, `title`, `description`, `weight` (higher = more likely), `years` (time cost, default 1), `once` (one-shot), `maxTimes`, `cooldown`, `minGap`, `storyGroup` (mutually exclusive group), `act` (qi/foundation/golden/any), `rarity` (common/rare/legendary), `conditions`, `choices`.
 
 `Choice`: `id`, `text`, `narrative` (shown after choosing), `hint`, `requirements` (conditions to be selectable), `effects` (direct), `outcomes` (probabilistic with `chance` 0-1, `luckBonus`, `successEffects`, `failEffects`).
+
+`GameEvent.followUpOf` requires at least one referenced event in history. `priority: 'consequence'` responds before ordinary events; consequence events must be `once` and declare `followUpOf` so they cannot starve the main story.
 
 `Condition` variants: `stat` (PlayerStats key + min/max), `realm` (min), `flag` (key + value), `resource`, `age`, `cultivation`, `lifespan_remaining`, `divineSense`, `alchemyTier`, `formationTier`, `swordTier`, `bloodlineTier`, `techniqueTier`, `divineWeaponTier`, `cultivationPath`, `origin`.
 
