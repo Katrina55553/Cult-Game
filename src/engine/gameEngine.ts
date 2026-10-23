@@ -4,12 +4,12 @@ import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
 import { EVENTS } from '../data/events'
 import { REALMS } from '../data/realms'
-import { formatShopEffectNote, SHOP_ITEMS } from '../data/shop'
+import { formatShopEffectNote, getShopPurchaseBlockReason, SHOP_ITEMS } from '../data/shop'
 import { SPIRIT_ROOTS } from '../data/spiritRoots'
 import { checkAchievements } from './achievements'
 import { checkConditions } from './conditions'
 import { applyEffects } from './effects'
-import { isEventEligible, pickNextEvent } from './eventPicker'
+import { isEventEligible, pickNextEventSelection } from './eventPicker'
 import { getEndingReason, type EndingTrigger } from './endingReason'
 import { migrateSave, SAVE_VERSION } from './migrate'
 import { detectEncounterMilestone, detectMilestone } from './milestone'
@@ -224,14 +224,28 @@ export function createNewGame(options: NewGameOptions): GameSession {
   }
 }
 
-export function beginPlaying(session: GameSession): GameSession {
+function pickNextEncounter(player: PlayerState, excludeId?: string): {
+  player: PlayerState
+  currentEvent: GameEvent | null
+} {
   const meta = loadMeta()
-  const event =
-    session.currentEvent ??
-    pickNextEvent(session.player, EVENTS, meta.unlockedEvents, meta.romanceBoost)
+  const selection = pickNextEventSelection(player, EVENTS, meta.unlockedEvents, meta.romanceBoost, excludeId)
+  return {
+    player: selection.consumedBias
+      ? { ...player, nextEventBias: undefined, nextEventHint: undefined }
+      : player,
+    currentEvent: selection.event,
+  }
+}
+
+export function beginPlaying(session: GameSession): GameSession {
+  const encounter = session.currentEvent
+    ? { player: session.player, currentEvent: session.currentEvent }
+    : pickNextEncounter(session.player)
+  const event = encounter.currentEvent
 
   // 第一章 intro
-  let player = session.player
+  let player = encounter.player
   const chapter = getChapter(player.currentChapter)
   if (chapter?.intro && !player.log.some((l) => l === chapter.intro)) {
     player = { ...player, log: [...player.log, `— ${chapter.name} —`, chapter.intro] }
@@ -340,7 +354,11 @@ function applyEventTimeAndLog(
   const logNarrative = augmentNarrativeWithBreakthrough(narrative, prevPlayer, next)
   const ageLog = `${next.age}岁：${logNarrative}`
   next = { ...next, log: [...next.log, ageLog] }
-  next = { ...next, history: [...next.history, event.id], nextEventHint: undefined }
+  next = {
+    ...next,
+    history: [...next.history, event.id],
+    nextEventHint: next.nextEventBias ? next.nextEventHint : undefined,
+  }
 
   return next
 }
@@ -390,14 +408,9 @@ function finalizeAfterChoice(
     })
   }
 
-  const meta = loadMeta()
-  const nextEvent = pickNextEvent(
-    player,
-    EVENTS,
-    meta.unlockedEvents,
-    meta.romanceBoost,
-    event.id,
-  )
+  const encounter = pickNextEncounter(player, event.id)
+  player = encounter.player
+  const nextEvent = encounter.currentEvent
   if (!nextEvent) {
     const { ending, trigger } = resolveNoEventEnding(player)
     return buildEndingSession(session, player, ending, trigger)
@@ -497,7 +510,7 @@ export function purchaseShopItem(session: GameSession, itemId: string): GameSess
   if (session.phase !== 'shop') return session
 
   const item = SHOP_ITEMS.find((i) => i.id === itemId)
-  if (!item || session.player.spiritStones < item.cost) return session
+  if (!item || getShopPurchaseBlockReason(session.player, item)) return session
 
   let player = applyEffects(session.player, item.effect)
   player = {
@@ -509,7 +522,7 @@ export function purchaseShopItem(session: GameSession, itemId: string): GameSess
     },
     log: [
       ...player.log,
-      `${player.age}岁：于坊市购得${item.name}，即刻生效：${formatShopEffectNote(item.effect)}。`,
+      `${player.age}岁：于坊市购得${item.name}，${formatShopEffectNote(item.effect)}。`,
     ],
   }
 
@@ -523,22 +536,16 @@ export function purchaseShopItem(session: GameSession, itemId: string): GameSess
 export function leaveShop(session: GameSession): GameSession {
   if (session.phase !== 'shop') return session
 
-  const meta = loadMeta()
   const lastEventId = session.player.history[session.player.history.length - 1]
-  const nextEvent = pickNextEvent(
-    session.player,
-    EVENTS,
-    meta.unlockedEvents,
-    meta.romanceBoost,
-    lastEventId,
-  )
+  const { player, currentEvent: nextEvent } = pickNextEncounter(session.player, lastEventId)
   if (!nextEvent) {
-    const { ending, trigger } = resolveNoEventEnding(session.player)
-    return buildEndingSession(session, session.player, ending, trigger)
+    const { ending, trigger } = resolveNoEventEnding(player)
+    return buildEndingSession(session, player, ending, trigger)
   }
 
   return {
     ...session,
+    player,
     phase: 'playing',
     currentEvent: nextEvent,
     lastMilestone: detectEncounterMilestone(nextEvent),
@@ -568,10 +575,10 @@ export function loadGame(): GameSession | null {
     if (session.phase !== 'playing') return { ...session, player: repaired }
     const meta = loadMeta()
     const current = EVENTS.find((event) => event.id === session.currentEvent?.id)
-    const currentEvent = current && isEventEligible(repaired, current, EVENTS, meta.unlockedEvents)
-      ? current
-      : pickNextEvent(repaired, EVENTS, meta.unlockedEvents, meta.romanceBoost)
-    return { ...session, player: repaired, currentEvent }
+    if (current && isEventEligible(repaired, current, EVENTS, meta.unlockedEvents)) {
+      return { ...session, player: repaired, currentEvent: current }
+    }
+    return { ...session, ...pickNextEncounter(repaired) }
   } catch {
     return null
   }

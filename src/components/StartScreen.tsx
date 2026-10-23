@@ -135,7 +135,7 @@ export function StartScreen({ onStart, soundOn, onToggleSound }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm text-mist mb-2 tracking-wider">出身</label>
+            <label htmlFor="origin" className="block text-sm text-mist mb-2 tracking-wider">出身</label>
             <OriginPicker value={origin} onChange={setOrigin} />
           </div>
 

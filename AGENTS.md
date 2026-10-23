@@ -16,16 +16,18 @@ Live: https://katrina55553.github.io/Cult-Game/
 | Typecheck + production build | `npm run build` (runs `tsc -b` then `vite build`) |
 | Lint | `npm run lint` |
 | Preview production build | `npm run preview` |
-| Automated playtest | `npx tsx scripts/playtest.ts` |
-| Deep playtest | `npx tsx scripts/playtest-deep.ts` |
-| Validate game data | `npx tsx scripts/validate-game-data.ts` |
-| Chapter progression regression | `npx tsx scripts/check-chapter-progress.ts` |
-| Chapter registration regression | `npx tsx scripts/check-chapter-validation.ts` |
-| Known bug regressions | `npx tsx scripts/check-known-regressions.ts` |
-| Story continuity regression | `npx tsx scripts/check-story-continuity.ts` |
+| Full verification (same as deployment CI) | `npm run verify` |
+| Automated playtest (28 seeded runs) | `npm run playtest` |
+| Deep playtest | `npm run playtest:deep` |
+| Validate game data | `npm run validate:data` |
+| Chapter progression + registration regressions | `npm run test:chapters` |
+| Known bug + story continuity + shop regressions | `npm run test:regressions` |
+| Run one TypeScript script | `node scripts/run-ts.mjs scripts/<name>.ts` |
 | Deploy to Gitee Pages | `bash scripts/deploy-gitee-pages.sh` (requires `GITEE_TOKEN` env var) |
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.
+
+Use Node.js 24 or newer. `npm run verify` runs lint, data validation, all five regression scripts, 28 seeded playtests, then the production build. A failing check stops the command and blocks deployment. Playtest audit and run issues set a nonzero exit status.
 
 Playtest strategies: `cultivate`, `romance`, `sect`, `greedy`, `random`, `wander`, `demon`. The canonical `FILLER_EVENT_IDS` lives in `src/data/eventCategories.ts`; `playtest-helpers.ts` re-exports it as `FILLER_IDS` so engine and playtests classify waiting-period events identically.
 
@@ -176,7 +178,7 @@ The ending screen has a novel export (📖 导出为小说) that compiles the fu
 - `npm run build` **fails if typecheck fails** — `tsc -b` runs first
 - Deploy sets `GITHUB_PAGES=true` or `GITEE_PAGES=true`, changing Vite `base` to `/Cult-Game/`
 - `erasableSyntaxOnly` means no `enum` or `namespace` — use `type` unions and plain objects
-- `scripts/` uses `tsx` (not in deps — use `npx tsx`). Scripts import from `../src/` directly with `.ts` extensions.
+- `scripts/run-ts.mjs` uses Node.js 24+ native TypeScript support and resolves extensionless relative imports to `.ts`. No extra runner download is needed. Scripts import from `../src/` directly with `.ts` extensions.
 - Adding new `Condition` or `Effect` variants requires updating types in `types/game.ts` AND the handler in `conditions.ts` / `effects.ts`
 - Adding new artifact IDs in events requires registering them in `data/artifacts.ts` ARTIFACTS map
 - Chapter events should NOT have realm conditions (chapter order controls pacing)

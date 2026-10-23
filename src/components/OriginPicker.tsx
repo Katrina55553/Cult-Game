@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
 import type { OriginId } from '../types/game'
 
 const OPTIONS: { value: OriginId; label: string; desc: string }[] = [
@@ -20,69 +19,30 @@ interface Props {
 }
 
 export function OriginPicker({ value, onChange }: Props) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
   const selected = OPTIONS.find((o) => o.value === value) ?? OPTIONS[0]
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
   return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-haspopup="listbox"
+    <div>
+      <select
+        id="origin"
+        value={value ?? ''}
+        onChange={(event) => {
+          const option = OPTIONS.find((o) => (o.value ?? '') === event.target.value)
+          if (option) onChange(option.value)
+        }}
+        aria-describedby="origin-description"
         className="w-full px-4 py-3 bg-ink-deep border border-jade/40 rounded-sm
-          flex items-center justify-between gap-3 text-base text-parchment cursor-pointer
+          text-base text-parchment cursor-pointer
           hover:border-jade-light focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30
           transition-colors"
       >
-        <span className="shrink-0">{selected.label}</span>
-        <span className="text-xs text-mist truncate text-right hidden sm:inline">{selected.desc}</span>
-      </button>
-
-      {open && (
-        <ul
-          className="absolute z-20 bottom-full mb-1.5 w-full max-h-60 overflow-y-auto border border-jade/40 bg-ink-deep rounded-sm
-            shadow-lift animate-fade-up log-scroll"
-          role="listbox"
-        >
-          {OPTIONS.map((opt) => {
-            const active = opt.value === value
-            return (
-              <li key={opt.label} role="option" aria-selected={active}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onChange(opt.value)
-                    setOpen(false)
-                  }}
-                  className={`w-full px-4 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors border-l-2
-                    ${active
-                      ? 'bg-jade/25 text-parchment border-gold/60'
-                      : 'text-parchment hover:bg-ink-raised border-transparent hover:border-jade/40'
-                    }`}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-3 min-w-0">
-                    <span className="shrink-0 text-sm">{opt.label}</span>
-                    <span className={`text-xs ${active ? 'text-parchment-dim' : 'text-mist'}`}>
-                      {opt.desc}
-                    </span>
-                  </div>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+        {OPTIONS.map((option) => (
+          <option key={option.label} value={option.value ?? ''}>
+            {option.label} · {option.desc}
+          </option>
+        ))}
+      </select>
+      <p id="origin-description" className="mt-2 text-xs text-mist">{selected.desc}</p>
     </div>
   )
 }

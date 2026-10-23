@@ -109,6 +109,7 @@ export interface PlayerState {
   history: string[]
   log: string[]
   nextEventHint?: string
+  nextEventBias?: 'rare_or_romance'
   shopBuffs: Record<string, number>
   spiritBeastsSeen: string[]
   currentChapter: string
@@ -149,7 +150,7 @@ export type Effect =
   | { type: 'age'; value: number }
   | { type: 'breakthrough' }
   | { type: 'endLife' }
-  | { type: 'hint'; text: string }
+  | { type: 'hint'; text: string; bias?: 'rare_or_romance' }
   | { type: 'divineSense'; value: number }
   | { type: 'alchemyTier'; value: number }
   | { type: 'formationTier'; value: number }

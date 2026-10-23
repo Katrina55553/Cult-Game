@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { formatShopEffectNote, SHOP_ITEMS } from '../data/shop'
+import { formatShopEffectNote, getShopPurchaseBlockReason, SHOP_ITEMS } from '../data/shop'
 import { getRealmName } from '../engine/gameEngine'
 import type { GameSession } from '../types/game'
 import { AbandonButton } from './AbandonButton'
@@ -24,7 +24,8 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
   const [purchaseToast, setPurchaseToast] = useState<PurchaseToast | null>(null)
 
   const selected = SHOP_ITEMS.find((item) => item.id === selectedId)
-  const canConfirm = selected !== undefined && player.spiritStones >= selected.cost
+  const blockReason = selected ? getShopPurchaseBlockReason(player, selected) : null
+  const canConfirm = selected !== undefined && !blockReason
 
   useEffect(() => {
     if (!purchaseToast) return
@@ -55,7 +56,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
             </p>
             <p className="text-xs text-mist mt-1">{purchaseToast.description}</p>
             <p className="text-xs text-jade-light mt-2">
-              即刻生效：{purchaseToast.effectNote}
+              交易所得：{purchaseToast.effectNote}
             </p>
             <p className="text-xs text-gold-dim mt-1">
               花费 {purchaseToast.cost} 灵石 · 剩余 {player.spiritStones} 灵石
@@ -108,6 +109,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
 
       <div className="grid grid-cols-2 gap-3 mb-6">
         {SHOP_ITEMS.map((item) => {
+          const available = getShopPurchaseBlockReason(player, item) === null
           const affordable = player.spiritStones >= item.cost
           const isSelected = selectedId === item.id
           return (
@@ -118,7 +120,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
               className={`text-left px-3 py-2.5 rounded-sm border transition-all duration-200 cursor-pointer
                 ${isSelected
                   ? 'border-gold bg-gold/12 ring-1 ring-gold/40 shadow-glow-cinnabar'
-                  : affordable
+                  : available
                     ? 'border-jade/60 bg-jade/12 hover:bg-jade/25 hover:-translate-y-0.5 hover:border-jade-light'
                     : 'border-mist/20 bg-ink/40 opacity-60'
                 }`}
@@ -136,6 +138,7 @@ export function ShopScreen({ session, onBuy, onLeave, onAbandon }: Props) {
       </div>
 
       <div className="space-y-3">
+        {blockReason && <p className="text-center text-sm text-cinnabar-glow" role="status">{blockReason}</p>}
         <button
           type="button"
           disabled={!canConfirm}

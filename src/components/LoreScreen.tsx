@@ -90,7 +90,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
   const paragraphs = displayedText.split('\n\n')
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden safe-bottom">
+    <div className="h-dvh flex flex-col items-center justify-center px-4 sm:px-6 pt-4 sm:pt-6 pb-[max(1rem,env(safe-area-inset-bottom))] sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] relative overflow-hidden">
       {/* 背景装饰 */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-jade/[0.05] blur-3xl" />
@@ -109,7 +109,7 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
       </div>
 
       {/* 页码指示 */}
-      <div className="flex justify-center gap-2 mb-6 shrink-0 relative z-10">
+      <div className="flex justify-center gap-2 mb-3 shrink-0 relative z-10">
         {LORE_PAGES.map((_, i) => (
           <button
             key={i}
@@ -128,11 +128,10 @@ export function LoreScreen({ onContinue, onAbandon }: Props) {
         ))}
       </div>
 
-      {/* 内容区域 — 固定高度 */}
-      <div className="w-full max-w-lg relative z-10 shrink-0">
-        <div className="scroll-panel mist-overlay border border-jade/30 bg-ink/60 p-6 sm:p-8 rounded-sm mb-8 h-[380px] sm:h-[400px] flex flex-col overflow-hidden">
+      <div className="w-full max-w-lg max-h-[460px] sm:max-h-[480px] flex-1 min-h-0 flex flex-col gap-4 relative z-10">
+        <div className="scroll-panel mist-overlay border border-jade/30 bg-ink/60 p-4 sm:p-6 rounded-sm flex-1 min-h-0 flex flex-col overflow-hidden">
           <h2
-            className="text-2xl sm:text-3xl text-gold mb-6 text-center shrink-0 relative z-10"
+            className="text-2xl sm:text-3xl text-gold mb-4 text-center shrink-0 relative z-10"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             <span className="title-flanked">{current.title}</span>

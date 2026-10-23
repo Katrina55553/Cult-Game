@@ -194,7 +194,7 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
       }
     }
     case 'hint':
-      return { ...state, nextEventHint: effect.text }
+      return { ...state, nextEventHint: effect.text, nextEventBias: effect.bias ?? state.nextEventBias }
     default: {
       const tierKey = TIER_EFFECT_KEYS.find((k) => k === effect.type)
       if (tierKey) {

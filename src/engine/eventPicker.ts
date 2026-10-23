@@ -58,6 +58,19 @@ function isRomanceEvent(event: GameEvent): boolean {
   )
 }
 
+function isEventBiasTarget(event: GameEvent): boolean {
+  return event.rarity === 'rare' || event.rarity === 'legendary' || isRomanceEvent(event)
+}
+
+export interface EventSelection {
+  event: GameEvent | null
+  consumedBias: boolean
+}
+
+function selectEvent(event: GameEvent | null): EventSelection {
+  return { event, consumedBias: false }
+}
+
 // ── 行为因子：根据玩家倾向连续调整事件权重 ──
 // 分类信息来自事件自身（`event.tags` 或 data/eventTags.ts 的历史表），
 // 这里不再出现任何具体事件 id。
@@ -137,6 +150,8 @@ function effectiveWeight(
   // 行为因子：根据玩家倾向连续调整
   weight *= affinityMultiplier(event, affinity, global)
 
+  if (state.nextEventBias === 'rare_or_romance' && isEventBiasTarget(event)) weight *= 3
+
   // 仅作数值保护，不再用 0.3 这类「地板」——
   // 旧地板会把冷却衰减一并吃掉（基础权重 3 的事件设计上要衰减 20 倍，
   // 压到 0.15 后又被抬回 0.3，实际只衰减 10 倍）。
@@ -208,9 +223,9 @@ function pickFillerEvent(
   events: GameEvent[],
   unlockedEvents: string[],
   excludeId?: string,
-): GameEvent | null {
+): EventSelection {
   const fillers = filterEligible(state, events, events, unlockedEvents, { excludeId }).filter(isFillerEvent)
-  if (fillers.length === 0) return null
+  if (fillers.length === 0) return selectEvent(null)
 
   // 排除上一个事件，避免连续重复
   const lastEvent = state.history[state.history.length - 1]
@@ -241,11 +256,11 @@ function pickGlobalPoolEvent(
   unlockedEvents: string[],
   metaRomanceBoost: boolean,
   excludeId?: string,
-): GameEvent | null {
+): EventSelection {
   const eligible = filterEligible(state, events, events, unlockedEvents, { excludeId }).filter(
     (event) => !isFillerEvent(event) && !CHAPTER_REGISTERED_IDS.has(event.id),
   )
-  return eligible.length > 0 ? weightedPick(eligible, state, metaRomanceBoost) : null
+  return eligible.length > 0 ? weightedPick(eligible, state, metaRomanceBoost) : selectEvent(null)
 }
 
 /**
@@ -259,11 +274,11 @@ function pickWaitingEvent(
   unlockedEvents: string[],
   metaRomanceBoost: boolean,
   excludeId?: string,
-): GameEvent | null {
+): EventSelection {
   const globalEvent = pickGlobalPoolEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
   const filler = pickFillerEvent(state, events, unlockedEvents, excludeId)
-  if (!globalEvent) return filler
-  if (!filler) return globalEvent
+  if (!globalEvent.event) return filler
+  if (!filler.event) return globalEvent
   return rng.random() < 0.5 ? filler : globalEvent
 }
 
@@ -273,18 +288,18 @@ function pickMainEvent(
   unlockedEvents: string[],
   metaRomanceBoost: boolean,
   excludeId?: string,
-): GameEvent | null {
+): EventSelection {
   const eligible = filterEligible(state, events, events, unlockedEvents, { excludeId }).filter(
     (event) => !isFillerEvent(event),
   )
-  return eligible.length > 0 ? weightedPick(eligible, state, metaRomanceBoost) : null
+  return eligible.length > 0 ? weightedPick(eligible, state, metaRomanceBoost) : selectEvent(null)
 }
 
 function weightedPick(
   eligible: GameEvent[],
   state: PlayerState,
   metaRomanceBoost: boolean,
-): GameEvent {
+): EventSelection {
   // 整批共用一份倾向向量，避免每个事件重算一遍
   const affinity = computeAffinity(state)
   const global = globalAffinity(state)
@@ -293,13 +308,14 @@ function weightedPick(
   )
   const totalWeight = weights.reduce((sum, w) => sum + w, 0)
   let roll = rng.random() * totalWeight
+  const consumedBias = state.nextEventBias === 'rare_or_romance' && eligible.some(isEventBiasTarget)
 
   for (let i = 0; i < eligible.length; i++) {
     roll -= weights[i]
-    if (roll < 0) return eligible[i]
+    if (roll < 0) return { event: eligible[i], consumedBias }
   }
 
-  return eligible[eligible.length - 1]
+  return { event: eligible[eligible.length - 1], consumedBias }
 }
 
 export function pickNextEvent(
@@ -309,8 +325,18 @@ export function pickNextEvent(
   metaRomanceBoost = false,
   excludeId?: string,
 ): GameEvent | null {
+  return pickNextEventSelection(state, events, unlockedEvents, metaRomanceBoost, excludeId).event
+}
+
+export function pickNextEventSelection(
+  state: PlayerState,
+  events: GameEvent[],
+  unlockedEvents: string[] = [],
+  metaRomanceBoost = false,
+  excludeId?: string,
+): EventSelection {
   const consequences = filterEligible(state, events.filter((event) => event.priority === 'consequence'), events, unlockedEvents, { excludeId })
-  if (consequences.length > 0) return consequences[0]
+  if (consequences.length > 0) return selectEvent(consequences[0])
 
   // 章节制：优先从当前章节中选取事件
   const chapter = getChapter(state.currentChapter)
@@ -322,7 +348,7 @@ export function pickNextEvent(
       const evt = eventMap.get(eventId)
       if (!evt) continue
       if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
-      return evt
+      return selectEvent(evt)
     }
 
     const sideIds = new Set(getVisitedChapters(state).flatMap((entry) => entry.sideEvents ?? []))
@@ -343,7 +369,7 @@ export function pickNextEvent(
       const evt = eventMap.get(eventId)
       if (!evt) continue
       if (!isEventEligible(state, evt, events, unlockedEvents, { excludeId })) continue
-      return evt
+      return selectEvent(evt)
     }
 
     if (sideEvents.length > 0) return pickSide()
@@ -354,7 +380,7 @@ export function pickNextEvent(
 
   // 兜底：没有章节时使用原来的随机逻辑
   const mainEvent = pickMainEvent(state, events, unlockedEvents, metaRomanceBoost, excludeId)
-  if (mainEvent) return mainEvent
+  if (mainEvent.event) return mainEvent
 
   const filler = pickFillerEvent(state, events, unlockedEvents, excludeId)
   return filler

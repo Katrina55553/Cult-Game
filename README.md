@@ -212,6 +212,8 @@
 
 ### 开发
 
+需要 Node.js 24 或更高版本。
+
 ```bash
 npm install
 npm run dev      # 启动本地开发服务器
@@ -227,10 +229,15 @@ npm run preview  # 本地预览生产构建
 ### 验证
 
 ```bash
-npm run lint     # 代码规范检查
-npx tsx scripts/playtest.ts       # 自动化测试（一次随机走完全局）
-npx tsx scripts/playtest-deep.ts  # 深度 playtest
+npm run verify           # 与部署 CI 一致：lint、数据校验、5 组回归、28 局试玩、构建
+npm run validate:data    # 游戏数据校验
+npm run test:chapters    # 章节推进与登记回归
+npm run test:regressions # 已知问题、剧情连续性与商店回归
+npm run playtest         # 7 种策略 × 4 个固定种子，共 28 局
+npm run playtest:deep    # 深度试玩
 ```
+
+验证脚本使用 Node.js 原生 TypeScript 支持，无需临时下载执行器。任一验证失败都会返回非零状态，阻止 GitHub Pages 部署。
 
 ---
 
@@ -257,7 +264,7 @@ npx tsx scripts/playtest-deep.ts  # 深度 playtest
 | 字体 | **Ma Shan Zheng · Noto Serif SC** | — | 自托管 `woff2` 子集（`src/assets/fonts/`），运行时不请求 Google Fonts |
 | 音效 | **Web Audio API** | — | 全部程序化合成，**零音频文件** |
 | 存档 | **localStorage** | — | `cultgame_save`（当前进度）/ `cultgame_meta`（跨局解锁） |
-| 工具脚本 | **tsx** | `npx` 直跑 | `scripts/playtest*.ts` 自动化试玩，未列入依赖 |
+| 工具脚本 | **Node.js** | `24+` | 原生执行 TypeScript，统一验证与自动化试玩，无需额外执行器 |
 | 部署 | **GitHub Pages / Gitee Pages** | — | 纯静态零后端，响应式适配桌面 / 平板 / 手机 |
 
 **零资源依赖**：无外部音频、无图标库、无网络字体请求，首屏只需字体子集 + 单份 JS/CSS。

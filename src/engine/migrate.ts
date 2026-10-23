@@ -99,6 +99,8 @@ export function migrateSave(data: unknown): GameSession | null {
     flags: repairRelationships(flags),
     history: [...(rawPlayer.history ?? [])],
     log: [...(rawPlayer.log ?? [])],
+    nextEventHint: typeof rawPlayer.nextEventHint === 'string' ? rawPlayer.nextEventHint : undefined,
+    nextEventBias: rawPlayer.nextEventBias === 'rare_or_romance' ? rawPlayer.nextEventBias : undefined,
     shopBuffs: { purchases: 0, ...(rawPlayer.shopBuffs ?? {}) },
     spiritBeastsSeen: [...(rawPlayer.spiritBeastsSeen ?? [])],
     currentChapter,

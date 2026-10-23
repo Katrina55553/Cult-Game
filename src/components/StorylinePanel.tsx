@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { getActiveStorylines } from '../engine/storylineTracker'
 import type { PlayerState } from '../types/game'
 
@@ -44,13 +45,13 @@ export function StorylinePanel({ player, open, onClose }: Props) {
   const storylines = getActiveStorylines(player)
   const sorted = [...storylines].sort((a, b) => b.percent - a.percent)
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop px-4" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center modal-backdrop p-4" onClick={onClose}>
       <div
-        className="modal-panel animate-modal-in max-w-lg w-full h-[520px] p-6 flex flex-col"
+        className="modal-panel animate-modal-in max-w-lg w-full h-[520px] max-h-[calc(100dvh-2rem)] p-6 flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 shrink-0">
           <h3 className="modal-heading flex-1 text-xl text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             📜 剧情线
           </h3>
@@ -121,6 +122,7 @@ export function StorylinePanel({ player, open, onClose }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

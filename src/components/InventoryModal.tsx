@@ -65,14 +65,14 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
   return createPortal(
     <div
       data-overlay="true"
-      className="fixed inset-0 z-[9999] flex items-center justify-center modal-backdrop px-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center modal-backdrop p-4"
       onClick={(e) => { if ((e.target as HTMLElement).dataset.overlay) onClose() }}
     >
       <div
-        className="modal-panel animate-modal-in max-w-sm w-full h-[420px] p-5 flex flex-col"
+        className="modal-panel animate-modal-in max-w-sm w-full h-[420px] max-h-[calc(100dvh-2rem)] p-5 flex flex-col overflow-hidden"
       >
         {/* 标题 */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 shrink-0">
           <h3 className="modal-heading flex-1 text-lg text-gold" style={{ fontFamily: 'var(--font-display)' }}>
             {detail ? '详情' : '👜 乾坤袋'}
           </h3>
@@ -87,8 +87,8 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
 
         {/* 详情 */}
         {detail && (
-          <div className="flex-1 flex flex-col">
-            <div className="flex-1">
+          <div className="flex-1 min-h-0 flex flex-col gap-4">
+            <div className="flex-1 min-h-0 overflow-y-auto log-scroll">
               <p className="text-base text-parchment mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                 {detailName}
               </p>
@@ -99,7 +99,7 @@ export function InventoryModal({ player, onClose, onUseItem }: Props) {
                 <p className="text-xs text-jade-light">✦ {detailExtra}</p>
               )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 shrink-0">
               {detailUsable && detail.kind === 'item' && onUseItem && (
                 <button
                   type="button"

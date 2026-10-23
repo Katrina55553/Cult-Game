@@ -1,8 +1,9 @@
 /**
  * Automated playtest — simulates multiple runs with different strategies.
- * Run: npx tsx scripts/playtest.ts
+ * Run: npm run playtest
  */
 import { EVENTS } from '../src/data/events.ts'
+import { SHOP_ITEMS } from '../src/data/shop.ts'
 import { FILLER_IDS } from './playtest-helpers.ts'
 import {
   beginPlaying,
@@ -118,16 +119,17 @@ function startRun(strategy: Strategy, seed: number): RunReport {
   const eventCounts: Record<string, number> = {}
   let fillerCount = 0
   let stagnant = 0
+  let longestStagnation = 0
   let lastSig = ''
 
   for (let guard = 0; guard < 120; guard++) {
     if (session.phase === 'ending') break
 
     if (session.phase === 'shop') {
-      const affordable = ['spirit_gather', 'wash_marrow', 'lifespan_pill'].find(
-        () => session.player.spiritStones >= 45,
-      )
-      if (affordable) session = purchaseShopItem(session, affordable)
+      const affordable = ['spirit_gather', 'wash_marrow', 'lifespan_pill']
+        .map((id) => SHOP_ITEMS.find((item) => item.id === id))
+        .find((item) => item && session.player.spiritStones >= item.cost)
+      if (affordable) session = purchaseShopItem(session, affordable.id)
       session = leaveShop(session)
       continue
     }
@@ -150,7 +152,8 @@ function startRun(strategy: Strategy, seed: number): RunReport {
     session = resolveChoice(session, choiceId)
 
     const sig = `${session.player.realm}-${session.player.cultivation}-${session.player.age}`
-    if (sig === lastSig && session.phase === 'playing') stagnant++
+    stagnant = sig === lastSig && session.phase === 'playing' ? stagnant + 1 : 0
+    longestStagnation = Math.max(longestStagnation, stagnant)
     lastSig = sig
 
     if (session.player.age >= session.player.lifespan && session.phase !== 'ending') {
@@ -165,7 +168,7 @@ function startRun(strategy: Strategy, seed: number): RunReport {
   if (session.phase !== 'ending') {
     issues.push(`120回合内未结束(phase=${session.phase})`)
   }
-  if (stagnant >= 8) issues.push(`修为长期停滞(${stagnant}次)`)
+  if (longestStagnation >= 8) issues.push(`修为长期停滞(${longestStagnation}次连续)`)
 
   const repeated = Object.entries(eventCounts).filter(
     ([id, n]) => n >= 4 && !FILLER_IDS.has(id),
@@ -268,3 +271,14 @@ console.log('\n【全局统计】')
 console.log(`  道途搁浅: ${pathExhausted}/${reports.length}`)
 console.log(`  未触发新养成: ${noSystems}/${reports.length}`)
 console.log(`  总事件数: ${EVENTS.length}`)
+
+const failedRuns = reports.filter((report) => report.issues.length > 0)
+if (audit.length || failedRuns.length) {
+  for (const report of failedRuns) {
+    console.error(`  ${report.strategy} seed=${report.seed}: ${report.issues.join('; ')}`)
+  }
+  console.error(`\n试玩失败：${audit.length} 项数据问题，${failedRuns.length}/${reports.length} 局异常`)
+  process.exitCode = 1
+} else {
+  console.log(`\n✓ ${reports.length} 局固定种子试玩通过`)
+}

@@ -1,13 +1,24 @@
-import type { ShopItem } from '../types/game'
+import type { PlayerState, ShopItem } from '../types/game'
 import { summarizeEffects } from '../engine/narrative'
 
 export function formatShopEffectNote(effects: ShopItem['effect']): string {
   const summary = summarizeEffects(effects)
+  const items = effects.filter((effect) => effect.type === 'inventory')
+    .map((effect) => `收入乾坤袋：${effect.name}（${effect.description}）`)
   const hint = effects.find((e) => e.type === 'hint')
-  if (hint && hint.type === 'hint') {
-    return summary ? `${summary}，${hint.text}` : hint.text
+  return [summary, ...items, hint?.text].filter(Boolean).join('，')
+}
+
+export function getShopPurchaseBlockReason(player: PlayerState, item: ShopItem): string | null {
+  if (player.spiritStones < item.cost) return '灵石不足'
+  const slotsNeeded = item.effect.filter((effect) => effect.type === 'inventory').length
+  if (slotsNeeded > 0 && player.inventory.length + slotsNeeded > player.bagCapacity) {
+    return '乾坤袋空间不足，请先使用物品腾出位置'
   }
-  return summary
+  if (item.effect.some((effect) => effect.type === 'hint' && effect.bias && effect.bias === player.nextEventBias)) {
+    return '已有天机情报尚未应验'
+  }
+  return null
 }
 
 export const SHOP_ITEMS: ShopItem[] = [
@@ -43,7 +54,7 @@ export const SHOP_ITEMS: ShopItem[] = [
     name: '天机情报',
     description: '坊市中最灵通的情报贩子，以灵石换取一则天机。据说他的消息从不出错。',
     cost: 35,
-    effect: [{ type: 'hint', text: '下一机缘偏向高阶奇遇或情缘' }],
+    effect: [{ type: 'hint', text: '下一次随机机缘更易遇到稀有奇遇或情缘', bias: 'rare_or_romance' }],
   },
   {
     id: 'spirit_gather',
