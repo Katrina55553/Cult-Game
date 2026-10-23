@@ -123,6 +123,7 @@ export type Condition =
   | { type: 'stat'; key: keyof PlayerStats; min?: number; max?: number }
   | { type: 'realm'; min: RealmId }
   | { type: 'flag'; key: string; value: boolean }
+  | { type: 'anyFlag'; keys: string[] }
   | { type: 'route'; route: RouteId }
   | { type: 'resource'; key: 'spiritStones'; min: number }
   | { type: 'age'; min?: number; max?: number }
@@ -266,6 +267,7 @@ export interface EndingProximity {
 
 export interface GameSession {
   version?: number
+  rngState?: number
   phase: GamePhase
   player: PlayerState
   currentEvent: GameEvent | null

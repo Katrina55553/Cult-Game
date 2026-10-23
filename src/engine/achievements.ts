@@ -16,6 +16,11 @@ const SYSTEM_EVENT_IDS = [
   'technique_pavilion',
 ]
 
+const ORIGIN_EVENT_IDS = new Set(EVENTS.filter((event) => event.conditions?.some((condition) =>
+  condition.type === 'origin'
+  || (condition.type === 'flag' && condition.key === 'has_mysterious_origin' && condition.value),
+)).map((event) => event.id))
+
 export function checkAchievements(
   session: GameSession,
   meta: MetaProgress,
@@ -62,7 +67,7 @@ export function checkAchievements(
 
     if (player.spiritRoot === '五灵根') add('penta_root')
     if (player.spiritRoot === '天灵根') add('heaven_root')
-    if (player.flags.ever_walked_wander_path) add('no_sect')
+    if (player.flags.ever_walked_wander_path && !player.flags.ever_joined_sect) add('no_sect')
     if (session.dailySeed !== null) add('daily_player')
     if (session.useInnateBody) add('innate_body')
     if (session.turn <= 10) add('speed_run')
@@ -81,16 +86,16 @@ export function checkAchievements(
   if (player.flags.sect_battle_hero) add('sect_battle_hero')
   if (player.flags.spy_hero) add('spy_hero')
   if (player.history.includes('calamity_plague')) add('survived_plague')
-  if (player.history.includes('qi_deviation')) add('survived_qi_deviation')
-  if (player.history.includes('inner_demon')) add('defeated_demon_heart')
+  if (player.flags.qi_self_rescued) add('survived_qi_deviation')
+  if (player.flags.demon_heart_defeated) add('defeated_demon_heart')
   if (player.flags.has_ancient_map) add('ancient_map_found')
-  if (player.history.includes('blood_moon')) add('blood_moon_cultivate')
+  if (player.flags.blood_moon_cultivated) add('blood_moon_cultivate')
   if (player.flags.celestial_heritage) add('celestial_witness')
   if (player.flags.vein_war_hero) add('vein_war_hero')
   if (player.flags.lin_yuan_brother) add('lin_yuan_brother')
   if (player.flags.su_muyan_close) add('su_muyan_close')
   if (player.flags.zhao_reconciled) add('zhao_reconciled')
-  if (player.flags.lin_yuan_ally && player.flags.su_muyan_ally) add('three_friends')
+  if (player.history.includes('three_friends')) add('three_friends')
   if (player.flags.ye_qingmei_close) add('ye_qingmei_close')
   if (player.flags.moli_brother) add('moli_brother')
   if (player.flags.dungeon_cleared) add('dungeon_cleared')
@@ -101,7 +106,7 @@ export function checkAchievements(
   if (player.flags.yaogu_ally) add('yaogu_ally')
   if (player.flags.guiyi_ally) add('guiyi_ally')
   if (player.flags.wanyao_friend) add('wanyao_friend')
-  if (player.flags.has_mysterious_origin) add('origin_event')
+  if (player.history.some((id) => ORIGIN_EVENT_IDS.has(id))) add('origin_event')
   if (player.flags.route_switched) add('route_switch')
   if (player.stats.demonHeart >= 90) add('demon_heart_90')
   if (player.lifespan - player.age <= 1) add('lifespan_1')

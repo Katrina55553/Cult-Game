@@ -91,9 +91,9 @@ export function StorylinePanel({ player, open, onClose }: Props) {
                   </div>
 
                   <div className="flex flex-wrap gap-1.5">
-                    {sp.storyline.steps.map((step, i) => {
-                      const done = i < sp.completedSteps
-                      const isCurrent = i === sp.completedSteps
+                    {sp.storyline.steps.map((step) => {
+                      const done = sp.completedFlags.includes(step.flag)
+                      const isCurrent = step.flag === sp.nextFlag
                       return (
                         <span
                           key={step.flag}

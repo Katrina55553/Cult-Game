@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "validate:data": "node scripts/run-ts.mjs scripts/validate-game-data.ts",
     "test:chapters": "node scripts/run-ts.mjs scripts/check-chapter-progress.ts && node scripts/run-ts.mjs scripts/check-chapter-validation.ts",
-    "test:regressions": "node scripts/run-ts.mjs scripts/check-known-regressions.ts && node scripts/run-ts.mjs scripts/check-story-continuity.ts && node scripts/run-ts.mjs scripts/check-shop-regressions.ts",
+    "test:regressions": "node scripts/run-ts.mjs scripts/check-known-regressions.ts && node scripts/run-ts.mjs scripts/check-story-continuity.ts && node scripts/run-ts.mjs scripts/check-shop-regressions.ts && node scripts/run-ts.mjs scripts/check-audit-regressions.ts && node scripts/run-ts.mjs scripts/check-hook-regressions.ts",
     "playtest": "node scripts/run-ts.mjs scripts/playtest.ts",
     "playtest:deep": "node scripts/run-ts.mjs scripts/playtest-deep.ts",
     "verify": "npm run lint && npm run validate:data && npm run test:chapters && npm run test:regressions && npm run playtest && npm run build"

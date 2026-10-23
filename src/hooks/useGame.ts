@@ -42,7 +42,23 @@ export function useGame(initialSoundOn = true) {
   const { canRewind, capture, consume, reset: resetRewind } = useRewind()
 
   const sessionRef = useRef(session)
-  useEffect(() => { sessionRef.current = session }, [session])
+  const commitSession = useCallback((next: GameSession | null) => {
+    sessionRef.current = next
+    setSession(next)
+  }, [])
+
+  const transition = useCallback((action: (prev: GameSession) => GameSession, capturePrevious = false) => {
+    const prev = sessionRef.current
+    if (!prev) return
+    const next = action(prev)
+    if (next === prev) return
+    if (capturePrevious) capture(prev)
+    commitSession(next)
+    if (next.phase === 'ending') setMilestone(null)
+    else if (next.lastMilestone) setMilestone(next.lastMilestone)
+    const fresh = next.newAchievements.filter((id) => !prev.newAchievements.includes(id))
+    if (fresh.length > 0) setAchievementToast(fresh)
+  }, [capture, commitSession])
 
   useEffect(() => {
     if (session && session.phase !== 'start') {
@@ -71,95 +87,55 @@ export function useGame(initialSoundOn = true) {
     if (sound) play(sound)
   }, [session, play])
 
-  const showAchievements = useCallback((ids: string[]) => {
-    if (ids.length > 0) setAchievementToast(ids)
-  }, [])
-
   const startGame = useCallback(
     (options: NewGameOptions) => {
       play('start')
-      setSession(createNewGame(options))
+      commitSession(createNewGame(options))
       setMilestone(null)
       setAchievementToast([])
       resetRewind()
     },
-    [play, resetRewind],
+    [play, resetRewind, commitSession],
   )
 
   const confirmLore = useCallback(() => {
-    setSession((prev) => (prev ? { ...prev, phase: 'root_reveal' } : prev))
-  }, [])
+    transition((prev) => prev.phase === 'lore' ? { ...prev, phase: 'root_reveal' } : prev)
+  }, [transition])
 
   const confirmRoot = useCallback(() => {
-    setSession((prev) => {
-      if (!prev) return prev
-      const next = beginPlaying(prev)
-      if (next.lastMilestone) setMilestone(next.lastMilestone)
-      return next
-    })
-  }, [])
+    transition((prev) => prev.phase === 'root_reveal' ? beginPlaying(prev) : prev)
+  }, [transition])
 
   const choose = useCallback(
     (choiceId: string) => {
-      capture(sessionRef.current)
-
-      setSession((prev) => {
-        if (!prev || prev.phase !== 'playing') return prev
-
-        const prevAch = prev.newAchievements.length
-        const next = resolveChoice(prev, choiceId)
-
-        if (next.phase === 'ending') {
-          setMilestone(null)
-        } else if (next.lastMilestone) {
-          setMilestone(next.lastMilestone)
-        }
-
-        const freshAch = next.newAchievements.slice(prevAch)
-        if (freshAch.length > 0) {
-          showAchievements(freshAch)
-        }
-
-        return next
-      })
+      transition((prev) => resolveChoice(prev, choiceId), true)
     },
-    [capture, showAchievements],
+    [transition],
   )
 
   const buyItem = useCallback(
     (itemId: string) => {
-      setSession((prev) => {
-        if (!prev || prev.phase !== 'shop') return prev
-        const achBefore = prev.newAchievements.length
-        const next = purchaseShopItem(prev, itemId)
-        const fresh = next.newAchievements.slice(achBefore)
-        if (fresh.length > 0) showAchievements(fresh)
-        return next
-      })
+      transition((prev) => purchaseShopItem(prev, itemId))
     },
-    [showAchievements],
+    [transition],
   )
 
   const exitShop = useCallback(() => {
-    setSession((prev) => {
-      if (!prev) return prev
-      const next = leaveShop(prev)
-      if (next.lastMilestone) setMilestone(next.lastMilestone)
-      return next
-    })
-  }, [])
+    transition(leaveShop)
+  }, [transition])
 
   const rewind = useCallback(() => {
     const snap = consume()
     if (!snap) return
-    setSession(snap)
+    commitSession(snap)
     setMilestone(null)
+    setAchievementToast([])
     play('click')
-  }, [consume, play])
+  }, [consume, play, commitSession])
 
   const useItem = useCallback((index: number) => {
-    setSession((prev) => {
-      if (!prev) return prev
+    transition((prev) => {
+      if (prev.phase !== 'playing') return prev
       const item = prev.player.inventory[index]
       if (!item?.usable) return prev
       const newInventory = prev.player.inventory.filter((_, i) => i !== index)
@@ -167,16 +143,16 @@ export function useGame(initialSoundOn = true) {
       const player = applyEffects({ ...prev.player, inventory: newInventory }, effects)
       return { ...prev, player }
     })
-  }, [])
+  }, [transition])
 
   const restart = useCallback(() => {
     clearSave()
     resetRewind()
-    setSession(null)
+    commitSession(null)
     setMilestone(null)
     setAchievementToast([])
     play('click')
-  }, [play, resetRewind])
+  }, [play, resetRewind, commitSession])
 
   const dismissMilestone = useCallback(() => setMilestone(null), [])
   const dismissAchievements = useCallback(() => setAchievementToast([]), [])

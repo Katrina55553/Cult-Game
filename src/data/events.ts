@@ -1078,6 +1078,7 @@ const CORE_EVENTS: GameEvent[] = [
         id: 'ascend',
         text: '步入飞升通道，追寻仙道',
         requirements: [
+          { type: 'realm', min: 'nascent_soul' },
           { type: 'stat', key: 'demonHeart', max: 30 },
           { type: 'flag', key: 'got_inheritance', value: true },
         ],

@@ -21,13 +21,13 @@ Live: https://katrina55553.github.io/Cult-Game/
 | Deep playtest | `npm run playtest:deep` |
 | Validate game data | `npm run validate:data` |
 | Chapter progression + registration regressions | `npm run test:chapters` |
-| Known bug + story continuity + shop regressions | `npm run test:regressions` |
+| Known bug + story continuity + shop + audit + React hook regressions | `npm run test:regressions` |
 | Run one TypeScript script | `node scripts/run-ts.mjs scripts/<name>.ts` |
 | Deploy to Gitee Pages | `bash scripts/deploy-gitee-pages.sh` (requires `GITEE_TOKEN` env var) |
 
 There is **no test framework** installed. Verification is lint + typecheck + build + manual or automated playtest.
 
-Use Node.js 24 or newer. `npm run verify` runs lint, data validation, all five regression scripts, 28 seeded playtests, then the production build. A failing check stops the command and blocks deployment. Playtest audit and run issues set a nonzero exit status.
+Use Node.js 24 or newer. `npm run verify` runs lint, data validation, all seven regression scripts, 28 seeded playtests, then the production build. A failing check stops the command and blocks deployment. Playtest audit and run issues set a nonzero exit status.
 
 Playtest strategies: `cultivate`, `romance`, `sect`, `greedy`, `random`, `wander`, `demon`. The canonical `FILLER_EVENT_IDS` lives in `src/data/eventCategories.ts`; `playtest-helpers.ts` re-exports it as `FILLER_IDS` so engine and playtests classify waiting-period events identically.
 
@@ -145,7 +145,7 @@ Additional data files: `talents.ts` (12 talents across 4 categories), `exploreAr
 
 `GameEvent.followUpOf` requires at least one referenced event in history. `priority: 'consequence'` responds before ordinary events; consequence events must be `once` and declare `followUpOf` so they cannot starve the main story.
 
-`Condition` variants: `stat` (PlayerStats key + min/max), `realm` (min), `flag` (key + value), `resource`, `age`, `cultivation`, `lifespan_remaining`, `divineSense`, `alchemyTier`, `formationTier`, `swordTier`, `bloodlineTier`, `techniqueTier`, `divineWeaponTier`, `cultivationPath`, `origin`.
+`Condition` variants: `stat` (PlayerStats key + min/max), `realm` (min), `flag` (key + value), `anyFlag` (at least one key is true), `resource`, `age`, `cultivation`, `lifespan_remaining`, `divineSense`, `alchemyTier`, `formationTier`, `swordTier`, `bloodlineTier`, `techniqueTier`, `divineWeaponTier`, `cultivationPath`, `origin`.
 
 `Effect` variants: `stat`, `cultivation`, `lifespan`, `spiritStones`, `flag`, `artifact`, `log`, `age`, `breakthrough`, `endLife`, `hint`, `divineSense`, `alchemyTier`, `formationTier`, `swordTier`, `bloodline`, `bloodlineTier`, `technique`, `techniqueTier`, `divineWeapon`, `divineWeaponTier`, `spiritBeast`, `cultivationPath`, `inventory`.
 
@@ -185,4 +185,9 @@ The ending screen has a novel export (📖 导出为小说) that compiles the fu
 - `pickFillerEvent` checks `maxTimes`, `cooldown`, AND `checkConditions` — filler events with unmet conditions are skipped
 - `cloneSystems` in effects.ts clones ALL mutable arrays (history, inventory, chapterCompleted, spiritBeastsSeen)
 - `rng.ts` uses module-level mutable seed — single instance, not safe for concurrent use
+- `GameSession.rngState` persists the current PRNG state. `restoreGame()` migrates and repairs saves, restores the PRNG, and refreshes invalid encounters; rewind uses the same path. Legacy saves receive a stable fallback seed because their original PRNG state was not stored.
+- `useGame` executes engine transitions in event callbacks and commits the resulting session directly. Do not call RNG or meta-persisting engine functions inside React state updaters: StrictMode can invoke them twice.
+- Percentage artifact bonuses are structured in `ArtifactInfo.passive` and aggregated by `getArtifactBonuses()`. Resource bonuses apply only to positive gains, not costs or absolute assignments.
+- Cultivation multipliers apply only to positive gains; negative cultivation effects retain their stated loss. While playing, `turn` names the current encounter; an ending stores completed turns and does not add a pending encounter. Leaving a shop without a next encounter does not consume another turn.
+- The opening `sect_1` scene does not count as joining a sect until the admission choice resolves. `no_sect` requires wander history with no sect history; origin and shared-outing achievements require their actual encounters in history.
 - Shop item effects are hardcoded in `useGame.ts` `ITEM_EFFECTS` map — adding new usable items requires updating both `data/shop.ts` and this map

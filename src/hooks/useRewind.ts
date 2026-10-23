@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import type { GameSession } from '../types/game'
+import { migrateSave } from '../engine/migrate'
+import { restoreGame } from '../engine/gameEngine'
 
 const REWIND_KEY = 'cultgame_rewind'
 
@@ -35,13 +37,13 @@ export function loadPersistedRewindState(): PersistedRewindState {
         return { snapshot: null, used: false }
       }
       if (typeof snapshot.phase !== 'string') return { snapshot: null, used: false }
-      return { snapshot: snapshot as GameSession, used: false }
+      return { snapshot: migrateSave(snapshot), used: false }
     }
 
     // 兼容旧格式：历史版本直接把 GameSession 存在该 key 下。
     if (!parsed.player || typeof parsed.player !== 'object') return { snapshot: null, used: false }
     if (typeof parsed.phase !== 'string') return { snapshot: null, used: false }
-    return { snapshot: parsed as GameSession, used: false }
+    return { snapshot: migrateSave(parsed), used: false }
   } catch {
     return { snapshot: null, used: false }
   }
@@ -80,8 +82,9 @@ export function useRewind() {
   }, [])
 
   const consume = useCallback((): GameSession | null => {
-    if (!rewindState.snapshot) return null
-    const snap = rewindState.snapshot
+    if (rewindUsedRef.current || !rewindState.snapshot) return null
+    const snap = restoreGame(rewindState.snapshot)
+    if (!snap) return null
     setRewindState({ snapshot: null, used: true })
     rewindUsedRef.current = true
     persistRewindUsed()

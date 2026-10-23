@@ -4,7 +4,7 @@ import { getChapter, getVisitedChapters } from '../data/chapters'
 import type { GameSession, MetaProgress, PlayerState } from '../types/game'
 import { repairRelationships } from './relationships'
 
-export const SAVE_VERSION = 2
+export const SAVE_VERSION = 4
 export const META_VERSION = 1
 
 const DEFAULT_PLAYER_FIELDS: Partial<PlayerState> = {
@@ -42,7 +42,9 @@ export function migrateSave(data: unknown): GameSession | null {
   const currentChapter = rawPlayer.currentChapter ?? 'sect_1'
   const flags = { ...(rawPlayer.flags ?? {}) }
   const currentRoute = getChapter(currentChapter)?.route
-  if (flags.loyal_to_sect || currentRoute === 'sect') flags.ever_joined_sect = true
+  const awaitingSectDecision = currentChapter === 'sect_1' && !rawPlayer.history?.includes('enter_sect')
+  if (awaitingSectDecision) delete flags.ever_joined_sect
+  else if (flags.loyal_to_sect || currentRoute === 'sect') flags.ever_joined_sect = true
   if (flags.refused_all_sects || currentRoute === 'wander') flags.ever_walked_wander_path = true
   if (flags.accepted_demon_path || currentRoute === 'demon') flags.ever_walked_demon_path = true
   delete flags.loyal_to_sect
@@ -112,11 +114,19 @@ export function migrateSave(data: unknown): GameSession | null {
 
   return {
     phase: s.phase as GameSession['phase'],
+    rngState: typeof s.rngState === 'number' && Number.isInteger(s.rngState)
+      && s.rngState >= 0 && s.rngState <= 0xffffffff
+      ? s.rngState
+      : Array.from(JSON.stringify([s.dailySeed, s.turn, rawPlayer])).reduce(
+        (seed, char) => (Math.imul(seed, 31) + char.charCodeAt(0)) >>> 0, 1,
+      ),
     player,
     currentEvent: s.currentEvent ?? null,
     ending: s.ending ?? null,
     endingReason: s.endingReason,
-    turn: s.turn ?? 0,
+    turn: s.phase === 'ending' && (s.version ?? 0) < 4
+      ? Math.max(0, rawPlayer.history?.length ?? ((s.turn ?? 1) - 1))
+      : s.turn ?? 0,
     revealedRoot: s.revealedRoot ?? null,
     lastMilestone: s.lastMilestone ?? null,
     dailySeed: s.dailySeed ?? null,

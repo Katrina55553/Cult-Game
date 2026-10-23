@@ -287,6 +287,12 @@ export const SYSTEM_EVENTS: GameEvent[] = [
           { type: 'cultivation', value: 8 },
         ],
       },
+      {
+        id: 'rest',
+        text: '暂缓喂养，让灵兽自行调息',
+        narrative: '你轻抚灵兽，任它在身旁休息，待物资充足时再助它进阶。',
+        effects: [],
+      },
     ],
   },
   {

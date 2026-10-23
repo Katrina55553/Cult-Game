@@ -430,7 +430,7 @@ export const ROMANCE_EVENTS: GameEvent[] = [
     weight: 8,
     years: 2,
     once: true,
-    conditions: [{ type: 'flag', key: 'ye_qingmei_friend', value: true }],
+    conditions: [{ type: 'anyFlag', keys: ['ye_qingmei_friend', 'ye_qingmei_companion'] }],
     choices: [
       {
         id: 'help_ye',

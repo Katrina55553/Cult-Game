@@ -50,6 +50,8 @@ function checkCondition(state: PlayerState, condition: Condition): boolean {
       const actual = state.flags[condition.key] ?? false
       return actual === condition.value
     }
+    case 'anyFlag':
+      return condition.keys.some((key) => !!state.flags[key])
     case 'route':
       return getChapter(state.currentChapter)?.route === condition.route
     case 'resource': {
@@ -105,6 +107,8 @@ function describeCondition(c: Condition): string {
       return `境界需达${c.min}`
     case 'flag':
       return '需满足特定条件'
+    case 'anyFlag':
+      return '需满足任一剧情条件'
     case 'route': {
       const labels: Record<RouteId, string> = { sect: '宗门', wander: '散修', demon: '魔道' }
       return `需处于${labels[c.route]}路线`

@@ -1,4 +1,6 @@
 import { getChapter } from '../data/chapters'
+import { getArtifactBonuses } from '../data/artifacts'
+import { getEventTags } from '../data/eventTags'
 import { createDefaultCultivationSystems } from '../data/cultivationSystems'
 import { ACHIEVEMENTS } from '../data/achievements'
 import { ENDINGS } from '../data/endings'
@@ -221,6 +223,7 @@ export function createNewGame(options: NewGameOptions): GameSession {
     newEndingUnlock: false,
     newAchievements: [],
     version: SAVE_VERSION,
+    rngState: rng.getSeed(),
   }
 }
 
@@ -258,6 +261,7 @@ export function beginPlaying(session: GameSession): GameSession {
     currentEvent: event,
     turn: 1,
     lastMilestone: detectEncounterMilestone(event),
+    rngState: rng.getSeed(),
   }
 }
 
@@ -312,8 +316,9 @@ function getDivineSenseBonus(state: PlayerState): number {
 function resolveOutcome(
   state: PlayerState,
   outcome: Outcome,
-  eventId: string,
+  event: GameEvent,
 ): { state: PlayerState; narrative: string; success: boolean } {
+  const eventId = event.id
   let chance = outcome.chance
   if (outcome.luckBonus) {
     chance += state.stats.luck * outcome.luckBonus
@@ -321,6 +326,11 @@ function resolveOutcome(
   chance += getTalentBonus(state, eventId)
   chance += getRootBoneBonus(state, eventId)
   chance += getDivineSenseBonus(state)
+  const artifacts = getArtifactBonuses(state.artifacts)
+  if (getEventTags(event).includes('combat') || eventId.startsWith('boss_')) {
+    chance += artifacts.combat
+  }
+  if (eventId === 'dual_cultivation') chance += artifacts.dualCultivation
   chance = Math.max(0.05, Math.min(0.95, chance))
 
   const success = rng.random() < chance
@@ -458,12 +468,13 @@ function buildEndingSession(
   ending: Ending,
   trigger: EndingTrigger,
 ): GameSession {
+  const turn = Math.max(0, session.turn - (session.phase === 'shop' ? 1 : 0))
   let meta = loadMeta()
-  const { meta: updatedMeta, isFirstEnding } = recordEndingRun(meta, ending, player, session.turn)
+  const { meta: updatedMeta, isFirstEnding } = recordEndingRun(meta, ending, player, turn)
   meta = updatedMeta
 
   const ach = checkAchievements(
-    { ...session, player, ending, phase: 'ending' },
+    { ...session, player, ending, phase: 'ending', turn },
     meta,
     ending,
   )
@@ -476,10 +487,10 @@ function buildEndingSession(
     ending,
     endingReason: getEndingReason(ending, trigger),
     phase: 'ending',
-    turn: session.turn + 1,
+    turn,
     lastMilestone: null,
     newEndingUnlock: isFirstEnding,
-    newAchievements: ach,
+    newAchievements: [...new Set([...session.newAchievements, ...ach])],
   }
 }
 
@@ -494,7 +505,7 @@ export function resolveChoice(session: GameSession, choiceId: string): GameSessi
   let narrative = ''
 
   if (choice.outcomes && choice.outcomes.length > 0) {
-    const result = resolveOutcome(player, choice.outcomes[0], session.currentEvent.id)
+    const result = resolveOutcome(player, choice.outcomes[0], session.currentEvent)
     player = result.state
     narrative = result.narrative
   } else if (choice.effects) {
@@ -503,7 +514,7 @@ export function resolveChoice(session: GameSession, choiceId: string): GameSessi
   }
 
   const openShop = shouldOpenShop(session, session.currentEvent.id, choiceId)
-  return finalizeAfterChoice(session, player, narrative, openShop)
+  return { ...finalizeAfterChoice(session, player, narrative, openShop), rngState: rng.getSeed() }
 }
 
 export function purchaseShopItem(session: GameSession, itemId: string): GameSession {
@@ -540,7 +551,7 @@ export function leaveShop(session: GameSession): GameSession {
   const { player, currentEvent: nextEvent } = pickNextEncounter(session.player, lastEventId)
   if (!nextEvent) {
     const { ending, trigger } = resolveNoEventEnding(player)
-    return buildEndingSession(session, player, ending, trigger)
+    return { ...buildEndingSession(session, player, ending, trigger), rngState: rng.getSeed() }
   }
 
   return {
@@ -549,6 +560,7 @@ export function leaveShop(session: GameSession): GameSession {
     phase: 'playing',
     currentEvent: nextEvent,
     lastMilestone: detectEncounterMilestone(nextEvent),
+    rngState: rng.getSeed(),
   }
 }
 
@@ -568,8 +580,17 @@ export function loadGame(): GameSession | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY)
     if (!raw) return null
-    const session = migrateSave(JSON.parse(raw))
+    return restoreGame(JSON.parse(raw))
+  } catch {
+    return null
+  }
+}
+
+export function restoreGame(data: unknown): GameSession | null {
+  try {
+    const session = migrateSave(data)
     if (!session) return null
+    if (session.rngState !== undefined) rng.setSeed(session.rngState)
 
     const repaired = repairStoryProgress(session.player)
     if (session.phase !== 'playing') return { ...session, player: repaired }
@@ -578,7 +599,7 @@ export function loadGame(): GameSession | null {
     if (current && isEventEligible(repaired, current, EVENTS, meta.unlockedEvents)) {
       return { ...session, player: repaired, currentEvent: current }
     }
-    return { ...session, ...pickNextEncounter(repaired) }
+    return { ...session, ...pickNextEncounter(repaired), rngState: rng.getSeed() }
   } catch {
     return null
   }

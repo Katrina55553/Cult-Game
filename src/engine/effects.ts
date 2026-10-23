@@ -1,4 +1,4 @@
-import { normalizeArtifactIds, resolveArtifactId } from '../data/artifacts'
+import { getArtifactBonuses, normalizeArtifactIds, resolveArtifactId } from '../data/artifacts'
 import { getNextRealm, REALMS } from '../data/realms'
 import type { Effect, PlayerState } from '../types/game'
 import { getCultivationMultiplier } from './pathBonuses'
@@ -64,7 +64,10 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
       return { ...state, stats: { ...state.stats, [effect.key]: value } }
     }
     case 'cultivation': {
-      const bonus = Math.round(effect.value * getCultivationMultiplier(state))
+      const multiplier = effect.value > 0
+        ? getCultivationMultiplier(state) * (1 + getArtifactBonuses(state.artifacts).cultivation)
+        : 1
+      const bonus = Math.round(effect.value * multiplier)
       let cultivation = state.cultivation + bonus
       let realm = state.realm
       let lifespan = state.lifespan
@@ -89,7 +92,10 @@ function applyEffect(state: PlayerState, effect: Effect): PlayerState {
       if (effect.set) {
         return { ...state, spiritStones: Math.max(0, effect.value) }
       }
-      return { ...state, spiritStones: Math.max(0, state.spiritStones + effect.value) }
+      const value = effect.value > 0
+        ? Math.round(effect.value * (1 + getArtifactBonuses(state.artifacts).spiritStones))
+        : effect.value
+      return { ...state, spiritStones: Math.max(0, state.spiritStones + value) }
     }
     case 'flag':
       if (LEGACY_ROUTE_FLAGS.has(effect.key)) {

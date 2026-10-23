@@ -8,6 +8,8 @@ export interface StorylineProgress {
   currentLabel: string | null
   nextLabel: string | null
   percent: number
+  completedFlags: string[]
+  nextFlag: string | null
 }
 
 export function getActiveStorylines(player: PlayerState): StorylineProgress[] {
@@ -16,16 +18,17 @@ export function getActiveStorylines(player: PlayerState): StorylineProgress[] {
   for (const sl of STORYLINES) {
     if (sl.entryCheck && !sl.entryCheck(player)) continue
 
-    let completed = 0
-    for (const step of sl.steps) {
+    const completedSteps = sl.steps.map((step) => {
       const flagSet = !!player.flags[step.flag]
       const extra = step.extraCheck ? step.extraCheck(player) : true
-      if (flagSet && extra) completed++
-    }
+      return flagSet && extra
+    })
+    const completed = completedSteps.filter(Boolean).length
 
     const total = sl.steps.length
-    const currentStep = completed > 0 ? sl.steps[completed - 1] : null
-    const nextStep = completed < total ? sl.steps[completed] : null
+    const currentIndex = completedSteps.findLastIndex(Boolean)
+    const currentStep = sl.steps[currentIndex]
+    const nextStep = sl.steps[currentIndex + 1]
 
     results.push({
       storyline: sl,
@@ -34,6 +37,8 @@ export function getActiveStorylines(player: PlayerState): StorylineProgress[] {
       currentLabel: currentStep?.label ?? null,
       nextLabel: nextStep?.label ?? null,
       percent: total > 0 ? Math.round((completed / total) * 100) : 0,
+      completedFlags: sl.steps.filter((_, index) => completedSteps[index]).map((step) => step.flag),
+      nextFlag: nextStep?.flag ?? null,
     })
   }
 

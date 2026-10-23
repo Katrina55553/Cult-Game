@@ -22,6 +22,7 @@ export function getCurrentRoute(player: Pick<PlayerState, 'currentChapter'>): Ro
 }
 
 function markRouteVisited(player: PlayerState, route: RouteId): PlayerState {
+  if (route === 'sect' && player.currentChapter === 'sect_1' && !player.history.includes('enter_sect')) return player
   const flag = ROUTE_HISTORY_FLAGS[route]
   if (player.flags[flag]) return player
   return { ...player, flags: { ...player.flags, [flag]: true } }

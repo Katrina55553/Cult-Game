@@ -1000,6 +1000,7 @@ export const MISC_EVENTS: GameEvent[] = [
             successEffects: [
               { type: 'stat', key: 'demonHeart', value: -8 },
               { type: 'cultivation', value: 5 },
+              { type: 'flag', key: 'qi_self_rescued', value: true },
             ],
             failEffects: [
               { type: 'cultivation', value: -20 },
@@ -1032,6 +1033,7 @@ export const MISC_EVENTS: GameEvent[] = [
             successEffects: [
               { type: 'stat', key: 'rootBone', value: 4 },
               { type: 'cultivation', value: 8 },
+              { type: 'flag', key: 'qi_self_rescued', value: true },
             ],
             failEffects: [
               { type: 'lifespan', value: -15 },
@@ -1338,6 +1340,7 @@ export const MISC_EVENTS: GameEvent[] = [
               { type: 'stat', key: 'demonHeart', value: -15 },
               { type: 'stat', key: 'comprehension', value: 6 },
               { type: 'cultivation', value: 12 },
+              { type: 'flag', key: 'demon_heart_defeated', value: true },
             ],
             failEffects: [
               { type: 'stat', key: 'demonHeart', value: 10 },
@@ -1580,10 +1583,12 @@ export const MISC_EVENTS: GameEvent[] = [
               { type: 'cultivation', value: 25 },
               { type: 'stat', key: 'demonHeart', value: 10 },
               { type: 'stat', key: 'rootBone', value: 5 },
+              { type: 'flag', key: 'blood_moon_cultivated', value: true },
             ],
             failEffects: [
               { type: 'stat', key: 'demonHeart', value: 20 },
               { type: 'lifespan', value: -10 },
+              { type: 'flag', key: 'blood_moon_cultivated', value: true },
             ],
             narrative: {
               success: '你借血月之力突破瓶颈，修为大进，但心魔也随之增长。',

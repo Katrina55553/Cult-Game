@@ -201,7 +201,7 @@ export const ENDINGS: Ending[] = [
     title: '散修盟主',
     description:
       '你以散修之身，聚拢天下独行修士，建立散修盟。此后散修不再是孤立无援的个体，而是一股不可忽视的力量。你被尊为盟主，名震修真界。',
-    priority: 64,
+    priority: 71,
     conditions: [
       { type: 'flag', key: 'wander_leader', value: true },
       { type: 'realm', min: 'golden_core' },
